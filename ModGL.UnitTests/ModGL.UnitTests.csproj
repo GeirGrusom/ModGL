@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{1CFDC9EE-42E8-45FD-B5EA-478F67C72447}</ProjectGuid>
+    <ProjectGuid>{46B36B35-53DE-4651-8EFA-529F59153127}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ModGL</RootNamespace>
-    <AssemblyName>ModGL</AssemblyName>
+    <RootNamespace>ModGL.UnitTests</RootNamespace>
+    <AssemblyName>ModGL.UnitTests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,6 +30,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NSubstitute">
+      <HintPath>..\packages\NSubstitute.1.6.1.0\lib\NET40\NSubstitute.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -39,17 +45,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IGLObject.cs" />
-    <Compile Include="IObjectManager.cs" />
-    <Compile Include="NativeGL\Delegates.cs" />
-    <Compile Include="NativeGL\GL.cs" />
-    <Compile Include="OpenGLContext.cs" />
-    <Compile Include="VertexArray.cs" />
-    <Compile Include="VertexBuffer.cs" />
+    <Compile Include="Class1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="VertexDescriptor.cs" />
-    <Compile Include="Windows\WGL.cs" />
-    <Compile Include="Windows\WindowsContext.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

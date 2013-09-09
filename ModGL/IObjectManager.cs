@@ -6,13 +6,6 @@ using System.Threading.Tasks;
 
 namespace ModGL
 {
-    public static class ObjectManagerExtensions
-    {
-        public static async Task<uint> CreateVertexBufferAsync()
-        {
-            
-        }
-    }
     public interface IObjectManager
     {
         uint CreateVertexBuffer();

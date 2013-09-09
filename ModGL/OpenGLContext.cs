@@ -1,4 +1,6 @@
-﻿namespace ModGL
+﻿using System;
+
+namespace ModGL
 {
     public interface IContext
     {
@@ -23,6 +25,8 @@
     }
     
 
+
+
     public abstract class Context : IContext, IGLObject, IExtensionSupport
     {
         public uint Handle { get; protected internal set; }
@@ -33,9 +37,9 @@
 
         public abstract TDelegate GetExtension<TDelegate>(string extensionName);
 
-        public NativeGL.IOpenGL3 GetOpenGL(OpenGLVersion desiredVersion)
+        public NativeGL.IOpenGL30 GetOpenGL(OpenGLVersion desiredVersion)
         {
-            
+            throw new NotImplementedException();
         }
 
         public TDelegate GetExtension<TDelegate>()
