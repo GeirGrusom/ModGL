@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using NSubst
-namespace ModGL.UnitTests
-{
-    public class ContextTest
-    {
 
+namespace ModGL
+{
+    public class ThrowOnErrorAttribute : Attribute
+    {
     }
 }

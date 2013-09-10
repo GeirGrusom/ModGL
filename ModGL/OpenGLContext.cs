@@ -9,8 +9,9 @@ namespace ModGL
 
     public interface IExtensionSupport
     {
-        TDelegate GetExtension<TDelegate>(string extensionName);
-        TDelegate GetExtension<TDelegate>();
+        Delegate GetProcedure(string procedureName, Type delegateType);
+        TDelegate GetProcedure<TDelegate>(string procedureName);
+        TDelegate GetProcedure<TDelegate>();
     }
 
     public enum OpenGLVersion
@@ -32,17 +33,25 @@ namespace ModGL
 
         public abstract void MakeCurrent();
 
-        public abstract TDelegate GetExtension<TDelegate>(string extensionName);
-
         public NativeGL.IOpenGL30 GetOpenGL(OpenGLVersion desiredVersion)
         {
             throw new NotImplementedException();
         }
 
-        public TDelegate GetExtension<TDelegate>()
+        public TDelegate GetProcedure<TDelegate>(string procedureName)
         {
-            return GetExtension<TDelegate>(typeof (TDelegate).Name);
+            return (TDelegate)Convert.ChangeType(GetProcedure(procedureName, typeof(TDelegate)), typeof(TDelegate));
         }
+
+
+        public TDelegate GetProcedure<TDelegate>()
+        {
+            return (TDelegate)Convert.ChangeType(GetProcedure(typeof(TDelegate).Name, typeof (TDelegate)), typeof(TDelegate));
+        }
+
+        public abstract Delegate GetProcedure(string name, Type delegateType);
+
+
 
         public static IContext Current
         {

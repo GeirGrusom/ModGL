@@ -72,6 +72,21 @@ namespace ModGL.Windows
 
         public WindowsContext(IWGL wgl, ContextCreationParameters parameters)
         {
+            if(parameters == null)
+                throw new ArgumentNullException("parameters");
+
+            if(parameters.MajorVersion < 3)
+                throw new ContextCreationException("OpenGL version below 3.0 is not supported.", parameters);
+
+            if(parameters.Device == IntPtr.Zero)
+                throw new ContextCreationException("Device (HDC) cannot be null.", parameters);
+
+            if(parameters.Window == IntPtr.Zero)
+                throw new ContextCreationException("Window (HWND) cannot be null.", parameters);
+
+            if(parameters.Display != IntPtr.Zero)
+                throw new ContextCreationException("Display is not supported on this platform.", parameters);
+
             _wgl = wgl;
             hwnd = parameters.Window;
             hdc = parameters.Device;
@@ -86,31 +101,34 @@ namespace ModGL.Windows
 
             if(choosePixelFormat == null)
                 throw new ContextCreationException("Unable to find wglChoosePixelFormatARB.", parameters);
+
             if(createContext == null)
                 throw new ContextCreationException("Unable to find wglCreateContextARB extension.", parameters);
-
-
 
             int[] formats = new int[1];
             uint[] numFormats = new uint[1];
 
-            choosePixelFormat(
+            if (!choosePixelFormat(
                 hdc,
-                new []
-                {
-                    WGLPixelFormatConstants.WGL_DRAW_TO_WINDOW_ARB, (int)GLboolean.True,
-                    WGLPixelFormatConstants.WGL_SUPPORT_OPENGL_ARB, (int)GLboolean.True,
-                    WGLPixelFormatConstants.WGL_DOUBLE_BUFFER_ARB, (int)GLboolean.True,
-                    WGLPixelFormatConstants.WGL_PIXEL_TYPE_ARB, WGLPixelFormatConstants.WGL_TYPE_RGBA_ARB,
-                    WGLPixelFormatConstants.WGL_COLOR_BITS_ARB, parameters.ColorBits,
-                    WGLPixelFormatConstants.WGL_DEPTH_BITS_ARB, parameters.DepthBits,
-                    WGLPixelFormatConstants.WGL_STENCIL_BITS_ARB, parameters.StencilBits,
-                    0 //End 
-                },
+                new[]
+                    {
+                        WGLPixelFormatConstants.WGL_DRAW_TO_WINDOW_ARB, (int) GLboolean.True,
+                        WGLPixelFormatConstants.WGL_SUPPORT_OPENGL_ARB, (int) GLboolean.True,
+                        WGLPixelFormatConstants.WGL_DOUBLE_BUFFER_ARB, (int) GLboolean.True,
+                        WGLPixelFormatConstants.WGL_PIXEL_TYPE_ARB, WGLPixelFormatConstants.WGL_TYPE_RGBA_ARB,
+                        WGLPixelFormatConstants.WGL_COLOR_BITS_ARB, parameters.ColorBits,
+                        WGLPixelFormatConstants.WGL_DEPTH_BITS_ARB, parameters.DepthBits,
+                        WGLPixelFormatConstants.WGL_STENCIL_BITS_ARB, parameters.StencilBits,
+                        0 //End 
+                    },
                 null,
                 1,
                 formats,
-                numFormats);
+                numFormats)
+                )
+            {
+                throw new ContextCreationException("Unable to choose pixel format.", parameters);
+            }
 
         }
 
