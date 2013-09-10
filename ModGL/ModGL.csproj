@@ -45,7 +45,9 @@
     <Compile Include="IObjectManager.cs" />
     <Compile Include="NativeGL\Delegates.cs" />
     <Compile Include="NativeGL\GL.cs" />
+    <Compile Include="NativeGL\OpenGLBindingFactory.cs" />
     <Compile Include="OpenGLContext.cs" />
+    <Compile Include="ThrowOnErrorAttribute.cs" />
     <Compile Include="VertexArray.cs" />
     <Compile Include="VertexBuffer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
