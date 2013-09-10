@@ -36,22 +36,28 @@ namespace ModGL.Windows
         public uint DamageMask;
     }
 
+    public delegate bool wglChoosePixelFormatARB(HDC hdc,
+                                int[] piAttribIList,
+                                float[] pfAttribFList,
+                                uint nMaxFormats,
+                                int[] piFormats,
+                                uint[] nNumFormats);
+
+    public delegate HGLRC wglCreateContextAttribsARB(HDC hDC, HGLRC hshareContext, int[] attribList);
+
     public interface IWGL
     {
         HGLRC wglCreateContext(HDC hdc);
-
         
-        Delegate wglGetProcAddress(string procName);
-
+        TDelegate wglGetProcAddress<TDelegate>(string procName);
         
         bool wglMakeCurrent(HDC dc, HGLRC glrc);
 
-
         int GetPixelFormat(HDC hdc);
 
+        bool SetPixelFormat(HDC hdc, int iPixelFormat, ref PixelFormatDescriptor ppfd);        
 
         int DescribePixelFormat(HDC hdc, int pixelFormat, uint bytes, out PixelFormatDescriptor ppfd);
-
 
         int ChoosePixelFormat(HDC hdc, ref PixelFormatDescriptor ppfd);
 
@@ -66,9 +72,9 @@ namespace ModGL.Windows
 
         public const string GDILibraryName = "gdi32";
 
-        Delegate IWGL.wglGetProcAddress(string procName)
+        TDelegate IWGL.wglGetProcAddress<TDelegate>(string procName)
         {
-            return wglGetProcAddress(procName);
+            return  (TDelegate)Convert.ChangeType(Marshal.GetDelegateForFunctionPointer(wglGetProcAddress(procName), typeof(TDelegate)), typeof(TDelegate));
         }
 
         bool IWGL.wglMakeCurrent(IntPtr dc, IntPtr glrc)
@@ -100,12 +106,20 @@ namespace ModGL.Windows
         {
             return wglCreateContext(hdc);
         }
+        
+        bool IWGL.SetPixelFormat(HDC hdc, int iPixelFormat, ref PixelFormatDescriptor ppfd)
+        {
+            return SetPixelFormat(hdc, iPixelFormat, ref ppfd);
+        }
+
+        [DllImport(GDILibraryName)]
+        public static extern bool SetPixelFormat(HDC hdc, int iPixelFormat, ref PixelFormatDescriptor ppfd);
 
         [DllImport(WGLLibraryName)]
         public static extern HGLRC wglCreateContext(HDC hdc);
 
         [DllImport(WGLLibraryName)]
-        public static extern Delegate wglGetProcAddress(string procName);
+        public static extern IntPtr wglGetProcAddress(string procName);
 
         [DllImport(WGLLibraryName)]
         public static extern bool wglMakeCurrent(HDC dc, HGLRC glrc);

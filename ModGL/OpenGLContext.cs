@@ -15,17 +15,14 @@ namespace ModGL
 
     public enum OpenGLVersion
     {
-        OpenGL30 = 0x30,
-        OpenGL31 = 0x31,
-        OpenGL32 = 0x32,
-        OpenGL40 = 0x40,
-        OpenGL41 = 0x41,
-        OpenGL42 = 0x42,
+        OpenGL30 = 0x300,
+        OpenGL31 = 0x310,
+        OpenGL32 = 0x320,
+        OpenGL40 = 0x400,
+        OpenGL41 = 0x410,
+        OpenGL42 = 0x420,
         DontCare = 0xffff,
     }
-    
-
-
 
     public abstract class Context : IContext, IGLObject, IExtensionSupport
     {
@@ -56,7 +53,8 @@ namespace ModGL
             set
             {
                 _currentContext = value; 
-                _currentContext.MakeCurrent();
+                if(value != null)
+                    _currentContext.MakeCurrent();
             }
         }
     }

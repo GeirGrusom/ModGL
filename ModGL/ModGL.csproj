@@ -39,6 +39,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ContextCreationException.cs" />
+    <Compile Include="ExtensionMissingException.cs" />
     <Compile Include="IGLObject.cs" />
     <Compile Include="IObjectManager.cs" />
     <Compile Include="NativeGL\Delegates.cs" />
@@ -48,6 +50,8 @@
     <Compile Include="VertexBuffer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VertexDescriptor.cs" />
+    <Compile Include="ContextCreationParameters.cs" />
+    <Compile Include="Windows\PixelFormatException.cs" />
     <Compile Include="Windows\WGL.cs" />
     <Compile Include="Windows\WindowsContext.cs" />
   </ItemGroup>
