@@ -164,10 +164,10 @@ namespace ModGL.Windows
             throw new NotImplementedException();
         }
 
-        public override TDelegate GetExtension<TDelegate>(string extensionName)
+        public override Delegate GetProcedure(string extensionName, Type delegateType)
         {
-            var deleg = _wgl.wglGetProcAddress(extensionName);
-            return (TDelegate)Convert.ChangeType(deleg, typeof(TDelegate));
+            var deleg = _wgl.wglGetProcAddress(extensionName, delegateType);
+            return deleg;
         }
     }
 }

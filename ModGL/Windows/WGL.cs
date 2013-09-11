@@ -49,6 +49,8 @@ namespace ModGL.Windows
     {
         HGLRC wglCreateContext(HDC hdc);
         
+        Delegate wglGetProcAddress(string procName, Type delegateType);
+
         TDelegate wglGetProcAddress<TDelegate>(string procName);
         
         bool wglMakeCurrent(HDC dc, HGLRC glrc);
@@ -72,9 +74,14 @@ namespace ModGL.Windows
 
         public const string GDILibraryName = "gdi32";
 
+        Delegate IWGL.wglGetProcAddress(string procName, Type delegateType)
+        {
+            return  Marshal.GetDelegateForFunctionPointer(wglGetProcAddress(procName), delegateType);
+        }
+
         TDelegate IWGL.wglGetProcAddress<TDelegate>(string procName)
         {
-            return  (TDelegate)Convert.ChangeType(Marshal.GetDelegateForFunctionPointer(wglGetProcAddress(procName), typeof(TDelegate)), typeof(TDelegate));
+            return (TDelegate)Convert.ChangeType((this as IWGL).wglGetProcAddress(procName, typeof(TDelegate)), typeof(TDelegate));
         }
 
         bool IWGL.wglMakeCurrent(IntPtr dc, IntPtr glrc)

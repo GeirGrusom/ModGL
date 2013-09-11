@@ -7,13 +7,6 @@ namespace ModGL
         void MakeCurrent();
     }
 
-    public interface IExtensionSupport
-    {
-        Delegate GetProcedure(string procedureName, Type delegateType);
-        TDelegate GetProcedure<TDelegate>(string procedureName);
-        TDelegate GetProcedure<TDelegate>();
-    }
-
     public enum OpenGLVersion
     {
         OpenGL30 = 0x300,

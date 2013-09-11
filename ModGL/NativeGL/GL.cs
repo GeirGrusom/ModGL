@@ -21,7 +21,6 @@ using GLfloat = System.Single;
 using GLclampf = System.Single;
 using GLdouble = System.Double;
 using GLclampd = System.Double;
-using GLvoid = System.Void;
 using GLintptr = System.IntPtr;
 using GLsizeiptr = System.IntPtr;
 using GLhandle = System.UInt32;
@@ -1443,6 +1442,29 @@ namespace ModGL.NativeGL
         [DllImport(GLLibraryName)]
         public static extern void glCopyTexSubImage3D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLint x, GLint y, GLsizei width, GLsizei height);
  * */
+
+        [System.Diagnostics.DebuggerHidden]
+        [System.Diagnostics.DebuggerStepThrough]
+        public static void HandleOpenGLError()
+        {
+            GLenum error = glGetError();
+            switch ((ErrorCode)error)
+            {
+                case ErrorCode.InvalidEnum:
+                    throw new OpenGLInvalidEnumException();
+                case ErrorCode.InvalidOperation:
+                    throw new OpenGLInvalidOperationException();
+                case ErrorCode.InvalidValue:
+                    throw new OpenGLInvalidValueException();
+                case ErrorCode.StackOverflow:
+                    throw new OpenGLStackOverflowException();
+                case ErrorCode.StackUnderflow:
+                    throw new OpenGLStackUnderflowException();
+                default:
+                    throw new OpenGLException((ErrorCode)error);
+            }
+        }
+
         [DllImport(GLLibraryName)]
         public static extern void glDrawArrays(GLenum mode, GLint first, GLsizei count);
         [DllImport(GLLibraryName)]
@@ -1477,7 +1499,7 @@ namespace ModGL.NativeGL
 
         private static TDelegate GetFunction<TDelegate>(string functionName)
         {
-
+            throw new NotImplementedException();
         }
     }
 }

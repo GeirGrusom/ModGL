@@ -26,7 +26,7 @@ namespace ModGL
         public VertexBuffer(IEnumerable<TElementType> elements, IObjectManager manager)
         {
             this.manager = manager;
-            Handle = await manager.CreateVertexBuffer();
+            Handle = 0;
             data = elements.ToArray();
         }
 

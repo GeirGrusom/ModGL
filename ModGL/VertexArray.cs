@@ -8,6 +8,6 @@ namespace ModGL
 {
     public class VertexArray : IGLObject
     {
-        
+        public uint Handle { get; private set; }
     }
 }

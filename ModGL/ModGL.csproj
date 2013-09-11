@@ -41,11 +41,18 @@
   <ItemGroup>
     <Compile Include="ContextCreationException.cs" />
     <Compile Include="ExtensionMissingException.cs" />
+    <Compile Include="IExtensionSupport.cs" />
     <Compile Include="IGLObject.cs" />
     <Compile Include="IObjectManager.cs" />
     <Compile Include="NativeGL\Delegates.cs" />
     <Compile Include="NativeGL\GL.cs" />
     <Compile Include="NativeGL\OpenGLBindingFactory.cs" />
+    <Compile Include="NativeGL\OpenGLException.cs" />
+    <Compile Include="NativeGL\OpenGLInvalidEnumException.cs" />
+    <Compile Include="NativeGL\OpenGLInvalidOperationException.cs" />
+    <Compile Include="NativeGL\OpenGLInvalidValueException.cs" />
+    <Compile Include="NativeGL\OpenGLStackOverflowException.cs" />
+    <Compile Include="NativeGL\OpenGLStackUnderflowException.cs" />
     <Compile Include="OpenGLContext.cs" />
     <Compile Include="ThrowOnErrorAttribute.cs" />
     <Compile Include="VertexArray.cs" />
