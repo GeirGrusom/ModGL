@@ -4,41 +4,45 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using ModGL.NativeGL;
+
 namespace ModGL
 {
-    public interface IVertexBuffer : IGLObject
+    public interface IVertexBuffer : IBuffer
     {
-        long Elements { get; }
-        int ElementSize { get; }
     }
 
-    public class VertexBuffer<TElementType> : IVertexBuffer, IDisposable
+    public interface IElementArray : IBuffer
+    {
+    }
+
+    public sealed class ElementBuffer<TElementType> : Buffer<TElementType>, IElementArray
+    where TElementType : struct
+    {
+        public ElementBuffer(IEnumerable<TElementType> elements, IOpenGL30 gl)
+            : base(BufferTarget.ElementArray, elements, gl)
+        {
+        }
+        public ElementBuffer(long size, IOpenGL30 gl)
+            : base(BufferTarget.ElementArray, size, gl)
+        {
+        }
+
+    }
+
+
+    public sealed class VertexBuffer<TElementType> : Buffer<TElementType>, IVertexBuffer
         where TElementType : struct
     {
-        private readonly TElementType[] data;
-        private readonly IObjectManager manager;
-
-        public long Elements { get { return data.LongLength; } }
-        public int ElementSize { get { throw new NotImplementedException(); } }
-        public uint Handle { get; protected internal set; }
-        
-
-        public VertexBuffer(IEnumerable<TElementType> elements, IObjectManager manager)
+        public VertexBuffer(IEnumerable<TElementType> elements, IOpenGL30 gl)
+            : base(BufferTarget.Array, elements, gl)
         {
-            this.manager = manager;
-            Handle = 0;
-            data = elements.ToArray();
         }
 
-        public void Dispose()
+        public VertexBuffer(long size, IOpenGL30 gl)
+            : base(BufferTarget.Array, size, gl)
         {
-            throw new NotImplementedException();
         }
 
-        public TElementType this[long index]
-        {
-            get { return data[index]; }
-            set { data[index] = value; }
-        }
-    }
+   }
 }

@@ -1,10 +1,16 @@
 ﻿using System;
 
+using ModGL.NativeGL;
+
 namespace ModGL
 {
     public interface IContext
     {
         void MakeCurrent();
+
+        void Bind(IBuffer buffer);
+
+        void Bind(IVertexArray vertexArray);
     }
 
     public enum OpenGLVersion
@@ -25,6 +31,9 @@ namespace ModGL
         private static IContext _currentContext;
 
         public abstract void MakeCurrent();
+
+        public abstract IDisposable Bind(IBuffer buffer);
+        public abstract IDisposable Bind(IVertexArray vertexArray);
 
         public NativeGL.IOpenGL30 GetOpenGL(OpenGLVersion desiredVersion)
         {

@@ -20,6 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -39,6 +40,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Buffer.cs" />
+    <Compile Include="BufferBindContext.cs" />
+    <Compile Include="BufferExtensions.cs" />
     <Compile Include="ContextCreationException.cs" />
     <Compile Include="ExtensionMissingException.cs" />
     <Compile Include="IExtensionSupport.cs" />
