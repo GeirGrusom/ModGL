@@ -29,7 +29,7 @@ namespace ModGL
         public IEnumerable<VertexElement> Elements { get; private set; }
         public void Apply(VertexArray<TElementType> array, IOpenGL30 gl)
         {
-            gl.glGen
+            
         }
     }
 }

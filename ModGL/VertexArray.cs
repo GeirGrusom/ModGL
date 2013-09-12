@@ -11,8 +11,13 @@ namespace ModGL
         
     }
 
-    public class VertexArray<TElementType> : IVertexArray
+    public class VertexArray<TElementType> : IVertexArray, IBindable
     {
         public uint Handle { get; private set; }
+
+        public BindContext Bind()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

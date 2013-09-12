@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-
 using ModGL.NativeGL;
 
 namespace ModGL
@@ -18,53 +15,88 @@ namespace ModGL
         Type ElementType { get; }
     }
 
-    public class Buffer<TElementType> : IBuffer
+    public class Buffer<TElementType> : IBuffer, IBindable
         where TElementType : struct
     {
-        internal TElementType[] data;
-        private readonly int elementSize;
-        private readonly IOpenGL30 gl;
+        internal TElementType[] Data;
+        private readonly int _elementSize;
+        private readonly IOpenGL30 _gl;
+
+        public bool Released { get; private set; }
 
         public BufferTarget Target { get; private set; }
 
-        public long Elements { get { return data.LongLength; } }
+        public long Elements { get { return Data.LongLength; } }
 
-        public int ElementSize { get { return elementSize; } }
+        public int ElementSize { get { return _elementSize; } }
 
         public uint Handle { get; private set; }
 
+        public BindContext Bind()
+        {
+            _gl.glBindBuffer(Target, Handle);
+            return new BindContext(() => _gl.glBindBuffer(Target, 0));
+        }
+
+        public BindContext Bind(uint index)
+        {
+            _gl.glBindBufferBase(Target, index, Handle);
+            return new BindContext(() => _gl.glBindBufferBase(Target, index, 0));
+        }
+
+        public BindContext Bind(uint index, long startIndex, long elements)
+        {
+            _gl.glBindBufferRange(Target, index, Handle, new IntPtr(startIndex * _elementSize), new IntPtr(elements * _elementSize));
+            return new BindContext(() => _gl.glBindBufferBase(Target, index, 0));
+        }
+
+        public void ReleaseClientData()
+        {
+            Data = null;
+            Released = true;
+        }
+
+        private void ReleasedConstraint()
+        {
+            if(Released)
+                throw new InvalidOperationException();
+        }
+
         protected Buffer(BufferTarget target, IEnumerable<TElementType> elements , IOpenGL30 gl)
         {
+            ReleasedConstraint();
             if(gl == null)
                 throw new ArgumentNullException("gl");
-            this.gl = gl;
-            data = elements.ToArray();
+            _gl = gl;
+            Data = elements.ToArray();
             Target = target;
-            elementSize = Marshal.SizeOf(typeof(TElementType));
-            uint[] names = new uint[1];
+            _elementSize = Marshal.SizeOf(typeof(TElementType));
+            var names = new uint[1];
             gl.glGenBuffers(1, names);
             Handle = names.Single();
         }
 
         protected Buffer(BufferTarget target, long size, IOpenGL30 gl)
         {
+            ReleasedConstraint();
             if (gl == null)
                 throw new ArgumentNullException("gl");
-            this.gl = gl;
-            data = new TElementType[size];
+            _gl = gl;
+            Data = new TElementType[size];
             Target = target;
-            elementSize = Marshal.SizeOf(typeof(TElementType));
-            uint[] names = new uint[1];
+            _elementSize = Marshal.SizeOf(typeof(TElementType));
+            var names = new uint[1];
             gl.glGenBuffers(1, names);
             Handle = names.Single();
         }
 
         public void BufferData(BufferUsage usage)
         {
-            var handle = GCHandle.Alloc(data, GCHandleType.Pinned);
+            ReleasedConstraint();
+            var handle = GCHandle.Alloc(Data, GCHandleType.Pinned);
             try
             {
-                gl.glBufferData(Target, new IntPtr(data.LongLength * ElementSize), handle.AddrOfPinnedObject(), usage);
+                _gl.glBufferData(Target, new IntPtr(Data.LongLength * ElementSize), handle.AddrOfPinnedObject(), usage);
             }
             finally
             {
@@ -76,18 +108,20 @@ namespace ModGL
 
         public void BufferSubData(BufferUsage usage)
         {
+            ReleasedConstraint();
             throw new NotImplementedException();
         }
 
         public void BufferSubData<TElement>(BufferUsage usage, System.Linq.Expressions.Expression<Func<TElementType, TElement>> elementProc)
         {
+            ReleasedConstraint();
             throw new NotImplementedException();
         }
 
         public TElementType this[long index]
         {
-            get { return data[index]; }
-            set { data[index] = value; }
+            get { ReleasedConstraint(); return Data[index]; }
+            set { ReleasedConstraint(); Data[index] = value; }
         }
     }
 }

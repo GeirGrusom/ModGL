@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Collections.Generic;
 using ModGL.NativeGL;
 
 namespace ModGL
@@ -7,10 +7,6 @@ namespace ModGL
     public interface IContext
     {
         void MakeCurrent();
-
-        void Bind(IBuffer buffer);
-
-        void Bind(IVertexArray vertexArray);
     }
 
     public enum OpenGLVersion
@@ -32,12 +28,17 @@ namespace ModGL
 
         public abstract void MakeCurrent();
 
-        public abstract IDisposable Bind(IBuffer buffer);
-        public abstract IDisposable Bind(IVertexArray vertexArray);
-
-        public NativeGL.IOpenGL30 GetOpenGL(OpenGLVersion desiredVersion)
+        public TOpenGLInterface GetOpenGL<TOpenGLInterface>(bool debug = false)
+            where TOpenGLInterface : class
         {
-            throw new NotImplementedException();
+            var bindingFactory = new InterfaceBindingFactory();
+            return bindingFactory
+                .CreateBinding<TOpenGLInterface>
+                (
+                    context: this,
+                    interfaceMap: new Dictionary<Type, Type> { {typeof(IOpenGL), typeof(GL)} }, 
+                    errorHandling: debug ? GL.OpenGLErrorFunctions : null
+                );
         }
 
         public TDelegate GetProcedure<TDelegate>(string procedureName)

@@ -3,12 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reflection;
-using System.Reflection.Emit;
-using System.Linq.Expressions;
 
 namespace ModGL.NativeGL
 {
@@ -115,7 +109,8 @@ namespace ModGL.NativeGL
                 var newMethod = definedType.DefineMethod
                 (
                     method.Name, 
-                    MethodAttributes.Private | MethodAttributes.HideBySig | MethodAttributes.NewSlot | MethodAttributes.Virtual | MethodAttributes.Final, CallingConventions.Any, 
+                    MethodAttributes.Private | MethodAttributes.HideBySig | MethodAttributes.NewSlot | MethodAttributes.Virtual | MethodAttributes.Final,
+                    CallingConventions.Any, 
                     method.ReturnType, 
                     method.GetParameters().OrderBy(p => p.Position).Select(t => t.ParameterType).ToArray()
                 );

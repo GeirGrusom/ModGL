@@ -393,6 +393,7 @@ namespace ModGL.NativeGL
 
     }
 
+    [GLVersion(3, 0)]
     public interface IOpenGL30
     {
         void glColorMaski(GLuint index, GLboolean r, GLboolean g, GLboolean b, GLboolean a);
@@ -403,8 +404,8 @@ namespace ModGL.NativeGL
         GLboolean glIsEnabledi(GLenum target, GLuint index);
         void glBeginTransformFeedback(GLenum primitiveMode);
         void glEndTransformFeedback();
-        void glBindBufferRange(GLenum target, GLuint index, GLuint buffer, GLintptr offset, GLsizeiptr size);
-        void glBindBufferBase(GLenum target, GLuint index, GLuint buffer);
+        void glBindBufferRange(BufferTarget target, GLuint index, GLuint buffer, GLintptr offset, GLsizeiptr size);
+        void glBindBufferBase(BufferTarget target, GLuint index, GLuint buffer);
         void glTransformFeedbackVaryings(GLuint program, GLsizei count, string[] varyings, GLenum bufferMode);
         void glGetTransformFeedbackVarying(GLuint program, GLuint index, GLsizei bufSize, GLsizei[] length, GLsizei[] size, GLenum[] type, GLchar[] name);
         void glClampColor(GLenum target, GLenum clamp);
@@ -600,39 +601,49 @@ namespace ModGL.NativeGL
     }
     // ReSharper restore InconsistentNaming
 
+    [GLVersion(3, 1)]
     public interface IOpenGL31 : IOpenGL30
     {
 
     }
 
+    [GLVersion(3, 2)]
     public interface IOpenGL32 : IOpenGL31
     {
 
     }
 
+    [GLVersion(3, 3)]
     public interface IOpenGL33 : IOpenGL32
     {
 
     }
 
+    [GLVersion(4, 0)]
     public interface IOpenGL40 : IOpenGL33
     {
 
     }
+
+    [GLVersion(4, 1)]
     public interface IOpenGL41 : IOpenGL40
     {
 
     }
+
+    [GLVersion(4, 2)]
     public interface IOpenGL42 : IOpenGL41
     {
 
     }
 
+    [GLVersion(4, 3)]
     public interface IOpenGL43 : IOpenGL42
     {
 
     }
 
+    [GLVersion(4, 4)]
     public interface IOpenGL44 : IOpenGL43
     {
 
@@ -692,32 +703,6 @@ namespace ModGL.NativeGL
         DstColor = 0x0306,
         OneMinusDstColor = 0x0307,
         SrcAlphaSaturate = 0x0308
-    }
-
-    public class GLVersionAttribute : Attribute
-    {
-        public int Major;
-        public int Minor;
-        public int Revision;
-
-        public GLVersionAttribute(int major, int minor, int revision)
-        {
-            Major = major;
-            Minor = minor;
-            Revision = revision;
-        }
-
-        public GLVersionAttribute(int major, int minor)
-        {
-            Major = major;
-            Minor = minor;
-        }
-
-        public override string ToString()
-        {
-            return string.Format("{0}.{1}.{2}", Major, Minor, Revision);
-        }
-
     }
 
     [GLVersion(1, 5)]

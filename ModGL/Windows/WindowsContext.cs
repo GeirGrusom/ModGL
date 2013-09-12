@@ -8,6 +8,40 @@ using ModGL.NativeGL;
 
 namespace ModGL.Windows
 {
+     public enum WGLColorBufferMask
+     {
+        FrontColorBufferBit= 1,
+        BackColorBufferBit = 2,
+        DepthBufferBit = 4,
+        StencilBufferBit = 8
+     }
+
+
+    public enum WGLContextFlagsMask
+    {
+        DebugBit = 1,
+        ForwardCompatibleBit = 2,
+        RobustAccessBit = 4,
+        ResetIsolationBit = 8
+    }
+
+    public enum WGLContextProfileMask
+    {
+        CoreProfileBit = 1,
+        CompatibilityProfileBit = 2,
+        EsProfileBit = 4,
+        Es2ProfileBit = 8
+    }
+
+    public enum WGLContextAttributes
+    {
+        MajorVersion     =      0x2091,
+        MinorVersion     =      0x2092,
+        LayerPlane       =      0x2093,
+        Flags            =      0x2094,
+        ProfileMask      =      0x9126
+    }
+ 
     public class WindowsContext : Context
     {
         private readonly IWGL _wgl;
@@ -69,7 +103,7 @@ namespace ModGL.Windows
             public const int WGL_TYPE_RGBA_ARB = 0x202B;
             public const int WGL_TYPE_COLORINDEX_ARB = 0x202C;
         }
-
+        
         public WindowsContext(IWGL wgl, ContextCreationParameters parameters)
         {
             if(parameters == null)
@@ -129,6 +163,17 @@ namespace ModGL.Windows
             {
                 throw new ContextCreationException("Unable to choose pixel format.", parameters);
             }
+
+            var finalContext = createContext(hdc, IntPtr.Zero, new []
+                {
+                    (int)WGLContextAttributes.MajorVersion, parameters.MajorVersion,
+                    (int)WGLContextAttributes.MinorVersion, parameters.MinorVersion,
+                    (int)WGLContextAttributes.Flags, 0,
+                    (int)WGLContextAttributes.ProfileMask, (int)WGLContextProfileMask.CoreProfileBit,
+                    0
+                }
+            );
+            hglrc = finalContext;
 
         }
 

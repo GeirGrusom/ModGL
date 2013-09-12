@@ -4,15 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{1CFDC9EE-42E8-45FD-B5EA-478F67C72447}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{5EF96097-BFCE-4688-B26B-EEAC078C9F30}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ModGL</RootNamespace>
-    <AssemblyName>ModGL</AssemblyName>
+    <RootNamespace>InterfaceBuilder</RootNamespace>
+    <AssemblyName>InterfaceBuilder</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -20,9 +21,9 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -40,34 +41,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Buffer.cs" />
-    <Compile Include="BufferExtensions.cs" />
-    <Compile Include="ContextCreationException.cs" />
-    <Compile Include="ExtensionMissingException.cs" />
-    <Compile Include="IBindable.cs" />
-    <Compile Include="IExtensionSupport.cs" />
-    <Compile Include="IGLObject.cs" />
-    <Compile Include="IObjectManager.cs" />
-    <Compile Include="NativeGL\Delegates.cs" />
-    <Compile Include="NativeGL\GL.cs" />
-    <Compile Include="NativeGL\GLVersionAttribute.cs" />
-    <Compile Include="NativeGL\InterfaceBindingFactory.cs" />
-    <Compile Include="NativeGL\OpenGLException.cs" />
-    <Compile Include="NativeGL\OpenGLInvalidEnumException.cs" />
-    <Compile Include="NativeGL\OpenGLInvalidOperationException.cs" />
-    <Compile Include="NativeGL\OpenGLInvalidValueException.cs" />
-    <Compile Include="NativeGL\OpenGLStackOverflowException.cs" />
-    <Compile Include="NativeGL\OpenGLStackUnderflowException.cs" />
-    <Compile Include="OpenGLContext.cs" />
-    <Compile Include="ThrowOnErrorAttribute.cs" />
-    <Compile Include="VertexArray.cs" />
-    <Compile Include="VertexBuffer.cs" />
+    <Compile Include="EnumerationBuilder.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="VertexDescriptor.cs" />
-    <Compile Include="ContextCreationParameters.cs" />
-    <Compile Include="Windows\PixelFormatException.cs" />
-    <Compile Include="Windows\WGL.cs" />
-    <Compile Include="Windows\WindowsContext.cs" />
+    <Compile Include="XmlRetriever.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
