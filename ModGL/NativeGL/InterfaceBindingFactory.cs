@@ -12,7 +12,14 @@ using System.Linq.Expressions;
 
 namespace ModGL.NativeGL
 {
-    public class OpenGLBindingFactory
+
+    public class ErrorHandling
+    {
+        public MethodInfo FlushError { get; set; }
+        public MethodInfo CheckErrorState { get; set; }
+    }
+
+    public class InterfaceBindingFactory
     {
         private static string GetDelegateNameForMethodInfo(MethodInfo method)
         {
@@ -52,16 +59,37 @@ namespace ModGL.NativeGL
 
             return typeBuilder;
         }
-        public TGLInterface CreateBinding<TGLInterface>(IExtensionSupport context, bool debugInterface = false)
+        /// <summary>
+        /// Creates a binding for the specified interface to extension methods defined by IExtensions support.
+        /// </summary>
+        /// <typeparam name="TGLInterface">Interface type to implement.</typeparam>
+        /// <param name="context">Extension context. This will return method delegates that the binder will use.</param>
+        /// <param name="errorHandling">Defines error handling routines. Setting this to null disables error handling.</param>
+        /// <returns>Implementation of the interface.</returns>
+        public TGLInterface CreateBinding<TGLInterface>(IExtensionSupport context, ErrorHandling errorHandling = null)
+        {
+            return CreateBinding<TGLInterface>(context, new Dictionary<Type, Type>(), errorHandling);
+        }
+
+        /// <summary>
+        /// Creates a binding for the specified interface to extension methods defined by IExtensions support.
+        /// </summary>
+        /// <typeparam name="TGLInterface">Interface type to implement.</typeparam>
+        /// <param name="context">Extension context. This will return method delegates that the binder will use.</param>
+        /// <param name="interfaceMap">Additional interfaces to implement using static functions in the mpa types.</param>
+        /// <param name="errorHandling">Defines error handling routines. Setting this to null disables error handling.</param>
+        /// <returns>Implementation of the interface.</returns>
+        /// <remarks>The interface map will override interface implementations from <see cref="TGLInterface"/> if they intersect.</remarks>
+        public TGLInterface CreateBinding<TGLInterface>(IExtensionSupport context, Dictionary<Type, Type> interfaceMap, ErrorHandling errorHandling = null)
         {
             if(!typeof(TGLInterface).IsInterface)
                 throw new ArgumentException("TGLInterface must be an interface.");
 
-            var superType = typeof(IOpenGL);
-            var superTypeMethods = superType.GetMethods();
+            var remapMethods = interfaceMap.SelectMany(t => t.Value.GetMethods());
             var type = typeof (TGLInterface);
 
-            var methods = type.GetMethods().Except(superTypeMethods).ToArray();
+            // Exclude methods defined in the interface map.
+            var methods = type.GetMethods().Except(remapMethods).ToArray();
 
             var assembly = AssemblyBuilder.DefineDynamicAssembly(
                     new AssemblyName(string.Format("{0}.Dynamic", typeof (TGLInterface).Name)),
@@ -75,7 +103,7 @@ namespace ModGL.NativeGL
 
             definedType.AddInterfaceImplementation(typeof(TGLInterface));
 
-            var constructor = definedType.DefineConstructor(MethodAttributes.Public | MethodAttributes.Final, CallingConventions.Any, new[] {typeof (IExtensionSupport)});
+            var constructor = definedType.DefineConstructor(MethodAttributes.Public, CallingConventions.Any, new[] {typeof (IExtensionSupport)});
 
             var fields = GenerateInvocationFields(methods, delegateModule, definedType);
 
@@ -87,36 +115,50 @@ namespace ModGL.NativeGL
                 var newMethod = definedType.DefineMethod
                 (
                     method.Name, 
-                    MethodAttributes.Public, CallingConventions.Any, 
+                    MethodAttributes.Private | MethodAttributes.HideBySig | MethodAttributes.NewSlot | MethodAttributes.Virtual | MethodAttributes.Final, CallingConventions.Any, 
                     method.ReturnType, 
-                    method.GetParameters().Select(t => t.ParameterType).ToArray()
+                    method.GetParameters().OrderBy(p => p.Position).Select(t => t.ParameterType).ToArray()
                 );
                 definedType.DefineMethodOverride(newMethod, method);
 
-                var throwAttrib = method.GetCustomAttributes<ThrowOnErrorAttribute>().LastOrDefault();
-
                 var generator = newMethod.GetILGenerator();
 
-                if (throwAttrib != null || debugInterface)
-                    GenerateThrowingInvocation(generator, method, fields, typeof(TGLInterface));
+                if (errorHandling != null)
+                    GenerateThrowingInvocation(generator, method, fields, errorHandling);
                 else
                     GenerateInvocation(generator, method, fields);
             }
 
-            // Implement OpenGL 1.1 methods as invocations to the static class GL
-            foreach (var method in superTypeMethods)
+            foreach (var item in interfaceMap)
             {
-                var newMethod = definedType.DefineMethod(method.Name, MethodAttributes.Public, CallingConventions.Any, method.ReturnType, method.GetParameters().Select(t => t.ParameterType).ToArray());
-                definedType.DefineMethodOverride(newMethod, method);
+                // Implement interface
+                definedType.AddInterfaceImplementation(item.Key);
+                foreach (var method in item.Value.GetMethods())
+                {
+                    // Map interface to static methods.
+                    var parameters =
+                        method.GetParameters().OrderBy(p => p.Position).Select(t => t.ParameterType).ToArray();
+                    const MethodAttributes attributes = MethodAttributes.Private | MethodAttributes.HideBySig |
+                                          MethodAttributes.NewSlot | MethodAttributes.Virtual | MethodAttributes.Final;
 
-                var throwAttrib = method.GetCustomAttributes<ThrowOnErrorAttribute>().LastOrDefault();
+                    var newMethod = definedType.DefineMethod
+                    (
+                        method.Name, 
+                        attributes,
+                        CallingConventions.Any,
+                        method.ReturnType,
+                        parameters
+                    );
 
-                var generator = newMethod.GetILGenerator();
+                    definedType.DefineMethodOverride(newMethod, method);
 
-                if (throwAttrib != null || debugInterface)
-                    GenerateThrowingStaticInvocation(generator, method);
-                else
-                    GenerateStaticInvocation(generator, method);
+                    var generator = newMethod.GetILGenerator();
+
+                    if (errorHandling != null)
+                        GenerateThrowingStaticInvocation(generator, method, errorHandling);
+                    else
+                        GenerateStaticInvocation(generator, method);
+                }                
             }
 
             var resultType = definedType.CreateType();
@@ -163,25 +205,25 @@ namespace ModGL.NativeGL
             generator.Emit(OpCodes.Ret);
         }
 
-        private void GenerateThrowingStaticInvocation(ILGenerator generator, MethodInfo method)
+        private void GenerateThrowingStaticInvocation(ILGenerator generator, MethodInfo method, ErrorHandling err)
         {
-            generator.EmitCall(OpCodes.Call, typeof(GL).GetMethod("glGetError"), null);
-            generator.Emit(OpCodes.Pop); // Pop return value
+            generator.DeclareLocal(method.ReturnType);
+            generator.EmitCall(OpCodes.Call, err.FlushError, null);
             GenerateStaticInvocation(generator, method, emitReturn: false);
             generator.Emit(OpCodes.Stloc_0);
-            generator.EmitCall(OpCodes.Call, typeof(GL).GetMethod("HandleOpenGLError"), null);
+            generator.EmitCall(OpCodes.Call, err.CheckErrorState, null);
             generator.Emit(OpCodes.Ldloc_0);
             generator.Emit(OpCodes.Ret);
         }
 
 
-        private void GenerateThrowingInvocation(ILGenerator generator, MethodInfo method, IEnumerable<FieldBuilder> fieldBuilders, Type parentType)
+        private void GenerateThrowingInvocation(ILGenerator generator, MethodInfo method, IEnumerable<FieldBuilder> fieldBuilders, ErrorHandling err)
         {
-            generator.EmitCall(OpCodes.Call, typeof(GL).GetMethod("glGetError"), null);
-            generator.Emit(OpCodes.Pop); // Pop return value
+            generator.DeclareLocal(method.ReturnType);
+            generator.EmitCall(OpCodes.Call, err.FlushError, null);
             GenerateInvocation(generator, method, fieldBuilders, emitReturn: false);
             generator.Emit(OpCodes.Stloc_0);
-            generator.EmitCall(OpCodes.Call, typeof(GL).GetMethod("HandleOpenGLError"), null);
+            generator.EmitCall(OpCodes.Call, err.CheckErrorState, null);
             generator.Emit(OpCodes.Ldloc_0);
             generator.Emit(OpCodes.Ret);
         }

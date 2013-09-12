@@ -46,7 +46,7 @@
     <Compile Include="IObjectManager.cs" />
     <Compile Include="NativeGL\Delegates.cs" />
     <Compile Include="NativeGL\GL.cs" />
-    <Compile Include="NativeGL\OpenGLBindingFactory.cs" />
+    <Compile Include="NativeGL\InterfaceBindingFactory.cs" />
     <Compile Include="NativeGL\OpenGLException.cs" />
     <Compile Include="NativeGL\OpenGLInvalidEnumException.cs" />
     <Compile Include="NativeGL\OpenGLInvalidOperationException.cs" />

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -1448,6 +1449,8 @@ namespace ModGL.NativeGL
         public static void HandleOpenGLError()
         {
             GLenum error = glGetError();
+            if (error == 0)
+                return;
             switch ((ErrorCode)error)
             {
                 case ErrorCode.InvalidEnum:
@@ -1464,6 +1467,17 @@ namespace ModGL.NativeGL
                     throw new OpenGLException((ErrorCode)error);
             }
         }
+
+        public static void FlushOpenGLError()
+        {
+            glGetError();
+        }
+
+        public static readonly ErrorHandling OpenGLErrorFunctions = new ErrorHandling
+            {
+                FlushError = typeof (GL).GetMethod("FlushOpenGLError", BindingFlags.Public | BindingFlags.Static),
+                CheckErrorState = typeof (GL).GetMethod("HandleOpenGLError", BindingFlags.Public | BindingFlags.Static)
+            };
 
         [DllImport(GLLibraryName)]
         public static extern void glDrawArrays(GLenum mode, GLint first, GLsizei count);
