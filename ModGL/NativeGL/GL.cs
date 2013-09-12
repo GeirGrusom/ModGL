@@ -321,6 +321,8 @@ namespace ModGL.NativeGL
 
     public delegate GLubyte[] PFNGLGETSTRINGIPROC(GLenum name, GLuint index);*/
 
+
+
     public interface IOpenGL
     {
         // 1.0
@@ -560,14 +562,14 @@ namespace ModGL.NativeGL
         void glGetQueryiv(GLenum target, GLenum pname, GLint[] @params);
         void glGetQueryObjectiv(GLuint id, GLenum pname, GLint[] @params);
         void glGetQueryObjectuiv(GLuint id, GLenum pname, GLuint[] @params);
-        void glBindBuffer(GLenum target, GLuint buffer);
+        void glBindBuffer(BufferTarget target, GLuint buffer);
         void glDeleteBuffers(GLsizei n, GLuint[] buffers);
         void glGenBuffers(GLsizei n, GLuint[] buffers);
         GLboolean glIsBuffer(GLuint buffer);
-        void glBufferData(GLenum target, GLsizeiptr size, IntPtr data, GLenum usage);
-        void glBufferSubData(GLenum target, GLintptr offset, GLsizeiptr size, IntPtr data);
+        void glBufferData(BufferTarget target, GLsizeiptr size, IntPtr data, BufferUsage usage);
+        void glBufferSubData(BufferTarget target, GLintptr offset, GLsizeiptr size, IntPtr data);
         void glGetBufferSubData(GLenum target, GLintptr offset, GLsizeiptr size, IntPtr data);
-        IntPtr glMapBuffer(GLenum target, GLenum access);
+        IntPtr glMapBuffer(BufferTarget target, GLenum access);
         GLboolean glUnmapBuffer(GLenum target);
         void glGetBufferParameteriv(GLenum target, GLenum pname, GLint[] @params);
         void glGetBufferPointerv(GLenum target, GLenum pname, IntPtr[] @params);
@@ -690,6 +692,100 @@ namespace ModGL.NativeGL
         DstColor = 0x0306,
         OneMinusDstColor = 0x0307,
         SrcAlphaSaturate = 0x0308
+    }
+
+    public class GLVersionAttribute : Attribute
+    {
+        public int Major;
+        public int Minor;
+        public int Revision;
+
+        public GLVersionAttribute(int major, int minor, int revision)
+        {
+            Major = major;
+            Minor = minor;
+            Revision = revision;
+        }
+
+        public GLVersionAttribute(int major, int minor)
+        {
+            Major = major;
+            Minor = minor;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("{0}.{1}.{2}", Major, Minor, Revision);
+        }
+
+    }
+
+    [GLVersion(1, 5)]
+    public enum BufferUsage : uint
+    {
+        StreamDraw = 0x88E0,
+        StreamRead = 0x88E1,
+        StreamCopy = 0x88E2,
+        StaticDraw = 0x88E4,
+        StaticRead = 0x88E5,
+        StaticCopy = 0x88E6,
+        DynamicDraw = 0x88E8,
+        DynamicRead = 0x88E9,
+        DynamicCopy = 0x88EA
+    }
+
+    [GLVersion(1, 5)]
+    public enum BufferAccess : uint
+    {
+        ReadOnly = 0x88B8,
+        WriteOnly = 0x88B9,
+        ReadWrite = 0x88BA
+    }
+
+    [GLVersion(1, 5)]
+    public enum BufferTarget : uint
+    {
+        [GLVersion(1, 5)]
+        Array = 0x8892,
+
+        [GLVersion(4, 1)]
+        AtomicCounter = 0x92C0,
+
+        [GLVersion(3, 0)]
+        CopyRead = 0x8F36,
+
+        [GLVersion(3, 0)]
+        CopyWrite = 0x8F37,
+
+        [GLVersion(3, 3)]
+        DrawIndirect = 0x8F3F,
+
+        [GLVersion(4, 3)]
+        DispatchIndirect = 0x90EE,
+
+        [GLVersion(1, 5)]
+        ElementArray = 0x8893,
+
+        [GLVersion(2, 0)]
+        PixelPack = 0x88EB,
+
+        [GLVersion(2, 0)]
+        PixelUnpack = 0x88EC,
+
+        [GLVersion(4, 4)]
+        Query = 0x9192,
+
+        [GLVersion(4, 3)]
+        ShaderStorage = 0x90D2,
+
+        [GLVersion(3, 1)]
+        Texture = 0x8C2A,
+
+        [GLVersion(3, 0)]
+        TransformFeedback = 0x8C8E,
+
+        [GLVersion(3, 1)]
+        UniformBuffer = 0x8A11
     }
 
     public enum DrawBufferMode

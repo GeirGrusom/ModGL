@@ -6,7 +6,12 @@ using System.Threading.Tasks;
 
 namespace ModGL
 {
-    public class VertexArray : IGLObject
+    public interface IVertexArray : IGLObject
+    {
+        
+    }
+
+    public class VertexArray<TElementType> : IVertexArray
     {
         public uint Handle { get; private set; }
     }
