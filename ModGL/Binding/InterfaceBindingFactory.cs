@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 
-namespace ModGL.NativeGL
+namespace ModGL.Binding
 {
 
     public class ErrorHandling
@@ -25,7 +25,7 @@ namespace ModGL.NativeGL
             return string.Format("_{0}", method.Name);
         }
 
-        private static TypeBuilder CreateDelegateType(MethodInfo method, ModuleBuilder module)
+        private static Type CreateDelegateType(MethodInfo method, ModuleBuilder module)
         {
             string name = GetDelegateNameForMethodInfo(method);
 
@@ -51,7 +51,7 @@ namespace ModGL.NativeGL
                 invokeMethod.DefineParameter(i + 1, ParameterAttributes.None, parameter.Name);
             }
 
-            return typeBuilder;
+            return typeBuilder.CreateType();
         }
         /// <summary>
         /// Creates a binding for the specified interface to extension methods defined by IExtensions support.
@@ -87,43 +87,42 @@ namespace ModGL.NativeGL
 
             var assembly = AssemblyBuilder.DefineDynamicAssembly(
                     new AssemblyName(string.Format("{0}.Dynamic", typeof (TGLInterface).Name)),
-                    AssemblyBuilderAccess.RunAndCollect);
+                    AssemblyBuilderAccess.RunAndSave);
 
-            var module = assembly.DefineDynamicModule("OpenGLInterfaces");
-            var delegateModule = assembly.DefineDynamicModule("OpenGLDelegates");
+            var module = assembly.DefineDynamicModule("OpenGLInterfaces", "interface.cs");
+            
+            //var delegateModule = assembly.DefineDynamicModule("OpenGLDelegates");
 
             var definedType = module.DefineType(string.Format("{0}_DynamicProxy", typeof (TGLInterface).Name),
                                          TypeAttributes.Public | TypeAttributes.Sealed | TypeAttributes.Class);
 
             definedType.AddInterfaceImplementation(typeof(TGLInterface));
 
-            var constructor = definedType.DefineConstructor(MethodAttributes.Public, CallingConventions.Any, new[] {typeof (IExtensionSupport)});
+            var constructor = definedType.DefineConstructor(MethodAttributes.Public | MethodAttributes.Final, CallingConventions.HasThis, new[] {typeof (IExtensionSupport)});
 
-            var fields = GenerateInvocationFields(methods, delegateModule, definedType);
+            var fields = GenerateInvocationFields(methods, module, definedType);
 
             GenerateConstructor(constructor, methods, fields);
 
-            // Implement OpenGL 1.2+ as GetProc invocations
-            foreach (var method in methods)
-            {
-                var newMethod = definedType.DefineMethod
-                (
-                    method.Name, 
-                    MethodAttributes.Private | MethodAttributes.HideBySig | MethodAttributes.NewSlot | MethodAttributes.Virtual | MethodAttributes.Final,
-                    CallingConventions.Any, 
-                    method.ReturnType, 
-                    method.GetParameters().OrderBy(p => p.Position).Select(t => t.ParameterType).ToArray()
-                );
-                definedType.DefineMethodOverride(newMethod, method);
+            DefineProcMethods<TGLInterface>(errorHandling, methods, definedType, fields);
 
-                var generator = newMethod.GetILGenerator();
+            DefineStaticMethods<TGLInterface>(interfaceMap, errorHandling, definedType);
 
-                if (errorHandling != null)
-                    GenerateThrowingInvocation(generator, method, fields, errorHandling);
-                else
-                    GenerateInvocation(generator, method, fields);
-            }
+            var resultType = definedType.CreateType();
 
+            var ctrs = resultType.GetConstructors().Single();
+            var args = ctrs.GetParameters();
+            
+            //assembly.Save("test.dll");
+            var result = Activator.CreateInstance(resultType, context);
+            var resultMethods = result.GetType().GetMethods();
+            return (TGLInterface)result;
+        }
+
+
+        private void DefineStaticMethods<TGLInterface>(
+            Dictionary<Type, Type> interfaceMap, ErrorHandling errorHandling, TypeBuilder definedType)
+        {
             foreach (var item in interfaceMap)
             {
                 // Implement interface
@@ -134,77 +133,111 @@ namespace ModGL.NativeGL
                     var parameters =
                         method.GetParameters().OrderBy(p => p.Position).Select(t => t.ParameterType).ToArray();
                     const MethodAttributes attributes = MethodAttributes.Private | MethodAttributes.HideBySig |
-                                          MethodAttributes.NewSlot | MethodAttributes.Virtual | MethodAttributes.Final;
+                                                        MethodAttributes.NewSlot | MethodAttributes.Virtual
+                                                        | MethodAttributes.Final;
 
                     var newMethod = definedType.DefineMethod
-                    (
-                        method.Name, 
-                        attributes,
-                        CallingConventions.Any,
-                        method.ReturnType,
-                        parameters
-                    );
-
-                    definedType.DefineMethodOverride(newMethod, method);
+                        (
+                            method.Name,
+                            attributes,
+                            CallingConventions.Any,
+                            method.ReturnType,
+                            parameters
+                        );
 
                     var generator = newMethod.GetILGenerator();
 
                     if (errorHandling != null)
-                        GenerateThrowingStaticInvocation(generator, method, errorHandling);
+                        GenerateThrowingStaticInvocation(generator, method, item.Value, errorHandling);
                     else
-                        GenerateStaticInvocation(generator, method);
-                }                
-            }
+                        GenerateStaticInvocation(generator, method, item.Value);
 
-            var resultType = definedType.CreateType();
-            return (TGLInterface)Activator.CreateInstance(resultType, new object[] { context });
+                    definedType.DefineMethodOverride(newMethod, method);
+                }
+            }
         }
+
+
+        private void DefineProcMethods<TGLInterface>(
+            ErrorHandling errorHandling, MethodInfo[] methods, TypeBuilder definedType, IList<FieldBuilder> fields)
+        {
+            foreach (var method in methods)
+            {
+                var newMethod = definedType.DefineMethod
+                    (
+                        method.Name,
+                        MethodAttributes.Private | MethodAttributes.Virtual | MethodAttributes.Final |
+                        MethodAttributes.HideBySig | MethodAttributes.NewSlot,
+                        method.ReturnType,
+                        method.GetParameters().OrderBy(p => p.Position).Select(t => t.ParameterType).ToArray()
+                    );
+
+                var generator = newMethod.GetILGenerator();
+
+                if (errorHandling != null)
+                    GenerateThrowingInvocation(generator, method, fields, errorHandling);
+                else
+                    GenerateInvocation(generator, method, fields);
+
+                definedType.DefineMethodOverride(newMethod, method);
+            }
+        }
+
 
         private void GenerateConstructor(ConstructorBuilder builder, IEnumerable<MethodInfo> methods, IEnumerable<FieldBuilder> fields)
         {
             var generator = builder.GetILGenerator();
+            generator.DeclareLocal(typeof(Delegate));
             // Call object constructor
-            generator.Emit(OpCodes.Ldarg_0);
+            //generator.Emit(OpCodes.Ldarg_0);
             // ReSharper disable AssignNullToNotNullAttribute
-            generator.Emit(OpCodes.Call, typeof(object).GetConstructor(new Type[0]));
+             //generator.Emit(OpCodes.Call, typeof(object).GetConstructor(new Type[0]));
             // ReSharper restore AssignNullToNotNullAttribute
+            var getMethod = typeof(IExtensionSupport).GetMethod("GetProcedure", new[] { typeof(string), typeof(Type) });
+
             foreach (var method in methods)
             {
                 var name = GetFieldNameForMethodInfo(method);
                 var field = fields.Single(f => f.Name == name);
                 
                 // _glMethodName = (MethodDelegateType)extensionSupport.GetProcedure("glMethodName", typeof(MethodDelegateType));
-                generator.Emit(OpCodes.Ldarg_0); // load this
-                generator.Emit(OpCodes.Ldarg_1); // load argument
+                generator.Emit(OpCodes.Ldarg_0); // load argument
+                generator.Emit(OpCodes.Ldarg_1); // load this
                 generator.Emit(OpCodes.Ldstr, method.Name);  // load method name
-                generator.Emit(OpCodes.Ldelem, field.FieldType); // load field type
-                generator.EmitCall(OpCodes.Callvirt, typeof(IExtensionSupport).GetMethod("GetProcedure", new [] { typeof(string), typeof(Type)}), null);
+                generator.Emit(OpCodes.Ldtoken, field.FieldType); // load field type
+                generator.EmitCall(OpCodes.Call, typeof(System.Type).GetMethod("GetTypeFromHandle", new[] { typeof(System.RuntimeTypeHandle) }), null);
+                generator.EmitCall(OpCodes.Callvirt, getMethod, null);
                 generator.Emit(OpCodes.Castclass, field.FieldType);
-                generator.Emit(OpCodes.Stfld, field);
+                generator.Emit(OpCodes.Stloc_0); // result = GetProcedure("MethodName", Type);
+                generator.Emit(OpCodes.Ldarg_0); // this
+                generator.Emit(OpCodes.Ldloc_0); // result
+                generator.Emit(OpCodes.Stfld, field); // this._fieldName = result;
 
             }
+            //generator.Emit(OpCodes.Ldloc_0); // Load this
+            generator.Emit(OpCodes.Ret);
         }
 
         private IList<FieldBuilder> GenerateInvocationFields(IEnumerable<MethodInfo> methods, ModuleBuilder delegateModule, TypeBuilder builder)
         {
             return (from method in methods
-                    let delegateType = CreateDelegateType(method, delegateModule).CreateType()
+                    let delegateType = CreateDelegateType(method, delegateModule)
                     select builder.DefineField(GetFieldNameForMethodInfo(method), delegateType, FieldAttributes.Private)).ToList();
         }
 
-        private void GenerateStaticInvocation(ILGenerator generator, MethodInfo method, bool emitReturn = true)
+        private void GenerateStaticInvocation(ILGenerator generator, MethodInfo method, Type staticMapping, bool emitReturn = true)
         {
             foreach (var item in method.GetParameters().Select((p, i) => new { Type = p, Index = i }))
                 generator.Emit(OpCodes.Ldarg, item.Index);
-            generator.EmitCall(OpCodes.Call, typeof(GL).GetMethod(method.Name, BindingFlags.Public | BindingFlags.Static, null, method.GetParameters().Select(p => p.ParameterType).ToArray(), null), null);
+            generator.EmitCall(OpCodes.Call, staticMapping.GetMethod(method.Name, BindingFlags.Public | BindingFlags.Static, null, method.GetParameters().Select(p => p.ParameterType).ToArray(), null), null);
             generator.Emit(OpCodes.Ret);
         }
 
-        private void GenerateThrowingStaticInvocation(ILGenerator generator, MethodInfo method, ErrorHandling err)
+        private void GenerateThrowingStaticInvocation(ILGenerator generator, MethodInfo method, Type staticMapping, ErrorHandling err)
         {
             generator.DeclareLocal(method.ReturnType);
             generator.EmitCall(OpCodes.Call, err.FlushError, null);
-            GenerateStaticInvocation(generator, method, emitReturn: false);
+            GenerateStaticInvocation(generator, method, staticMapping, emitReturn: false);
             generator.Emit(OpCodes.Stloc_0);
             generator.EmitCall(OpCodes.Call, err.CheckErrorState, null);
             generator.Emit(OpCodes.Ldloc_0);

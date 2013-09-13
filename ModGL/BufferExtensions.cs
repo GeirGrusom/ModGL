@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using ModGL.VertexInfo;
+
 namespace ModGL
 {
     public static class BufferExtensions

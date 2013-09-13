@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 
 using System.Runtime.InteropServices;
 
+using ModGL.Binding;
+
 using GLenum = System.UInt32;
 using GLbitfield = System.UInt32;
 using GLchar = System.Byte;

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+
+using ModGL.Binding;
 using ModGL.NativeGL;
 
 namespace ModGL

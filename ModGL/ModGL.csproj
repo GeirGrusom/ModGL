@@ -47,11 +47,10 @@
     <Compile Include="IBindable.cs" />
     <Compile Include="IExtensionSupport.cs" />
     <Compile Include="IGLObject.cs" />
-    <Compile Include="IObjectManager.cs" />
     <Compile Include="NativeGL\Delegates.cs" />
     <Compile Include="NativeGL\GL.cs" />
     <Compile Include="NativeGL\GLVersionAttribute.cs" />
-    <Compile Include="NativeGL\InterfaceBindingFactory.cs" />
+    <Compile Include="Binding\InterfaceBindingFactory.cs" />
     <Compile Include="NativeGL\OpenGLException.cs" />
     <Compile Include="NativeGL\OpenGLInvalidEnumException.cs" />
     <Compile Include="NativeGL\OpenGLInvalidOperationException.cs" />
@@ -63,7 +62,7 @@
     <Compile Include="VertexArray.cs" />
     <Compile Include="VertexBuffer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="VertexDescriptor.cs" />
+    <Compile Include="VertexInfo\VertexDescriptor.cs" />
     <Compile Include="ContextCreationParameters.cs" />
     <Compile Include="Windows\PixelFormatException.cs" />
     <Compile Include="Windows\WGL.cs" />
