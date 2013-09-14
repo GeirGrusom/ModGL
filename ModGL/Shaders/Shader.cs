@@ -6,8 +6,15 @@ using ModGL.NativeGL;
 
 namespace ModGL.Shaders
 {
+    public interface IShader : IGLObject
+    {
+        ShaderCompilationResults GetCompilationResults();
+        bool IsCompiled { get; }
+        void Compile();
+    }
+
     [Serializable]
-    public abstract class Shader : IGLObject, IDisposable
+    public abstract class Shader : IDisposable, IShader
     {
         private readonly ShaderType _shaderType;
         private readonly IOpenGL30 _gl;

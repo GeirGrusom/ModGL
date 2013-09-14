@@ -2,27 +2,30 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 using ModGL.NativeGL;
 
 namespace ModGL.Shaders
 {
+    public interface IProgram : IGLObject, IBindable, IDisposable
+    {
+        void Compile();
+    }
+
     [Serializable]
-    public class Program : ModGL.IGLObject, IBindable, IDisposable
+    public class Program : IGLObject, IProgram
     {
         [NonSerialized]
         private readonly IOpenGL30 _gl;
-        public Program(IOpenGL30 gl, IEnumerable<Shader> shaders)
+        public uint Handle { get; private set; }
+        public IEnumerable<IShader> Shaders { get; private set; } 
+
+        public Program(IOpenGL30 gl, IEnumerable<IShader> shaders)
         {
             _gl = gl;
             Handle = gl.glCreateProgram();
             Shaders = shaders;
         }
-
-        public uint Handle { get; private set; }
-
-        public IEnumerable<Shader> Shaders { get; private set; } 
 
         public bool IsValid
         {
@@ -51,7 +54,7 @@ namespace ModGL.Shaders
             byte[] log = new byte[logLength.Single()];
             _gl.glGetProgramInfoLog(Handle, log.Length, out logLength[0], log);
 
-            return new CompilationResults(Shaders.Select(s => s.GetCompilationResults()), Encoding.UTF8.GetString(log), this.IsValid, IsLinked);
+            return new CompilationResults(Shaders.Select(s => s.GetCompilationResults()), Encoding.UTF8.GetString(log), IsValid, IsLinked);
         }
 
         public void Compile()
