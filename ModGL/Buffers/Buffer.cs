@@ -7,7 +7,7 @@ using ModGL.NativeGL;
 namespace ModGL
 {
 
-    public interface IBuffer : IGLObject
+    public interface IBuffer : IGLObject, IBindable
     {
         long Elements { get; }
         int ElementSize { get; }
@@ -15,7 +15,7 @@ namespace ModGL
         Type ElementType { get; }
     }
 
-    public class Buffer<TElementType> : IBuffer, IBindable
+    public class Buffer<TElementType> : IBuffer
         where TElementType : struct
     {
         internal TElementType[] Data;
@@ -62,13 +62,12 @@ namespace ModGL
                 throw new InvalidOperationException();
         }
 
-        protected Buffer(BufferTarget target, IEnumerable<TElementType> elements , IOpenGL30 gl)
+        private Buffer(BufferTarget target, IOpenGL30 gl)
         {
             ReleasedConstraint();
-            if(gl == null)
+            if (gl == null)
                 throw new ArgumentNullException("gl");
             _gl = gl;
-            Data = elements.ToArray();
             Target = target;
             _elementSize = Marshal.SizeOf(typeof(TElementType));
             var names = new uint[1];
@@ -76,18 +75,18 @@ namespace ModGL
             Handle = names.Single();
         }
 
-        protected Buffer(BufferTarget target, long size, IOpenGL30 gl)
+        protected Buffer(BufferTarget target, IEnumerable<TElementType> elements , IOpenGL30 gl)
+            : this(target,  gl)
         {
-            ReleasedConstraint();
-            if (gl == null)
-                throw new ArgumentNullException("gl");
-            _gl = gl;
+            if(elements == null)
+                throw new ArgumentNullException("elements");
+            Data = elements.ToArray();
+        }
+
+        protected Buffer(BufferTarget target, long size, IOpenGL30 gl)
+            : this(target, gl)
+        {
             Data = new TElementType[size];
-            Target = target;
-            _elementSize = Marshal.SizeOf(typeof(TElementType));
-            var names = new uint[1];
-            gl.glGenBuffers(1, names);
-            Handle = names.Single();
         }
 
         public void BufferData(BufferUsage usage)
@@ -106,10 +105,18 @@ namespace ModGL
 
         public Type ElementType { get { return typeof(TElementType); } }
 
-        public void BufferSubData(BufferUsage usage)
+        public void BufferSubData(BufferUsage usage, int offset, int size)
         {
             ReleasedConstraint();
-            throw new NotImplementedException();
+            var handle = GCHandle.Alloc(Data, GCHandleType.Pinned);
+            try
+            {
+                _gl.glBufferSubData(Target, new IntPtr(offset), new IntPtr(size), handle.AddrOfPinnedObject());
+            }
+            finally
+            {
+                handle.Free();
+            }
         }
 
         public void BufferSubData<TElement>(BufferUsage usage, System.Linq.Expressions.Expression<Func<TElementType, TElement>> elementProc)

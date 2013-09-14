@@ -27,7 +27,7 @@ namespace ModGL.UnitTests
             Assert.AreEqual("OpenGL version below 3.0 is not supported.", exception.Message);
         }
 
-        [Test, Ignore]
+        [Test, Ignore] // Work in progress. Functionality should probably be split up more.
         public void Context_Ok()
         {
             // Arrange

@@ -4,23 +4,17 @@ using System.Linq;
 using System.Reflection;
 
 using ModGL.NativeGL;
+using ModGL.Shaders;
 
 namespace ModGL.VertexInfo
 {
-
-    public enum ElementType
-    {
-        @byte, @short, @int, @long,
-        unsigned_byte, unsigned_short, unsigned_int, unsigned_long,
-        half, @float, @double
-    }
 
     public class VertexElement
     {
         public int Length { get; internal set; }
         public string Name { get; internal set; }
         public int Dimensions { get; internal set; }
-        public ElementType Type { get; internal set; }
+        public DataType Type { get; internal set; }
         public int Offset { get; set; }
 
 
@@ -28,17 +22,16 @@ namespace ModGL.VertexInfo
 
     internal static class ElementTypeHelper
     {
-        internal static readonly Dictionary<Type, ElementType> TypeConversionTable = new Dictionary<Type, ElementType>
+        internal static readonly Dictionary<Type, DataType> TypeConversionTable = new Dictionary<Type, DataType>
         {
-            { typeof(byte), ElementType.@unsigned_byte },
-            { typeof(sbyte), ElementType.@byte },
-            { typeof(short), ElementType.@short },
-            { typeof(ushort), ElementType.unsigned_short },
-            { typeof(int), ElementType.@int },
-            { typeof(uint), ElementType.unsigned_int },
-            { typeof(long), ElementType.@long },
-            { typeof(float), ElementType.@float },
-            { typeof(double), ElementType.@double }
+            { typeof(byte), DataType.UnsignedByte },
+            { typeof(sbyte), DataType.Byte },
+            { typeof(short), DataType.Short },
+            { typeof(ushort), DataType.UnsignedShort },
+            { typeof(int), DataType.Int },
+            { typeof(uint), DataType.UnsignedInt },
+            { typeof(float), DataType.Float },
+            { typeof(double), DataType.Double }
         };
     }
 
@@ -48,15 +41,13 @@ namespace ModGL.VertexInfo
         public IEnumerable<VertexElement> Elements { get; private set; }
 
 
-        private static ElementType? GetElementType(Type type)
+        private static DataType GetElementType(Type type)
         {
-            ElementType result;
+            DataType result;
             if (ElementTypeHelper.TypeConversionTable.TryGetValue(type, out result))
                 return result;
-
-            throw new NotImplementedException();
+            throw new NotSupportedException("Complex types are not supported.");
         }
-
 
         private static IEnumerable<VertexElement> ConvertField(FieldInfo field)
         {
@@ -64,8 +55,7 @@ namespace ModGL.VertexInfo
             {
                 Name = field.Name,
                 Length = System.Runtime.InteropServices.Marshal.SizeOf(field.FieldType),
-                Type = GetElementType(field.FieldType).Value, Dimensions = 1
-                
+                Type = GetElementType(field.FieldType), Dimensions = 1
             };
         }
 
@@ -81,9 +71,9 @@ namespace ModGL.VertexInfo
             };
         }
 
-        private static uint ConvertElementTypeToGlType(ElementType type)
+        public void Apply(Program program, IOpenGL30 gl)
         {
-            throw new NotImplementedException();
+            
         }
 
         public void Apply(VertexArray<TElementType> array, IOpenGL30 gl)
@@ -92,13 +82,26 @@ namespace ModGL.VertexInfo
             {
                 foreach (var e in Elements.Select((e, i) => new { Index = i, Item = e}))
                 {
-                    gl.glVertexAttribPointer(
-                        (uint)e.Index, 
-                        e.Item.Length, 
-                        ConvertElementTypeToGlType(e.Item.Type), 
-                        GLboolean.False, 
-                        System.Runtime.InteropServices.Marshal.SizeOf(typeof(TElementType)), 
-                        new IntPtr(e.Item.Offset));
+                    if (e.Item.Type == DataType.Half || e.Item.Type == DataType.Float)
+                    {
+                        gl.glVertexAttribPointer(
+                            (uint)e.Index,
+                            e.Item.Length,
+                            e.Item.Type,
+                            GLboolean.False,
+                            System.Runtime.InteropServices.Marshal.SizeOf(typeof(TElementType)),
+                            new IntPtr(e.Item.Offset));
+                    }
+                    else
+                    {
+                        gl.glVertexAttribIPointer(
+                            (uint)e.Index,
+                            e.Item.Length,
+                            e.Item.Type,
+                            System.Runtime.InteropServices.Marshal.SizeOf(typeof(TElementType)),
+                            new IntPtr(e.Item.Offset));
+                    }
+                    gl.glEnableVertexAttribArray((uint)e.Index);
                 }
             }
         }

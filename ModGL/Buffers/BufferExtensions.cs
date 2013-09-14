@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 using ModGL.VertexInfo;
 
-namespace ModGL
+namespace ModGL.Buffers
 {
     public static class BufferExtensions
     {
-        public static void CopyTo<TElementType>(this Buffer<TElementType> buffer, Buffer<ElementType> other, long start, long length, long targetOffset)
+        public static void CopyTo<TElementType>(this Buffer<TElementType> buffer, Buffer<TElementType> other, long start, long length, long targetOffset)
             where TElementType : struct 
         {
             Array.Copy(buffer.Data, start, other.Data, targetOffset, length);
         }
-        public static void CopyTo<TElementType>(this Buffer<TElementType> buffer, ElementType[] other, long start, long length, long targetOffset)
+        public static void CopyTo<TElementType>(this Buffer<TElementType> buffer, TElementType[] other, long start, long length, long targetOffset)
             where TElementType : struct
         {
             Array.Copy(buffer.Data, start,other,targetOffset, length);

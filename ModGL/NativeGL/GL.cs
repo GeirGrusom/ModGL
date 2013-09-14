@@ -333,6 +333,29 @@ namespace ModGL.NativeGL
         InfoLogLength = 0x8B84
     }
 
+    public enum DrawMode : uint
+    {
+        Points = 0x0000,
+        Lines = 0x0001,
+        LineLoop = 0x0002,
+        LineStrip = 0x0003,
+        Triangles = 0x0004,
+        TriangleStrip = 0x0005,
+        TriangleFan = 0x0006,
+        LinesAdjacency = 0x000A,
+        LineStripAdjacency = 0x000B,
+        TrianglesAdjacency = 0x000C,
+        TriangleStripAdjacency = 0x000D,
+        Patches = 0x000E
+    }
+
+    public enum ElementBufferItemType
+    {
+        UnsignedByte = 0x1401,
+        UnsignedShort = 0x1403,
+        UnsignedInt = 0x1405
+    }
+
     public enum ProgramParameters : uint
     {
         DeleteStatus = 0x8B80,
@@ -362,7 +385,7 @@ namespace ModGL.NativeGL
         void glTexParameteriv(GLenum target, GLenum pname, GLint[] @params);
         void glTexImage1D(GLenum target, GLint level, GLint internalformat, GLsizei width, GLint border, GLenum format, GLenum type, IntPtr pixels);
         void glTexImage2D(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, IntPtr pixels);
-        void glDrawBuffer(GLenum mode);
+        void glDrawBuffer(DrawMode mode);
         void glClear(ClearTarget mask);
         void glClearColor(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha);
         void glClearStencil(GLint s);
@@ -399,8 +422,8 @@ namespace ModGL.NativeGL
         void glViewport(GLint x, GLint y, GLsizei width, GLsizei height);
 
         // 1.1
-        void glDrawArrays(GLenum mode, GLint first, GLsizei count);
-        void glDrawElements(GLenum mode, GLsizei count, GLenum type, IntPtr indices);
+        void glDrawArrays(DrawMode mode, GLint first, GLsizei count);
+        void glDrawElements(DrawMode mode, GLsizei count, ElementBufferItemType type, IntPtr indices);
         void glGetPointerv(GLenum pname, IntPtr[] @params);
         void glPolygonOffset(GLfloat factor, GLfloat units);
         void glCopyTexImage1D(GLenum target, GLint level, GLenum internalformat, GLint x, GLint y, GLsizei width, GLint border);
@@ -434,7 +457,7 @@ namespace ModGL.NativeGL
         void glClampColor(GLenum target, GLenum clamp);
         void glBeginConditionalRender(GLuint id, GLenum mode);
         void glEndConditionalRender();
-        void glVertexAttribIPointer(GLuint index, GLint size, GLenum type, GLsizei stride, IntPtr pointer);
+        void glVertexAttribIPointer(GLuint index, GLint size, DataType type, GLsizei stride, IntPtr pointer);
         void glGetVertexAttribIiv(GLuint index, GLenum pname, GLint[] @params);
         void glGetVertexAttribIuiv(GLuint index, GLenum pname, GLuint[] @params);
         void glVertexAttribI1i(GLuint index, GLint x);
@@ -576,7 +599,7 @@ namespace ModGL.NativeGL
         void glVertexAttrib4ubv(GLuint index, GLubyte[] v);
         void glVertexAttrib4uiv(GLuint index, GLuint[] v);
         void glVertexAttrib4usv(GLuint index, GLushort[] v);
-        void glVertexAttribPointer(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, IntPtr pointer);
+        void glVertexAttribPointer(GLuint index, GLint size, DataType type, GLboolean normalized, GLsizei stride, IntPtr pointer);
         // 1.5
         void glGenQueries(GLsizei n, GLuint[] ids);
         void glDeleteQueries(GLsizei n, GLuint[] ids);
@@ -926,6 +949,7 @@ namespace ModGL.NativeGL
         UnsignedInt = 0x1405,
         Float = 0x1406,
         Double = 0x140A,
+        Half = 0x140B
     }
 
     public enum LogicOp
@@ -1087,7 +1111,7 @@ namespace ModGL.NativeGL
         [DllImport(GLLibraryName)]
         public static extern void glTexImage2D(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, IntPtr pixels);
         [DllImport(GLLibraryName)]
-        public static extern void glDrawBuffer(GLenum mode);
+        public static extern void glDrawBuffer(DrawMode mode);
         [DllImport(GLLibraryName)]
         public static extern void glClear(ClearTarget mask);
         [DllImport(GLLibraryName)]
@@ -1593,9 +1617,9 @@ namespace ModGL.NativeGL
             };
 
         [DllImport(GLLibraryName)]
-        public static extern void glDrawArrays(GLenum mode, GLint first, GLsizei count);
+        public static extern void glDrawArrays(DrawMode mode, GLint first, GLsizei count);
         [DllImport(GLLibraryName)]
-        public static extern void glDrawElements(GLenum mode, GLsizei count, GLenum type, IntPtr indices);
+        public static extern void glDrawElements(DrawMode mode, GLsizei count, ElementBufferItemType type, IntPtr indices);
         [DllImport(GLLibraryName)]
         public static extern void glGetPointerv(GLenum pname, IntPtr[] @params);
         [DllImport(GLLibraryName)]

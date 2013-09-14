@@ -233,7 +233,7 @@ namespace ModGL.UnitTests
             // Assert
             Assert.AreEqual(1, result.Sub(2, 1));
             Assert.AreEqual(3, result.Div(2, 1));
-            extensions.Received(2).GetProcedure(Arg.Any<string>(), Arg.Any<Type>());
+            extensions.Received(1).GetProcedure(Arg.Any<string>(), Arg.Any<Type>());
         }
 
     }

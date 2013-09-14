@@ -22,9 +22,14 @@ namespace ModGL.Shaders
 
         public Program(IOpenGL30 gl, IEnumerable<IShader> shaders)
         {
+            if(shaders == null)
+                throw new ArgumentNullException("shaders");
+            if(gl == null)
+                throw new ArgumentNullException("gl");
+
             _gl = gl;
             Handle = gl.glCreateProgram();
-            Shaders = shaders;
+            Shaders = shaders.ToArray();
         }
 
         public bool IsValid
@@ -73,8 +78,11 @@ namespace ModGL.Shaders
 
             _gl.glValidateProgram(Handle);
             _gl.glLinkProgram(Handle);
-            if(!IsLinked || !this.IsValid)
-                throw new ProgramLCompilationException(this, GetCompilationResults());
+            if (!IsLinked || !IsValid)
+            {
+                var compileResults = GetCompilationResults();
+                throw new ProgramLCompilationException(this, compileResults, string.Format("Program compilation failed: {0}", compileResults.Message));
+            }
         }
 
         public BindContext Bind()

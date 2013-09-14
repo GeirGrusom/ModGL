@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="Buffers\Buffer.cs" />
     <Compile Include="Buffers\BufferExtensions.cs" />
+    <Compile Include="Buffers\ElementBuffer.cs" />
     <Compile Include="ContextCreationException.cs" />
     <Compile Include="ExtensionNotSupportedException.cs" />
     <Compile Include="IBindable.cs" />
@@ -58,6 +59,7 @@
     <Compile Include="NativeGL\OpenGLStackOverflowException.cs" />
     <Compile Include="NativeGL\OpenGLStackUnderflowException.cs" />
     <Compile Include="OpenGLContext.cs" />
+    <Compile Include="Rendering\Renderer.cs" />
     <Compile Include="Shaders\CompilationException.cs" />
     <Compile Include="Shaders\CompilationResults.cs" />
     <Compile Include="Shaders\FragmentShader.cs" />

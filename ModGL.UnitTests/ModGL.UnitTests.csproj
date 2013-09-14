@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Buffers\BufferTest.cs" />
     <Compile Include="ILSpyCodeBuilder.cs" />
     <Compile Include="OpenGLBindingFactoryTest.cs" />
     <Compile Include="Shaders\ShaderProgramTest.cs" />
