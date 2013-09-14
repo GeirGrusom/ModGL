@@ -19,6 +19,12 @@ namespace ModGL.UnitTests
             int Sub(int a, int b);
         }
 
+        public interface IFooVoid
+        {
+            void Sub(int a, int b);
+        }
+
+
         public interface IFoo2 : IFoo
         {
             int Div(int a, int b);
@@ -30,6 +36,19 @@ namespace ModGL.UnitTests
             return a - b;
         }
 
+        public static void FooVoid(int a, int b)
+        {
+            
+        }
+
+
+        [Test]
+        public void ExensionSupportIsNull_ThrowsArgumentNullException()
+        {
+            var factory = new InterfaceBindingFactory();
+
+            Assert.Throws<ArgumentNullException>(() => factory.CreateBinding<IFoo>(null));
+        }
         [Test]
         public void CreatesType_InvocesCorrectFunction()
         {
@@ -49,8 +68,63 @@ namespace ModGL.UnitTests
 
             // Assert
             Assert.AreEqual(1, result.Sub(2, 1));
-            extensions.Received(2).GetProcedure("Sub", Arg.Is<Type>(t => t.IsSubclassOf(typeof(MulticastDelegate)) && t.Name == "SubProc"));
+            extensions.Received(1).GetProcedure("Sub", Arg.Is<Type>(t => t.IsSubclassOf(typeof(MulticastDelegate)) && t.Name == "SubProc"));
         }
+
+        [Test]
+        public void CreatesType_InvocesCorrectFunction_ReturnTypeVoid_Ok()
+        {
+            // Arrange
+            var extensions = Substitute.For<IExtensionSupport>();
+
+            extensions.GetProcedure(Arg.Any<string>(), Arg.Any<Type>())
+                .Returns(x => Delegate.CreateDelegate
+                    (
+                        (Type)x.Args()[1],
+                        GetType().GetMethod("FooVoid", new[] { typeof(int), typeof(int) }))
+                    );
+            var factory = new InterfaceBindingFactory();
+            var result = factory.CreateBinding<IFooVoid>(extensions);
+
+            // Act
+            result.Sub(1, 2);
+
+            // Assert
+            extensions.Received(1).GetProcedure("Sub", Arg.Is<Type>(t => t.IsSubclassOf(typeof(MulticastDelegate)) && t.Name == "SubProc"));
+        }
+
+
+        [Test]
+        public void InterfaceMap_NotInterfaces_ThrowsInvalidOperation()
+        {
+            // Arrange
+            var extensions = Substitute.For<IExtensionSupport>();
+
+            var factory = new InterfaceBindingFactory();
+
+            // Act
+            var exception = Assert.Catch<InvalidOperationException>(() => factory.CreateBinding<IFoo>(extensions, new Dictionary<Type, Type> { { typeof(OpenGLBindingFactoryTest), typeof(OpenGLBindingFactoryTest) }}));
+
+            // Assert
+            Assert.AreEqual("Interface map must map interfaces : OpenGLBindingFactoryTest", exception.Message);
+        }
+
+        [Test]
+        public void InterfaceMap_MapInterfaceToInterface_ThrowsInvalidOperation()
+        {
+            // Arrange
+            var extensions = Substitute.For<IExtensionSupport>();
+
+            var factory = new InterfaceBindingFactory();
+
+            // Act
+            var exception = Assert.Catch<InvalidOperationException>(() => factory.CreateBinding<IFoo>(extensions, new Dictionary<Type, Type> { { typeof(IFoo), typeof(IFoo) } }));
+
+            // Assert
+            Assert.AreEqual("Interface map must map to classes with static members: IFoo", exception.Message);
+        }
+
+
 
         public static void FlushError()
         {
@@ -64,6 +138,23 @@ namespace ModGL.UnitTests
         public static void ThrowError()
         {
             throw new OpenGLInvalidEnumException("Foo");
+        }
+
+        [Test]
+        public void UnsupportedExtensionThrows()
+        {
+            // Arrange
+            var extensions = Substitute.For<IExtensionSupport>();
+            extensions.GetProcedure<Action>(Arg.Any<string>()).Returns((Action)null);
+            var factory = new InterfaceBindingFactory();
+
+            // Act
+            var exception = Assert.Catch<ExtensionNotSupportedException>(() => factory.CreateBinding<IFoo>(extensions));
+
+            // Assert
+            Assert.AreEqual("Extension not suported by the current context: 'Sub'", exception.Message);
+
+
         }
 
         [Test]
@@ -110,7 +201,8 @@ namespace ModGL.UnitTests
             // Assert
             Assert.AreEqual(1, result.Sub(2, 1));
             Assert.AreEqual(1, result.Div(2, 1));
-            extensions.Received(2).GetProcedure(Arg.Any<string>(), Arg.Any<Type>());
+            extensions.Received(1).GetProcedure("Sub", Arg.Any<Type>());
+            extensions.Received(1).GetProcedure("Div", Arg.Any<Type>());
         }
 
         public static class ImplementationTest
@@ -120,7 +212,6 @@ namespace ModGL.UnitTests
                 return a + b;
             }
         }
-
 
         [Test]
         public void CreatesType_InheritedInterface_ImplementsStaticClass()

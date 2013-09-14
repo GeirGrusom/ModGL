@@ -1,17 +1,52 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+
+using ModGL.NativeGL;
+
 using HDC = System.IntPtr;
 using HGLRC = System.IntPtr;
 
 namespace ModGL.Windows
 {
 
+    [Flags]
+    public enum PixelFormatFlags : uint
+    {
+        DoubleBuffer = 0x00000001,
+        Stereo = 0x00000002,
+        DrawToWindows = 0x00000004,
+        DrawToBitmap = 0x00000008,
+        SupportGDI = 0x00000010,
+        SupportOpenGL = 0x00000020,
+        GenericFormat = 0x00000040,
+        NeedPalett = 0x00000080,
+        NeedSystemPalett = 0x00000100,
+        SwapExhange = 0x00000200,
+        SwapCopy = 0x00000400,
+        SwapLayerBuffers = 0x00000800,
+        GenericAccelerated = 0x00001000,
+        SupportDirectDraw = 0x00002000
+    }
+
+    public enum PixelType : byte
+    {
+        Rgba = 0,
+        ColorIndex = 1
+    }
+
+    public enum Plane
+    {
+        MainPlane = 0,
+        OverlayPlane = 1,
+        UnderlyingPlane = -1
+    }
+
     public struct PixelFormatDescriptor
     {
         public ushort Size;
         public ushort Version;
-        public uint Flags;
-        public byte PixelType;
+        public PixelFormatFlags Flags;
+        public PixelType PixelType;
         public byte ColorBits;
         public byte RedBits;
         public byte RedShift;
@@ -35,35 +70,38 @@ namespace ModGL.Windows
         public uint VisibleMask;
         public uint DamageMask;
     }
-
-    public delegate bool wglChoosePixelFormatARB(HDC hdc,
-                                int[] piAttribIList,
-                                float[] pfAttribFList,
-                                uint nMaxFormats,
-                                int[] piFormats,
-                                uint[] nNumFormats);
+                                                       
+    public delegate bool wglChoosePixelFormatARB(HDC    hdc,
+                                int[]                   piAttribIList,
+                                float[]                 pfAttribFList,
+                                uint                    nMaxFormats,
+                                int[]                   piFormats,
+                                uint[]                  nNumFormats
+    );
 
     public delegate HGLRC wglCreateContextAttribsARB(HDC hDC, HGLRC hshareContext, int[] attribList);
 
     public interface IWGL
     {
         HGLRC wglCreateContext(HDC hdc);
-        
+
         Delegate wglGetProcAddress(string procName, Type delegateType);
 
         TDelegate wglGetProcAddress<TDelegate>(string procName);
-        
+
         bool wglMakeCurrent(HDC dc, HGLRC glrc);
 
         int GetPixelFormat(HDC hdc);
 
-        bool SetPixelFormat(HDC hdc, int iPixelFormat, ref PixelFormatDescriptor ppfd);        
+        bool SetPixelFormat(HDC hdc, int iPixelFormat, ref PixelFormatDescriptor ppfd);
 
         int DescribePixelFormat(HDC hdc, int pixelFormat, uint bytes, out PixelFormatDescriptor ppfd);
 
         int ChoosePixelFormat(HDC hdc, ref PixelFormatDescriptor ppfd);
 
         bool wglDeleteContext(HGLRC hglrc);
+
+        bool SwapBuffers(IntPtr hdc);
     }
 
 
@@ -76,7 +114,14 @@ namespace ModGL.Windows
 
         Delegate IWGL.wglGetProcAddress(string procName, Type delegateType)
         {
-            return  Marshal.GetDelegateForFunctionPointer(wglGetProcAddress(procName), delegateType);
+            var ptr = wglGetProcAddress(procName);
+
+            if (ptr == IntPtr.Zero)
+            {
+                var error = GL.glGetError();
+                return null;
+            }
+            return Marshal.GetDelegateForFunctionPointer(ptr, delegateType);
         }
 
         TDelegate IWGL.wglGetProcAddress<TDelegate>(string procName)
@@ -113,10 +158,15 @@ namespace ModGL.Windows
         {
             return wglCreateContext(hdc);
         }
-        
+
         bool IWGL.SetPixelFormat(HDC hdc, int iPixelFormat, ref PixelFormatDescriptor ppfd)
         {
             return SetPixelFormat(hdc, iPixelFormat, ref ppfd);
+        }
+
+        bool IWGL.SwapBuffers(HDC hdc)
+        {
+            return SwapBuffers(hdc);
         }
 
         [DllImport(GDILibraryName)]
@@ -126,7 +176,7 @@ namespace ModGL.Windows
         public static extern HGLRC wglCreateContext(HDC hdc);
 
         [DllImport(WGLLibraryName)]
-        public static extern IntPtr wglGetProcAddress(string procName);
+        public static extern IntPtr wglGetProcAddress([MarshalAs(UnmanagedType.LPStr)]string procName);
 
         [DllImport(WGLLibraryName)]
         public static extern bool wglMakeCurrent(HDC dc, HGLRC glrc);
@@ -142,6 +192,9 @@ namespace ModGL.Windows
 
         [DllImport(GDILibraryName)]
         public static extern int ChoosePixelFormat(HDC hdc, ref PixelFormatDescriptor ppfd);
+
+        [DllImport(GDILibraryName)]
+        public static extern bool SwapBuffers(HDC hdc);
     }
 
 

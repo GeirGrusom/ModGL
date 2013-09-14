@@ -17,18 +17,55 @@ namespace ModGL.UnitTests
         
     }
 
-    public class Class1
+    public class ILSpyCodeBuilderWithDouble
+    {
+        private readonly Func<double, double, double> foo;
+
+        public ILSpyCodeBuilderWithDouble()
+        {
+            foo = SFoo;
+        }
+
+        private static double SFoo(double a, double b)
+        {
+            return a + b;
+        }
+
+        public double Foo(double a, double b)
+        {
+            return foo(a, b);
+        }
+
+        public double StaticFooCallser(double a, double b)
+        {
+            return Proxy.Foo(a, b);
+        }
+    }
+
+    public class Proxy
+    {
+        public static double Foo(double a, double b)
+        {
+            return a + b;
+        }
+    }
+
+    public class ILSpyCodeBuilder
     {
         private Func<int, long, byte, int> a;
         private Action b;
         
+        public void ThrowError(string extension)
+        {
+            throw new ExtensionNotSupportedException(extension);
+        }
 
-        public Class1(IExtensionFoo foo)
+        public ILSpyCodeBuilder(IExtensionFoo foo)
         {
             b = (Action)foo.GetProcedure("Abc123", typeof(Action));
         }
 
-        public Class1()
+        public ILSpyCodeBuilder()
         {
 
             a = Foo;

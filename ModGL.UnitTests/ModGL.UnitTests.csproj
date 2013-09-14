@@ -47,7 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="ILSpyCodeBuilder.cs" />
     <Compile Include="OpenGLBindingFactoryTest.cs" />
     <Compile Include="WindowsContextTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

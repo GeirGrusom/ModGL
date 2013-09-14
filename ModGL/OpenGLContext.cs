@@ -6,9 +6,10 @@ using ModGL.NativeGL;
 
 namespace ModGL
 {
-    public interface IContext
+    public interface IContext : IDisposable
     {
-        void MakeCurrent();
+        BindContext MakeCurrent();
+        void SwapBuffers();
     }
 
     public enum OpenGLVersion
@@ -28,7 +29,11 @@ namespace ModGL
 
         private static IContext _currentContext;
 
-        public abstract void MakeCurrent();
+        public abstract BindContext MakeCurrent();
+
+        public abstract void SwapBuffers();
+
+        public abstract void Dispose();
 
         public TOpenGLInterface GetOpenGL<TOpenGLInterface>(bool debug = false)
             where TOpenGLInterface : class
@@ -55,8 +60,6 @@ namespace ModGL
         }
 
         public abstract Delegate GetProcedure(string name, Type delegateType);
-
-
 
         public static IContext Current
         {

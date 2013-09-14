@@ -84,11 +84,6 @@ namespace ModGL.VertexInfo
         private static uint ConvertElementTypeToGlType(ElementType type)
         {
             throw new NotImplementedException();
-            switch (type)
-            {
-                case ElementType.unsigned_byte:
-                    //return 
-            }
         }
 
         public void Apply(VertexArray<TElementType> array, IOpenGL30 gl)

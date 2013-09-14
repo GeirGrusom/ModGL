@@ -342,7 +342,7 @@ namespace ModGL.NativeGL
         void glTexImage1D(GLenum target, GLint level, GLint internalformat, GLsizei width, GLint border, GLenum format, GLenum type, IntPtr pixels);
         void glTexImage2D(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, IntPtr pixels);
         void glDrawBuffer(GLenum mode);
-        void glClear(GLbitfield mask);
+        void glClear(ClearTarget mask);
         void glClearColor(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha);
         void glClearStencil(GLint s);
         void glClearDepth(GLdouble depth);
@@ -396,7 +396,7 @@ namespace ModGL.NativeGL
     }
 
     [GLVersion(3, 0)]
-    public interface IOpenGL30
+    public interface IOpenGL30 : IOpenGL
     {
         void glColorMaski(GLuint index, GLboolean r, GLboolean g, GLboolean b, GLboolean a);
         void glGetBooleani_v(GLenum target, GLuint index, GLboolean[] data);
@@ -1011,6 +1011,15 @@ namespace ModGL.NativeGL
         Repeat = 0x2901
     }
 
+    [Flags]
+    public enum ClearTarget : uint
+    {
+        Depth = 0x00000100,
+        Stencil = 0x00000400,
+        Color = 0x00004000,
+        All = Depth | Stencil | Color
+    }
+
     public enum PixelInternalFormat
     {
         R3G3B2 = 0x2A10,
@@ -1060,7 +1069,7 @@ namespace ModGL.NativeGL
         [DllImport(GLLibraryName)]
         public static extern void glDrawBuffer(GLenum mode);
         [DllImport(GLLibraryName)]
-        public static extern void glClear(GLbitfield mask);
+        public static extern void glClear(ClearTarget mask);
         [DllImport(GLLibraryName)]
         public static extern void glClearColor(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha);
         [DllImport(GLLibraryName)]
@@ -1127,6 +1136,7 @@ namespace ModGL.NativeGL
         public static extern void glDepthRange(GLdouble near, GLdouble far);
         [DllImport(GLLibraryName)]
         public static extern void glViewport(GLint x, GLint y, GLsizei width, GLsizei height);
+
         /*
         [DllImport(GLLibraryName)]
         public static extern void glColorMaski(GLuint index, GLboolean r, GLboolean g, GLboolean b, GLboolean a);
@@ -1558,8 +1568,8 @@ namespace ModGL.NativeGL
 
         public static readonly ErrorHandling OpenGLErrorFunctions = new ErrorHandling
             {
-                FlushError = typeof (GL).GetMethod("FlushOpenGLError", BindingFlags.Public | BindingFlags.Static),
-                CheckErrorState = typeof (GL).GetMethod("HandleOpenGLError", BindingFlags.Public | BindingFlags.Static)
+                FlushError = typeof(GL).GetMethod("FlushOpenGLError", BindingFlags.Public | BindingFlags.Static),
+                CheckErrorState = typeof(GL).GetMethod("HandleOpenGLError", BindingFlags.Public | BindingFlags.Static)
             };
 
         [DllImport(GLLibraryName)]

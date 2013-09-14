@@ -76,14 +76,23 @@ namespace ModGL.Binding
         /// <remarks>The interface map will override interface implementations from <see cref="TGLInterface"/> if they intersect.</remarks>
         public TGLInterface CreateBinding<TGLInterface>(IExtensionSupport context, Dictionary<Type, Type> interfaceMap, ErrorHandling errorHandling = null)
         {
+            if(context == null)
+                throw new ArgumentNullException("context");
+
             if(!typeof(TGLInterface).IsInterface)
                 throw new ArgumentException("TGLInterface must be an interface.");
 
-            var remapMethods = interfaceMap.SelectMany(t => t.Value.GetMethods());
+            if (interfaceMap.Keys.Any(interf => !interf.IsInterface))
+                throw new InvalidOperationException(string.Format("Interface map must map interfaces : {0}", string.Join(", ", interfaceMap.Keys.Where(t => !t.IsInterface).Select(t => t.Name))));
+
+            if(interfaceMap.Values.Any(t => t.IsInterface))
+                throw new InvalidOperationException(string.Format("Interface map must map to classes with static members: {0}", string.Join(", ", interfaceMap.Values.Where(t => t.IsInterface).Select(t => t.Name))));
+
+            var remapMethods = interfaceMap.SelectMany(t => t.Value.GetMethods()).ToArray();
             var type = typeof (TGLInterface);
 
             // Exclude methods defined in the interface map.
-            var methods = type.GetMethods().Union(type.GetInterfaces().SelectMany(t => t.GetMethods())).Except(remapMethods).ToArray();
+            var methods = type.GetMethods().Union(type.GetInterfaces().SelectMany(t => t.GetMethods())).Except(remapMethods, new MethodInfoEqualityComparer()).ToArray();
 
             var assembly = AssemblyBuilder.DefineDynamicAssembly(
                     new AssemblyName(string.Format("{0}.Dynamic", typeof (TGLInterface).Name)),
@@ -117,8 +126,16 @@ namespace ModGL.Binding
             var args = ctrs.GetParameters();
             
             //assembly.Save("test.dll");
-            var result = Activator.CreateInstance(resultType, context);
-            var resultMethods = result.GetType().GetMethods();
+            object result;
+            try
+            {
+                 result = Activator.CreateInstance(resultType, context);
+            }
+            catch (TargetInvocationException ex)
+            {
+                throw ex.InnerException;
+            }
+
             return (TGLInterface)result;
         }
 
@@ -158,11 +175,25 @@ namespace ModGL.Binding
             }
         }
 
+        internal class ParameterInfoEqualityComparer : IEqualityComparer<ParameterInfo>
+        {
+            public bool Equals(ParameterInfo x, ParameterInfo y)
+            {
+                return x.ParameterType == y.ParameterType;
+            }
+
+
+            public int GetHashCode(ParameterInfo obj)
+            {
+                return obj.ParameterType.FullName.GetHashCode();
+            }
+        }
+
         internal class MethodInfoEqualityComparer : IEqualityComparer<MethodInfo>
         {
             public bool Equals(MethodInfo x, MethodInfo y)
             {
-                return x.Name == y.Name && x.GetParameters().SequenceEqual(y.GetParameters());
+                return x.Name == y.Name && x.GetParameters().SequenceEqual(y.GetParameters(), new ParameterInfoEqualityComparer());
             }
 
 
@@ -204,31 +235,38 @@ namespace ModGL.Binding
         {
             var generator = builder.GetILGenerator();
             generator.DeclareLocal(typeof(Delegate));
-            // Call object constructor
-            //generator.Emit(OpCodes.Ldarg_0);
-            // ReSharper disable AssignNullToNotNullAttribute
-             //generator.Emit(OpCodes.Call, typeof(object).GetConstructor(new Type[0]));
-            // ReSharper restore AssignNullToNotNullAttribute
             var getMethod = typeof(IExtensionSupport).GetMethod("GetProcedure", new[] { typeof(string), typeof(Type) });
+            var notSupportedConstructor = typeof(ExtensionNotSupportedException).GetConstructor(
+                new[] { typeof(string) });
+            if(notSupportedConstructor == null) // Constructor required. Added to make unit tests fail if it is missing.
+                throw new MissingMethodException("ExtensionNotSupportedException", ".ctr(string)");
 
             foreach (var method in methods)
             {
                 var name = GetFieldNameForMethodInfo(method);
                 var field = fields.Single(f => f.Name == name);
+                var okLabel = generator.DefineLabel();
                 
                 // _glMethodName = (MethodDelegateType)extensionSupport.GetProcedure("glMethodName", typeof(MethodDelegateType));
-                generator.Emit(OpCodes.Ldarg_0); // load argument
-                generator.Emit(OpCodes.Ldarg_1); // load this
+                generator.Emit(OpCodes.Ldarg_0);
+                generator.Emit(OpCodes.Ldarg_1);
                 generator.Emit(OpCodes.Ldstr, method.Name);  // load method name
                 generator.Emit(OpCodes.Ldtoken, field.FieldType); // load field type
-                generator.EmitCall(OpCodes.Call, typeof(System.Type).GetMethod("GetTypeFromHandle", new[] { typeof(System.RuntimeTypeHandle) }), null);
+                generator.EmitCall(OpCodes.Call, typeof(Type).GetMethod("GetTypeFromHandle", new[] { typeof(RuntimeTypeHandle) }), null);
                 generator.EmitCall(OpCodes.Callvirt, getMethod, null);
-                generator.Emit(OpCodes.Castclass, field.FieldType);
                 generator.Emit(OpCodes.Stloc_0); // result = GetProcedure("MethodName", Type);
+                // if result == null throw ExtensionNotSupportedException
+                generator.Emit(OpCodes.Ldloc_0);
+                generator.Emit(OpCodes.Brtrue, okLabel);
+                generator.Emit(OpCodes.Ldstr, method.Name);
+                generator.Emit(OpCodes.Newobj, notSupportedConstructor);
+                generator.Emit(OpCodes.Throw);
+                generator.MarkLabel(okLabel);
+                generator.Emit(OpCodes.Ldloc_0);
+                generator.Emit(OpCodes.Castclass, field.FieldType);
                 generator.Emit(OpCodes.Ldarg_0); // this
                 generator.Emit(OpCodes.Ldloc_0); // result
                 generator.Emit(OpCodes.Stfld, field); // this._fieldName = result;
-
             }
             //generator.Emit(OpCodes.Ldloc_0); // Load this
             generator.Emit(OpCodes.Ret);
@@ -249,20 +287,25 @@ namespace ModGL.Binding
                 null,
                 method.GetParameters().Select(p => p.ParameterType).ToArray(),
                 null);
+            generator.Emit(OpCodes.Nop);
             foreach (var item in method.GetParameters().Select((p, i) => new { Type = p, Index = i }))
                 generator.Emit(OpCodes.Ldarg, item.Index + 1);
             generator.EmitCall(OpCodes.Call, invokeMethod , null);
-            generator.Emit(OpCodes.Ret);
+            if(emitReturn)
+                generator.Emit(OpCodes.Ret);
         }
 
         private void GenerateThrowingStaticInvocation(ILGenerator generator, MethodInfo method, Type staticMapping, ErrorHandling err)
         {
-            generator.DeclareLocal(method.ReturnType);
+            if(method.ReturnType != typeof(void))
+                generator.DeclareLocal(method.ReturnType);
             generator.EmitCall(OpCodes.Call, err.FlushError, null);
             GenerateStaticInvocation(generator, method, staticMapping, emitReturn: false);
-            generator.Emit(OpCodes.Stloc_0);
+            if (method.ReturnType != typeof(void))
+                generator.Emit(OpCodes.Stloc_0);
             generator.EmitCall(OpCodes.Call, err.CheckErrorState, null);
-            generator.Emit(OpCodes.Ldloc_0);
+            if (method.ReturnType != typeof(void))
+                generator.Emit(OpCodes.Ldloc_0);
             generator.Emit(OpCodes.Ret);
         }
 

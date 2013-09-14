@@ -103,6 +103,16 @@ namespace ModGL.Windows
             public const int WGL_TYPE_RGBA_ARB = 0x202B;
             public const int WGL_TYPE_COLORINDEX_ARB = 0x202C;
         }
+
+        public override void Dispose()
+        {
+            _wgl.wglDeleteContext(hglrc);
+        }
+
+        public override void SwapBuffers()
+        {
+            _wgl.SwapBuffers(hdc);
+        }
         
         public WindowsContext(IWGL wgl, ContextCreationParameters parameters)
         {
@@ -110,13 +120,13 @@ namespace ModGL.Windows
                 throw new ArgumentNullException("parameters");
 
             if(parameters.MajorVersion < 3)
-                throw new ContextCreationException("OpenGL version below 3.0 is not supported.", parameters);
+                throw new VersionNotSupportedException("OpenGL version below 3.0 is not supported.", parameters);
 
             if(parameters.Device == IntPtr.Zero)
-                throw new ContextCreationException("Device (HDC) cannot be null.", parameters);
+                throw new ContextCreationException("Device cannot be null.", parameters);
 
             if(parameters.Window == IntPtr.Zero)
-                throw new ContextCreationException("Window (HWND) cannot be null.", parameters);
+                throw new ContextCreationException("Window cannot be null.", parameters);
 
             if(parameters.Display != IntPtr.Zero)
                 throw new ContextCreationException("Display is not supported on this platform.", parameters);
@@ -129,6 +139,7 @@ namespace ModGL.Windows
 
             if(!_wgl.wglMakeCurrent(hdc, tempContext))
                 throw new ContextCreationException("Unable to make temporary context current.", parameters);
+
 
             var choosePixelFormat = _wgl.wglGetProcAddress<wglChoosePixelFormatARB>("wglChoosePixelFormatARB");
             var createContext = _wgl.wglGetProcAddress<wglCreateContextAttribsARB>("wglCreateContextAttribsARB");
@@ -185,8 +196,9 @@ namespace ModGL.Windows
                 StencilBits = 8,
                 DepthBits = 24,
                 ColorBits = 32,
-                PixelType = 1,
-                Size = (ushort)System.Runtime.InteropServices.Marshal.SizeOf(typeof(PixelFormatDescriptor))
+                PixelType = PixelType.Rgba,
+                Size = (ushort)System.Runtime.InteropServices.Marshal.SizeOf(typeof(PixelFormatDescriptor)),
+                Flags = PixelFormatFlags.DoubleBuffer | PixelFormatFlags.DrawToWindows | PixelFormatFlags.SupportOpenGL,
             };
 
             int pixelFormat = _wgl.ChoosePixelFormat(hdc, ref desc);
@@ -204,9 +216,10 @@ namespace ModGL.Windows
             return glptr;
         }
 
-        public override void MakeCurrent()
+        public override BindContext MakeCurrent()
         {
-            throw new NotImplementedException();
+            _wgl.wglMakeCurrent(hdc, hglrc);
+            return new BindContext(() => _wgl.wglMakeCurrent(IntPtr.Zero, IntPtr.Zero) );
         }
 
         public override Delegate GetProcedure(string extensionName, Type delegateType)
