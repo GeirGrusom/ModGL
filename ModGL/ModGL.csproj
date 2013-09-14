@@ -40,8 +40,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Buffer.cs" />
-    <Compile Include="BufferExtensions.cs" />
+    <Compile Include="Buffers\Buffer.cs" />
+    <Compile Include="Buffers\BufferExtensions.cs" />
     <Compile Include="ContextCreationException.cs" />
     <Compile Include="ExtensionNotSupportedException.cs" />
     <Compile Include="IBindable.cs" />
@@ -58,10 +58,23 @@
     <Compile Include="NativeGL\OpenGLStackOverflowException.cs" />
     <Compile Include="NativeGL\OpenGLStackUnderflowException.cs" />
     <Compile Include="OpenGLContext.cs" />
+    <Compile Include="Shaders\CompilationException.cs" />
+    <Compile Include="Shaders\CompilationResults.cs" />
+    <Compile Include="Shaders\FragmentShader.cs" />
+    <Compile Include="Shaders\GeometryShader.cs" />
+    <Compile Include="Shaders\Program.cs" />
+    <Compile Include="Shaders\ProgramLCompilationException.cs" />
+    <Compile Include="Shaders\Shader.cs" />
+    <Compile Include="Shaders\ShaderCompilationException.cs" />
+    <Compile Include="Shaders\ShaderCompilationResults.cs" />
+    <Compile Include="Shaders\ShaderException.cs" />
+    <Compile Include="Shaders\ShaderProgramException.cs" />
+    <Compile Include="Shaders\ShaderType.cs" />
+    <Compile Include="Shaders\VertexShader.cs" />
     <Compile Include="ThrowOnErrorAttribute.cs" />
     <Compile Include="VersionNotSupportedException.cs" />
     <Compile Include="VertexArray.cs" />
-    <Compile Include="VertexBuffer.cs" />
+    <Compile Include="Buffers\VertexBuffer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VertexInfo\VertexDescriptor.cs" />
     <Compile Include="ContextCreationParameters.cs" />

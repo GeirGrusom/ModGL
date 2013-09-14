@@ -31,7 +31,7 @@ using GLhandle = System.UInt32;
 
 namespace ModGL.NativeGL
 {
-    // ReSharper disable InconsistentNaming
+
     /*
     
     public delegate void GLDEBUGPROC(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, string message, IntPtr userParam);
@@ -324,6 +324,27 @@ namespace ModGL.NativeGL
     public delegate GLubyte[] PFNGLGETSTRINGIPROC(GLenum name, GLuint index);*/
 
 
+    public enum ShaderParameters : uint
+    {
+        ShaderType = 0x8B4F,
+        DeleteStatus = 0x8B80,
+        CompileStatus = 0x8B81,
+        ShaderSourceLength = 0x8B88,
+        InfoLogLength = 0x8B84
+    }
+
+    public enum ProgramParameters : uint
+    {
+        DeleteStatus = 0x8B80,
+        LinkStatus = 0x8B82,
+        ValidateStatus = 0x8B83,
+        InfoLogLength = 0x8B84,
+        AttachedShaders = 0x8B85,
+        ActiveUniforms = 0x8B86,
+        ActiveUniformMaxLength = 0x8B87,
+        ActiveAttributes = 0x8B89,
+        ActiveAttributeMaxLength = 0x8B8A
+    }
 
     public interface IOpenGL
     {
@@ -482,11 +503,11 @@ namespace ModGL.NativeGL
         void glGetActiveUniform(GLuint program, GLuint index, GLsizei bufSize, GLsizei[] length, GLint[] size, GLenum[] type, GLchar[] name);
         void glGetAttachedShaders(GLuint program, GLsizei maxCount, GLsizei[] count, GLuint[] obj);
         GLint glGetAttribLocation(GLuint program, string name);
-        void glGetProgramiv(GLuint program, GLenum pname, GLint[] @params);
-        void glGetProgramInfoLog(GLuint program, GLsizei bufSize, GLsizei[] length, GLchar[] infoLog);
-        void glGetShaderiv(GLuint shader, GLenum pname, GLint[] @params);
-        void glGetShaderInfoLog(GLuint shader, GLsizei bufSize, GLsizei[] length, string infoLog);
-        void glGetShaderSource(GLuint shader, GLsizei bufSize, GLsizei[] length, string source);
+        void glGetProgramiv(GLuint program, ProgramParameters pname, GLint[] @params);
+        void glGetProgramInfoLog(GLuint program, GLsizei bufSize, out GLsizei length, GLchar[] infoLog);
+        void glGetShaderiv(GLuint shader, ShaderParameters pname, GLint[] @params);
+        void glGetShaderInfoLog(GLuint shader, GLsizei bufSize, out GLsizei length, GLchar[] infoLog);
+        void glGetShaderSource(GLuint shader, GLsizei bufSize, out GLsizei length, GLchar[] source);
         GLint glGetUniformLocation(GLuint program, string name);
         void glGetUniformfv(GLuint program, GLint location, GLfloat[] @params);
         void glGetUniformiv(GLuint program, GLint location, GLint[] @params);
@@ -601,7 +622,6 @@ namespace ModGL.NativeGL
         void glTexSubImage3D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLenum type, IntPtr pixels);
         void glCopyTexSubImage3D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLint x, GLint y, GLsizei width, GLsizei height);
     }
-    // ReSharper restore InconsistentNaming
 
     [GLVersion(3, 1)]
     public interface IOpenGL31 : IOpenGL30
