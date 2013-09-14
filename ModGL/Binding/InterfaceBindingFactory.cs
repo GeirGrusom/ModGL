@@ -83,7 +83,7 @@ namespace ModGL.Binding
             var type = typeof (TGLInterface);
 
             // Exclude methods defined in the interface map.
-            var methods = type.GetMethods().Except(remapMethods).ToArray();
+            var methods = type.GetMethods().Union(type.GetInterfaces().SelectMany(t => t.GetMethods())).Except(remapMethods).ToArray();
 
             var assembly = AssemblyBuilder.DefineDynamicAssembly(
                     new AssemblyName(string.Format("{0}.Dynamic", typeof (TGLInterface).Name)),
@@ -96,7 +96,7 @@ namespace ModGL.Binding
             var definedType = module.DefineType(string.Format("{0}_DynamicProxy", typeof (TGLInterface).Name),
                                          TypeAttributes.Public | TypeAttributes.Sealed | TypeAttributes.Class);
 
-            definedType.AddInterfaceImplementation(typeof(TGLInterface));
+            //definedType.AddInterfaceImplementation(typeof(TGLInterface));
 
             var constructor = definedType.DefineConstructor(MethodAttributes.Public | MethodAttributes.Final, CallingConventions.HasThis, new[] {typeof (IExtensionSupport)});
 
@@ -104,9 +104,12 @@ namespace ModGL.Binding
 
             GenerateConstructor(constructor, methods, fields);
 
-            DefineProcMethods<TGLInterface>(errorHandling, methods, definedType, fields);
+            var interfaces = type.GetInterfaces().Concat(new[] { type }).Except(interfaceMap.Keys).ToArray();
 
-            DefineStaticMethods<TGLInterface>(interfaceMap, errorHandling, definedType);
+            foreach(var @interface in interfaces)
+                DefineProcMethods(errorHandling, @interface, remapMethods, definedType, fields);
+
+            DefineStaticMethods(interfaceMap, errorHandling, definedType);
 
             var resultType = definedType.CreateType();
 
@@ -120,27 +123,25 @@ namespace ModGL.Binding
         }
 
 
-        private void DefineStaticMethods<TGLInterface>(
+        private void DefineStaticMethods(
             Dictionary<Type, Type> interfaceMap, ErrorHandling errorHandling, TypeBuilder definedType)
         {
             foreach (var item in interfaceMap)
             {
                 // Implement interface
                 definedType.AddInterfaceImplementation(item.Key);
-                foreach (var method in item.Value.GetMethods())
+                foreach (var method in item.Key.GetMethods())
                 {
                     // Map interface to static methods.
                     var parameters =
                         method.GetParameters().OrderBy(p => p.Position).Select(t => t.ParameterType).ToArray();
-                    const MethodAttributes attributes = MethodAttributes.Private | MethodAttributes.HideBySig |
-                                                        MethodAttributes.NewSlot | MethodAttributes.Virtual
-                                                        | MethodAttributes.Final;
+                    const MethodAttributes attributes = MethodAttributes.Private | MethodAttributes.Virtual | MethodAttributes.Final |
+                        MethodAttributes.HideBySig | MethodAttributes.NewSlot;
 
                     var newMethod = definedType.DefineMethod
                         (
                             method.Name,
                             attributes,
-                            CallingConventions.Any,
                             method.ReturnType,
                             parameters
                         );
@@ -157,10 +158,24 @@ namespace ModGL.Binding
             }
         }
 
-
-        private void DefineProcMethods<TGLInterface>(
-            ErrorHandling errorHandling, MethodInfo[] methods, TypeBuilder definedType, IList<FieldBuilder> fields)
+        internal class MethodInfoEqualityComparer : IEqualityComparer<MethodInfo>
         {
+            public bool Equals(MethodInfo x, MethodInfo y)
+            {
+                return x.Name == y.Name && x.GetParameters().SequenceEqual(y.GetParameters());
+            }
+
+
+            public int GetHashCode(MethodInfo obj)
+            {
+                return obj.Name.GetHashCode();
+            }
+        }
+
+        private void DefineProcMethods(
+            ErrorHandling errorHandling, Type interfaceType, IEnumerable<MethodInfo> except, TypeBuilder definedType, IList<FieldBuilder> fields)
+        {
+            var methods = interfaceType.GetMethods().Except(except, new MethodInfoEqualityComparer()).ToArray();
             foreach (var method in methods)
             {
                 var newMethod = definedType.DefineMethod
@@ -181,6 +196,7 @@ namespace ModGL.Binding
 
                 definedType.DefineMethodOverride(newMethod, method);
             }
+            definedType.AddInterfaceImplementation(interfaceType);
         }
 
 
@@ -222,14 +238,20 @@ namespace ModGL.Binding
         {
             return (from method in methods
                     let delegateType = CreateDelegateType(method, delegateModule)
-                    select builder.DefineField(GetFieldNameForMethodInfo(method), delegateType, FieldAttributes.Private)).ToList();
+                    select builder.DefineField(GetFieldNameForMethodInfo(method), delegateType, FieldAttributes.Private | FieldAttributes.InitOnly)).ToList();
         }
 
         private void GenerateStaticInvocation(ILGenerator generator, MethodInfo method, Type staticMapping, bool emitReturn = true)
         {
+            var invokeMethod = staticMapping.GetMethod(
+                method.Name,
+                BindingFlags.Public | BindingFlags.Static,
+                null,
+                method.GetParameters().Select(p => p.ParameterType).ToArray(),
+                null);
             foreach (var item in method.GetParameters().Select((p, i) => new { Type = p, Index = i }))
-                generator.Emit(OpCodes.Ldarg, item.Index);
-            generator.EmitCall(OpCodes.Call, staticMapping.GetMethod(method.Name, BindingFlags.Public | BindingFlags.Static, null, method.GetParameters().Select(p => p.ParameterType).ToArray(), null), null);
+                generator.Emit(OpCodes.Ldarg, item.Index + 1);
+            generator.EmitCall(OpCodes.Call, invokeMethod , null);
             generator.Emit(OpCodes.Ret);
         }
 
