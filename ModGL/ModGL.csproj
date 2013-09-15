@@ -65,7 +65,7 @@
     <Compile Include="Shaders\FragmentShader.cs" />
     <Compile Include="Shaders\GeometryShader.cs" />
     <Compile Include="Shaders\Program.cs" />
-    <Compile Include="Shaders\ProgramLCompilationException.cs" />
+    <Compile Include="Shaders\ProgramCompilationException.cs" />
     <Compile Include="Shaders\Shader.cs" />
     <Compile Include="Shaders\ShaderCompilationException.cs" />
     <Compile Include="Shaders\ShaderCompilationResults.cs" />

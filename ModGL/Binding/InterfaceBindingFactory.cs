@@ -312,12 +312,18 @@ namespace ModGL.Binding
 
         private void GenerateThrowingInvocation(ILGenerator generator, MethodInfo method, IEnumerable<FieldBuilder> fieldBuilders, ErrorHandling err)
         {
-            generator.DeclareLocal(method.ReturnType);
+            if(method.ReturnType != typeof(void))
+                generator.DeclareLocal(method.ReturnType);
+
             generator.EmitCall(OpCodes.Call, err.FlushError, null);
             GenerateInvocation(generator, method, fieldBuilders, emitReturn: false);
-            generator.Emit(OpCodes.Stloc_0);
+
+            if (method.ReturnType != typeof(void))
+                generator.Emit(OpCodes.Stloc_0);
             generator.EmitCall(OpCodes.Call, err.CheckErrorState, null);
-            generator.Emit(OpCodes.Ldloc_0);
+
+            if (method.ReturnType != typeof(void))
+                generator.Emit(OpCodes.Ldloc_0);
             generator.Emit(OpCodes.Ret);
         }
 

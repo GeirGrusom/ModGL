@@ -32,298 +32,7 @@ using GLhandle = System.UInt32;
 namespace ModGL.NativeGL
 {
 
-    /*
     
-    public delegate void GLDEBUGPROC(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, string message, IntPtr userParam);
-    public delegate void PFNGLCULLFACEPROC(GLenum mode);
-    public delegate void PFNGLFRONTFACEPROC(GLenum mode);
-    public delegate void PFNGLHINTPROC(GLenum target, GLenum mode);
-    public delegate void PFNGLLINEWIDTHPROC(GLfloat width);
-    public delegate void PFNGLPOINTSIZEPROC(GLfloat size);
-    public delegate void PFNGLPOLYGONMODEPROC(GLenum face, GLenum mode);
-    public delegate void PFNGLSCISSORPROC(GLint x, GLint y, GLsizei width, GLsizei height);
-    public delegate void PFNGLTEXPARAMETERFPROC(GLenum target, GLenum pname, GLfloat param);
-    public delegate void PFNGLTEXPARAMETERFVPROC(GLenum target, GLenum pname, GLfloat[] @params);
-    public delegate void PFNGLTEXPARAMETERIPROC(GLenum target, GLenum pname, GLint param);
-    public delegate void PFNGLTEXPARAMETERIVPROC(GLenum target, GLenum pname, GLint[] @params);
-    public delegate void PFNGLTEXIMAGE1DPROC(GLenum target, GLint level, GLint internalformat, GLsizei width, GLint border, GLenum format, GLenum type, IntPtr pixels);
-    public delegate void PFNGLTEXIMAGE2DPROC(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, IntPtr pixels);
-    public delegate void PFNGLDRAWBUFFERPROC(GLenum mode);
-    public delegate void PFNGLCLEARPROC(GLbitfield mask);
-    public delegate void PFNGLCLEARCOLORPROC(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha);
-    public delegate void PFNGLCLEARSTENCILPROC(GLint s);
-    public delegate void PFNGLCLEARDEPTHPROC(GLdouble depth);
-    public delegate void PFNGLSTENCILMASKPROC(GLuint mask);
-    public delegate void PFNGLCOLORMASKPROC(GLboolean red, GLboolean green, GLboolean blue, GLboolean alpha);
-    public delegate void PFNGLDEPTHMASKPROC(GLboolean flag);
-    public delegate void PFNGLDISABLEPROC(GLenum cap);
-    public delegate void PFNGLENABLEPROC(GLenum cap);
-    public delegate void PFNGLFINISHPROC();
-    public delegate void PFNGLFLUSHPROC();
-    public delegate void PFNGLBLENDFUNCPROC(GLenum sfactor, GLenum dfactor);
-    public delegate void PFNGLLOGICOPPROC(GLenum opcode);
-    public delegate void PFNGLSTENCILFUNCPROC(GLenum func, GLint @ref, GLuint mask);
-    public delegate void PFNGLSTENCILOPPROC(GLenum fail, GLenum zfail, GLenum zpass);
-    public delegate void PFNGLDEPTHFUNCPROC(GLenum func);
-    public delegate void PFNGLPIXELSTOREFPROC(GLenum pname, GLfloat param);
-    public delegate void PFNGLPIXELSTOREIPROC(GLenum pname, GLint param);
-    public delegate void PFNGLREADBUFFERPROC(GLenum mode);
-    public delegate void PFNGLREADPIXELSPROC(GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, IntPtr pixels);
-    public delegate void PFNGLGETBOOLEANVPROC(GLenum pname, GLboolean[] @params);
-    public delegate void PFNGLGETDOUBLEVPROC(GLenum pname, GLdouble[] @params);
-    public delegate GLenum PFNGLGETERRORPROC();
-    public delegate void PFNGLGETFLOATVPROC(GLenum pname, GLfloat[] @params);
-    public delegate void PFNGLGETINTEGERVPROC(GLenum pname, GLint[] @params);
-    public delegate string PFNGLGETSTRINGPROC(GLenum name);
-    public delegate void PFNGLGETTEXIMAGEPROC(GLenum target, GLint level, GLenum format, GLenum type, IntPtr pixels);
-    public delegate void PFNGLGETTEXPARAMETERFVPROC(GLenum target, GLenum pname, GLfloat[] @params);
-    public delegate void PFNGLGETTEXPARAMETERIVPROC(GLenum target, GLenum pname, GLint[] @params);
-    public delegate void PFNGLGETTEXLEVELPARAMETERFVPROC(GLenum target, GLint level, GLenum pname, GLfloat[] @params);
-    public delegate void PFNGLGETTEXLEVELPARAMETERIVPROC(GLenum target, GLint level, GLenum pname, GLint[] @params);
-    public delegate GLboolean PFNGLISENABLEDPROC(GLenum cap);
-    public delegate void PFNGLDEPTHRANGEPROC(GLdouble near, GLdouble far);
-    public delegate void PFNGLVIEWPORTPROC(GLint x, GLint y, GLsizei width, GLsizei height);
-
-
-
-    public delegate void PFNGLDRAWARRAYSPROC(GLenum mode, GLint first, GLsizei count);
-    public delegate void PFNGLDRAWELEMENTSPROC(GLenum mode, GLsizei count, GLenum type, IntPtr indices);
-    public delegate void PFNGLGETPOINTERVPROC(GLenum pname, IntPtr[] @params);
-    public delegate void PFNGLPOLYGONOFFSETPROC(GLfloat factor, GLfloat units);
-    public delegate void PFNGLCOPYTEXIMAGE1DPROC(GLenum target, GLint level, GLenum internalformat, GLint x, GLint y, GLsizei width, GLint border);
-    public delegate void PFNGLCOPYTEXIMAGE2DPROC(GLenum target, GLint level, GLenum internalformat, GLint x, GLint y, GLsizei width, GLsizei height, GLint border);
-    public delegate void PFNGLCOPYTEXSUBIMAGE1DPROC(GLenum target, GLint level, GLint xoffset, GLint x, GLint y, GLsizei width);
-    public delegate void PFNGLCOPYTEXSUBIMAGE2DPROC(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint x, GLint y, GLsizei width, GLsizei height);
-    public delegate void PFNGLTEXSUBIMAGE1DPROC(GLenum target, GLint level, GLint xoffset, GLsizei width, GLenum format, GLenum type, IntPtr pixels);
-    public delegate void PFNGLTEXSUBIMAGE2DPROC(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLenum type, IntPtr pixels);
-    public delegate void PFNGLBINDTEXTUREPROC(GLenum target, GLuint texture);
-    public delegate void PFNGLDELETETEXTURESPROC(GLsizei n, GLuint[] textures);
-    public delegate void PFNGLGENTEXTURESPROC(GLsizei n, GLuint[] textures);
-    public delegate GLboolean PFNGLISTEXTUREPROC(GLuint texture);
-
-
-
-    public delegate void PFNGLBLENDCOLORPROC(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha);
-    public delegate void PFNGLBLENDEQUATIONPROC(GLenum mode);
-    public delegate void PFNGLDRAWRANGEELEMENTSPROC(GLenum mode, GLuint start, GLuint end, GLsizei count, GLenum type, IntPtr indices);
-    public delegate void PFNGLTEXIMAGE3DPROC(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLsizei depth, GLint border, GLenum format, GLenum type, IntPtr pixels);
-    public delegate void PFNGLTEXSUBIMAGE3DPROC(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLenum type, IntPtr pixels);
-    public delegate void PFNGLCOPYTEXSUBIMAGE3DPROC(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLint x, GLint y, GLsizei width, GLsizei height);
-
-
-
-
-
-    public delegate void PFNGLACTIVETEXTUREPROC(GLenum texture);
-    public delegate void PFNGLSAMPLECOVERAGEPROC(GLfloat value, GLboolean invert);
-    public delegate void PFNGLCOMPRESSEDTEXIMAGE3DPROC(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLsizei depth, GLint border, GLsizei imageSize, IntPtr data);
-    public delegate void PFNGLCOMPRESSEDTEXIMAGE2DPROC(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLint border, GLsizei imageSize, IntPtr data);
-    public delegate void PFNGLCOMPRESSEDTEXIMAGE1DPROC(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLint border, GLsizei imageSize, IntPtr data);
-    public delegate void PFNGLCOMPRESSEDTEXSUBIMAGE3DPROC(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLsizei imageSize, IntPtr data);
-    public delegate void PFNGLCOMPRESSEDTEXSUBIMAGE2DPROC(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLsizei imageSize, IntPtr data);
-    public delegate void PFNGLCOMPRESSEDTEXSUBIMAGE1DPROC(GLenum target, GLint level, GLint xoffset, GLsizei width, GLenum format, GLsizei imageSize, IntPtr data);
-    public delegate void PFNGLGETCOMPRESSEDTEXIMAGEPROC(GLenum target, GLint level, IntPtr img);
-
-
-
-    public delegate void PFNGLBLENDFUNCSEPARATEPROC(GLenum sfactorRGB, GLenum dfactorRGB, GLenum sfactorAlpha, GLenum dfactorAlpha);
-    public delegate void PFNGLMULTIDRAWARRAYSPROC(GLenum mode, GLint[] first, GLsizei[] count, GLsizei drawcount);
-    public delegate void PFNGLMULTIDRAWELEMENTSPROC(GLenum mode, GLsizei[] count, GLenum type, IntPtr[] indices, GLsizei drawcount);
-    public delegate void PFNGLPOINTPARAMETERFPROC(GLenum pname, GLfloat param);
-    public delegate void PFNGLPOINTPARAMETERFVPROC(GLenum pname, GLfloat[] @params);
-    public delegate void PFNGLPOINTPARAMETERIPROC(GLenum pname, GLint param);
-    public delegate void PFNGLPOINTPARAMETERIVPROC(GLenum pname, GLint[] @params);
-
-
-
-    public delegate void PFNGLGENQUERIESPROC(GLsizei n, GLuint[] ids);
-    public delegate void PFNGLDELETEQUERIESPROC(GLsizei n, GLuint[] ids);
-    public delegate GLboolean PFNGLISQUERYPROC(GLuint id);
-    public delegate void PFNGLBEGINQUERYPROC(GLenum target, GLuint id);
-    public delegate void PFNGLENDQUERYPROC(GLenum target);
-    public delegate void PFNGLGETQUERYIVPROC(GLenum target, GLenum pname, GLint[] @params);
-    public delegate void PFNGLGETQUERYOBJECTIVPROC(GLuint id, GLenum pname, GLint[] @params);
-    public delegate void PFNGLGETQUERYOBJECTUIVPROC(GLuint id, GLenum pname, GLuint[] @params);
-    public delegate void PFNGLBINDBUFFERPROC(GLenum target, GLuint buffer);
-    public delegate void PFNGLDELETEBUFFERSPROC(GLsizei n, GLuint[] buffers);
-    public delegate void PFNGLGENBUFFERSPROC(GLsizei n, GLuint[] buffers);
-    public delegate GLboolean PFNGLISBUFFERPROC(GLuint buffer);
-    public delegate void PFNGLBUFFERDATAPROC(GLenum target, GLsizeiptr size, IntPtr data, GLenum usage);
-    public delegate void PFNGLBUFFERSUBDATAPROC(GLenum target, GLintptr offset, GLsizeiptr size, IntPtr data);
-    public delegate void PFNGLGETBUFFERSUBDATAPROC(GLenum target, GLintptr offset, GLsizeiptr size, IntPtr data);
-    public delegate IntPtr PFNGLMAPBUFFERPROC(GLenum target, GLenum access);
-    public delegate GLboolean PFNGLUNMAPBUFFERPROC(GLenum target);
-    public delegate void PFNGLGETBUFFERPARAMETERIVPROC(GLenum target, GLenum pname, GLint[] @params);
-    public delegate void PFNGLGETBUFFERPOINTERVPROC(GLenum target, GLenum pname, IntPtr[] @params);
-
-
-
-    public delegate void PFNGLBLENDEQUATIONSEPARATEPROC(GLenum modeRGB, GLenum modeAlpha);
-    public delegate void PFNGLDRAWBUFFERSPROC(GLsizei n, GLenum[] bufs);
-    public delegate void PFNGLSTENCILOPSEPARATEPROC(GLenum face, GLenum sfail, GLenum dpfail, GLenum dppass);
-    public delegate void PFNGLSTENCILFUNCSEPARATEPROC(GLenum face, GLenum func, GLint @ref, GLuint mask);
-    public delegate void PFNGLSTENCILMASKSEPARATEPROC(GLenum face, GLuint mask);
-    public delegate void PFNGLATTACHSHADERPROC(GLuint program, GLuint shader);
-    public delegate void PFNGLBINDATTRIBLOCATIONPROC(GLuint program, GLuint index, string name);
-    public delegate void PFNGLCOMPILESHADERPROC(GLuint shader);
-    public delegate GLuint PFNGLCREATEPROGRAMPROC();
-    public delegate GLuint PFNGLCREATESHADERPROC(GLenum type);
-    public delegate void PFNGLDELETEPROGRAMPROC(GLuint program);
-    public delegate void PFNGLDELETESHADERPROC(GLuint shader);
-    public delegate void PFNGLDETACHSHADERPROC(GLuint program, GLuint shader);
-    public delegate void PFNGLDISABLEVERTEXATTRIBARRAYPROC(GLuint index);
-    public delegate void PFNGLENABLEVERTEXATTRIBARRAYPROC(GLuint index);
-    public delegate void PFNGLGETACTIVEATTRIBPROC(GLuint program, GLuint index, GLsizei bufSize, GLsizei[] length, GLint[] size, GLenum[] type, GLchar[] name);
-    public delegate void PFNGLGETACTIVEUNIFORMPROC(GLuint program, GLuint index, GLsizei bufSize, GLsizei[] length, GLint[] size, GLenum[] type, GLchar[] name);
-    public delegate void PFNGLGETATTACHEDSHADERSPROC(GLuint program, GLsizei maxCount, GLsizei[] count, GLuint[] obj);
-    public delegate GLint PFNGLGETATTRIBLOCATIONPROC(GLuint program, string name);
-    public delegate void PFNGLGETPROGRAMIVPROC(GLuint program, GLenum pname, GLint[] @params);
-    public delegate void PFNGLGETPROGRAMINFOLOGPROC(GLuint program, GLsizei bufSize, GLsizei[] length, GLchar[] infoLog);
-    public delegate void PFNGLGETSHADERIVPROC(GLuint shader, GLenum pname, GLint[] @params);
-    public delegate void PFNGLGETSHADERINFOLOGPROC(GLuint shader, GLsizei bufSize, GLsizei[] length, GLchar[] infoLog);
-    public delegate void PFNGLGETSHADERSOURCEPROC(GLuint shader, GLsizei bufSize, GLsizei[] length, GLchar[] source);
-    public delegate GLint PFNGLGETUNIFORMLOCATIONPROC(GLuint program, string name);
-    public delegate void PFNGLGETUNIFORMFVPROC(GLuint program, GLint location, GLfloat[] @params);
-    public delegate void PFNGLGETUNIFORMIVPROC(GLuint program, GLint location, GLint[] @params);
-    public delegate void PFNGLGETVERTEXATTRIBDVPROC(GLuint index, GLenum pname, GLdouble[] @params);
-    public delegate void PFNGLGETVERTEXATTRIBFVPROC(GLuint index, GLenum pname, GLfloat[] @params);
-    public delegate void PFNGLGETVERTEXATTRIBIVPROC(GLuint index, GLenum pname, GLint[] @params);
-    public delegate void PFNGLGETVERTEXATTRIBPOINTERVPROC(GLuint index, GLenum pname, IntPtr[] pointer);
-    public delegate GLboolean PFNGLISPROGRAMPROC(GLuint program);
-    public delegate GLboolean PFNGLISSHADERPROC(GLuint shader);
-    public delegate void PFNGLLINKPROGRAMPROC(GLuint program);
-    public delegate void PFNGLSHADERSOURCEPROC(GLuint shader, GLsizei count, string[] strings, GLint[] length);
-    public delegate void PFNGLUSEPROGRAMPROC(GLuint program);
-    public delegate void PFNGLUNIFORM1FPROC(GLint location, GLfloat v0);
-    public delegate void PFNGLUNIFORM2FPROC(GLint location, GLfloat v0, GLfloat v1);
-    public delegate void PFNGLUNIFORM3FPROC(GLint location, GLfloat v0, GLfloat v1, GLfloat v2);
-    public delegate void PFNGLUNIFORM4FPROC(GLint location, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3);
-    public delegate void PFNGLUNIFORM1IPROC(GLint location, GLint v0);
-    public delegate void PFNGLUNIFORM2IPROC(GLint location, GLint v0, GLint v1);
-    public delegate void PFNGLUNIFORM3IPROC(GLint location, GLint v0, GLint v1, GLint v2);
-    public delegate void PFNGLUNIFORM4IPROC(GLint location, GLint v0, GLint v1, GLint v2, GLint v3);
-    public delegate void PFNGLUNIFORM1FVPROC(GLint location, GLsizei count, GLfloat[] value);
-    public delegate void PFNGLUNIFORM2FVPROC(GLint location, GLsizei count, GLfloat[] value);
-    public delegate void PFNGLUNIFORM3FVPROC(GLint location, GLsizei count, GLfloat[] value);
-    public delegate void PFNGLUNIFORM4FVPROC(GLint location, GLsizei count, GLfloat[] value);
-    public delegate void PFNGLUNIFORM1IVPROC(GLint location, GLsizei count, GLint[] value);
-    public delegate void PFNGLUNIFORM2IVPROC(GLint location, GLsizei count, GLint[] value);
-    public delegate void PFNGLUNIFORM3IVPROC(GLint location, GLsizei count, GLint[] value);
-    public delegate void PFNGLUNIFORM4IVPROC(GLint location, GLsizei count, GLint[] value);
-    public delegate void PFNGLUNIFORMMATRIX2FVPROC(GLint location, GLsizei count, GLboolean transpose, GLfloat[] value);
-    public delegate void PFNGLUNIFORMMATRIX3FVPROC(GLint location, GLsizei count, GLboolean transpose, GLfloat[] value);
-    public delegate void PFNGLUNIFORMMATRIX4FVPROC(GLint location, GLsizei count, GLboolean transpose, GLfloat[] value);
-    public delegate void PFNGLVALIDATEPROGRAMPROC(GLuint program);
-    public delegate void PFNGLVERTEXATTRIB1DPROC(GLuint index, GLdouble x);
-    public delegate void PFNGLVERTEXATTRIB1DVPROC(GLuint index, GLdouble[] v);
-    public delegate void PFNGLVERTEXATTRIB1FPROC(GLuint index, GLfloat x);
-    public delegate void PFNGLVERTEXATTRIB1FVPROC(GLuint index, GLfloat[] v);
-    public delegate void PFNGLVERTEXATTRIB1SPROC(GLuint index, GLshort x);
-    public delegate void PFNGLVERTEXATTRIB1SVPROC(GLuint index, GLshort[] v);
-    public delegate void PFNGLVERTEXATTRIB2DPROC(GLuint index, GLdouble x, GLdouble y);
-    public delegate void PFNGLVERTEXATTRIB2DVPROC(GLuint index, GLdouble[] v);
-    public delegate void PFNGLVERTEXATTRIB2FPROC(GLuint index, GLfloat x, GLfloat y);
-    public delegate void PFNGLVERTEXATTRIB2FVPROC(GLuint index, GLfloat[] v);
-    public delegate void PFNGLVERTEXATTRIB2SPROC(GLuint index, GLshort x, GLshort y);
-    public delegate void PFNGLVERTEXATTRIB2SVPROC(GLuint index, GLshort[] v);
-    public delegate void PFNGLVERTEXATTRIB3DPROC(GLuint index, GLdouble x, GLdouble y, GLdouble z);
-    public delegate void PFNGLVERTEXATTRIB3DVPROC(GLuint index, GLdouble[] v);
-    public delegate void PFNGLVERTEXATTRIB3FPROC(GLuint index, GLfloat x, GLfloat y, GLfloat z);
-    public delegate void PFNGLVERTEXATTRIB3FVPROC(GLuint index, GLfloat[] v);
-    public delegate void PFNGLVERTEXATTRIB3SPROC(GLuint index, GLshort x, GLshort y, GLshort z);
-    public delegate void PFNGLVERTEXATTRIB3SVPROC(GLuint index, GLshort[] v);
-    public delegate void PFNGLVERTEXATTRIB4NBVPROC(GLuint index, GLbyte[] v);
-    public delegate void PFNGLVERTEXATTRIB4NIVPROC(GLuint index, GLint[] v);
-    public delegate void PFNGLVERTEXATTRIB4NSVPROC(GLuint index, GLshort[] v);
-    public delegate void PFNGLVERTEXATTRIB4NUBPROC(GLuint index, GLubyte x, GLubyte y, GLubyte z, GLubyte w);
-    public delegate void PFNGLVERTEXATTRIB4NUBVPROC(GLuint index, GLubyte[] v);
-    public delegate void PFNGLVERTEXATTRIB4NUIVPROC(GLuint index, GLuint[] v);
-    public delegate void PFNGLVERTEXATTRIB4NUSVPROC(GLuint index, GLushort[] v);
-    public delegate void PFNGLVERTEXATTRIB4BVPROC(GLuint index, GLbyte[] v);
-    public delegate void PFNGLVERTEXATTRIB4DPROC(GLuint index, GLdouble x, GLdouble y, GLdouble z, GLdouble w);
-    public delegate void PFNGLVERTEXATTRIB4DVPROC(GLuint index, GLdouble[] v);
-    public delegate void PFNGLVERTEXATTRIB4FPROC(GLuint index, GLfloat x, GLfloat y, GLfloat z, GLfloat w);
-    public delegate void PFNGLVERTEXATTRIB4FVPROC(GLuint index, GLfloat[] v);
-    public delegate void PFNGLVERTEXATTRIB4IVPROC(GLuint index, GLint[] v);
-    public delegate void PFNGLVERTEXATTRIB4SPROC(GLuint index, GLshort x, GLshort y, GLshort z, GLshort w);
-    public delegate void PFNGLVERTEXATTRIB4SVPROC(GLuint index, GLshort[] v);
-    public delegate void PFNGLVERTEXATTRIB4UBVPROC(GLuint index, GLubyte[] v);
-    public delegate void PFNGLVERTEXATTRIB4UIVPROC(GLuint index, GLuint[] v);
-    public delegate void PFNGLVERTEXATTRIB4USVPROC(GLuint index, GLushort[] v);
-    public delegate void PFNGLVERTEXATTRIBPOINTERPROC(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, IntPtr pointer);
-
-
-
-    public delegate void PFNGLUNIFORMMATRIX2X3FVPROC(GLint location, GLsizei count, GLboolean transpose, GLfloat[] value);
-    public delegate void PFNGLUNIFORMMATRIX3X2FVPROC(GLint location, GLsizei count, GLboolean transpose, GLfloat[] value);
-    public delegate void PFNGLUNIFORMMATRIX2X4FVPROC(GLint location, GLsizei count, GLboolean transpose, GLfloat[] value);
-    public delegate void PFNGLUNIFORMMATRIX4X2FVPROC(GLint location, GLsizei count, GLboolean transpose, GLfloat[] value);
-    public delegate void PFNGLUNIFORMMATRIX3X4FVPROC(GLint location, GLsizei count, GLboolean transpose, GLfloat[] value);
-    public delegate void PFNGLUNIFORMMATRIX4X3FVPROC(GLint location, GLsizei count, GLboolean transpose, GLfloat[] value);
-
-
-
-    public delegate void PFNGLCOLORMASKIPROC(GLuint index, GLboolean r, GLboolean g, GLboolean b, GLboolean a);
-    public delegate void PFNGLGETBOOLEANI_VPROC(GLenum target, GLuint index, GLboolean[] data);
-    public delegate void PFNGLGETINTEGERI_VPROC(GLenum target, GLuint index, GLint[] data);
-    public delegate void PFNGLENABLEIPROC(GLenum target, GLuint index);
-    public delegate void PFNGLDISABLEIPROC(GLenum target, GLuint index);
-    public delegate GLboolean PFNGLISENABLEDIPROC(GLenum target, GLuint index);
-    public delegate void PFNGLBEGINTRANSFORMFEEDBACKPROC(GLenum primitiveMode);
-    public delegate void PFNGLENDTRANSFORMFEEDBACKPROC();
-    public delegate void PFNGLBINDBUFFERRANGEPROC(GLenum target, GLuint index, GLuint buffer, GLintptr offset, GLsizeiptr size);
-    public delegate void PFNGLBINDBUFFERBASEPROC(GLenum target, GLuint index, GLuint buffer);
-    public delegate void PFNGLTRANSFORMFEEDBACKVARYINGSPROC(GLuint program, GLsizei count, string[] varyings, GLenum bufferMode);
-    public delegate void PFNGLGETTRANSFORMFEEDBACKVARYINGPROC(GLuint program, GLuint index, GLsizei bufSize, GLsizei[] length, GLsizei[] size, GLenum[] type, GLchar[] name);
-    public delegate void PFNGLCLAMPCOLORPROC(GLenum target, GLenum clamp);
-    public delegate void PFNGLBEGINCONDITIONALRENDERPROC(GLuint id, GLenum mode);
-    public delegate void PFNGLENDCONDITIONALRENDERPROC();
-    public delegate void PFNGLVERTEXATTRIBIPOINTERPROC(GLuint index, GLint size, GLenum type, GLsizei stride, IntPtr pointer);
-    public delegate void PFNGLGETVERTEXATTRIBIIVPROC(GLuint index, GLenum pname, GLint[] @params);
-    public delegate void PFNGLGETVERTEXATTRIBIUIVPROC(GLuint index, GLenum pname, GLuint[] @params);
-    public delegate void PFNGLVERTEXATTRIBI1IPROC(GLuint index, GLint x);
-    public delegate void PFNGLVERTEXATTRIBI2IPROC(GLuint index, GLint x, GLint y);
-    public delegate void PFNGLVERTEXATTRIBI3IPROC(GLuint index, GLint x, GLint y, GLint z);
-    public delegate void PFNGLVERTEXATTRIBI4IPROC(GLuint index, GLint x, GLint y, GLint z, GLint w);
-    public delegate void PFNGLVERTEXATTRIBI1UIPROC(GLuint index, GLuint x);
-    public delegate void PFNGLVERTEXATTRIBI2UIPROC(GLuint index, GLuint x, GLuint y);
-    public delegate void PFNGLVERTEXATTRIBI3UIPROC(GLuint index, GLuint x, GLuint y, GLuint z);
-    public delegate void PFNGLVERTEXATTRIBI4UIPROC(GLuint index, GLuint x, GLuint y, GLuint z, GLuint w);
-    public delegate void PFNGLVERTEXATTRIBI1IVPROC(GLuint index, GLint[] v);
-    public delegate void PFNGLVERTEXATTRIBI2IVPROC(GLuint index, GLint[] v);
-    public delegate void PFNGLVERTEXATTRIBI3IVPROC(GLuint index, GLint[] v);
-    public delegate void PFNGLVERTEXATTRIBI4IVPROC(GLuint index, GLint[] v);
-    public delegate void PFNGLVERTEXATTRIBI1UIVPROC(GLuint index, GLuint[] v);
-    public delegate void PFNGLVERTEXATTRIBI2UIVPROC(GLuint index, GLuint[] v);
-    public delegate void PFNGLVERTEXATTRIBI3UIVPROC(GLuint index, GLuint[] v);
-    public delegate void PFNGLVERTEXATTRIBI4UIVPROC(GLuint index, GLuint[] v);
-    public delegate void PFNGLVERTEXATTRIBI4BVPROC(GLuint index, GLbyte[] v);
-    public delegate void PFNGLVERTEXATTRIBI4SVPROC(GLuint index, GLshort[] v);
-    public delegate void PFNGLVERTEXATTRIBI4UBVPROC(GLuint index, GLubyte[] v);
-    public delegate void PFNGLVERTEXATTRIBI4USVPROC(GLuint index, GLushort[] v);
-    public delegate void PFNGLGETUNIFORMUIVPROC(GLuint program, GLint location, GLuint[] @params);
-    public delegate void PFNGLBINDFRAGDATALOCATIONPROC(GLuint program, GLuint color, GLchar[] name);
-    public delegate GLint PFNGLGETFRAGDATALOCATIONPROC(GLuint program, GLchar[] name);
-    public delegate void PFNGLUNIFORM1UIPROC(GLint location, GLuint v0);
-    public delegate void PFNGLUNIFORM2UIPROC(GLint location, GLuint v0, GLuint v1);
-    public delegate void PFNGLUNIFORM3UIPROC(GLint location, GLuint v0, GLuint v1, GLuint v2);
-    public delegate void PFNGLUNIFORM4UIPROC(GLint location, GLuint v0, GLuint v1, GLuint v2, GLuint v3);
-    public delegate void PFNGLUNIFORM1UIVPROC(GLint location, GLsizei count, GLuint[] value);
-    public delegate void PFNGLUNIFORM2UIVPROC(GLint location, GLsizei count, GLuint[] value);
-    public delegate void PFNGLUNIFORM3UIVPROC(GLint location, GLsizei count, GLuint[] value);
-    public delegate void PFNGLUNIFORM4UIVPROC(GLint location, GLsizei count, GLuint[] value);
-    public delegate void PFNGLTEXPARAMETERIIVPROC(GLenum target, GLenum pname, GLint[] @params);
-    public delegate void PFNGLTEXPARAMETERIUIVPROC(GLenum target, GLenum pname, GLuint[] @params);
-    public delegate void PFNGLGETTEXPARAMETERIIVPROC(GLenum target, GLenum pname, GLint[] @params);
-    public delegate void PFNGLGETTEXPARAMETERIUIVPROC(GLenum target, GLenum pname, GLuint[] @params);
-    public delegate void PFNGLCLEARBUFFERIVPROC(GLenum buffer, GLint drawbuffer, GLint[] value);
-    public delegate void PFNGLCLEARBUFFERUIVPROC(GLenum buffer, GLint drawbuffer, GLuint[] value);
-    public delegate void PFNGLCLEARBUFFERFVPROC(GLenum buffer, GLint drawbuffer, GLfloat[] value);
-    public delegate void PFNGLCLEARBUFFERFIPROC(GLenum buffer, GLint drawbuffer, GLfloat depth, GLint stencil);
-
-    public delegate GLubyte[] PFNGLGETSTRINGIPROC(GLenum name, GLuint index);*/
-
-
     public enum ShaderParameters : uint
     {
         ShaderType = 0x8B4F,
@@ -331,6 +40,146 @@ namespace ModGL.NativeGL
         CompileStatus = 0x8B81,
         ShaderSourceLength = 0x8B88,
         InfoLogLength = 0x8B84
+    }
+
+    public enum StateCaps : uint
+    {
+        /// <summary>
+        /// If enabled, blend the computed fragment color values with the values in the color buffers. See <see cref="IOpenGL.glBlendFunc"/>.
+        /// </summary>
+        Blend = 0x0BE2,
+        /// <summary>
+        /// If enabled, clip geometry against user-defined half space. Add index for seperate clip dstances.
+        /// </summary>
+        ClipDistance = 0x3000,
+
+        /// <summary>
+        /// If enabled, apply the currently selected logical operation to the computed fragment color and color buffer values. See <see cref="IOpenGL.glLogicOp"/>.
+        /// </summary>
+        ColorLogicOperation = 0x0BF2,
+
+        /// <summary>
+        /// If enabled, cull polygons based on their winding in window coordinates. See <see cref="IOpenGL.glCullFace"/>.
+        /// </summary>
+        CullFace = 0x0B44,
+        /// <summary>
+        /// If enabled, debug messages are produced by a debug context. When disabled, the debug message log is silenced. Note that in a non-debug context, very few, if any messages might be produced, even when DebugOutput is enabled.
+        /// </summary>
+        DebugOutput = 0x92E0,
+
+        /// <summary>
+        /// If enabled, debug messages are produced synchronously by a debug context. If disabled, debug messages may be produced asynchronously. In particular, they may be delayed relative to the execution of GL commands, and the debug callback function may be called from a thread other than that in which the commands are executed. See glDebugMessageCallback.
+        /// </summary>
+        DebugOutputSynchronous = 0x8242,
+
+        /// <summary>
+        /// If enabled, the -wc≤zc≤wc plane equation is ignored by view volume clipping (effectively, there is no near or far plane clipping). See <see cref="IOpenGL.glDepthRange"/>.
+        /// </summary>
+        DepthClamp = 0x864F,
+
+        /// <summary>
+        /// If enabled, do depth comparisons and update the depth buffer. Note that even if the depth buffer exists and the depth mask is non-zero, the depth buffer is not updated if the depth test is disabled. See <see cref="IOpenGL.glDepthFunc"/> and <see cref="IOpenGL.glDepthRange"/>.
+        /// </summary>
+        DepthTest = 0x0B71,
+
+        /// <summary>
+        /// If enabled, dither color components or indices before they are written to the color buffer.
+        /// </summary>
+        Dither = 0x0BD0,
+
+        /// <summary>
+        /// If enabled and the value of GL_FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING for the framebuffer attachment corresponding to the destination buffer is GL_SRGB, the R, G, and B destination color values (after conversion from fixed-point to floating-point) are considered to be encoded for the sRGB color space and hence are linearized prior to their use in blending.
+        /// </summary>
+        FramebufferSRGB = 0x8DB9,
+        /// <summary>
+        /// If enabled, draw lines with correct filtering. Otherwise, draw aliased lines. See <see cref="IOpenGL.glLineWidth"/>.
+        /// </summary>
+        LineSmooth = 0x0B20,
+
+        /// <summary>
+        /// If enabled, use multiple fragment samples in computing the final color of a pixel. See <see cref="IOpenGL30.glSampleCoverage"/>.
+        /// </summary>
+        MultiSample = 0x809D,
+
+        /// <summary>
+        /// If enabled, and if the polygon is rendered in GL_FILL mode, an offset is added to depth values of a polygon's fragments before the depth comparison is performed. See <see cref="IOpenGL.glPolygonOffset"/>.
+        /// </summary>
+        PolygonOffsetPoint = 0x2A01,
+
+        /// <summary>
+        /// If enabled, and if the polygon is rendered in GL_LINE mode, an offset is added to depth values of a polygon's fragments before the depth comparison is performed. See <see cref="IOpenGL.glPolygonOffset" />.
+        /// </summary>
+        PolygonOffsetLine = 0x2A02,
+        /// <summary>
+        /// If enabled, an offset is added to depth values of a polygon's fragments before the depth comparison is performed, if the polygon is rendered in GL_POINT mode. See <see cref="IOpenGL.glPolygonOffset"/>.
+        /// </summary>
+        PolygonOffsetFill = 0x8037,
+
+        /// <summary>
+        /// If enabled, draw polygons with proper filtering. Otherwise, draw aliased polygons. For correct antialiased polygons, an alpha buffer is needed and the polygons must be sorted front to back.
+        /// </summary>
+        PolygonSmooth = 0x0B41,
+
+        /// <summary>
+        /// Enables primitive restarting. If enabled, any one of the draw commands which transfers a set of generic attribute array elements to the GL will restart the primitive when the index of the vertex is equal to the primitive restart index. See <see cref="IOpenGL30.glPrimitiveRestartIndex"/>.
+        /// </summary>
+        PrimitiveRestart = 0x8F9D,
+
+        /// <summary>
+        /// Enables primitive restarting with a fixed index. If enabled, any one of the draw commands which transfers a set of generic attribute array elements to the GL will restart the primitive when the index of the vertex is equal to the fixed primitive index for the specified index type. The fixed index is equal to 2n−1 where n is equal to 8 for GL_UNSIGNED_BYTE, 16 for GL_UNSIGNED_SHORT and 32 for GL_UNSIGNED_INT.
+        /// </summary>
+        PrimiticeRestartFixedIndex = 0x8D69,
+
+        /// <summary>
+        /// If enabled, primitives are discarded after the optional transform feedback stage, but before rasterization. Furthermore, when enabled, <see cref="IOpenGL.glClear"/>, glClearBufferData, glClearBufferSubData, glClearTexImage, and glClearTexSubImage are ignored.
+        /// </summary>
+        RasterizerDiscard = 0x8C89,
+
+        /// <summary>
+        /// If enabled, compute a temporary coverage value where each bit is determined by the alpha value at the corresponding sample location. The temporary coverage value is then ANDed with the fragment coverage value.
+        /// </summary>
+        SampleAlphaToCoverage = 0x809E,
+
+        /// <summary>
+        /// If enabled, each sample alpha value is replaced by the maximum representable alpha value.
+        /// </summary>
+        SampleAlphaToOne = 0x809F,
+
+        /// <summary>
+        /// If enabled, the fragment's coverage is ANDed with the temporary coverage value. If GL_SAMPLE_COVERAGE_INVERT is set to GL_TRUE, invert the coverage value. See <see cref="IOpenGL30.glSampleCoverage"/>.
+        /// </summary>
+        SampleCoverage = 0x80A0,
+
+        /// <summary>
+        /// If enabled, the active fragment shader is run once for each covered sample, or at fraction of this rate as determined by the current value of GL_MIN_SAMPLE_SHADING_VALUE. See glMinSampleShading. />.
+        /// </summary>
+        SampleShading = 0x8C36,
+
+        /// <summary>
+        /// If enabled, the sample coverage mask generated for a fragment during rasterization will be ANDed with the value of GL_SAMPLE_MASK_VALUE before shading occurs. See glSampleMaski.
+        /// </summary>
+        SampleMask = 0x8E51,
+
+        /// <summary>
+        /// If enabled, discard fragments that are outside the scissor rectangle. See <see cref="IOpenGL.glScissor"/>.
+        /// </summary>
+        ScissorTest = 0x0C11,
+
+        /// <summary>
+        /// If enabled, do stencil testing and update the stencil buffer. See <see cref="IOpenGL.glStencilFunc"/> and <see cref="IOpenGL.glStencilOp"/>.
+        /// </summary>
+        StencilTest = 0x0B90,
+
+        /// <summary>
+        /// If enabled, cubemap textures are sampled such that when linearly sampling from the border between two adjacent faces, texels from both faces are used to generate the final sample value. When disabled, texels from only a single face are used to construct the final sample value.
+        /// </summary>
+        TextureCubeMapSeamless = 0x884F,
+
+        /// <summary>
+        /// If enabled and a vertex or geometry shader is active, then the derived point size is taken from the (potentially clipped) shader builtin gl_PointSize and clamped to the implementation-dependent point size range.
+        /// </summary>
+        ProgramPointSize = 0x8642
+
     }
 
     public enum DrawMode : uint
@@ -393,8 +242,8 @@ namespace ModGL.NativeGL
         void glStencilMask(GLuint mask);
         void glColorMask(GLboolean red, GLboolean green, GLboolean blue, GLboolean alpha);
         void glDepthMask(GLboolean flag);
-        void glDisable(GLenum cap);
-        void glEnable(GLenum cap);
+        void glDisable(StateCaps cap);
+        void glEnable(StateCaps cap);
         void glFinish();
         void glFlush();
         void glBlendFunc(GLenum sfactor, GLenum dfactor);
@@ -442,6 +291,48 @@ namespace ModGL.NativeGL
     [GLVersion(3, 0)]
     public interface IOpenGL30 : IOpenGL
     {
+        // 3.1
+        void glDrawArraysInstanced (GLenum mode, GLint first, GLsizei count, GLsizei instancecount);
+        void glDrawElementsInstanced (GLenum mode, GLsizei count, GLenum type, IntPtr indices, GLsizei instancecount);
+        void glTexBuffer (GLenum target, GLenum internalformat, GLuint buffer);
+        void glPrimitiveRestartIndex (GLuint index);
+        void glCopyBufferSubData (GLenum readTarget, GLenum writeTarget, GLintptr readOffset, GLintptr writeOffset, GLsizeiptr size);
+        void glGetUniformIndices (GLuint program, GLsizei uniformCount, string[] uniformNames, GLuint[] uniformIndices);
+        void glGetActiveUniformsiv (GLuint program, GLsizei uniformCount, GLuint[] uniformIndices, GLenum pname, GLint[] @params);
+        void glGetActiveUniformName (GLuint program, GLuint uniformIndex, GLsizei bufSize, out GLsizei length, GLchar[] uniformName);
+        GLuint glGetUniformBlockIndex (GLuint program, GLchar[] uniformBlockName);
+        void  glGetActiveUniformBlockiv (GLuint program, GLuint uniformBlockIndex, GLenum pname, GLint[] @params);
+        void  glGetActiveUniformBlockName (GLuint program, GLuint uniformBlockIndex, GLsizei bufSize, GLsizei[] length, GLchar[] uniformBlockName);
+        void  glUniformBlockBinding (GLuint program, GLuint uniformBlockIndex, GLuint uniformBlockBinding);
+
+        // 3.0
+        GLboolean glIsRenderbuffer(GLuint renderbuffer);
+        void glBindRenderbuffer(GLenum target, GLuint renderbuffer);
+        void glDeleteRenderbuffers(GLsizei n, GLuint[] renderbuffers);
+        void glGenRenderbuffers(GLsizei n, GLuint[] renderbuffers);
+        void glRenderbufferStorage(GLenum target, GLenum internalformat, GLsizei width, GLsizei height);
+        void glGetRenderbufferParameteriv(GLenum target, GLenum pname, GLint[] @params);
+        GLboolean glIsFramebuffer(GLuint framebuffer);
+        void glBindFramebuffer(GLenum target, GLuint framebuffer);
+        void glDeleteFramebuffers(GLsizei n, GLuint[] framebuffers);
+        void glGenFramebuffers(GLsizei n, GLuint[] framebuffers);
+        GLenum glCheckFramebufferStatus(GLenum target);
+        void glFramebufferTexture1D(GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level);
+        void glFramebufferTexture2D(GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level);
+        void glFramebufferTexture3D(GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level, GLint zoffset);
+        void glFramebufferRenderbuffer(GLenum target, GLenum attachment, GLenum renderbuffertarget, GLuint renderbuffer);
+        void glGetFramebufferAttachmentParameteriv(GLenum target, GLenum attachment, GLenum pname, GLint[] @params);
+        void glGenerateMipmap(GLenum target);
+        void glBlitFramebuffer(GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1, GLint dstX0, GLint dstY0, GLint dstX1, GLint dstY1, GLbitfield mask, GLenum filter);
+        void glRenderbufferStorageMultisample(GLenum target, GLsizei samples, GLenum internalformat, GLsizei width, GLsizei height);
+        void glFramebufferTextureLayer(GLenum target, GLenum attachment, GLuint texture, GLint level, GLint layer);
+        IntPtr glMapBufferRange(GLenum target, GLintptr offset, GLsizeiptr length, GLbitfield access);
+        void glFlushMappedBufferRange(GLenum target, GLintptr offset, GLsizeiptr length);
+        void glBindVertexArray(GLuint array);
+        void glDeleteVertexArrays(GLsizei n, uint[] arrays);
+        void glGenVertexArrays(GLsizei n, uint[] arrays);
+        GLboolean glIsVertexArray(GLuint array);
+
         void glColorMaski(GLuint index, GLboolean r, GLboolean g, GLboolean b, GLboolean a);
         void glGetBooleani_v(GLenum target, GLuint index, GLboolean[] data);
         void glGetIntegeri_v(GLenum target, GLuint index, GLint[] data);
@@ -1127,9 +1018,9 @@ namespace ModGL.NativeGL
         [DllImport(GLLibraryName)]
         public static extern void glDepthMask(GLboolean flag);
         [DllImport(GLLibraryName)]
-        public static extern void glDisable(GLenum cap);
+        public static extern void glDisable(StateCaps cap);
         [DllImport(GLLibraryName)]
-        public static extern void glEnable(GLenum cap);
+        public static extern void glEnable(StateCaps cap);
         [DllImport(GLLibraryName)]
         public static extern void glFinish();
         [DllImport(GLLibraryName)]

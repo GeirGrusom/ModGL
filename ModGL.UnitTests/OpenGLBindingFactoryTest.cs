@@ -19,6 +19,7 @@ namespace ModGL.UnitTests
             int Sub(int a, int b);
         }
 
+
         public interface IFooVoid
         {
             void Sub(int a, int b);
@@ -70,6 +71,42 @@ namespace ModGL.UnitTests
             Assert.AreEqual(1, result.Sub(2, 1));
             extensions.Received(1).GetProcedure("Sub", Arg.Is<Type>(t => t.IsSubclassOf(typeof(MulticastDelegate)) && t.Name == "SubProc"));
         }
+
+
+        public interface IFooArray
+        {
+            void Sub(int a, uint[] array);
+        }
+
+        public static void Sub(int count, uint[] ids)
+        {
+            ids[0] = 1;
+        }
+
+        [Test]
+        public void CreatesType_FunctionWithArrayArgument_InvocesCorrectFunction()
+        {
+            // Arrange
+            var extensions = Substitute.For<IExtensionSupport>();
+            uint[] array = new uint[1];
+
+            extensions.GetProcedure(Arg.Any<string>(), Arg.Any<Type>())
+                .Returns(x => Delegate.CreateDelegate
+                    (
+                        (Type)x.Args()[1],
+                        GetType().GetMethod("Sub", new[] { typeof(int), typeof(uint[]) }))
+                    );
+            var factory = new InterfaceBindingFactory();
+
+            // Act
+            var result = factory.CreateBinding<IFooArray>(extensions);
+
+            // Assert
+            result.Sub(1, array);
+            Assert.AreEqual(1, array[0]);
+            extensions.Received(1).GetProcedure("Sub", Arg.Is<Type>(t => t.IsSubclassOf(typeof(MulticastDelegate)) && t.Name == "SubProc"));
+        }
+
 
         [Test]
         public void CreatesType_InvocesCorrectFunction_ReturnTypeVoid_Ok()
@@ -211,6 +248,14 @@ namespace ModGL.UnitTests
             {
                 return a + b;
             }
+        }
+
+        
+
+        [Test]
+        public void FunctionWithArray_Ok()
+        {
+            
         }
 
         [Test]

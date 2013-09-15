@@ -49,7 +49,7 @@ namespace ModGL.UnitTests.Shaders
             var Program = new Program(gl, new[] { mockShader });
 
             // Act
-            var exception = Assert.Catch<ProgramLCompilationException>(Program.Compile);
+            var exception = Assert.Catch<ProgramCompilationException>(Program.Compile);
 
             // Assert
             Assert.IsNotNull(exception.InnerException);
@@ -73,7 +73,7 @@ namespace ModGL.UnitTests.Shaders
 
             // Act
             
-            var exception = Assert.Throws<ProgramLCompilationException>(Program.Compile);
+            var exception = Assert.Throws<ProgramCompilationException>(Program.Compile);
 
             // Assert
             Assert.AreEqual(false, exception.CompilationResults.Linked);
@@ -95,7 +95,7 @@ namespace ModGL.UnitTests.Shaders
             var Program = new Program(gl, new IShader[0]);
 
             // Act
-            var exception = Assert.Throws<ProgramLCompilationException>(Program.Compile);
+            var exception = Assert.Throws<ProgramCompilationException>(Program.Compile);
 
             // Assert
             Assert.AreEqual(true, exception.CompilationResults.Linked);
@@ -129,7 +129,7 @@ namespace ModGL.UnitTests.Shaders
             var Program = new Program(gl, new IShader[0] );
 
             // Act
-            var exception = Assert.Throws<ProgramLCompilationException>(Program.Compile);
+            var exception = Assert.Throws<ProgramCompilationException>(Program.Compile);
 
             // Assert
             Assert.AreEqual("Program compilation failed: A", exception.Message);

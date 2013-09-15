@@ -13,11 +13,8 @@ namespace ModGL.VertexInfo
     {
         public int Length { get; internal set; }
         public string Name { get; internal set; }
-        public int Dimensions { get; internal set; }
         public DataType Type { get; internal set; }
         public int Offset { get; set; }
-
-
     }
 
     internal static class ElementTypeHelper
@@ -35,30 +32,51 @@ namespace ModGL.VertexInfo
         };
     }
 
+    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Struct)]
+    public class VertexElementAttribute : Attribute
+    {
+        public DataType DataType { get; set; }
+    }
+
     public class VertexDescriptor<TElementType>
         where TElementType : struct
     {
         public IEnumerable<VertexElement> Elements { get; private set; }
 
-
         private static DataType GetElementType(Type type)
         {
+            if(!type.IsValueType)
+                throw new InvalidOperationException("Cannot use reference types as a vertex element.");
             DataType result;
             if (ElementTypeHelper.TypeConversionTable.TryGetValue(type, out result))
                 return result;
-            throw new NotSupportedException("Complex types are not supported.");
+            var attribute = type.GetCustomAttribute<VertexElementAttribute>(false);
+            if (attribute != null)
+                return attribute.DataType;
+            throw new InvalidOperationException("Could not determine the vertex element datatype.");
         }
 
-        private static IEnumerable<VertexElement> ConvertField(FieldInfo field)
+        private static VertexElement ConvertField(FieldInfo field)
         {
-            yield return new VertexElement
+            var attrib = field.GetCustomAttribute<VertexElementAttribute>();
+            DataType type;
+            if (attrib != null)
+                type = attrib.DataType;
+            else
+                type = GetElementType(field.FieldType);
+            return new VertexElement
             {
                 Name = field.Name,
                 Length = System.Runtime.InteropServices.Marshal.SizeOf(field.FieldType),
-                Type = GetElementType(field.FieldType), Dimensions = 1
+                Type = type
             };
         }
 
+        /// <summary>
+        /// Creates a vertex descriptor for <see cref="TElementType"/>.
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException">Thrown if a field is a value type, or if the class was unable to determine a correct datatype for a field.</exception>
         public static VertexDescriptor<TElementType> Create()
         {
             var type = typeof(TElementType);
@@ -67,7 +85,7 @@ namespace ModGL.VertexInfo
 
             return new VertexDescriptor<TElementType>
             {
-                Elements = fields.SelectMany(ConvertField).ToArray()
+                Elements = fields.Select(ConvertField).ToArray()
             };
         }
 

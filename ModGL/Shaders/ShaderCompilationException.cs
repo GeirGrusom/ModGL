@@ -5,7 +5,7 @@ namespace ModGL.Shaders
     [Serializable]
     public class ShaderCompilationException : ShaderException
     {
-        public ShaderCompilationResults CompilationResults { get; set; }
+        public ShaderCompilationResults CompilationResults { get; private set; }
 
         public ShaderCompilationException(Shader shader, ShaderCompilationResults results, string message, Exception innerException)
             : base(shader, message, innerException)
