@@ -507,8 +507,8 @@ namespace ModGL.NativeGL
         void glBufferData(BufferTarget target, GLsizeiptr size, IntPtr data, BufferUsage usage);
         void glBufferSubData(BufferTarget target, GLintptr offset, GLsizeiptr size, IntPtr data);
         void glGetBufferSubData(GLenum target, GLintptr offset, GLsizeiptr size, IntPtr data);
-        IntPtr glMapBuffer(BufferTarget target, GLenum access);
-        GLboolean glUnmapBuffer(GLenum target);
+        IntPtr glMapBuffer(BufferTarget target, BufferAccess access);
+        GLboolean glUnmapBuffer(BufferTarget target);
         void glGetBufferParameteriv(GLenum target, GLenum pname, GLint[] @params);
         void glGetBufferPointerv(GLenum target, GLenum pname, IntPtr[] @params);
         // 1.4

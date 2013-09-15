@@ -116,7 +116,7 @@ void main()
 "), 
                 });
 
-            shader.BindVertexAttributeLocations(desc, 0);
+            shader.BindVertexAttributeLocations(desc);
             gl.glBindFragDataLocation(shader.Handle, 0, "output");
 
             shader.Compile();
@@ -145,15 +145,13 @@ void main()
             gl.glClearColor(0f, 0f, 0f, 1f);
             gl.glClearDepth(1f);
             gl.glClear(ClearTarget.Color | ClearTarget.Depth);
-            
-            using (array.Bind())
+
             using (shader.Bind())
+            using (array.Bind())
             {
                 var render = new Renderer(gl);
                 render.Draw(DrawMode.LineLoop, buffer);
             }
-
-
 
             context.SwapBuffers();
         }

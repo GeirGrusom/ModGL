@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using ModGL.NativeGL;
@@ -13,6 +14,41 @@ namespace ModGL
         int ElementSize { get; }
         BufferTarget Target { get; }
         Type ElementType { get; }
+    }
+
+    public class MappedBuffer : IDisposable
+    {
+        private BindContext _bufferBindingContext;
+        public IBuffer Buffer { get; private set; }
+        public UnmanagedMemoryAccessor Accessor { get; private set; }
+
+        internal MappedBuffer(IBuffer buffer, BindContext context, UnmanagedMemoryAccessor accessor)
+        {
+            Buffer = buffer;
+            _bufferBindingContext = context;
+            Accessor = accessor;
+        }
+
+        public void Dispose()
+        {
+            Accessor.Dispose();
+            _bufferBindingContext.Dispose();
+        }
+    }
+
+    public class SafeMapBuffer : SafeBuffer
+    {
+        internal SafeMapBuffer(IntPtr handle)
+            : base(false)
+        {
+            this.handle = handle;
+        }
+
+        protected override bool ReleaseHandle()
+        {
+            // This class cannot reliably release the handle.
+            return true;
+        }
     }
 
     public class Buffer<TElementType> : IBuffer
@@ -101,6 +137,31 @@ namespace ModGL
             {
                 handle.Free();
             }
+        }
+
+        /// <summary>
+        /// Maps a buffer to memory.
+        /// </summary>
+        /// <param name="access">Map access</param>
+        /// <returns>A mapped buffer handle. This object must be disposed after use.</returns>
+        public MappedBuffer MapBuffer(BufferAccess access)
+        {
+            // TODO: Add a check constrain if the object this is called on is the currently bound object.
+            var bindContext = new BindContext(() => _gl.glUnmapBuffer(Target) );
+
+            // Note: glMapBuffer seem to have a stupid implementation.
+            var ptr = _gl.glMapBuffer(Target, access);
+            var accessor = new UnmanagedMemoryAccessor(
+                new SafeMapBuffer(ptr),
+                0,
+                Elements * ElementSize,
+                access == BufferAccess.ReadOnly
+                    ? FileAccess.Read
+                    : access == BufferAccess.WriteOnly 
+                        ? FileAccess.Write 
+                        : FileAccess.ReadWrite);
+
+            return new MappedBuffer(this, bindContext, accessor);
         }
 
         public Type ElementType { get { return typeof(TElementType); } }
