@@ -10,6 +10,7 @@ using ModGL.Binding;
 using ModGL.NativeGL;
 using ModGL.Rendering;
 using ModGL.Shaders;
+using ModGL.VertexInfo;
 using ModGL.Windows;
 
 using DrawMode = ModGL.NativeGL.DrawMode;
@@ -23,7 +24,7 @@ namespace WindowsTest
         private Graphics hdc;
         private IOpenGL30 gl;
 
-        private VertexArray<Vertex> array;
+        private VertexArray array;
         private VertexBuffer<Vertex> buffer;
         private ModGL.Shaders.Program shader;
 
@@ -61,7 +62,7 @@ namespace WindowsTest
             gl = binding.CreateBinding<IOpenGL30>(context as IExtensionSupport, new Dictionary<Type, Type> { {typeof(IOpenGL), typeof(GL)} }, GL.OpenGLErrorFunctions);
             gl.glEnable(StateCaps.DepthTest);
 
-            array = new VertexArray<Vertex>(gl);
+            
             buffer = new VertexBuffer<Vertex>(new []
             {
                 new Vertex
@@ -83,37 +84,19 @@ namespace WindowsTest
             using (buffer.Bind())
             {
                 buffer.BufferData(BufferUsage.StaticDraw);
+                buffer.ReleaseClientData();
             }
-            var desc = ModGL.VertexInfo.VertexDescriptor<Vertex>.Create();
-            desc.Apply(array, gl);
+            var desc = VertexDescriptor.Create<Vertex>();
+            array = new VertexArray(gl, new [] { buffer }, new [] { desc });
+
+            var vs = new System.IO.StreamReader(GetType().Assembly.GetManifestResourceStream("WindowsTest.VertexShader.vs")).ReadToEnd();
+            var fs = new System.IO.StreamReader(GetType().Assembly.GetManifestResourceStream("WindowsTest.FragmentShader.fs")).ReadToEnd();
 
             shader = new ModGL.Shaders.Program(gl, 
                 new IShader[]
                 {
-                    new VertexShader(gl, 
-@"#version 150
-in vec4 Position;
-in vec4 Color;
-
-out vec3 color;
-
-void main()
-{
-    color = Color.rbg;
-    gl_Position = Position;
-}
-"),
-                    new FragmentShader(gl, 
-@"#version 150
-
-in vec3 color;
-out vec4 output;
-
-void main()
-{
-    output = vec4(color, 1);
-}
-"), 
+                    new VertexShader(gl, vs),
+                    new FragmentShader(gl, fs) 
                 });
 
             shader.BindVertexAttributeLocations(desc);

@@ -27,10 +27,7 @@ namespace ModGL.Rendering
 
         public void Draw(DrawMode mode, IVertexBuffer buffer)
         {
-            using (buffer.Bind())
-            {
-                _gl.glDrawArrays(mode, 0, (int)buffer.Elements);
-            }
+            _gl.glDrawArrays(mode, 0, (int)buffer.Elements);
         }
     }
 }

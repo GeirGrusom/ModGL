@@ -55,6 +55,7 @@ namespace ModGL
         where TElementType : struct
     {
         internal TElementType[] Data;
+        internal readonly long length;
         private readonly int _elementSize;
         private readonly IOpenGL30 _gl;
 
@@ -62,7 +63,7 @@ namespace ModGL
 
         public BufferTarget Target { get; private set; }
 
-        public long Elements { get { return Data.LongLength; } }
+        public long Elements { get { return length; } }
 
         public int ElementSize { get { return _elementSize; } }
 
@@ -117,12 +118,14 @@ namespace ModGL
             if(elements == null)
                 throw new ArgumentNullException("elements");
             Data = elements.ToArray();
+            length = Data.LongLength;
         }
 
         protected Buffer(BufferTarget target, long size, IOpenGL30 gl)
             : this(target, gl)
         {
             Data = new TElementType[size];
+            length = size;
         }
 
         public void BufferData(BufferUsage usage)
@@ -149,7 +152,7 @@ namespace ModGL
             // TODO: Add a check constrain if the object this is called on is the currently bound object.
             var bindContext = new BindContext(() => _gl.glUnmapBuffer(Target) );
 
-            // Note: glMapBuffer seem to have a stupid implementation.
+            // Note: glMapBuffer seem to have a relatively stupid implementation.
             var ptr = _gl.glMapBuffer(Target, access);
             var accessor = new UnmanagedMemoryAccessor(
                 new SafeMapBuffer(ptr),

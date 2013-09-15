@@ -51,9 +51,9 @@ namespace ModGL.VertexInfo
         public int Dimensions;
     }
 
-    public class VertexDescriptor<TElementType>
-        where TElementType : struct
+    public class VertexDescriptor
     {
+        public Type ElementType { get; private set; }
         public IEnumerable<VertexElement> Elements { get; private set; }
 
         private static DataType GetElementType(Type type)
@@ -98,15 +98,17 @@ namespace ModGL.VertexInfo
         /// </summary>
         /// <returns></returns>
         /// <exception cref="InvalidOperationException">Thrown if a field is a value type, or if the class was unable to determine a correct datatype for a field.</exception>
-        public static VertexDescriptor<TElementType> Create()
+        public static VertexDescriptor Create<TElementType>()
+            where TElementType : struct
         {
             var type = typeof(TElementType);
 
             var fields = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 
-            return new VertexDescriptor<TElementType>
+            return new VertexDescriptor
             {
-                Elements = fields.Select(ConvertField).ToArray()
+                Elements = fields.Select(ConvertField).ToArray(),
+                ElementType = typeof(TElementType)
             };
         }
 
@@ -115,34 +117,31 @@ namespace ModGL.VertexInfo
             
         }
 
-        public void Apply(VertexArray<TElementType> array, IOpenGL30 gl)
+        internal void Apply(IOpenGL30 gl, int indexOffset)
         {
-            using (array.Bind())
+            foreach (var e in Elements.Select((e, i) => new { Index = i, Item = e}))
             {
-                foreach (var e in Elements.Select((e, i) => new { Index = i, Item = e}))
+                // Double is supported by glVertexAttribLPointer, which is not implemented in OpenGL 3.0.
+                if (e.Item.Type == DataType.Half || e.Item.Type == DataType.Float) 
                 {
-                    // Double is supported by glVertexAttribLPointer, which is not implemented in OpenGL 3.0.
-                    if (e.Item.Type == DataType.Half || e.Item.Type == DataType.Float) 
-                    {
-                        gl.glVertexAttribPointer(
-                            (uint)e.Index,
-                            e.Item.Dimensions,
-                            e.Item.Type,
-                            GLboolean.False,
-                            System.Runtime.InteropServices.Marshal.SizeOf(typeof(TElementType)),
-                            new IntPtr(e.Item.Offset));
-                    }
-                    else
-                    {
-                        gl.glVertexAttribIPointer(
-                            (uint)e.Index,
-                            e.Item.Dimensions,
-                            e.Item.Type,
-                            System.Runtime.InteropServices.Marshal.SizeOf(typeof(TElementType)),
-                            new IntPtr(e.Item.Offset));
-                    }
-                    gl.glEnableVertexAttribArray((uint)e.Index);
+                    gl.glVertexAttribPointer(
+                        (uint)e.Index,
+                        e.Item.Dimensions,
+                        e.Item.Type,
+                        GLboolean.False,
+                        System.Runtime.InteropServices.Marshal.SizeOf(ElementType),
+                        new IntPtr(e.Item.Offset));
                 }
+                else
+                {
+                    gl.glVertexAttribIPointer(
+                        (uint)e.Index,
+                        e.Item.Dimensions,
+                        e.Item.Type,
+                        System.Runtime.InteropServices.Marshal.SizeOf(ElementType),
+                        new IntPtr(e.Item.Offset));
+                }
+                gl.glEnableVertexAttribArray((uint)e.Index);
             }
         }
     }

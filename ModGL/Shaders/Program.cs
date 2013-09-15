@@ -84,13 +84,11 @@ namespace ModGL.Shaders
         /// <summary>
         /// Binds attribute locations to vertex description. This can only be done before the program has been compiled.
         /// </summary>
-        /// <typeparam name="TVertexElement">Vertex type.</typeparam>
         /// <param name="definition">Vertex definition.</param>
         /// <param name="indexOffset">Optional. Offset for each index.</param>
         /// <exception cref="ArgumentException">Thrown if <see cref="indexOffset"/> is less than zero.</exception>
         /// <exception cref="InvalidOperationException">Thrown if program has already been compiled. Vertex attribute locations cannot be bound after the program has been linked.</exception>
-        public void BindVertexAttributeLocations<TVertexElement>(VertexInfo.VertexDescriptor<TVertexElement> definition, int indexOffset = 0)
-            where TVertexElement : struct
+        public void BindVertexAttributeLocations(VertexInfo.VertexDescriptor definition, int indexOffset = 0)
         {
             if(indexOffset < 0)
                 throw new ArgumentException("Offset cannot be less than zero.", "indexOffset");
