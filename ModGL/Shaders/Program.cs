@@ -144,5 +144,12 @@ namespace ModGL.Shaders
         {
             _gl.glDeleteProgram(Handle);
         }
+
+        public Uniform<TValueType> GetUniform<UniformType, TValueType>(string uniformName)
+            where UniformType : Uniform<TValueType>
+        {
+            var uniformLoc = _gl.glGetUniformLocation(Handle, uniformName);
+            return (UniformType)Activator.CreateInstance(typeof(UniformType), _gl, uniformLoc, uniformName);
+        }
     }
 }
