@@ -122,10 +122,6 @@ namespace ModGL.Binding
 
             var resultType = definedType.CreateType();
 
-            var ctrs = resultType.GetConstructors().Single();
-            var args = ctrs.GetParameters();
-            
-            //assembly.Save("test.dll");
             object result;
             try
             {
@@ -140,8 +136,7 @@ namespace ModGL.Binding
         }
 
 
-        private void DefineStaticMethods(
-            Dictionary<Type, Type> interfaceMap, ErrorHandling errorHandling, TypeBuilder definedType)
+        private void DefineStaticMethods(Dictionary<Type, Type> interfaceMap, ErrorHandling errorHandling, TypeBuilder definedType)
         {
             foreach (var item in interfaceMap)
             {
@@ -241,10 +236,11 @@ namespace ModGL.Binding
             if(notSupportedConstructor == null) // Constructor required. Added to make unit tests fail if it is missing.
                 throw new MissingMethodException("ExtensionNotSupportedException", ".ctr(string)");
 
+            var fieldBuilders = fields as FieldBuilder[] ?? fields.ToArray();
             foreach (var method in methods)
             {
                 var name = GetFieldNameForMethodInfo(method);
-                var field = fields.Single(f => f.Name == name);
+                var field = fieldBuilders.Single(f => f.Name == name);
                 var okLabel = generator.DefineLabel();
                 
                 // _glMethodName = (MethodDelegateType)extensionSupport.GetProcedure("glMethodName", typeof(MethodDelegateType));
@@ -308,7 +304,6 @@ namespace ModGL.Binding
                 generator.Emit(OpCodes.Ldloc_0);
             generator.Emit(OpCodes.Ret);
         }
-
 
         private void GenerateThrowingInvocation(ILGenerator generator, MethodInfo method, IEnumerable<FieldBuilder> fieldBuilders, ErrorHandling err)
         {

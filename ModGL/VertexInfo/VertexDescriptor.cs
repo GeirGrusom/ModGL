@@ -11,7 +11,7 @@ namespace ModGL.VertexInfo
 
     public class VertexElement
     {
-        public int Length { get; internal set; }
+        public int Dimensions { get; internal set; }
         public string Name { get; internal set; }
         public DataType Type { get; internal set; }
         public int Offset { get; set; }
@@ -35,7 +35,20 @@ namespace ModGL.VertexInfo
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Struct)]
     public class VertexElementAttribute : Attribute
     {
-        public DataType DataType { get; set; }
+        public VertexElementAttribute(DataType type, int dimensions)
+        {
+            DataType = type;
+            Dimensions = dimensions;
+        }
+
+        public VertexElementAttribute(DataType type)
+        {
+            DataType = type;
+            Dimensions = 1;
+        }
+
+        public DataType DataType;
+        public int Dimensions;
     }
 
     public class VertexDescriptor<TElementType>
@@ -60,14 +73,22 @@ namespace ModGL.VertexInfo
         {
             var attrib = field.GetCustomAttribute<VertexElementAttribute>();
             DataType type;
+            int dimensions;
             if (attrib != null)
+            {
                 type = attrib.DataType;
+                dimensions = attrib.Dimensions;
+            }
             else
+            {
                 type = GetElementType(field.FieldType);
+                dimensions = 1;
+            }
+
             return new VertexElement
             {
                 Name = field.Name,
-                Length = System.Runtime.InteropServices.Marshal.SizeOf(field.FieldType),
+                Dimensions = dimensions,
                 Type = type
             };
         }
@@ -100,11 +121,12 @@ namespace ModGL.VertexInfo
             {
                 foreach (var e in Elements.Select((e, i) => new { Index = i, Item = e}))
                 {
-                    if (e.Item.Type == DataType.Half || e.Item.Type == DataType.Float)
+                    // Double is supported by glVertexAttribLPointer, which is not implemented in OpenGL 3.0.
+                    if (e.Item.Type == DataType.Half || e.Item.Type == DataType.Float) 
                     {
                         gl.glVertexAttribPointer(
                             (uint)e.Index,
-                            e.Item.Length,
+                            e.Item.Dimensions,
                             e.Item.Type,
                             GLboolean.False,
                             System.Runtime.InteropServices.Marshal.SizeOf(typeof(TElementType)),
@@ -114,7 +136,7 @@ namespace ModGL.VertexInfo
                     {
                         gl.glVertexAttribIPointer(
                             (uint)e.Index,
-                            e.Item.Length,
+                            e.Item.Dimensions,
                             e.Item.Type,
                             System.Runtime.InteropServices.Marshal.SizeOf(typeof(TElementType)),
                             new IntPtr(e.Item.Offset));

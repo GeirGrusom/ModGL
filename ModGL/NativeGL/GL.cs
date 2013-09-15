@@ -234,7 +234,7 @@ namespace ModGL.NativeGL
         void glTexParameteriv(GLenum target, GLenum pname, GLint[] @params);
         void glTexImage1D(GLenum target, GLint level, GLint internalformat, GLsizei width, GLint border, GLenum format, GLenum type, IntPtr pixels);
         void glTexImage2D(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, IntPtr pixels);
-        void glDrawBuffer(DrawMode mode);
+        void glDrawBuffer(GLenum mode);
         void glClear(ClearTarget mask);
         void glClearColor(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha);
         void glClearStencil(GLint s);
@@ -1002,7 +1002,7 @@ namespace ModGL.NativeGL
         [DllImport(GLLibraryName)]
         public static extern void glTexImage2D(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, IntPtr pixels);
         [DllImport(GLLibraryName)]
-        public static extern void glDrawBuffer(DrawMode mode);
+        public static extern void glDrawBuffer(GLenum mode);
         [DllImport(GLLibraryName)]
         public static extern void glClear(ClearTarget mask);
         [DllImport(GLLibraryName)]

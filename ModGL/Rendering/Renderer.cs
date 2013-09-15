@@ -25,17 +25,11 @@ namespace ModGL.Rendering
             }
         }
 
-        public void DrawBuffers(IEnumerable<IBuffer> buffers, DrawMode mode)
-        {
-            var allBuffers = buffers.Select(b => b.Handle).ToArray();
-            _gl.glDrawBuffers(allBuffers.Length, allBuffers);
-        }
-
-        public void DrawBuffer(DrawMode mode, IVertexBuffer buffer)
+        public void Draw(DrawMode mode, IVertexBuffer buffer)
         {
             using (buffer.Bind())
             {
-                _gl.glDrawBuffer(mode);
+                _gl.glDrawArrays(mode, 0, (int)buffer.Elements);
             }
         }
     }

@@ -8,7 +8,11 @@ using System.Windows.Forms;
 using ModGL;
 using ModGL.Binding;
 using ModGL.NativeGL;
+using ModGL.Rendering;
+using ModGL.Shaders;
 using ModGL.Windows;
+
+using DrawMode = ModGL.NativeGL.DrawMode;
 
 namespace WindowsTest
 {
@@ -58,20 +62,82 @@ namespace WindowsTest
             gl.glEnable(StateCaps.DepthTest);
 
             array = new VertexArray<Vertex>(gl);
-            buffer = new VertexBuffer<Vertex>(new [] { new Vertex { Position = new Vec3f { x = 1, y = 2, z = 0}} }, gl );
+            buffer = new VertexBuffer<Vertex>(new []
+            {
+                new Vertex
+                {
+                    Position = new Vec4f { x = 0, y = 0, z = 0, w = 1},
+                    Color = new Vec4f { x = 1.0f, w = 1.0f }
+                },
+                new Vertex
+                {
+                    Position = new Vec4f { x = 2, y = 2, z = 0, w = 1},
+                    Color = new Vec4f {y = 1.0f, w = 1.0f }
+                },                
+                new Vertex
+                {
+                    Position = new Vec4f { x = 1, y = -1, z = 0, w = 1},
+                    Color = new Vec4f { z = 1.0f, w = 1.0f }
+                }
+            }, gl);
+            using (buffer.Bind())
+            {
+                buffer.BufferData(BufferUsage.StaticDraw);
+            }
             var desc = ModGL.VertexInfo.VertexDescriptor<Vertex>.Create();
+            desc.Apply(array, gl);
 
+            shader = new ModGL.Shaders.Program(gl, 
+                new IShader[]
+                {
+                    new VertexShader(gl, 
+@"#version 150
+in vec4 Position;
+in vec4 Color;
+
+out vec3 color;
+
+void main()
+{
+    color = Color.rbg;
+    gl_Position = Position;
+}
+"),
+                    new FragmentShader(gl, 
+@"#version 150
+
+in vec3 color;
+out vec4 output;
+
+void main()
+{
+    output = vec4(color, 1);
+}
+"), 
+                });
+
+            shader.BindVertexAttributeLocations(desc, 0);
+            gl.glBindFragDataLocation(shader.Handle, 0, "output");
+
+            shader.Compile();
         }
 
-        [ModGL.VertexInfo.VertexElement(DataType = DataType.Float)]
+        [ModGL.VertexInfo.VertexElement(DataType.Float, 4)]
+        public struct Vec4f
+        {
+            public float x, y, z, w;
+        }
+
+        [ModGL.VertexInfo.VertexElement(DataType.Float, 3)]
         public struct Vec3f
         {
-            public float x, y, z;
+            public float x, y, z, w;
         }
 
         public struct Vertex
         {
-            public Vec3f Position;
+            public Vec4f Position;
+            public Vec4f Color;
         }
 
         public void Render()
@@ -80,6 +146,12 @@ namespace WindowsTest
             gl.glClearDepth(1f);
             gl.glClear(ClearTarget.Color | ClearTarget.Depth);
             
+            using (array.Bind())
+            using (shader.Bind())
+            {
+                var render = new Renderer(gl);
+                render.Draw(DrawMode.LineLoop, buffer);
+            }
 
 
 
