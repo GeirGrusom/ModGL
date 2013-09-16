@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+
 using ModGL.NativeGL;
 
-namespace ModGL
+namespace ModGL.Buffers
 {
-
     public interface IBuffer : IGLObject, IBindable
     {
         long Elements { get; }
@@ -24,15 +24,15 @@ namespace ModGL
 
         internal MappedBuffer(IBuffer buffer, BindContext context, UnmanagedMemoryAccessor accessor)
         {
-            Buffer = buffer;
-            _bufferBindingContext = context;
-            Accessor = accessor;
+            this.Buffer = buffer;
+            this._bufferBindingContext = context;
+            this.Accessor = accessor;
         }
 
         public void Dispose()
         {
-            Accessor.Dispose();
-            _bufferBindingContext.Dispose();
+            this.Accessor.Dispose();
+            this._bufferBindingContext.Dispose();
         }
     }
 
@@ -63,39 +63,39 @@ namespace ModGL
 
         public BufferTarget Target { get; private set; }
 
-        public long Elements { get { return length; } }
+        public long Elements { get { return this.length; } }
 
-        public int ElementSize { get { return _elementSize; } }
+        public int ElementSize { get { return this._elementSize; } }
 
         public uint Handle { get; private set; }
 
         public BindContext Bind()
         {
-            _gl.glBindBuffer(Target, Handle);
-            return new BindContext(() => _gl.glBindBuffer(Target, 0));
+            this._gl.glBindBuffer(this.Target, this.Handle);
+            return new BindContext(() => this._gl.glBindBuffer(this.Target, 0));
         }
 
         public BindContext Bind(uint index)
         {
-            _gl.glBindBufferBase(Target, index, Handle);
-            return new BindContext(() => _gl.glBindBufferBase(Target, index, 0));
+            this._gl.glBindBufferBase(this.Target, index, this.Handle);
+            return new BindContext(() => this._gl.glBindBufferBase(this.Target, index, 0));
         }
 
         public BindContext Bind(uint index, long startIndex, long elements)
         {
-            _gl.glBindBufferRange(Target, index, Handle, new IntPtr(startIndex * _elementSize), new IntPtr(elements * _elementSize));
-            return new BindContext(() => _gl.glBindBufferBase(Target, index, 0));
+            this._gl.glBindBufferRange(this.Target, index, this.Handle, new IntPtr(startIndex * this._elementSize), new IntPtr(elements * this._elementSize));
+            return new BindContext(() => this._gl.glBindBufferBase(this.Target, index, 0));
         }
 
         public void ReleaseClientData()
         {
-            Data = null;
-            Released = true;
+            this.Data = null;
+            this.Released = true;
         }
 
         private void ReleasedConstraint()
         {
-            if(Released)
+            if(this.Released)
                 throw new InvalidOperationException();
         }
 
@@ -104,12 +104,12 @@ namespace ModGL
             ReleasedConstraint();
             if (gl == null)
                 throw new ArgumentNullException("gl");
-            _gl = gl;
-            Target = target;
-            _elementSize = Marshal.SizeOf(typeof(TElementType));
+            this._gl = gl;
+            this.Target = target;
+            this._elementSize = Marshal.SizeOf(typeof(TElementType));
             var names = new uint[1];
             gl.glGenBuffers(1, names);
-            Handle = names.Single();
+            this.Handle = names.Single();
         }
 
         protected Buffer(BufferTarget target, IEnumerable<TElementType> elements , IOpenGL30 gl)
@@ -117,24 +117,24 @@ namespace ModGL
         {
             if(elements == null)
                 throw new ArgumentNullException("elements");
-            Data = elements.ToArray();
-            length = Data.LongLength;
+            this.Data = elements.ToArray();
+            this.length = this.Data.LongLength;
         }
 
         protected Buffer(BufferTarget target, long size, IOpenGL30 gl)
             : this(target, gl)
         {
-            Data = new TElementType[size];
-            length = size;
+            this.Data = new TElementType[size];
+            this.length = size;
         }
 
         public void BufferData(BufferUsage usage)
         {
             ReleasedConstraint();
-            var handle = GCHandle.Alloc(Data, GCHandleType.Pinned);
+            var handle = GCHandle.Alloc(this.Data, GCHandleType.Pinned);
             try
             {
-                _gl.glBufferData(Target, new IntPtr(Data.LongLength * ElementSize), handle.AddrOfPinnedObject(), usage);
+                this._gl.glBufferData(this.Target, new IntPtr(this.Data.LongLength * this.ElementSize), handle.AddrOfPinnedObject(), usage);
             }
             finally
             {
@@ -150,14 +150,14 @@ namespace ModGL
         public MappedBuffer MapBuffer(BufferAccess access)
         {
             // TODO: Add a check constrain if the object this is called on is the currently bound object.
-            var bindContext = new BindContext(() => _gl.glUnmapBuffer(Target) );
+            var bindContext = new BindContext(() => this._gl.glUnmapBuffer(this.Target) );
 
             // Note: glMapBuffer seem to have a relatively stupid implementation.
-            var ptr = _gl.glMapBuffer(Target, access);
+            var ptr = this._gl.glMapBuffer(this.Target, access);
             var accessor = new UnmanagedMemoryAccessor(
                 new SafeMapBuffer(ptr),
                 0,
-                Elements * ElementSize,
+                this.Elements * this.ElementSize,
                 access == BufferAccess.ReadOnly
                     ? FileAccess.Read
                     : access == BufferAccess.WriteOnly 
@@ -172,10 +172,10 @@ namespace ModGL
         public void BufferSubData(BufferUsage usage, int offset, int size)
         {
             ReleasedConstraint();
-            var handle = GCHandle.Alloc(Data, GCHandleType.Pinned);
+            var handle = GCHandle.Alloc(this.Data, GCHandleType.Pinned);
             try
             {
-                _gl.glBufferSubData(Target, new IntPtr(offset), new IntPtr(size), handle.AddrOfPinnedObject());
+                this._gl.glBufferSubData(this.Target, new IntPtr(offset), new IntPtr(size), handle.AddrOfPinnedObject());
             }
             finally
             {
@@ -191,8 +191,8 @@ namespace ModGL
 
         public TElementType this[long index]
         {
-            get { ReleasedConstraint(); return Data[index]; }
-            set { ReleasedConstraint(); Data[index] = value; }
+            get { ReleasedConstraint(); return this.Data[index]; }
+            set { ReleasedConstraint(); this.Data[index] = value; }
         }
     }
 }

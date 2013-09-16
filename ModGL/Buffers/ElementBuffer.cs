@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using ModGL.NativeGL;
 
-namespace ModGL
+namespace ModGL.Buffers
 {
     public sealed class ElementBuffer<TElementType> : Buffer<TElementType>, IElementArray
         where TElementType : struct
@@ -19,18 +19,18 @@ namespace ModGL
                 return ElementBufferItemType.UnsignedShort;
             if(type == typeof(byte) || type == typeof(sbyte))
                 return ElementBufferItemType.UnsignedByte;
-            throw new ArgumentException("TElementType must be either unsigned or signed byte, short or int.", "TElementType");
+            throw new ArgumentException("Generic argument TElementType must be either unsigned or signed byte, short or int.", "TElementType");
         }
 
         public ElementBuffer(IEnumerable<TElementType> elements, IOpenGL30 gl)
             : base(BufferTarget.ElementArray, elements, gl)
         {
-            this.Type = DetermineType();
+            Type = DetermineType();
         }
         public ElementBuffer(long size, IOpenGL30 gl)
             : base(BufferTarget.ElementArray, size, gl)
         {
-            this.Type = DetermineType();
+            Type = DetermineType();
         }
     }
 }

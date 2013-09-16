@@ -1,11 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using ModGL.NativeGL;
 
-namespace ModGL
+namespace ModGL.Buffers
 {
     public interface IVertexBuffer : IBuffer
     {
