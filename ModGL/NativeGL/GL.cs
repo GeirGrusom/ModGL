@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-
 using System.Runtime.InteropServices;
 
 using ModGL.Binding;
@@ -19,20 +14,15 @@ using GLsizei = System.Int32;
 using GLubyte = System.Byte;
 using GLushort = System.UInt16;
 using GLuint = System.UInt32;
-using GLhalf = System.UInt16;
 using GLfloat = System.Single;
-using GLclampf = System.Single;
 using GLdouble = System.Double;
-using GLclampd = System.Double;
 using GLintptr = System.IntPtr;
 using GLsizeiptr = System.IntPtr;
-using GLhandle = System.UInt32;
-
 
 namespace ModGL.NativeGL
 {
 
-    
+
     public enum ShaderParameters : uint
     {
         ShaderType = 0x8B4F,
@@ -40,6 +30,120 @@ namespace ModGL.NativeGL
         CompileStatus = 0x8B81,
         ShaderSourceLength = 0x8B88,
         InfoLogLength = 0x8B84
+    }
+
+    public enum TexturePixelType : uint
+    {
+        UnsignedByte = 0x1401,
+        Byte = 0x1400,
+        UnsignedShort = 0x1403,
+        Short = 0x1402,
+        UnsignedInt = 0x1405,
+        Int = 0x1404,
+        Float = 0x1406,
+        Unsigned_Byte_3_3_2 = 0x8032,
+        Unsigned_Byte_2_3_3_REV = 0x8362,
+        Unsigned_Short_5_6_5 = 0x8363,
+        Unsigned_Short_5_6_5_REV = 0x8364,
+        Unsigned_Short_4_4_4_4 = 0x8033,
+        Unsigned_Short_4_4_4_4_REV = 0x8365,
+        Unsigned_Short_5_5_5_1 = 0x8034,
+        Unsigned_Short_1_5_5_5_REV = 0x8366, 
+        Unsigned_Int_8_8_8_8 = 0x8035,
+        Unsigned_Int_8_8_8_8_REV = 0x8367, 
+        Unsigned_Int_10_10_10_2 = 0x8036,
+        Unsigned_Int_2_10_10_10_REV = 0x8368
+    }
+
+    public enum TextureTarget : uint
+    {
+        Texture1D = 0x0DE0,
+        Texture2D = 0x0DE1,
+        Texture3D = 0x806F,
+        Texture1DArray = 0x8C18,
+        Texture2DArray = 0x8C1A,
+        TextureCubeMap = 0x8513,
+        TextureCubeMapArray = 0x9009,
+        TextureRectangle = 0x84F5,
+        TextureBuffer = 0x8C2A,
+        Texture2DMultisample = 0x9100,
+        Texture2DMultisampleArray = 0x9102
+    }
+
+    public enum TextureFormat : uint
+    {
+        Red = 0x1903,
+        RedGreen = 0x8227,
+        RedGreenBlue = 0x1907,
+        BlueGreenRed = 0x80E0,
+        RedGreenBlueAlpha = 0x1908,
+        BlueGreenRedAlpha = 0x80E1,
+        RedInteger = 0x8D94,
+        RedGreenInteger = 0x8228,
+        RedGreenBlueInteger = 0x8D98,
+        BlueGreenRedInteger = 0x8D9A,
+        RedGreenBlueAlphaInteger = 0x8D99,
+        BlueGreenRedAlphaInteger = 0x8D9B,
+        StencilIndex = 0x1901,
+        DepthComponent = 0x1902,
+        DepthStencil = 0x84F9
+    }
+
+    public enum TextureInternalFormat : uint
+    {
+        R = 0x1903,
+        RG = 0x8227,
+        RGB = 0x1907,
+        BGR = 0x80E0,
+        RGBA = 0x1908,
+        BGRA = 0x80E1,
+        RInteger = 0x8D94,
+        RGInteger = 0x8228,
+        RGBInteger = 0x8D98,
+        BGRInteger = 0x8D9A,
+        RGBAInteger = 0x8D99,
+        BGRAInteger = 0x8D9B,
+        StencilIndex = 0x1901,
+        DepthComponent = 0x1902,
+        DepthStencil = 0x84F9,
+        R8 = 0x8229,
+        R16 = 0x822A,
+        RG8 = 0x822B,
+        RG16 = 0x822C,
+        R16F = 0x822D,
+        R32F = 0x822E,
+        RG16F = 0x822F,
+        RG32F = 0x8230,
+        R8I = 0x8231,
+        R8UI = 0x8232,
+        R16I = 0x8233,
+        R16UI = 0x8234,
+        R32I = 0x8235,
+        R32UI = 0x8236,
+        RG8I = 0x8237,
+        RG8UI = 0x8238,
+        RG16I = 0x8239,
+        RG16UI = 0x823A,
+        RG32I = 0x823B,
+        RG32UI = 0x823C,
+        RGBA32F = 0x8814,
+        RGB32F = 0x8815,
+        RGBA16F = 0x881A,
+        RGB16F = 0x881B,
+        R3_G3_B2 = 0x2A10,
+        RGB4 = 0x804F,
+        RGB5 = 0x8050,
+        RGB8 = 0x8051,
+        RGB10 = 0x8052,
+        RGB12 = 0x8053,
+        RGB16 = 0x8054,
+        RGBA2 = 0x8055,
+        RGBA4 = 0x8056,
+        RGB5_A1 = 0x8057,
+        RGBA8 = 0x8058,
+        RGB10_A2 = 0x8059,
+        RGBA12 = 0x805A,
+        RGBA16 = 0x805B,
     }
 
     public enum StateCaps : uint
@@ -232,8 +336,8 @@ namespace ModGL.NativeGL
         void glTexParameterfv(GLenum target, GLenum pname, GLfloat[] @params);
         void glTexParameteri(GLenum target, GLenum pname, GLint param);
         void glTexParameteriv(GLenum target, GLenum pname, GLint[] @params);
-        void glTexImage1D(GLenum target, GLint level, GLint internalformat, GLsizei width, GLint border, GLenum format, GLenum type, IntPtr pixels);
-        void glTexImage2D(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, IntPtr pixels);
+        void glTexImage1D(TextureTarget target, GLint level, TextureInternalFormat internalformat, GLsizei width, GLint border, TextureFormat format, TexturePixelType type, IntPtr pixels);
+        void glTexImage2D(TextureTarget target, GLint level, TextureInternalFormat internalformat, GLsizei width, GLsizei height, GLint border, TextureFormat format, TexturePixelType type, IntPtr pixels);
         void glDrawBuffer(GLenum mode);
         void glClear(ClearTarget mask);
         void glClearColor(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha);
@@ -281,7 +385,7 @@ namespace ModGL.NativeGL
         void glCopyTexSubImage2D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint x, GLint y, GLsizei width, GLsizei height);
         void glTexSubImage1D(GLenum target, GLint level, GLint xoffset, GLsizei width, GLenum format, GLenum type, IntPtr pixels);
         void glTexSubImage2D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLenum type, IntPtr pixels);
-        void glBindTexture(GLenum target, GLuint texture);
+        void glBindTexture(TextureTarget target, GLuint texture);
         void glDeleteTextures(GLsizei n, GLuint[] textures);
         void glGenTextures(GLsizei n, GLuint[] textures);
         GLboolean glIsTexture(GLuint texture);
@@ -292,18 +396,18 @@ namespace ModGL.NativeGL
     public interface IOpenGL30 : IOpenGL
     {
         // 3.1
-        void glDrawArraysInstanced (GLenum mode, GLint first, GLsizei count, GLsizei instancecount);
-        void glDrawElementsInstanced (GLenum mode, GLsizei count, GLenum type, IntPtr indices, GLsizei instancecount);
-        void glTexBuffer (GLenum target, GLenum internalformat, GLuint buffer);
-        void glPrimitiveRestartIndex (GLuint index);
-        void glCopyBufferSubData (GLenum readTarget, GLenum writeTarget, GLintptr readOffset, GLintptr writeOffset, GLsizeiptr size);
-        void glGetUniformIndices (GLuint program, GLsizei uniformCount, string[] uniformNames, GLuint[] uniformIndices);
-        void glGetActiveUniformsiv (GLuint program, GLsizei uniformCount, GLuint[] uniformIndices, GLenum pname, GLint[] @params);
-        void glGetActiveUniformName (GLuint program, GLuint uniformIndex, GLsizei bufSize, out GLsizei length, GLchar[] uniformName);
-        GLuint glGetUniformBlockIndex (GLuint program, GLchar[] uniformBlockName);
-        void  glGetActiveUniformBlockiv (GLuint program, GLuint uniformBlockIndex, GLenum pname, GLint[] @params);
-        void  glGetActiveUniformBlockName (GLuint program, GLuint uniformBlockIndex, GLsizei bufSize, GLsizei[] length, GLchar[] uniformBlockName);
-        void  glUniformBlockBinding (GLuint program, GLuint uniformBlockIndex, GLuint uniformBlockBinding);
+        void glDrawArraysInstanced(GLenum mode, GLint first, GLsizei count, GLsizei instancecount);
+        void glDrawElementsInstanced(GLenum mode, GLsizei count, GLenum type, IntPtr indices, GLsizei instancecount);
+        void glTexBuffer(GLenum target, GLenum internalformat, GLuint buffer);
+        void glPrimitiveRestartIndex(GLuint index);
+        void glCopyBufferSubData(GLenum readTarget, GLenum writeTarget, GLintptr readOffset, GLintptr writeOffset, GLsizeiptr size);
+        void glGetUniformIndices(GLuint program, GLsizei uniformCount, string[] uniformNames, GLuint[] uniformIndices);
+        void glGetActiveUniformsiv(GLuint program, GLsizei uniformCount, GLuint[] uniformIndices, GLenum pname, GLint[] @params);
+        void glGetActiveUniformName(GLuint program, GLuint uniformIndex, GLsizei bufSize, out GLsizei length, GLchar[] uniformName);
+        GLuint glGetUniformBlockIndex(GLuint program, GLchar[] uniformBlockName);
+        void glGetActiveUniformBlockiv(GLuint program, GLuint uniformBlockIndex, GLenum pname, GLint[] @params);
+        void glGetActiveUniformBlockName(GLuint program, GLuint uniformBlockIndex, GLsizei bufSize, GLsizei[] length, GLchar[] uniformBlockName);
+        void glUniformBlockBinding(GLuint program, GLuint uniformBlockIndex, GLuint uniformBlockBinding);
 
         // 3.0
         GLboolean glIsRenderbuffer(GLuint renderbuffer);
@@ -532,7 +636,7 @@ namespace ModGL.NativeGL
         void glBlendColor(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha);
         void glBlendEquation(GLenum mode);
         void glDrawRangeElements(GLenum mode, GLuint start, GLuint end, GLsizei count, GLenum type, IntPtr indices);
-        void glTexImage3D(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLsizei depth, GLint border, GLenum format, GLenum type, IntPtr pixels);
+        void glTexImage3D(TextureTarget target, GLint level, TextureInternalFormat internalformat, GLsizei width, GLsizei height, GLsizei depth, GLint border, TextureFormat format, TexturePixelType type, IntPtr pixels);
         void glTexSubImage3D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLenum type, IntPtr pixels);
         void glCopyTexSubImage3D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLint x, GLint y, GLsizei width, GLsizei height);
     }
@@ -935,12 +1039,6 @@ namespace ModGL.NativeGL
         TextureWrapT = 0x2803,
     }
 
-    public enum TextureTarget
-    {
-        ProxyTexture_1D = 0x8063,
-        ProxyTexture_2D = 0x8064
-    }
-
     public enum TextureWrapMode
     {
         Repeat = 0x2901
@@ -998,9 +1096,9 @@ namespace ModGL.NativeGL
         [DllImport(GLLibraryName)]
         public static extern void glTexParameteriv(GLenum target, GLenum pname, GLint[] @params);
         [DllImport(GLLibraryName)]
-        public static extern void glTexImage1D(GLenum target, GLint level, GLint internalformat, GLsizei width, GLint border, GLenum format, GLenum type, IntPtr pixels);
+        public static extern void glTexImage1D(TextureTarget target, GLint level, TextureInternalFormat internalformat, GLsizei width, GLint border, TextureFormat format, TexturePixelType type, IntPtr pixels);
         [DllImport(GLLibraryName)]
-        public static extern void glTexImage2D(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, IntPtr pixels);
+        public static extern void glTexImage2D(TextureTarget target, GLint level, TextureInternalFormat internalformat, GLsizei width, GLsizei height, GLint border, TextureFormat format, TexturePixelType type, IntPtr pixels);
         [DllImport(GLLibraryName)]
         public static extern void glDrawBuffer(GLenum mode);
         [DllImport(GLLibraryName)]
@@ -1528,7 +1626,7 @@ namespace ModGL.NativeGL
         [DllImport(GLLibraryName)]
         public static extern void glTexSubImage2D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLenum type, IntPtr pixels);
         [DllImport(GLLibraryName)]
-        public static extern void glBindTexture(GLenum target, GLuint texture);
+        public static extern void glBindTexture(TextureTarget target, GLuint texture);
         [DllImport(GLLibraryName)]
         public static extern void glDeleteTextures(GLsizei n, GLuint[] textures);
         [DllImport(GLLibraryName)]
