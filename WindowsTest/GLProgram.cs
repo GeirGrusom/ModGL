@@ -67,17 +67,17 @@ namespace WindowsTest
             {
                 new Vertex
                 {
-                    Position = new Vec4f { x = 0, y = 0, z = 0, w = 0},
+                    Position = new Vec4f { x = 0, y = 0, z = -0.5f, w = 1},
                     Color = new Vec4f { x = 1.0f, w = 1.0f }
                 },
                 new Vertex
                 {
-                    Position = new Vec4f { x = 0.5f, y = 0.5f, z = 0, w = 0},
+                    Position = new Vec4f { x = 0.5f, z = 0.5f, w = 1},
                     Color = new Vec4f {y = 1.0f, w = 1.0f }
                 },                
                 new Vertex
                 {
-                    Position = new Vec4f { x = 0.5f, y = -0.5f, z = 0, w = 0},
+                    Position = new Vec4f { x = 0.5f, z = -0.5f, w = 1},
                     Color = new Vec4f { z = 1.0f, w = 1.0f }
                 }
             }, gl);
@@ -105,13 +105,13 @@ namespace WindowsTest
             shader.Compile();
         }
 
-        [ModGL.VertexInfo.VertexElement(DataType.Float, 4)]
+        [VertexElement(DataType.Float, 4)]
         public struct Vec4f
         {
             public float x, y, z, w;
         }
 
-        [ModGL.VertexInfo.VertexElement(DataType.Float, 3)]
+        [VertexElement(DataType.Float, 3)]
         public struct Vec3f
         {
             public float x, y, z, w;
@@ -128,12 +128,13 @@ namespace WindowsTest
             gl.glClearColor(0f, 0f, 0f, 1f);
             gl.glClearDepth(1f);
             gl.glClear(ClearTarget.Color | ClearTarget.Depth);
+            gl.glViewport(0, 0, form.ClientSize.Width, form.ClientSize.Height);
 
             using (shader.Bind())
             using (array.Bind())
             {
                 var render = new Renderer(gl);
-                render.Draw(DrawMode.Triangles, buffer);
+                render.Draw(DrawMode.LineLoop, buffer);
             }
 
             context.SwapBuffers();

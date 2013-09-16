@@ -62,8 +62,10 @@
     <Compile Include="Rendering\Renderer.cs" />
     <Compile Include="Shaders\CompilationException.cs" />
     <Compile Include="Shaders\CompilationResults.cs" />
+    <Compile Include="Shaders\FloatUniform.cs" />
     <Compile Include="Shaders\FragmentShader.cs" />
     <Compile Include="Shaders\GeometryShader.cs" />
+    <Compile Include="Shaders\IntUniform.cs" />
     <Compile Include="Shaders\Program.cs" />
     <Compile Include="Shaders\ProgramCompilationException.cs" />
     <Compile Include="Shaders\Shader.cs" />
@@ -72,7 +74,13 @@
     <Compile Include="Shaders\ShaderException.cs" />
     <Compile Include="Shaders\ShaderProgramException.cs" />
     <Compile Include="Shaders\ShaderType.cs" />
+    <Compile Include="Shaders\TextureUniform.cs" />
+    <Compile Include="Shaders\Uniform.cs" />
     <Compile Include="Shaders\VertexShader.cs" />
+    <Compile Include="Textures\Texture.cs" />
+    <Compile Include="Textures\Texture1D.cs" />
+    <Compile Include="Textures\Texture2D.cs" />
+    <Compile Include="Textures\Texture3D.cs" />
     <Compile Include="ThrowOnErrorAttribute.cs" />
     <Compile Include="VersionNotSupportedException.cs" />
     <Compile Include="VertexArray.cs" />

@@ -9,13 +9,19 @@ using ModGL.NativeGL;
 
 namespace ModGL.Textures
 {
-    public abstract class Texture : IGLObject, IBindable
+    public abstract class Texture : IGLObject, IBindable, IDisposable
     {
         public TextureTarget Target { get; private set; }
 
         protected readonly IOpenGL30 _gl;
 
         public uint Handle { get; set; }
+
+        public void Dispose()
+        {
+            uint[] handles = new [] { Handle };
+            _gl.glDeleteTextures(1, handles);
+        }
 
         protected Texture(IOpenGL30 gl, TextureTarget target)
         {
