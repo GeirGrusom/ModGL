@@ -7,6 +7,7 @@ using System.Windows.Forms;
 
 using ModGL;
 using ModGL.Binding;
+using ModGL.Buffers;
 using ModGL.NativeGL;
 using ModGL.Rendering;
 using ModGL.Shaders;

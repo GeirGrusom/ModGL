@@ -12,7 +12,7 @@ using NUnit.Framework;
 namespace ModGL.UnitTests
 {
     [TestFixture]
-    public class OpenGLBindingFactoryTest
+    public class InterfaceBindingFactoryTest
     {
         public interface IFoo
         {
@@ -140,7 +140,7 @@ namespace ModGL.UnitTests
             var factory = new InterfaceBindingFactory();
 
             // Act
-            var exception = Assert.Catch<InvalidOperationException>(() => factory.CreateBinding<IFoo>(extensions, new Dictionary<Type, Type> { { typeof(OpenGLBindingFactoryTest), typeof(OpenGLBindingFactoryTest) }}));
+            var exception = Assert.Catch<InvalidOperationException>(() => factory.CreateBinding<IFoo>(extensions, new Dictionary<Type, Type> { { typeof(InterfaceBindingFactoryTest), typeof(InterfaceBindingFactoryTest) }}));
 
             // Assert
             Assert.AreEqual("Interface map must map interfaces : OpenGLBindingFactoryTest", exception.Message);
