@@ -7,6 +7,7 @@ using ModGL.NativeGL;
 
 namespace ModGL
 {
+    using VertexInfo;
     public interface IVertexArray : IGLObject, IBindable
     {
         
@@ -18,10 +19,10 @@ namespace ModGL
 
         public IEnumerable<IBuffer> Buffers { get; private set; }
 
-        public VertexArray(IOpenGL30 gl, IEnumerable<IBuffer> buffers, IEnumerable<VertexInfo.VertexDescriptor> descriptors)
+        public VertexArray(IOpenGL30 gl, IEnumerable<IVertexBuffer> buffers, IEnumerable<VertexDescriptor> descriptors)
         {
-            IBuffer[] bufferObjects = buffers.ToArray();
-            VertexInfo.VertexDescriptor[] descs = descriptors.ToArray();
+            IVertexBuffer[] bufferObjects = buffers.ToArray();
+            VertexDescriptor[] descs = descriptors.ToArray();
             if (descs.Length != bufferObjects.Length)
                 throw new InvalidOperationException("Number of buffers and number of descriptors must match.");
 

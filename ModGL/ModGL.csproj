@@ -58,6 +58,7 @@
     <Compile Include="NativeGL\OpenGLInvalidValueException.cs" />
     <Compile Include="NativeGL\OpenGLStackOverflowException.cs" />
     <Compile Include="NativeGL\OpenGLStackUnderflowException.cs" />
+    <Compile Include="NoHandleCreatedException.cs" />
     <Compile Include="OpenGLContext.cs" />
     <Compile Include="Rendering\Renderer.cs" />
     <Compile Include="Shaders\CompilationException.cs" />

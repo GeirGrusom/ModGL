@@ -15,10 +15,24 @@ namespace ModGL.UnitTests.Shaders
     [TestFixture]
     public class ShaderProgramTest
     {
+
+        [Test]
+        public void Constructor_ReturnsHandleZero_FailsWithNoHandleCreatedException()
+        {
+            // Arrange
+            var gl = Substitute.For<IOpenGL30>();
+            gl.glCreateProgram().Returns(0u);
+            var mockShader = Substitute.For<IShader>();
+
+            // Act
+            // Assert
+            var exception = Assert.Catch<NoHandleCreatedException>(() =>  new Program(gl, new[] { mockShader }));
+        }
         [Test]
         public void CompileProgram_Ok() // Test is fairly useless.
         {
             var gl = Substitute.For<IOpenGL30>();
+            gl.glCreateProgram().Returns(1u);
             var mockShader = Substitute.For<IShader>();
             // IsValid <- true
             gl.When(g => g.glGetProgramiv(Arg.Any<uint>(), ProgramParameters.ValidateStatus, Arg.Any<int[]>())) 
@@ -37,6 +51,8 @@ namespace ModGL.UnitTests.Shaders
         {
             // Arrange
             var gl = Substitute.For<IOpenGL30>();
+            gl.glCreateProgram().Returns(1u);
+
             var mockShader = Substitute.For<IShader>();
             mockShader.When(i => i.Compile()).Do(x => { throw new ShaderCompilationException(null, null); });
             // IsValid <- true
@@ -61,6 +77,7 @@ namespace ModGL.UnitTests.Shaders
         {
             // Arrange
             var gl = Substitute.For<IOpenGL30>();
+            gl.glCreateProgram().Returns(1u);
 
             // IsValid <- true
             gl.When(g => g.glGetProgramiv(Arg.Any<uint>(), ProgramParameters.ValidateStatus, Arg.Any<int[]>()))
@@ -85,6 +102,7 @@ namespace ModGL.UnitTests.Shaders
         {
             // Arrange
             var gl = Substitute.For<IOpenGL30>();
+            gl.glCreateProgram().Returns(1u);
             // IsValid <- true
             gl.When(g => g.glGetProgramiv(Arg.Any<uint>(), ProgramParameters.ValidateStatus, Arg.Any<int[]>()))
                 .Do(x => ((int[])x.Args()[2])[0] = 0);
@@ -107,6 +125,8 @@ namespace ModGL.UnitTests.Shaders
         {
             // Arrange
             var gl = Substitute.For<IOpenGL30>();
+            gl.glCreateProgram().Returns(1u);
+
 
             // IsValid <- true
             gl.When(g => g.glGetProgramiv(Arg.Any<uint>(), ProgramParameters.ValidateStatus, Arg.Any<int[]>()))

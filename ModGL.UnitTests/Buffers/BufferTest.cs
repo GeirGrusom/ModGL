@@ -19,6 +19,10 @@ namespace ModGL.UnitTests.Buffers
         public void Constructor_NullElements_ThrowsArgumentNullException()
         {
             var gl = Substitute.For<IOpenGL30>();
+            gl.WhenForAnyArgs(g => g.glGenBuffers(Arg.Any<int>(), Arg.Any<uint[]>()))
+                .Do(x =>
+                { ((uint[])x[1])[0] = 1; });
+
             var exception = Assert.Catch<ArgumentNullException>(() => new ElementBuffer<int>(null, gl));
             
             Assert.AreEqual("elements", exception.ParamName);
@@ -29,11 +33,16 @@ namespace ModGL.UnitTests.Buffers
         {
             // Arrange
             var gl = Substitute.For<IOpenGL30>();
+            gl.WhenForAnyArgs(g => g.glGenBuffers(Arg.Any<int>(), Arg.Any<uint[]>()))
+                .Do(x =>
+                { ((uint[])x[1])[0] = 1; });
+
 
             // Act
             var buffer = new ElementBuffer<int>(new[] { 1, 2, 3 }, gl);
 
             // Assert
+            Assert.AreEqual(1, buffer.Handle);
             Assert.AreEqual(3, buffer.Elements);
             Assert.AreEqual(4, buffer.ElementSize);
             Assert.AreEqual(typeof(int), buffer.ElementType);
@@ -111,6 +120,9 @@ namespace ModGL.UnitTests.Buffers
         {
             // Arrange
             var gl = Substitute.For<IOpenGL30>();
+            gl.WhenForAnyArgs(g => g.glGenBuffers(Arg.Any<int>(), Arg.Any<uint[]>()))
+                .Do(x =>
+                { ((uint[])x[1])[0] = 1; });
             var buffer = new ElementBuffer<int>(new[] { 1, 2, 3 }, gl);
 
             // Act
@@ -125,6 +137,10 @@ namespace ModGL.UnitTests.Buffers
         {
             // Arrange
             var gl = Substitute.For<IOpenGL30>();
+            gl.WhenForAnyArgs(g => g.glGenBuffers(Arg.Any<int>(), Arg.Any<uint[]>()))
+                .Do(x =>
+                { ((uint[])x[1])[0] = 1; });
+
             var buffer = new ElementBuffer<int>(new[] { 1, 2, 3 }, gl);
 
             // Act

@@ -15,6 +15,14 @@ namespace ModGL.VertexInfo
         public string Name { get; internal set; }
         public DataType Type { get; internal set; }
         public int Offset { get; set; }
+
+        public VertexElement(string name, DataType type, int dimensions, int offset)
+        {
+            Name = name;
+            Type = type;
+            Dimensions = dimensions;
+            Offset = offset;
+        }
     }
 
     internal static class ElementTypeHelper
@@ -30,6 +38,11 @@ namespace ModGL.VertexInfo
             { typeof(float), DataType.Float },
             { typeof(double), DataType.Double }
         };
+    }
+
+    [AttributeUsage(AttributeTargets.Field)]
+    public class IgnoreVertexElementAttribute : Attribute
+    {
     }
 
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Struct)]
@@ -56,6 +69,12 @@ namespace ModGL.VertexInfo
         public Type ElementType { get; private set; }
         public IEnumerable<VertexElement> Elements { get; private set; }
 
+        public VertexDescriptor(Type elementType, IEnumerable<VertexElement> elements)
+        {
+            ElementType = elementType;
+            Elements = elements.ToArray();
+        }
+
         private static DataType GetElementType(Type type)
         {
             if(!type.IsValueType)
@@ -69,7 +88,7 @@ namespace ModGL.VertexInfo
             throw new InvalidOperationException("Could not determine the vertex element datatype.");
         }
 
-        private static VertexElement ConvertField(FieldInfo field)
+        private static VertexElement ConvertField(FieldInfo field, int offset)
         {
             var attrib = field.GetCustomAttribute<VertexElementAttribute>();
             DataType type;
@@ -85,12 +104,7 @@ namespace ModGL.VertexInfo
                 dimensions = 1;
             }
 
-            return new VertexElement
-            {
-                Name = field.Name,
-                Dimensions = dimensions,
-                Type = type
-            };
+            return new VertexElement(field.Name, type, dimensions, offset);
         }
 
         /// <summary>
@@ -105,16 +119,23 @@ namespace ModGL.VertexInfo
 
             var fields = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 
-            return new VertexDescriptor
+            int offset = 0;
+            List<VertexElement> results = new List<VertexElement>(fields.Length);
+            foreach (var field in fields)
             {
-                Elements = fields.Select(ConvertField).ToArray(),
-                ElementType = typeof(TElementType)
-            };
-        }
+                var ret = ConvertField(field, offset);
+                offset += System.Runtime.InteropServices.Marshal.SizeOf(field.FieldType);
 
-        public void Apply(Program program, IOpenGL30 gl)
-        {
-            
+                var ignoreVertexElementAttribute = field.GetCustomAttribute<IgnoreVertexElementAttribute>();
+                if(ignoreVertexElementAttribute == null)
+                    results.Add(ret);
+            }
+
+            return new VertexDescriptor
+            (                
+                typeof(TElementType),
+                results
+            );
         }
 
         internal void Apply(IOpenGL30 gl, int indexOffset)

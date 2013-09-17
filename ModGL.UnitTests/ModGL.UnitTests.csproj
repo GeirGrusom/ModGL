@@ -60,6 +60,9 @@
     <Compile Include="ILSpyCodeBuilder.cs" />
     <Compile Include="InterfaceBindingFactoryTest.cs" />
     <Compile Include="Shaders\ShaderProgramTest.cs" />
+    <Compile Include="Shaders\ShaderTest.cs" />
+    <Compile Include="VertexArrayTest.cs" />
+    <Compile Include="VertexInfo\VertexDescriptorTest.cs" />
     <Compile Include="WindowsContextTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

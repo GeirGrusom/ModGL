@@ -101,15 +101,17 @@ namespace ModGL.Buffers
 
         private Buffer(BufferTarget target, IOpenGL30 gl)
         {
-            ReleasedConstraint();
             if (gl == null)
                 throw new ArgumentNullException("gl");
-            this._gl = gl;
-            this.Target = target;
-            this._elementSize = Marshal.SizeOf(typeof(TElementType));
             var names = new uint[1];
             gl.glGenBuffers(1, names);
-            this.Handle = names.Single();
+            Handle = names.Single();
+            if(Handle == 0)
+                throw new NoHandleCreatedException();
+
+            _gl = gl;
+            Target = target;
+            _elementSize = Marshal.SizeOf(typeof(TElementType));
         }
 
         protected Buffer(BufferTarget target, IEnumerable<TElementType> elements , IOpenGL30 gl)

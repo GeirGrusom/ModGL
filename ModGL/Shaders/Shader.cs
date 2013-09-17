@@ -72,6 +72,9 @@ namespace ModGL.Shaders
                 throw new ArgumentNullException("code");
             _gl = gl;
             Handle = gl.glCreateShader((uint)shaderType);
+            if(Handle == 0)
+                throw new NoHandleCreatedException();
+
             _shaderType = shaderType;
             this._code = code;
         }

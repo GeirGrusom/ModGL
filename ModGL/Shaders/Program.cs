@@ -35,6 +35,10 @@ namespace ModGL.Shaders
 
             _gl = gl;
             Handle = gl.glCreateProgram();
+
+            if(Handle == 0)
+                throw new NoHandleCreatedException();
+
             Shaders = shaders.ToArray();
 
             foreach(var shader in Shaders)
