@@ -143,7 +143,7 @@ namespace ModGL.UnitTests
             var exception = Assert.Catch<InvalidOperationException>(() => factory.CreateBinding<IFoo>(extensions, new Dictionary<Type, Type> { { typeof(InterfaceBindingFactoryTest), typeof(InterfaceBindingFactoryTest) }}));
 
             // Assert
-            Assert.AreEqual("Interface map must map interfaces : OpenGLBindingFactoryTest", exception.Message);
+            Assert.AreEqual("Interface map must map interfaces : InterfaceBindingFactoryTest", exception.Message);
         }
 
         [Test]

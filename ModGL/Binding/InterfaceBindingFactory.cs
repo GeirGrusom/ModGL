@@ -44,15 +44,37 @@ namespace ModGL.Binding
 
             var invokeMethod = typeBuilder.DefineMethod(
                 "Invoke", 
-                MethodAttributes.HideBySig | MethodAttributes.Virtual | MethodAttributes.Public);
+                MethodAttributes.HideBySig | MethodAttributes.Virtual | MethodAttributes.Public,
+                method.ReturnType,
+                parameters.Select(p => p.ParameterType).ToArray());
 
             invokeMethod.SetImplementationFlags(MethodImplAttributes.CodeTypeMask);
-            
-            invokeMethod.SetReturnType(method.ReturnType);
-                        
-            foreach (var p in parameters.Select((Param, Index) => new { Param, Index}))
+
+            if (method.ReturnType != typeof(void))
             {
-                var newParameter = invokeMethod.DefineParameter(p.Index, p.Param.Attributes, p.Param.Name);
+                invokeMethod.SetReturnType(method.ReturnType);
+                if (method.ReturnParameter != null)
+                {
+                    var returnParameter = invokeMethod.DefineParameter(0, method.ReturnParameter.Attributes, method.ReturnParameter.Name);
+                    foreach (var attrib in method.ReturnParameter.CustomAttributes)
+                    {
+                        if (attrib.NamedArguments == null || attrib.NamedArguments.Count == 0)
+                            continue;
+                        returnParameter.SetCustomAttribute(
+                            new CustomAttributeBuilder(
+                                attrib.Constructor,
+                                attrib.ConstructorArguments.Select(a => a.Value).ToArray(),
+                                attrib.NamedArguments.Where(a => !a.IsField).Select(s => s.MemberInfo).OfType<PropertyInfo>().ToArray(),
+                                attrib.NamedArguments.Where(a => !a.IsField).Select(s => s.TypedValue).Select(s => s.Value).ToArray(),
+                                attrib.NamedArguments.Where(a => a.IsField).Select(s => s.MemberInfo).OfType<FieldInfo>().ToArray(),
+                                attrib.NamedArguments.Where(a => a.IsField).Select(s => s.TypedValue).Select(s => s.Value).ToArray()));
+                    }
+                }
+            }
+
+            foreach (var p in parameters.Where(p=> p.Position > 0).Select((Param, Index) => new { Param, Index}))
+            {
+                var newParameter = invokeMethod.DefineParameter(p.Param.Position, p.Param.Attributes, p.Param.Name);
                 // Copy custom attributes.
                 foreach (var attrib in p.Param.CustomAttributes)
                 {
@@ -69,13 +91,6 @@ namespace ModGL.Binding
                 }
             }
 
-            
-
-            for (int i = 0; i < parameters.Length; i++)
-            {
-                var parameter = parameters[i];
-                invokeMethod.DefineParameter(i + 1, ParameterAttributes.None, parameter.Name);
-            }
 
             return typeBuilder.CreateType();
         }
