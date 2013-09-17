@@ -25,10 +25,14 @@ namespace ModGL.Textures
 
         protected Texture(IOpenGL30 gl, TextureTarget target)
         {
-            Target = target;
             uint[] newHandles = new uint[1];
-            this._gl = gl;
+            
             gl.glGenTextures(1, newHandles);
+            if(newHandles[0] == 0u)
+                throw new NoHandleCreatedException();
+
+            Target = target;
+            this._gl = gl;
             Handle = newHandles.Single();
         }
 

@@ -27,6 +27,8 @@ namespace ModGL.UnitTests
         {
             // Arrange
             var gl = Substitute.For<IOpenGL30>();
+            gl.WhenForAnyArgs(g => g.glGenVertexArrays(Arg.Any<int>(), Arg.Any<uint[]>()))
+                .Do(x => ((uint[])x[1])[0] = 1);
             var vertexBuffer = Substitute.For<IVertexBuffer>();
             var descriptor = new VertexDescriptor(typeof(TestVertex), new[] { new VertexElement("Value", DataType.Float, 1, 0) });
 
@@ -51,6 +53,10 @@ namespace ModGL.UnitTests
         {
             // Arrange
             var gl = Substitute.For<IOpenGL30>();
+
+            gl.WhenForAnyArgs(g => g.glGenVertexArrays(Arg.Any<int>(), Arg.Any<uint[]>()))
+                .Do(x => ((uint[])x[1])[0] = 1);
+
             var vertexBuffer = Substitute.For<IVertexBuffer>();
             var descriptor = new VertexDescriptor(typeof(TestVertexTwoFields), new[] { new VertexElement("Value", DataType.Float, 1, 0), new VertexElement("ValueInt", DataType.Int, 1, 4) });
 

@@ -26,9 +26,13 @@ namespace ModGL
             if (descs.Length != bufferObjects.Length)
                 throw new InvalidOperationException("Number of buffers and number of descriptors must match.");
 
-            _gl = gl;
+            
             uint[] handles = new uint[1];
             gl.glGenVertexArrays(1, handles);
+            if(handles[0] == 0u)
+                throw new NoHandleCreatedException();
+
+            _gl = gl;
             Handle = handles.Single();
             Buffers = bufferObjects;
             using (Bind())

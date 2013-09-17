@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace ModGL
 {
+    /// <summary>
+    /// Thrown if a system was unable to create a required handle.
+    /// </summary>
     [Serializable]
     public class NoHandleCreatedException : Exception
     {
