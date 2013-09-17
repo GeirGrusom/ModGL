@@ -44,7 +44,7 @@ namespace ModGL.Shaders
             get
             {
                 int[] compileStatus = new int[1];
-                _gl.glGetShaderiv(Handle, ShaderParameters.CompileStatus, compileStatus);
+                _gl.GetShaderiv(Handle, ShaderParameters.CompileStatus, compileStatus);
                 return compileStatus.Single() == (int)GLboolean.True;
             }
         }
@@ -54,7 +54,7 @@ namespace ModGL.Shaders
         /// </summary>
         public void Dispose()
         {
-            _gl.glDeleteShader(Handle);
+            _gl.DeleteShader(Handle);
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace ModGL.Shaders
             if(string.IsNullOrEmpty(code))
                 throw new ArgumentNullException("code");
             _gl = gl;
-            Handle = gl.glCreateShader((uint)shaderType);
+            Handle = gl.CreateShader((uint)shaderType);
             if(Handle == 0)
                 throw new NoHandleCreatedException();
 
@@ -87,9 +87,9 @@ namespace ModGL.Shaders
         {
             int[] logLength = new int[1];
             
-            this._gl.glGetShaderiv(Handle, ShaderParameters.InfoLogLength, logLength);
+            this._gl.GetShaderiv(Handle, ShaderParameters.InfoLogLength, logLength);
             byte[] log = new byte[logLength.Single()];
-            this._gl.glGetShaderInfoLog(Handle, log.Length, out logLength[0], log);
+            this._gl.GetShaderInfoLog(Handle, log.Length, out logLength[0], log);
             return new ShaderCompilationResults(Encoding.UTF8.GetString(log), success: IsCompiled);
         }
 
@@ -100,9 +100,9 @@ namespace ModGL.Shaders
         public void Compile()
         {
             int[] compileStatus = new int[1];
-            this._gl.glShaderSource(Handle, 1, new [] { Code }, new [] { Code.Length} );
-            this._gl.glCompileShader(Handle);
-            this._gl.glGetShaderiv(Handle, ShaderParameters.CompileStatus, compileStatus);
+            this._gl.ShaderSource(Handle, 1, new [] { Code }, new [] { Code.Length} );
+            this._gl.CompileShader(Handle);
+            this._gl.GetShaderiv(Handle, ShaderParameters.CompileStatus, compileStatus);
             if (compileStatus.Single() != (int)GLboolean.True)
                 throw new ShaderCompilationException(this, GetCompilationResults());
         }

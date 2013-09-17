@@ -145,7 +145,7 @@ namespace ModGL.VertexInfo
                 // Double is supported by glVertexAttribLPointer, which is not implemented in OpenGL 3.0.
                 if (e.Item.Type == DataType.Half || e.Item.Type == DataType.Float) 
                 {
-                    gl.glVertexAttribPointer(
+                    gl.VertexAttribPointer(
                         (uint)e.Index,
                         e.Item.Dimensions,
                         e.Item.Type,
@@ -155,14 +155,14 @@ namespace ModGL.VertexInfo
                 }
                 else
                 {
-                    gl.glVertexAttribIPointer(
+                    gl.VertexAttribIPointer(
                         (uint)e.Index,
                         e.Item.Dimensions,
                         e.Item.Type,
                         System.Runtime.InteropServices.Marshal.SizeOf(ElementType),
                         new IntPtr(e.Item.Offset));
                 }
-                gl.glEnableVertexAttribArray((uint)e.Index);
+                gl.EnableVertexAttribArray((uint)e.Index);
             }
         }
     }

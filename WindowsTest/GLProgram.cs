@@ -60,8 +60,8 @@ namespace WindowsTest
             });
 
             InterfaceBindingFactory binding = new InterfaceBindingFactory();
-            gl = binding.CreateBinding<IOpenGL30>(context as IExtensionSupport, new Dictionary<Type, Type> { {typeof(IOpenGL), typeof(GL)} }, GL.OpenGLErrorFunctions);
-            gl.glEnable(StateCaps.DepthTest);
+            gl = binding.CreateBinding<IOpenGL30>(context as IExtensionSupport, new Dictionary<Type, Type> { {typeof(IOpenGL), typeof(GL)} }, GL.OpenGLErrorFunctions, "gl");
+            gl.Enable(StateCaps.DepthTest);
 
             
             buffer = new VertexBuffer<Vertex>(new []
@@ -101,7 +101,7 @@ namespace WindowsTest
                 });
 
             shader.BindVertexAttributeLocations(desc);
-            gl.glBindFragDataLocation(shader.Handle, 0, "output");
+            gl.BindFragDataLocation(shader.Handle, 0, "output");
 
             shader.Compile();
         }
@@ -126,10 +126,10 @@ namespace WindowsTest
 
         public void Render()
         {
-            gl.glClearColor(0f, 0f, 0f, 1f);
-            gl.glClearDepth(1f);
-            gl.glClear(ClearTarget.Color | ClearTarget.Depth);
-            gl.glViewport(0, 0, form.ClientSize.Width, form.ClientSize.Height);
+            gl.ClearColor(0f, 0f, 0f, 1f);
+            gl.ClearDepth(1f);
+            gl.Clear(ClearTarget.Color | ClearTarget.Depth);
+            gl.Viewport(0, 0, form.ClientSize.Width, form.ClientSize.Height);
 
             using (shader.Bind())
             using (array.Bind())

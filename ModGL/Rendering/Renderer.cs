@@ -22,13 +22,13 @@ namespace ModGL.Rendering
         {
             using (elements.Bind())
             {
-                _gl.glDrawElements(mode, (int)elements.Elements, elements.Type, IntPtr.Zero);
+                _gl.DrawElements(mode, (int)elements.Elements, elements.Type, IntPtr.Zero);
             }
         }
 
         public void Draw(DrawMode mode, IVertexBuffer buffer)
         {
-            _gl.glDrawArrays(mode, 0, (int)buffer.Elements);
+            _gl.DrawArrays(mode, 0, (int)buffer.Elements);
         }
     }
 }

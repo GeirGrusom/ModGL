@@ -22,7 +22,7 @@ namespace ModGL.UnitTests.Shaders
         {
             // Arrange
             var gl = Substitute.For<IOpenGL30>();
-            gl.glCreateShader((uint)ShaderType.VertexShader).Returns(0u);
+            gl.CreateShader((uint)ShaderType.VertexShader).Returns(0u);
 
             // Act
             // Assert
@@ -34,7 +34,7 @@ namespace ModGL.UnitTests.Shaders
         {
             // Arrange
             var gl = Substitute.For<IOpenGL30>();
-            gl.glCreateShader((uint)ShaderType.VertexShader).Returns(1u);
+            gl.CreateShader((uint)ShaderType.VertexShader).Returns(1u);
 
             // Act
             var newShader = new VertexShader(gl, "Foo");
@@ -89,11 +89,11 @@ namespace ModGL.UnitTests.Shaders
             // Arrange
 
             var gl = Substitute.For<IOpenGL30>();
-            gl.glCreateShader(Arg.Any<uint>()).Returns(1u);
+            gl.CreateShader(Arg.Any<uint>()).Returns(1u);
             int len;
-            gl.WhenForAnyArgs(g => g.glGetShaderiv(0, ShaderParameters.InfoLogLength, Arg.Any<int[]>()))
+            gl.WhenForAnyArgs(g => g.GetShaderiv(0, ShaderParameters.InfoLogLength, Arg.Any<int[]>()))
                 .Do(x => ((int[])x[2])[0] = 1 );
-            gl.WhenForAnyArgs(g => g.glGetShaderInfoLog(Arg.Any<uint>(), Arg.Any<int>(), out len, Arg.Any<byte[]>()))
+            gl.WhenForAnyArgs(g => g.GetShaderInfoLog(Arg.Any<uint>(), Arg.Any<int>(), out len, Arg.Any<byte[]>()))
                 .Do( x =>
                     {
                         x[2] = 1;
@@ -114,16 +114,16 @@ namespace ModGL.UnitTests.Shaders
             // Arrange
             int len = 0;
             var gl = Substitute.For<IOpenGL30>();
-            gl.glCreateShader(Arg.Any<uint>()).Returns(1u);
+            gl.CreateShader(Arg.Any<uint>()).Returns(1u);
 
-            gl.WhenForAnyArgs(g => g.glGetShaderiv(Arg.Any<uint>(), Arg.Any<ShaderParameters>(), Arg.Any<int[]>()))
+            gl.WhenForAnyArgs(g => g.GetShaderiv(Arg.Any<uint>(), Arg.Any<ShaderParameters>(), Arg.Any<int[]>()))
               .Do(
                   x =>
                   {
                       if ((ShaderParameters)x[1] == ShaderParameters.InfoLogLength)
                           ((int[])x[2])[0] = 1;
                   });
-            gl.WhenForAnyArgs(g => g.glGetShaderInfoLog(Arg.Any<uint>(), Arg.Any<int>(), out len, Arg.Any<byte[]>()))
+            gl.WhenForAnyArgs(g => g.GetShaderInfoLog(Arg.Any<uint>(), Arg.Any<int>(), out len, Arg.Any<byte[]>()))
                 .Do(x =>
                 {
                     ((byte[])x[3])[0] = (byte)'A';
@@ -144,9 +144,9 @@ namespace ModGL.UnitTests.Shaders
         {
             // Arrange
             var gl = Substitute.For<IOpenGL30>();
-            gl.glCreateShader(Arg.Any<uint>()).Returns(1u);
+            gl.CreateShader(Arg.Any<uint>()).Returns(1u);
 
-            gl.WhenForAnyArgs(g => g.glGetShaderiv(Arg.Any<uint>(), Arg.Any<ShaderParameters>(), Arg.Any<int[]>()))
+            gl.WhenForAnyArgs(g => g.GetShaderiv(Arg.Any<uint>(), Arg.Any<ShaderParameters>(), Arg.Any<int[]>()))
               .Do(
                   x =>
                   {
@@ -160,8 +160,8 @@ namespace ModGL.UnitTests.Shaders
             shader.Compile();
 
             // Assert
-            gl.Received().glShaderSource(1, 1, Arg.Is<string[]>(s => s.SequenceEqual(new [] { "Foo"} )), Arg.Is<int[]>(s => s.SequenceEqual(new [] { 3 })) );
-            gl.Received().glCompileShader(1);
+            gl.Received().ShaderSource(1, 1, Arg.Is<string[]>(s => s.SequenceEqual(new [] { "Foo"} )), Arg.Is<int[]>(s => s.SequenceEqual(new [] { 3 })) );
+            gl.Received().CompileShader(1);
         }
 
     }

@@ -44,6 +44,7 @@
     <Compile Include="Buffers\Buffer.cs" />
     <Compile Include="Buffers\BufferExtensions.cs" />
     <Compile Include="Buffers\ElementBuffer.cs" />
+    <Compile Include="Buffers\TextureBuffer.cs" />
     <Compile Include="ContextCreationException.cs" />
     <Compile Include="ExtensionNotSupportedException.cs" />
     <Compile Include="IBindable.cs" />

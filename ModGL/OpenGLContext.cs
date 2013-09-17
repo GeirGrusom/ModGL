@@ -44,7 +44,7 @@ namespace ModGL
                 (
                     context: this,
                     interfaceMap: new Dictionary<Type, Type> { {typeof(IOpenGL), typeof(GL)} }, 
-                    errorHandling: debug ? GL.OpenGLErrorFunctions : null
+                    errorHandling: debug ? GL.OpenGLErrorFunctions : null, extensionMethodPrefix: "gl"
                 );
         }
 

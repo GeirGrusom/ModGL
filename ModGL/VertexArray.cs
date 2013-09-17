@@ -28,7 +28,7 @@ namespace ModGL
 
             
             uint[] handles = new uint[1];
-            gl.glGenVertexArrays(1, handles);
+            gl.GenVertexArrays(1, handles);
             if(handles[0] == 0u)
                 throw new NoHandleCreatedException();
 
@@ -53,8 +53,8 @@ namespace ModGL
 
         public BindContext Bind()
         {
-            _gl.glBindVertexArray(Handle);
-            return new BindContext(() => _gl.glBindVertexArray(0));
+            _gl.BindVertexArray(Handle);
+            return new BindContext(() => _gl.BindVertexArray(0));
         }
     }
 }

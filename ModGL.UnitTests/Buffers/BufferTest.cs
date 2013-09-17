@@ -19,7 +19,7 @@ namespace ModGL.UnitTests.Buffers
         public void Constructor_NullElements_ThrowsArgumentNullException()
         {
             var gl = Substitute.For<IOpenGL30>();
-            gl.WhenForAnyArgs(g => g.glGenBuffers(Arg.Any<int>(), Arg.Any<uint[]>()))
+            gl.WhenForAnyArgs(g => g.GenBuffers(Arg.Any<int>(), Arg.Any<uint[]>()))
                 .Do(x =>
                 { ((uint[])x[1])[0] = 1; });
 
@@ -33,7 +33,7 @@ namespace ModGL.UnitTests.Buffers
         {
             // Arrange
             var gl = Substitute.For<IOpenGL30>();
-            gl.WhenForAnyArgs(g => g.glGenBuffers(Arg.Any<int>(), Arg.Any<uint[]>()))
+            gl.WhenForAnyArgs(g => g.GenBuffers(Arg.Any<int>(), Arg.Any<uint[]>()))
                 .Do(x =>
                 { ((uint[])x[1])[0] = 1; });
 
@@ -66,7 +66,7 @@ namespace ModGL.UnitTests.Buffers
         {
             // Arrange
             var gl = Substitute.For<IOpenGL30>();
-            gl.When(g => g.glGenBuffers(Arg.Any<int>(), Arg.Any<uint[]>())).Do(x => ((uint[])x[1])[0] = 1);
+            gl.When(g => g.GenBuffers(Arg.Any<int>(), Arg.Any<uint[]>())).Do(x => ((uint[])x[1])[0] = 1);
             var buffer = new ElementBuffer<int>(new[] { 1, 2, 3 }, gl);
 
             // Act
@@ -75,8 +75,8 @@ namespace ModGL.UnitTests.Buffers
             }
 
             // Assert
-            gl.Received().glBindBuffer(BufferTarget.ElementArray, 1);
-            gl.Received().glBindBuffer(BufferTarget.ElementArray, 0);
+            gl.Received().BindBuffer(BufferTarget.ElementArray, 1);
+            gl.Received().BindBuffer(BufferTarget.ElementArray, 0);
         }
 
         [Test]
@@ -84,7 +84,7 @@ namespace ModGL.UnitTests.Buffers
         {
             // Arrange
             var gl = Substitute.For<IOpenGL30>();
-            gl.When(g => g.glGenBuffers(Arg.Any<int>(), Arg.Any<uint[]>())).Do(x => ((uint[])x[1])[0] = 1);
+            gl.When(g => g.GenBuffers(Arg.Any<int>(), Arg.Any<uint[]>())).Do(x => ((uint[])x[1])[0] = 1);
             var buffer = new ElementBuffer<int>(new[] { 1, 2, 3 }, gl);
 
             // Act
@@ -93,8 +93,8 @@ namespace ModGL.UnitTests.Buffers
             }
 
             // Assert
-            gl.Received().glBindBufferBase(BufferTarget.ElementArray, 2, 1);
-            gl.Received().glBindBufferBase(BufferTarget.ElementArray, 2, 0);
+            gl.Received().BindBufferBase(BufferTarget.ElementArray, 2, 1);
+            gl.Received().BindBufferBase(BufferTarget.ElementArray, 2, 0);
         }
 
         [Test]
@@ -102,7 +102,7 @@ namespace ModGL.UnitTests.Buffers
         {
             // Arrange
             var gl = Substitute.For<IOpenGL30>();
-            gl.When(g => g.glGenBuffers(Arg.Any<int>(), Arg.Any<uint[]>())).Do(x => ((uint[])x[1])[0] = 1);
+            gl.When(g => g.GenBuffers(Arg.Any<int>(), Arg.Any<uint[]>())).Do(x => ((uint[])x[1])[0] = 1);
             var buffer = new ElementBuffer<int>(new[] { 1, 2, 3 }, gl);
 
             // Act
@@ -111,8 +111,8 @@ namespace ModGL.UnitTests.Buffers
             }
 
             // Assert
-            gl.Received().glBindBufferRange(BufferTarget.ElementArray, 2,  1, new IntPtr(8), new IntPtr(16));
-            gl.Received().glBindBufferBase(BufferTarget.ElementArray, 2,  0);
+            gl.Received().BindBufferRange(BufferTarget.ElementArray, 2,  1, new IntPtr(8), new IntPtr(16));
+            gl.Received().BindBufferBase(BufferTarget.ElementArray, 2,  0);
         }
 
         [Test]
@@ -120,7 +120,7 @@ namespace ModGL.UnitTests.Buffers
         {
             // Arrange
             var gl = Substitute.For<IOpenGL30>();
-            gl.WhenForAnyArgs(g => g.glGenBuffers(Arg.Any<int>(), Arg.Any<uint[]>()))
+            gl.WhenForAnyArgs(g => g.GenBuffers(Arg.Any<int>(), Arg.Any<uint[]>()))
                 .Do(x =>
                 { ((uint[])x[1])[0] = 1; });
             var buffer = new ElementBuffer<int>(new[] { 1, 2, 3 }, gl);
@@ -129,7 +129,7 @@ namespace ModGL.UnitTests.Buffers
             buffer.BufferData(BufferUsage.StaticDraw);
 
             // Assert
-            gl.Received().glBufferData(BufferTarget.ElementArray, new IntPtr(12), Arg.Any<IntPtr>(), BufferUsage.StaticDraw);
+            gl.Received().BufferData(BufferTarget.ElementArray, new IntPtr(12), Arg.Any<IntPtr>(), BufferUsage.StaticDraw);
         }
 
         [Test]
@@ -137,7 +137,7 @@ namespace ModGL.UnitTests.Buffers
         {
             // Arrange
             var gl = Substitute.For<IOpenGL30>();
-            gl.WhenForAnyArgs(g => g.glGenBuffers(Arg.Any<int>(), Arg.Any<uint[]>()))
+            gl.WhenForAnyArgs(g => g.GenBuffers(Arg.Any<int>(), Arg.Any<uint[]>()))
                 .Do(x =>
                 { ((uint[])x[1])[0] = 1; });
 
@@ -147,7 +147,7 @@ namespace ModGL.UnitTests.Buffers
             buffer.BufferSubData(BufferUsage.StaticDraw, 1, 2);
 
             // Assert
-            gl.Received().glBufferSubData(BufferTarget.ElementArray, new IntPtr(1), new IntPtr(2), Arg.Any<IntPtr>());
+            gl.Received().BufferSubData(BufferTarget.ElementArray, new IntPtr(1), new IntPtr(2), Arg.Any<IntPtr>());
         }
 
 

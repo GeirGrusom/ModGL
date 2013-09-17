@@ -71,20 +71,20 @@ namespace ModGL.Buffers
 
         public BindContext Bind()
         {
-            this._gl.glBindBuffer(this.Target, this.Handle);
-            return new BindContext(() => this._gl.glBindBuffer(this.Target, 0));
+            this._gl.BindBuffer(this.Target, this.Handle);
+            return new BindContext(() => this._gl.BindBuffer(this.Target, 0));
         }
 
         public BindContext Bind(uint index)
         {
-            this._gl.glBindBufferBase(this.Target, index, this.Handle);
-            return new BindContext(() => this._gl.glBindBufferBase(this.Target, index, 0));
+            this._gl.BindBufferBase(this.Target, index, this.Handle);
+            return new BindContext(() => this._gl.BindBufferBase(this.Target, index, 0));
         }
 
         public BindContext Bind(uint index, long startIndex, long elements)
         {
-            this._gl.glBindBufferRange(this.Target, index, this.Handle, new IntPtr(startIndex * this._elementSize), new IntPtr(elements * this._elementSize));
-            return new BindContext(() => this._gl.glBindBufferBase(this.Target, index, 0));
+            this._gl.BindBufferRange(this.Target, index, this.Handle, new IntPtr(startIndex * this._elementSize), new IntPtr(elements * this._elementSize));
+            return new BindContext(() => this._gl.BindBufferBase(this.Target, index, 0));
         }
 
         public void ReleaseClientData()
@@ -104,7 +104,7 @@ namespace ModGL.Buffers
             if (gl == null)
                 throw new ArgumentNullException("gl");
             var names = new uint[1];
-            gl.glGenBuffers(1, names);
+            gl.GenBuffers(1, names);
             Handle = names.Single();
             if(Handle == 0)
                 throw new NoHandleCreatedException();
@@ -136,7 +136,7 @@ namespace ModGL.Buffers
             var handle = GCHandle.Alloc(this.Data, GCHandleType.Pinned);
             try
             {
-                this._gl.glBufferData(this.Target, new IntPtr(this.Data.LongLength * this.ElementSize), handle.AddrOfPinnedObject(), usage);
+                this._gl.BufferData(this.Target, new IntPtr(this.Data.LongLength * this.ElementSize), handle.AddrOfPinnedObject(), usage);
             }
             finally
             {
@@ -152,10 +152,10 @@ namespace ModGL.Buffers
         public MappedBuffer MapBuffer(BufferAccess access)
         {
             // TODO: Add a check constrain if the object this is called on is the currently bound object.
-            var bindContext = new BindContext(() => this._gl.glUnmapBuffer(this.Target) );
+            var bindContext = new BindContext(() => this._gl.UnmapBuffer(this.Target) );
 
             // Note: glMapBuffer seem to have a relatively stupid implementation.
-            var ptr = this._gl.glMapBuffer(this.Target, access);
+            var ptr = this._gl.MapBuffer(this.Target, access);
             var accessor = new UnmanagedMemoryAccessor(
                 new SafeMapBuffer(ptr),
                 0,
@@ -177,7 +177,7 @@ namespace ModGL.Buffers
             var handle = GCHandle.Alloc(this.Data, GCHandleType.Pinned);
             try
             {
-                this._gl.glBufferSubData(this.Target, new IntPtr(offset), new IntPtr(size), handle.AddrOfPinnedObject());
+                this._gl.BufferSubData(this.Target, new IntPtr(offset), new IntPtr(size), handle.AddrOfPinnedObject());
             }
             finally
             {

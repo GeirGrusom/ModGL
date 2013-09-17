@@ -12,7 +12,7 @@ namespace ModGL.Shaders
 
         public override void SetData(IOpenGL30 gl)
         {
-            gl.glUniform1i(this.Location, (int)this.Value.Handle);
+            gl.Uniform1i(this.Location, (int)this.Value.Handle);
         }
     }
 }

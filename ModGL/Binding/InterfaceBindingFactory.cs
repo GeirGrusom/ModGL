@@ -94,16 +94,19 @@ namespace ModGL.Binding
 
             return typeBuilder.CreateType();
         }
+
+
         /// <summary>
         /// Creates a binding for the specified interface to extension methods defined by IExtensions support.
         /// </summary>
         /// <typeparam name="TGLInterface">Interface type to implement.</typeparam>
         /// <param name="context">Extension context. This will return method delegates that the binder will use.</param>
         /// <param name="errorHandling">Defines error handling routines. Setting this to null disables error handling.</param>
+        /// <param name="extensionMethodPrefix">Optional prefix to extension methods. For prefix "Foo" this will bind Bar() with FooBar().</param>
         /// <returns>Implementation of the interface.</returns>
-        public TGLInterface CreateBinding<TGLInterface>(IExtensionSupport context, ErrorHandling errorHandling = null)
+        public TGLInterface CreateBinding<TGLInterface>(IExtensionSupport context, ErrorHandling errorHandling = null, string extensionMethodPrefix = "")
         {
-            return CreateBinding<TGLInterface>(context, new Dictionary<Type, Type>(), errorHandling);
+            return CreateBinding<TGLInterface>(context, new Dictionary<Type, Type>(), errorHandling, extensionMethodPrefix);
         }
 
         /// <summary>
@@ -113,9 +116,10 @@ namespace ModGL.Binding
         /// <param name="context">Extension context. This will return method delegates that the binder will use.</param>
         /// <param name="interfaceMap">Additional interfaces to implement using static functions in the mpa types.</param>
         /// <param name="errorHandling">Defines error handling routines. Setting this to null disables error handling.</param>
+        /// <param name="extensionMethodPrefix">Optional prefix to extension methods. For prefix "Foo" this will bind Bar() with FooBar().</param>
         /// <returns>Implementation of the interface.</returns>
         /// <remarks>The interface map will override interface implementations from <see cref="TGLInterface"/> if they intersect.</remarks>
-        public TGLInterface CreateBinding<TGLInterface>(IExtensionSupport context, Dictionary<Type, Type> interfaceMap, ErrorHandling errorHandling = null)
+        public TGLInterface CreateBinding<TGLInterface>(IExtensionSupport context, Dictionary<Type, Type> interfaceMap, ErrorHandling errorHandling = null, string extensionMethodPrefix = null)
         {
             if(context == null)
                 throw new ArgumentNullException("context");
@@ -152,14 +156,14 @@ namespace ModGL.Binding
 
             var fields = GenerateInvocationFields(methods, module, definedType);
 
-            GenerateConstructor(constructor, methods, fields);
+            GenerateConstructor(constructor, methods, fields, extensionMethodPrefix);
 
             var interfaces = type.GetInterfaces().Concat(new[] { type }).Except(interfaceMap.Keys).ToArray();
 
             foreach(var @interface in interfaces)
                 DefineProcMethods(errorHandling, @interface, remapMethods, definedType, fields);
 
-            DefineStaticMethods(interfaceMap, errorHandling, definedType);
+            DefineStaticMethods(interfaceMap, errorHandling, definedType, extensionMethodPrefix);
 
             var resultType = definedType.CreateType();
 
@@ -177,7 +181,7 @@ namespace ModGL.Binding
         }
 
 
-        private void DefineStaticMethods(Dictionary<Type, Type> interfaceMap, ErrorHandling errorHandling, TypeBuilder definedType)
+        private void DefineStaticMethods(Dictionary<Type, Type> interfaceMap, ErrorHandling errorHandling, TypeBuilder definedType, string extensionMethodPrefix = null)
         {
             foreach (var item in interfaceMap)
             {
@@ -202,9 +206,9 @@ namespace ModGL.Binding
                     var generator = newMethod.GetILGenerator();
 
                     if (errorHandling != null)
-                        GenerateThrowingStaticInvocation(generator, method, item.Value, errorHandling);
+                        GenerateThrowingStaticInvocation(generator, method, item.Value, errorHandling, extensionMethodPrefix: extensionMethodPrefix);
                     else
-                        GenerateStaticInvocation(generator, method, item.Value);
+                        GenerateStaticInvocation(generator, method, item.Value, extensionMethodPrefix: extensionMethodPrefix );
 
                     definedType.DefineMethodOverride(newMethod, method);
                 }
@@ -267,7 +271,7 @@ namespace ModGL.Binding
         }
 
 
-        private void GenerateConstructor(ConstructorBuilder builder, IEnumerable<MethodInfo> methods, IEnumerable<FieldBuilder> fields)
+        private static void GenerateConstructor(ConstructorBuilder builder, IEnumerable<MethodInfo> methods, IEnumerable<FieldBuilder> fields, string extensionMethodPrefix)
         {
             var generator = builder.GetILGenerator();
             generator.DeclareLocal(typeof(Delegate));
@@ -280,6 +284,7 @@ namespace ModGL.Binding
             var fieldBuilders = fields as FieldBuilder[] ?? fields.ToArray();
             foreach (var method in methods)
             {
+                string methodName = (extensionMethodPrefix ?? "") + method.Name;
                 var name = GetFieldNameForMethodInfo(method);
                 var field = fieldBuilders.Single(f => f.Name == name);
                 var okLabel = generator.DefineLabel();
@@ -287,7 +292,7 @@ namespace ModGL.Binding
                 // _glMethodName = (MethodDelegateType)extensionSupport.GetProcedure("glMethodName", typeof(MethodDelegateType));
                 generator.Emit(OpCodes.Ldarg_0);
                 generator.Emit(OpCodes.Ldarg_1);
-                generator.Emit(OpCodes.Ldstr, method.Name);  // load method name
+                generator.Emit(OpCodes.Ldstr, methodName);  // load method name
                 generator.Emit(OpCodes.Ldtoken, field.FieldType); // load field type
                 generator.EmitCall(OpCodes.Call, typeof(Type).GetMethod("GetTypeFromHandle", new[] { typeof(RuntimeTypeHandle) }), null);
                 generator.EmitCall(OpCodes.Callvirt, getMethod, null);
@@ -295,7 +300,7 @@ namespace ModGL.Binding
                 // if result == null throw ExtensionNotSupportedException
                 generator.Emit(OpCodes.Ldloc_0);
                 generator.Emit(OpCodes.Brtrue, okLabel);
-                generator.Emit(OpCodes.Ldstr, method.Name);
+                generator.Emit(OpCodes.Ldstr, methodName);
                 generator.Emit(OpCodes.Newobj, notSupportedConstructor);
                 generator.Emit(OpCodes.Throw);
                 generator.MarkLabel(okLabel);
@@ -309,17 +314,17 @@ namespace ModGL.Binding
             generator.Emit(OpCodes.Ret);
         }
 
-        private IList<FieldBuilder> GenerateInvocationFields(IEnumerable<MethodInfo> methods, ModuleBuilder delegateModule, TypeBuilder builder)
+        private static IList<FieldBuilder> GenerateInvocationFields(IEnumerable<MethodInfo> methods, ModuleBuilder delegateModule, TypeBuilder builder)
         {
             return (from method in methods
                     let delegateType = CreateDelegateType(method, delegateModule)
                     select builder.DefineField(GetFieldNameForMethodInfo(method), delegateType, FieldAttributes.Private | FieldAttributes.InitOnly)).ToList();
         }
 
-        private void GenerateStaticInvocation(ILGenerator generator, MethodInfo method, Type staticMapping, bool emitReturn = true)
+        private void GenerateStaticInvocation(ILGenerator generator, MethodInfo method, Type staticMapping, bool emitReturn = true, string extensionMethodPrefix = null)
         {
             var invokeMethod = staticMapping.GetMethod(
-                method.Name,
+                (extensionMethodPrefix ?? "") + method.Name,
                 BindingFlags.Public | BindingFlags.Static,
                 null,
                 method.GetParameters().Select(p => p.ParameterType).ToArray(),
@@ -332,12 +337,12 @@ namespace ModGL.Binding
                 generator.Emit(OpCodes.Ret);
         }
 
-        private void GenerateThrowingStaticInvocation(ILGenerator generator, MethodInfo method, Type staticMapping, ErrorHandling err)
+        private void GenerateThrowingStaticInvocation(ILGenerator generator, MethodInfo method, Type staticMapping, ErrorHandling err, string extensionMethodPrefix = null)
         {
             if(method.ReturnType != typeof(void))
                 generator.DeclareLocal(method.ReturnType);
             generator.EmitCall(OpCodes.Call, err.FlushError, null);
-            GenerateStaticInvocation(generator, method, staticMapping, emitReturn: false);
+            GenerateStaticInvocation(generator, method, staticMapping, false, extensionMethodPrefix);
             if (method.ReturnType != typeof(void))
                 generator.Emit(OpCodes.Stloc_0);
             generator.EmitCall(OpCodes.Call, err.CheckErrorState, null);

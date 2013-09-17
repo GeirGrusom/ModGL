@@ -27,7 +27,7 @@ namespace ModGL.UnitTests
         {
             // Arrange
             var gl = Substitute.For<IOpenGL30>();
-            gl.WhenForAnyArgs(g => g.glGenVertexArrays(Arg.Any<int>(), Arg.Any<uint[]>()))
+            gl.WhenForAnyArgs(g => g.GenVertexArrays(Arg.Any<int>(), Arg.Any<uint[]>()))
                 .Do(x => ((uint[])x[1])[0] = 1);
             var vertexBuffer = Substitute.For<IVertexBuffer>();
             var descriptor = new VertexDescriptor(typeof(TestVertex), new[] { new VertexElement("Value", DataType.Float, 1, 0) });
@@ -36,9 +36,9 @@ namespace ModGL.UnitTests
             var vertexArray = new VertexArray(gl, new[] { vertexBuffer }, new[] { descriptor });
 
             // Assert
-            gl.Received().glVertexAttribPointer(0, 1, DataType.Float, GLboolean.False, 4, IntPtr.Zero); // Stride should be size of vertex element.
+            gl.Received().VertexAttribPointer(0, 1, DataType.Float, GLboolean.False, 4, IntPtr.Zero); // Stride should be size of vertex element.
             vertexBuffer.Received().Bind();
-            gl.Received().glBindVertexArray(0);
+            gl.Received().BindVertexArray(0);
             Assert.Contains(vertexBuffer, vertexArray.Buffers.ToArray());
         }
 
@@ -54,7 +54,7 @@ namespace ModGL.UnitTests
             // Arrange
             var gl = Substitute.For<IOpenGL30>();
 
-            gl.WhenForAnyArgs(g => g.glGenVertexArrays(Arg.Any<int>(), Arg.Any<uint[]>()))
+            gl.WhenForAnyArgs(g => g.GenVertexArrays(Arg.Any<int>(), Arg.Any<uint[]>()))
                 .Do(x => ((uint[])x[1])[0] = 1);
 
             var vertexBuffer = Substitute.For<IVertexBuffer>();
@@ -64,8 +64,8 @@ namespace ModGL.UnitTests
             var vertexArray = new VertexArray(gl, new[] { vertexBuffer }, new[] { descriptor });
 
             // Assert
-            gl.Received().glVertexAttribPointer(0, 1, DataType.Float, GLboolean.False, 8, IntPtr.Zero); // Stride should be size of vertex element.
-            gl.Received().glVertexAttribIPointer(1, 1, DataType.Int, 8, new IntPtr(4));
+            gl.Received().VertexAttribPointer(0, 1, DataType.Float, GLboolean.False, 8, IntPtr.Zero); // Stride should be size of vertex element.
+            gl.Received().VertexAttribIPointer(1, 1, DataType.Int, 8, new IntPtr(4));
         }
 
     }

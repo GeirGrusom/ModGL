@@ -20,14 +20,14 @@ namespace ModGL.Textures
         public void Dispose()
         {
             uint[] handles = new [] { Handle };
-            _gl.glDeleteTextures(1, handles);
+            _gl.DeleteTextures(1, handles);
         }
 
         protected Texture(IOpenGL30 gl, TextureTarget target)
         {
             uint[] newHandles = new uint[1];
             
-            gl.glGenTextures(1, newHandles);
+            gl.GenTextures(1, newHandles);
             if(newHandles[0] == 0u)
                 throw new NoHandleCreatedException();
 
@@ -38,8 +38,8 @@ namespace ModGL.Textures
 
         public BindContext Bind()
         {
-            _gl.glBindTexture(Target, Handle);
-            return new BindContext(() => _gl.glBindTexture(Target, 0));
+            _gl.BindTexture(Target, Handle);
+            return new BindContext(() => _gl.BindTexture(Target, 0));
         }
 
         public void BufferData(byte[] dataArray)

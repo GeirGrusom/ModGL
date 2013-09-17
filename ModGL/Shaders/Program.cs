@@ -34,7 +34,7 @@ namespace ModGL.Shaders
                 throw new ArgumentNullException("gl");
 
             _gl = gl;
-            Handle = gl.glCreateProgram();
+            Handle = gl.CreateProgram();
 
             if(Handle == 0)
                 throw new NoHandleCreatedException();
@@ -42,7 +42,7 @@ namespace ModGL.Shaders
             Shaders = shaders.ToArray();
 
             foreach(var shader in Shaders)
-                gl.glAttachShader(Handle, shader.Handle);
+                gl.AttachShader(Handle, shader.Handle);
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace ModGL.Shaders
             get
             {
                 int[] validateStatus = new int[1];
-                _gl.glGetProgramiv(Handle, ProgramParameters.ValidateStatus, validateStatus);
+                _gl.GetProgramiv(Handle, ProgramParameters.ValidateStatus, validateStatus);
                 return validateStatus.Single() == (int)GLboolean.True;
             }
         }
@@ -66,7 +66,7 @@ namespace ModGL.Shaders
             get
             {
                 int[] linkStatus = new int[1];
-                _gl.glGetProgramiv(Handle, ProgramParameters.LinkStatus, linkStatus);
+                _gl.GetProgramiv(Handle, ProgramParameters.LinkStatus, linkStatus);
                 return linkStatus.Single() == (int)GLboolean.True;                
             }
         }
@@ -78,9 +78,9 @@ namespace ModGL.Shaders
         public CompilationResults GetCompilationResults()
         {
             int[] logLength = new int[1];
-            _gl.glGetProgramiv(Handle, ProgramParameters.InfoLogLength, logLength);
+            _gl.GetProgramiv(Handle, ProgramParameters.InfoLogLength, logLength);
             byte[] log = new byte[logLength.Single()];
-            _gl.glGetProgramInfoLog(Handle, log.Length, out logLength[0], log);
+            _gl.GetProgramInfoLog(Handle, log.Length, out logLength[0], log);
 
             return new CompilationResults(Shaders.Select(s => s.GetCompilationResults()), Encoding.UTF8.GetString(log), IsValid, IsLinked);
         }
@@ -101,7 +101,7 @@ namespace ModGL.Shaders
                 throw new InvalidOperationException("Cannot bind attributes to an already linked program.");
 
             foreach(var item in definition.Elements.Select((Item, Index) => new { Item, Index}))
-                _gl.glBindAttribLocation(Handle, (uint)(item.Index + indexOffset), item.Item.Name);
+                _gl.BindAttribLocation(Handle, (uint)(item.Index + indexOffset), item.Item.Name);
         }
 
         /// <summary>
@@ -120,8 +120,8 @@ namespace ModGL.Shaders
                 throw new ProgramCompilationException(this, GetCompilationResults(), "Program failed to compile due to shader errors. See inner exception for more details.", ex);
             }
 
-            _gl.glValidateProgram(Handle);
-            _gl.glLinkProgram(Handle);
+            _gl.ValidateProgram(Handle);
+            _gl.LinkProgram(Handle);
 
             if (IsLinked && IsValid)
                 return;
@@ -136,8 +136,8 @@ namespace ModGL.Shaders
         /// <returns>Returns a binding context used to unbind the program.</returns>
         public BindContext Bind()
         {
-            _gl.glUseProgram(Handle);
-            return new BindContext(() => _gl.glUseProgram(0));
+            _gl.UseProgram(Handle);
+            return new BindContext(() => _gl.UseProgram(0));
         }
 
         /// <summary>
@@ -146,13 +146,13 @@ namespace ModGL.Shaders
         /// <remarks>Shaders are not disposed and must be disposed by the caller.</remarks>
         public void Dispose()
         {
-            _gl.glDeleteProgram(Handle);
+            _gl.DeleteProgram(Handle);
         }
 
         public Uniform<TValueType> GetUniform<UniformType, TValueType>(string uniformName)
             where UniformType : Uniform<TValueType>
         {
-            var uniformLoc = _gl.glGetUniformLocation(Handle, uniformName);
+            var uniformLoc = _gl.GetUniformLocation(Handle, uniformName);
             return (UniformType)Activator.CreateInstance(typeof(UniformType), _gl, uniformLoc, uniformName);
         }
     }

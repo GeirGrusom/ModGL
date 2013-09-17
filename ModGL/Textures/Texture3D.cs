@@ -28,7 +28,7 @@ namespace ModGL.Textures
 
         public override void BufferData(IntPtr address)
         {
-            this._gl.glTexImage3D(Target, 0, InternalFormat, Width, Height, Depth, 0, Format, PixelType, address);
+            this._gl.TexImage3D(Target, 0, InternalFormat, Width, Height, Depth, 0, Format, PixelType, address);
         }
     }
 }
