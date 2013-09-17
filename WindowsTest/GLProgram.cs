@@ -68,18 +68,18 @@ namespace WindowsTest
             {
                 new Vertex
                 {
-                    Position = new Vec4f { x = 0, y = -0.5f, w = 0},
-                    Color = new Vec4f { x = 1.0f, w = 1.0f }
+                    Position = new Vec4f { x = -0.5f, y = -0.5f, z = -0.5f, w = 0}
+                    //,Color = new Vec4f { x = 1.0f, w = 1.0f }
                 },
                 new Vertex
                 {
-                    Position = new Vec4f { x = 0.5f, y = 0.5f, w = 0},
-                    Color = new Vec4f {y = 1.0f, w = 1.0f }
+                    Position = new Vec4f { x = 0.5f, y = 0.5f, w = 0}
+                    //,Color = new Vec4f {y = 1.0f, w = 1.0f }
                 },                
                 new Vertex
                 {
-                    Position = new Vec4f { x = 0.5f, y = -0.5f, w = 0},
-                    Color = new Vec4f { z = 1.0f, w = 1.0f }
+                    Position = new Vec4f { x = 0.5f, y = -0.5f, w = 0}
+                    //,Color = new Vec4f { z = 1.0f, w = 1.0f }
                 }
             }, gl);
             using (buffer.Bind())
@@ -121,7 +121,7 @@ namespace WindowsTest
         public struct Vertex
         {
             public Vec4f Position;
-            public Vec4f Color;
+            //public Vec4f Color;
         }
 
         public void Render()

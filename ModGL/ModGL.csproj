@@ -48,7 +48,6 @@
     <Compile Include="IBindable.cs" />
     <Compile Include="IExtensionSupport.cs" />
     <Compile Include="IGLObject.cs" />
-    <Compile Include="NativeGL\Delegates.cs" />
     <Compile Include="NativeGL\GL.cs" />
     <Compile Include="NativeGL\GLVersionAttribute.cs" />
     <Compile Include="Binding\InterfaceBindingFactory.cs" />
