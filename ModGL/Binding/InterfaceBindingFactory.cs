@@ -40,10 +40,36 @@ namespace ModGL.Binding
 
             var parameters = method.GetParameters();
 
+            
+
             var invokeMethod = typeBuilder.DefineMethod(
-                "Invoke", MethodAttributes.HideBySig | MethodAttributes.Virtual | MethodAttributes.Public,
-                method.ReturnType, parameters.Select(p => p.ParameterType).ToArray());
+                "Invoke", 
+                MethodAttributes.HideBySig | MethodAttributes.Virtual | MethodAttributes.Public);
+
             invokeMethod.SetImplementationFlags(MethodImplAttributes.CodeTypeMask);
+            
+            invokeMethod.SetReturnType(method.ReturnType);
+                        
+            foreach (var p in parameters.Select((Param, Index) => new { Param, Index}))
+            {
+                var newParameter = invokeMethod.DefineParameter(p.Index, p.Param.Attributes, p.Param.Name);
+                // Copy custom attributes.
+                foreach (var attrib in p.Param.CustomAttributes)
+                {
+                    if(attrib.NamedArguments == null || attrib.NamedArguments.Count == 0)
+                        continue;
+                    newParameter.SetCustomAttribute(
+                        new CustomAttributeBuilder(
+                            attrib.Constructor, 
+                            attrib.ConstructorArguments.Select(a => a.Value).ToArray(), 
+                            attrib.NamedArguments.Where(a => !a.IsField).Select(s => s.MemberInfo).OfType<PropertyInfo>().ToArray(),
+                            attrib.NamedArguments.Where(a => !a.IsField).Select(s => s.TypedValue).Select(s => s.Value).ToArray(),
+                            attrib.NamedArguments.Where(a => a.IsField).Select(s => s.MemberInfo).OfType<FieldInfo>().ToArray(),
+                            attrib.NamedArguments.Where(a => a.IsField).Select(s => s.TypedValue).Select(s => s.Value).ToArray()));
+                }
+            }
+
+            
 
             for (int i = 0; i < parameters.Length; i++)
             {

@@ -18,6 +18,9 @@ using GLfloat = System.Single;
 using GLdouble = System.Double;
 using GLintptr = System.IntPtr;
 using GLsizeiptr = System.IntPtr;
+using GLsync = System.IntPtr;
+using GLuint64 = System.UInt64;
+using GLint64 = System.Int64;
 
 namespace ModGL.NativeGL
 {
@@ -48,9 +51,9 @@ namespace ModGL.NativeGL
         Unsigned_Short_4_4_4_4 = 0x8033,
         Unsigned_Short_4_4_4_4_REV = 0x8365,
         Unsigned_Short_5_5_5_1 = 0x8034,
-        Unsigned_Short_1_5_5_5_REV = 0x8366, 
+        Unsigned_Short_1_5_5_5_REV = 0x8366,
         Unsigned_Int_8_8_8_8 = 0x8035,
-        Unsigned_Int_8_8_8_8_REV = 0x8367, 
+        Unsigned_Int_8_8_8_8_REV = 0x8367,
         Unsigned_Int_10_10_10_2 = 0x8036,
         Unsigned_Int_2_10_10_10_REV = 0x8368
     }
@@ -395,20 +398,6 @@ namespace ModGL.NativeGL
     [GLVersion(3, 0)]
     public interface IOpenGL30 : IOpenGL
     {
-        // 3.1
-        void glDrawArraysInstanced(GLenum mode, GLint first, GLsizei count, GLsizei instancecount);
-        void glDrawElementsInstanced(GLenum mode, GLsizei count, GLenum type, IntPtr indices, GLsizei instancecount);
-        void glTexBuffer(GLenum target, GLenum internalformat, GLuint buffer);
-        void glPrimitiveRestartIndex(GLuint index);
-        void glCopyBufferSubData(GLenum readTarget, GLenum writeTarget, GLintptr readOffset, GLintptr writeOffset, GLsizeiptr size);
-        void glGetUniformIndices(GLuint program, GLsizei uniformCount, string[] uniformNames, GLuint[] uniformIndices);
-        void glGetActiveUniformsiv(GLuint program, GLsizei uniformCount, GLuint[] uniformIndices, GLenum pname, GLint[] @params);
-        void glGetActiveUniformName(GLuint program, GLuint uniformIndex, GLsizei bufSize, out GLsizei length, GLchar[] uniformName);
-        GLuint glGetUniformBlockIndex(GLuint program, GLchar[] uniformBlockName);
-        void glGetActiveUniformBlockiv(GLuint program, GLuint uniformBlockIndex, GLenum pname, GLint[] @params);
-        void glGetActiveUniformBlockName(GLuint program, GLuint uniformBlockIndex, GLsizei bufSize, GLsizei[] length, GLchar[] uniformBlockName);
-        void glUniformBlockBinding(GLuint program, GLuint uniformBlockIndex, GLuint uniformBlockBinding);
-
         // 3.0
         GLboolean glIsRenderbuffer(GLuint renderbuffer);
         void glBindRenderbuffer(GLenum target, GLuint renderbuffer);
@@ -644,25 +633,127 @@ namespace ModGL.NativeGL
     [GLVersion(3, 1)]
     public interface IOpenGL31 : IOpenGL30
     {
+        void glDrawArraysInstanced(GLenum mode, GLint first, GLsizei count, GLsizei instancecount);
+        void glDrawElementsInstanced(GLenum mode, GLsizei count, GLenum type, IntPtr indices, GLsizei instancecount);
+        void glTexBuffer(GLenum target, GLenum internalformat, GLuint buffer);
+        void glPrimitiveRestartIndex(GLuint index);
+        void glCopyBufferSubData(GLenum readTarget, GLenum writeTarget, GLintptr readOffset, GLintptr writeOffset, GLsizeiptr size);
+        void glGetUniformIndices(GLuint program, GLsizei uniformCount, string[] uniformNames, GLuint[] uniformIndices);
+        void glGetActiveUniformsiv(GLuint program, GLsizei uniformCount, GLuint[] uniformIndices, GLenum pname, GLint[] @params);
+        void glGetActiveUniformName(GLuint program, GLuint uniformIndex, GLsizei bufSize, out GLsizei length, string uniformName);
+        GLuint glGetUniformBlockIndex(GLuint program, string uniformBlockName);
+        void glGetActiveUniformBlockiv(GLuint program, GLuint uniformBlockIndex, GLenum pname, GLint[] @params);
+        void glGetActiveUniformBlockName(GLuint program, GLuint uniformBlockIndex, GLsizei bufSize, GLsizei[] length, string uniformBlockName);
+        void glUniformBlockBinding(GLuint program, GLuint uniformBlockIndex, GLuint uniformBlockBinding);
 
     }
 
     [GLVersion(3, 2)]
     public interface IOpenGL32 : IOpenGL31
     {
-
+        void glDrawElementsBaseVertex(GLenum mode, GLsizei count, GLenum type, IntPtr indices, GLint basevertex);
+        void glDrawRangeElementsBaseVertex(GLenum mode, GLuint start, GLuint end, GLsizei count, GLenum type, IntPtr indices, GLint basevertex);
+        void glDrawElementsInstancedBaseVertex(GLenum mode, GLsizei count, GLenum type, IntPtr indices, GLsizei instancecount, GLint basevertex);
+        void glMultiDrawElementsBaseVertex(GLenum mode, GLsizei[] count, GLenum type, IntPtr[] indices, GLsizei drawcount, GLint[] basevertex);
+        void glProvokingVertex(GLenum mode);
+        GLsync glFenceSync(GLenum condition, GLbitfield flags);
+        GLboolean glIsSync(GLsync sync);
+        void glDeleteSync(GLsync sync);
+        GLenum glClientWaitSync(GLsync sync, GLbitfield flags, GLuint64 timeout);
+        void glWaitSync(GLsync sync, GLbitfield flags, GLuint64 timeout);
+        void glGetInteger64v(GLenum pname, GLint64[] @params);
+        void glGetSynciv(GLsync sync, GLenum pname, GLsizei bufSize, GLsizei[] length, GLint[] values);
+        void glGetInteger64i_v(GLenum target, GLuint index, GLint64[] data);
+        void glGetBufferParameteri64v(GLenum target, GLenum pname, GLint64[] @params);
+        void glFramebufferTexture(GLenum target, GLenum attachment, GLuint texture, GLint level);
+        void glTexImage2DMultisample(GLenum target, GLsizei samples, GLint internalformat, GLsizei width, GLsizei height, GLboolean fixedsamplelocations);
+        void glTexImage3DMultisample(GLenum target, GLsizei samples, GLint internalformat, GLsizei width, GLsizei height, GLsizei depth, GLboolean fixedsamplelocations);
+        void glGetMultisamplefv(GLenum pname, GLuint index, GLfloat[] val);
+        void glSampleMaski(GLuint index, GLbitfield mask);
     }
 
     [GLVersion(3, 3)]
     public interface IOpenGL33 : IOpenGL32
     {
-
+        void glBindFragDataLocationIndexed(GLuint program, GLuint colorNumber, GLuint index, string name);
+        GLint glGetFragDataIndex(GLuint program, string name);
+        void glGenSamplers(GLsizei count, GLuint[] samplers);
+        void glDeleteSamplers(GLsizei count, GLuint[] samplers);
+        GLboolean glIsSampler(GLuint sampler);
+        void glBindSampler(GLuint unit, GLuint sampler);
+        void glSamplerParameteri(GLuint sampler, GLenum pname, [In]GLint param);
+        void glSamplerParameteriv(GLuint sampler, GLenum pname, [In]GLint[] param);
+        void glSamplerParameterf(GLuint sampler, GLenum pname, GLfloat param);
+        void glSamplerParameterfv(GLuint sampler, GLenum pname, [In]GLfloat[] param);
+        void glSamplerParameterIiv(GLuint sampler, GLenum pname, [In]GLint[] param);
+        void glSamplerParameterIuiv(GLuint sampler, GLenum pname, [In]GLuint[] param);
+        void glGetSamplerParameteriv(GLuint sampler, GLenum pname, [Out]GLint[] @params);
+        void glGetSamplerParameterIiv(GLuint sampler, GLenum pname, [Out]GLint[] @params);
+        void glGetSamplerParameterfv(GLuint sampler, GLenum pname, [Out]GLfloat[] @params);
+        void glGetSamplerParameterIuiv(GLuint sampler, GLenum pname, [Out]GLuint[] @params);
+        void glQueryCounter(GLuint id, GLenum target);
+        void glGetQueryObjecti64v(GLuint id, GLenum pname, GLint64[] @params);
+        void glGetQueryObjectui64v(GLuint id, GLenum pname, GLuint64[] @params);
+        void glVertexAttribDivisor(GLuint index, GLuint divisor);
+        void glVertexAttribP1ui(GLuint index, GLenum type, GLboolean normalized, GLuint value);
+        void glVertexAttribP1uiv(GLuint index, GLenum type, GLboolean normalized, [In]GLuint[] value);
+        void glVertexAttribP2ui(GLuint index, GLenum type, GLboolean normalized, GLuint value);
+        void glVertexAttribP2uiv(GLuint index, GLenum type, GLboolean normalized, [In]GLuint[] value);
+        void glVertexAttribP3ui(GLuint index, GLenum type, GLboolean normalized, GLuint value);
+        void glVertexAttribP3uiv(GLuint index, GLenum type, GLboolean normalized, [In]GLuint[] value);
+        void glVertexAttribP4ui(GLuint index, GLenum type, GLboolean normalized, GLuint value);
+        void glVertexAttribP4uiv(GLuint index, GLenum type, GLboolean normalized, [In]GLuint[] value);
     }
 
     [GLVersion(4, 0)]
     public interface IOpenGL40 : IOpenGL33
     {
-
+void glMinSampleShading (GLfloat value);
+void glBlendEquationi (GLuint buf, GLenum mode);
+void glBlendEquationSeparatei (GLuint buf, GLenum modeRGB, GLenum modeAlpha);
+void glBlendFunci (GLuint buf, GLenum src, GLenum dst);
+void glBlendFuncSeparatei (GLuint buf, GLenum srcRGB, GLenum dstRGB, GLenum srcAlpha, GLenum dstAlpha);
+void glDrawArraysIndirect (GLenum mode, IntPtr indirect);
+void glDrawElementsIndirect (GLenum mode, GLenum type, [In]IntPtr indirect);
+void glUniform1d (GLint location, GLdouble x);
+void glUniform2d (GLint location, GLdouble x, GLdouble y);
+void glUniform3d (GLint location, GLdouble x, GLdouble y, GLdouble z);
+void glUniform4d (GLint location, GLdouble x, GLdouble y, GLdouble z, GLdouble w);
+void glUniform1dv (GLint location, GLsizei count, [In] GLdouble[] value);
+void glUniform2dv (GLint location, GLsizei count, [In] GLdouble[] value);
+void glUniform3dv (GLint location, GLsizei count, [In] GLdouble[] value);
+void glUniform4dv (GLint location, GLsizei count, [In] GLdouble[] value);
+void glUniformMatrix2dv (GLint location, GLsizei count, GLboolean transpose, [In] GLdouble[] value);
+void glUniformMatrix3dv (GLint location, GLsizei count, GLboolean transpose, [In]GLdouble[] value);
+void glUniformMatrix4dv (GLint location, GLsizei count, GLboolean transpose, [In]GLdouble[] value);
+void glUniformMatrix2x3dv (GLint location, GLsizei count, GLboolean transpose, [In]GLdouble[] value);
+void glUniformMatrix2x4dv (GLint location, GLsizei count, GLboolean transpose, [In]GLdouble[] value);
+void glUniformMatrix3x2dv (GLint location, GLsizei count, GLboolean transpose, [In]GLdouble[] value);
+void glUniformMatrix3x4dv (GLint location, GLsizei count, GLboolean transpose, [In]GLdouble[] value);
+void glUniformMatrix4x2dv (GLint location, GLsizei count, GLboolean transpose, [In]GLdouble[] value);
+void glUniformMatrix4x3dv (GLint location, GLsizei count, GLboolean transpose, [In]GLdouble[] value);
+void glGetUniformdv (GLuint program, GLint location, [Out]GLdouble @params);
+GLint glGetSubroutineUniformLocation (GLuint program, GLenum shadertype, [In] string name);
+GLuint glGetSubroutineIndex (GLuint program, GLenum shadertype, [In] string name);
+void glGetActiveSubroutineUniformiv (GLuint program, GLenum shadertype, GLuint index, GLenum pname, [Out]GLint[] values);
+void glGetActiveSubroutineUniformName (GLuint program, GLenum shadertype, GLuint index, GLsizei bufsize, [Out]GLsizei[] length, [Out]GLchar[] name);
+void glGetActiveSubroutineName (GLuint program, GLenum shadertype, GLuint index, GLsizei bufsize, [Out] out GLsizei length, [Out] string name);
+void glUniformSubroutinesuiv (GLenum shadertype, GLsizei count, [In]GLuint[] indices);
+void glGetUniformSubroutineuiv (GLenum shadertype, GLint location, [Out]GLuint[] @params);
+void glGetProgramStageiv (GLuint program, GLenum shadertype, GLenum pname, [Out]GLint[] values);
+void glPatchParameteri (GLenum pname, GLint value);
+void glPatchParameterfv (GLenum pname, [In]GLfloat[] values);
+void glBindTransformFeedback (GLenum target, GLuint id);
+void glDeleteTransformFeedbacks (GLsizei n, [In] GLuint[] ids);
+void glGenTransformFeedbacks (GLsizei n, [Out]GLuint[] ids);
+GLboolean glIsTransformFeedback (GLuint id);
+void glPauseTransformFeedback ();
+void glResumeTransformFeedback ();
+void glDrawTransformFeedback (GLenum mode, GLuint id);
+void glDrawTransformFeedbackStream (GLenum mode, GLuint id, GLuint stream);
+void glBeginQueryIndexed (GLenum target, GLuint index, GLuint id);
+void glEndQueryIndexed (GLenum target, GLuint index);
+void glGetQueryIndexediv (GLenum target, GLuint index, GLenum pname, [Out]GLint[] @params);
     }
 
     [GLVersion(4, 1)]
