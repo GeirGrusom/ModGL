@@ -250,8 +250,6 @@ namespace ModGL.UnitTests
             }
         }
 
-        
-
         [Test]
         public void FunctionWithArray_Ok()
         {
