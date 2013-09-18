@@ -250,10 +250,30 @@ namespace ModGL.UnitTests
             }
         }
 
-        [Test]
-        public void FunctionWithArray_Ok()
+        public interface IPrefixType
+        {
+            void Foo();
+        }
+
+        public static void DoNothing()
         {
             
+        }
+
+        [Test]
+        public void Function_WithPrefixOverride_Ok()
+        {
+            var ext = Substitute.For<IExtensionSupport>();
+            ext.GetProcedure(Arg.Any<string>(), Arg.Any<Type>()).Returns(x => Delegate.CreateDelegate
+                        (
+                            (Type)x.Args()[1],
+                            GetType().GetMethod("DoNothing", new Type[0])
+                        )
+                    );
+
+            var factory = new InterfaceBindingFactory().CreateBinding<IPrefixType>(ext, extensionMethodPrefix: "ext");
+
+            ext.Received().GetProcedure("extFoo", Arg.Any<Type>());
         }
 
         [Test]

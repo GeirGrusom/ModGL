@@ -118,7 +118,6 @@ namespace ModGL.Windows
 
             if (ptr == IntPtr.Zero)
             {
-                var error = GL.glGetError();
                 return null;
             }
             return Marshal.GetDelegateForFunctionPointer(ptr, delegateType);

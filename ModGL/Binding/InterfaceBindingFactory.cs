@@ -160,10 +160,11 @@ namespace ModGL.Binding
 
             var interfaces = type.GetInterfaces().Concat(new[] { type }).Except(interfaceMap.Keys).ToArray();
 
+            DefineStaticMethods(interfaceMap, errorHandling, definedType, extensionMethodPrefix);
+
             foreach(var @interface in interfaces)
                 DefineProcMethods(errorHandling, @interface, remapMethods, definedType, fields);
 
-            DefineStaticMethods(interfaceMap, errorHandling, definedType, extensionMethodPrefix);
 
             var resultType = definedType.CreateType();
 
@@ -324,7 +325,7 @@ namespace ModGL.Binding
         private void GenerateStaticInvocation(ILGenerator generator, MethodInfo method, Type staticMapping, bool emitReturn = true, string extensionMethodPrefix = null)
         {
             var invokeMethod = staticMapping.GetMethod(
-                (extensionMethodPrefix ?? "") + method.Name,
+                method.Name,
                 BindingFlags.Public | BindingFlags.Static,
                 null,
                 method.GetParameters().Select(p => p.ParameterType).ToArray(),

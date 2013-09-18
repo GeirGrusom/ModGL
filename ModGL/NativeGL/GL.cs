@@ -1207,508 +1207,198 @@ namespace ModGL.NativeGL
 
     public static class GL
     {
-        [DllImport(GLLibraryName)]
-        public static extern void glCullFace(Face mode);
-        [DllImport(GLLibraryName)]
-        public static extern void glFrontFace(FronFaceDirection mode);
-        [DllImport(GLLibraryName)]
-        public static extern void glHint(Hint target, HintValue mode);
-        [DllImport(GLLibraryName)]
-        public static extern void glLineWidth(GLfloat width);
-        [DllImport(GLLibraryName)]
-        public static extern void glPointSize(GLfloat size);
-        [DllImport(GLLibraryName)]
-        public static extern void glPolygonMode(Face face, PolygonMode mode);
-        [DllImport(GLLibraryName)]
-        public static extern void glScissor(GLint x, GLint y, GLsizei width, GLsizei height);
-        [DllImport(GLLibraryName)]
-        public static extern void glTexParameterf(TextureTarget target, TexParameterName pname, GLfloat param);
-        [DllImport(GLLibraryName)]
-        public static extern void glTexParameterfv(TextureTarget target, TexParameterName pname, [In]GLfloat[] @params);
-        [DllImport(GLLibraryName)]
-        public static extern void glTexParameteri(TextureTarget target, TexParameterName pname, GLint param);
-        [DllImport(GLLibraryName)]
-        public static extern void glTexParameteriv(TextureTarget target, TexParameterName pname, [In]GLint[] @params);
-        [DllImport(GLLibraryName)]
-        public static extern void glTexImage1D(TextureTarget target, GLint level, TextureInternalFormat internalformat, GLsizei width, GLint border, TextureFormat format, TexturePixelType type, IntPtr pixels);
-        [DllImport(GLLibraryName)]
-        public static extern void glTexImage2D(TextureTarget target, GLint level, TextureInternalFormat internalformat, GLsizei width, GLsizei height, GLint border, TextureFormat format, TexturePixelType type, IntPtr pixels);
-        [DllImport(GLLibraryName)]
-        public static extern void glDrawBuffer(GLenum mode);
-        [DllImport(GLLibraryName)]
-        public static extern void glClear(ClearTarget mask);
-        [DllImport(GLLibraryName)]
-        public static extern void glClearColor(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha);
-        [DllImport(GLLibraryName)]
-        public static extern void glClearStencil(GLint s);
-        [DllImport(GLLibraryName)]
-        public static extern void glClearDepth(GLdouble depth);
-        [DllImport(GLLibraryName)]
-        public static extern void glStencilMask(GLuint mask);
-        [DllImport(GLLibraryName)]
-        public static extern void glColorMask(GLboolean red, GLboolean green, GLboolean blue, GLboolean alpha);
-        [DllImport(GLLibraryName)]
-        public static extern void glDepthMask(GLboolean flag);
-        [DllImport(GLLibraryName)]
-        public static extern void glDisable(StateCaps cap);
-        [DllImport(GLLibraryName)]
-        public static extern void glEnable(StateCaps cap);
-        [DllImport(GLLibraryName)]
-        public static extern void glFinish();
-        [DllImport(GLLibraryName)]
-        public static extern void glFlush();
-        [DllImport(GLLibraryName)]
-        public static extern void glBlendFunc(GLenum sfactor, GLenum dfactor);
-        [DllImport(GLLibraryName)]
-        public static extern void glLogicOp(GLenum opcode);
-        [DllImport(GLLibraryName)]
-        public static extern void glStencilFunc(GLenum func, GLint @ref, GLuint mask);
-        [DllImport(GLLibraryName)]
-        public static extern void glStencilOp(GLenum fail, GLenum zfail, GLenum zpass);
-        [DllImport(GLLibraryName)]
-        public static extern void glDepthFunc(GLenum func);
-        [DllImport(GLLibraryName)]
-        public static extern void glPixelStoref(GLenum pname, GLfloat param);
-        [DllImport(GLLibraryName)]
-        public static extern void glPixelStorei(GLenum pname, GLint param);
-        [DllImport(GLLibraryName)]
-        public static extern void glReadBuffer(GLenum mode);
-        [DllImport(GLLibraryName)]
-        public static extern void glReadPixels(GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, IntPtr pixels);
-        [DllImport(GLLibraryName)]
-        public static extern void glGetBooleanv(GLenum pname, [Out]GLboolean[] @params);
-        [DllImport(GLLibraryName)]
-        public static extern void glGetDoublev(GLenum pname, [Out]GLdouble[] @params);
-        [DllImport(GLLibraryName)]
-        public static extern GLenum glGetError();
-        [DllImport(GLLibraryName)]
-        public static extern void glGetFloatv(GLenum pname, [Out]GLfloat[] @params);
-        [DllImport(GLLibraryName)]
-        public static extern void glGetIntegerv(GLenum pname, [Out]GLint[] @params);
-        [DllImport(GLLibraryName)]
-        public static extern string glGetString(GLenum name);
-        [DllImport(GLLibraryName)]
-        public static extern void glGetTexImage(GLenum target, GLint level, GLenum format, GLenum type, IntPtr pixels);
-        [DllImport(GLLibraryName)]
-        public static extern void glGetTexParameterfv(GLenum target, GLenum pname, [Out]GLfloat[] @params);
-        [DllImport(GLLibraryName)]
-        public static extern void glGetTexParameteriv(GLenum target, GLenum pname, [Out]GLint[] @params);
-        [DllImport(GLLibraryName)]
-        public static extern void glGetTexLevelParameterfv(GLenum target, GLint level, GLenum pname, [Out]GLfloat[] @params);
-        [DllImport(GLLibraryName)]
-        public static extern void glGetTexLevelParameteriv(GLenum target, GLint level, GLenum pname, [Out]GLint[] @params);
-        [DllImport(GLLibraryName)]
-        public static extern GLboolean glIsEnabled(StateCaps cap);
-        [DllImport(GLLibraryName)]
-        public static extern void glDepthRange(GLdouble near, GLdouble far);
-        [DllImport(GLLibraryName)]
-        public static extern void glViewport(GLint x, GLint y, GLsizei width, GLsizei height);
+        [DllImport(GLLibraryName, EntryPoint = "glCullFace")]
+        public static extern void CullFace(Face mode);
 
-        /*
-        [DllImport(GLLibraryName)]
-        public static extern void glColorMaski(GLuint index, GLboolean r, GLboolean g, GLboolean b, GLboolean a);
-        [DllImport(GLLibraryName)]
-        public static extern void glGetBooleani_v(GLenum target, GLuint index, GLboolean[] data);
-        [DllImport(GLLibraryName)]
-        public static extern void glGetIntegeri_v(GLenum target, GLuint index, GLint[] data);
-        [DllImport(GLLibraryName)]
-        public static extern void glEnablei(GLenum target, GLuint index);
-        [DllImport(GLLibraryName)]
-        public static extern void glDisablei(GLenum target, GLuint index);
-        [DllImport(GLLibraryName)]
-        public static extern GLboolean glIsEnabledi(GLenum target, GLuint index);
-        [DllImport(GLLibraryName)]
-        public static extern void glBeginTransformFeedback(GLenum primitiveMode);
-        [DllImport(GLLibraryName)]
-        public static extern void glEndTransformFeedback();
-        [DllImport(GLLibraryName)]
-        public static extern void glBindBufferRange(GLenum target, GLuint index, GLuint buffer, GLintptr offset, GLsizeiptr size);
-        [DllImport(GLLibraryName)]
-        public static extern void glBindBufferBase(GLenum target, GLuint index, GLuint buffer);
-        [DllImport(GLLibraryName)]
-        public static extern void glTransformFeedbackVaryings(GLuint program, GLsizei count, string[] varyings, GLenum bufferMode);
-        [DllImport(GLLibraryName)]
-        public static extern void glGetTransformFeedbackVarying(GLuint program, GLuint index, GLsizei bufSize, GLsizei[] length, GLsizei[] size, GLenum[] type, GLchar[] name);
-        [DllImport(GLLibraryName)]
-        public static extern void glClampColor(GLenum target, GLenum clamp);
-        [DllImport(GLLibraryName)]
-        public static extern void glBeginConditionalRender(GLuint id, GLenum mode);
-        [DllImport(GLLibraryName)]
-        public static extern void glEndConditionalRender();
-        [DllImport(GLLibraryName)]
-        public static extern void glVertexAttribIPointer(GLuint index, GLint size, GLenum type, GLsizei stride, IntPtr pointer);
-        [DllImport(GLLibraryName)]
-        public static extern void glGetVertexAttribIiv(GLuint index, GLenum pname, GLint[] @params);
-        [DllImport(GLLibraryName)]
-        public static extern void glGetVertexAttribIuiv(GLuint index, GLenum pname, GLuint[] @params);
-        [DllImport(GLLibraryName)]
-        public static extern void glVertexAttribI1i(GLuint index, GLint x);
-        [DllImport(GLLibraryName)]
-        public static extern void glVertexAttribI2i(GLuint index, GLint x, GLint y);
-        [DllImport(GLLibraryName)]
-        public static extern void glVertexAttribI3i(GLuint index, GLint x, GLint y, GLint z);
-        [DllImport(GLLibraryName)]
-        public static extern void glVertexAttribI4i(GLuint index, GLint x, GLint y, GLint z, GLint w);
-        [DllImport(GLLibraryName)]
-        public static extern void glVertexAttribI1ui(GLuint index, GLuint x);
-        [DllImport(GLLibraryName)]
-        public static extern void glVertexAttribI2ui(GLuint index, GLuint x, GLuint y);
-        [DllImport(GLLibraryName)]
-        public static extern void glVertexAttribI3ui(GLuint index, GLuint x, GLuint y, GLuint z);
-        [DllImport(GLLibraryName)]
-        public static extern void glVertexAttribI4ui(GLuint index, GLuint x, GLuint y, GLuint z, GLuint w);
-        [DllImport(GLLibraryName)]
-        public static extern void glVertexAttribI1iv(GLuint index, GLint[] v);
-        [DllImport(GLLibraryName)]
-        public static extern void glVertexAttribI2iv(GLuint index, GLint[] v);
-        [DllImport(GLLibraryName)]
-        public static extern void glVertexAttribI3iv(GLuint index, GLint[] v);
-        [DllImport(GLLibraryName)]
-        public static extern void glVertexAttribI4iv(GLuint index, GLint[] v);
-        [DllImport(GLLibraryName)]
-        public static extern void glVertexAttribI1uiv(GLuint index, GLuint[] v);
-        [DllImport(GLLibraryName)]
-        public static extern void glVertexAttribI2uiv(GLuint index, GLuint[] v);
-        [DllImport(GLLibraryName)]
-        public static extern void glVertexAttribI3uiv(GLuint index, GLuint[] v);
-        [DllImport(GLLibraryName)]
-        public static extern void glVertexAttribI4uiv(GLuint index, GLuint[] v);
-        [DllImport(GLLibraryName)]
-        public static extern void glVertexAttribI4bv(GLuint index, GLbyte[] v);
-        [DllImport(GLLibraryName)]
-        public static extern void glVertexAttribI4sv(GLuint index, GLshort[] v);
-        [DllImport(GLLibraryName)]
-        public static extern void glVertexAttribI4ubv(GLuint index, GLubyte[] v);
-        [DllImport(GLLibraryName)]
-        public static extern void glVertexAttribI4usv(GLuint index, GLushort[] v);
-        [DllImport(GLLibraryName)]
-        public static extern void glGetUniformuiv(GLuint program, GLint location, GLuint[] @params);
-        [DllImport(GLLibraryName)]
-        public static extern void glBindFragDataLocation(GLuint program, GLuint color, string name);
-        [DllImport(GLLibraryName)]
-        public static extern GLint glGetFragDataLocation(GLuint program, string name);
-        [DllImport(GLLibraryName)]
-        public static extern void glUniform1ui(GLint location, GLuint v0);
-        [DllImport(GLLibraryName)]
-        public static extern void glUniform2ui(GLint location, GLuint v0, GLuint v1);
-        [DllImport(GLLibraryName)]
-        public static extern void glUniform3ui(GLint location, GLuint v0, GLuint v1, GLuint v2);
-        [DllImport(GLLibraryName)]
-        public static extern void glUniform4ui(GLint location, GLuint v0, GLuint v1, GLuint v2, GLuint v3);
-        [DllImport(GLLibraryName)]
-        public static extern void glUniform1uiv(GLint location, GLsizei count, GLuint[] value);
-        [DllImport(GLLibraryName)]
-        public static extern void glUniform2uiv(GLint location, GLsizei count, GLuint[] value);
-        [DllImport(GLLibraryName)]
-        public static extern void glUniform3uiv(GLint location, GLsizei count, GLuint[] value);
-        [DllImport(GLLibraryName)]
-        public static extern void glUniform4uiv(GLint location, GLsizei count, GLuint[] value);
-        [DllImport(GLLibraryName)]
-        public static extern void glTexParameterIiv(GLenum target, GLenum pname, GLint[] @params);
-        [DllImport(GLLibraryName)]
-        public static extern void glTexParameterIuiv(GLenum target, GLenum pname, GLuint[] @params);
-        [DllImport(GLLibraryName)]
-        public static extern void glGetTexParameterIiv(GLenum target, GLenum pname, GLint[] @params);
-        [DllImport(GLLibraryName)]
-        public static extern void glGetTexParameterIuiv(GLenum target, GLenum pname, GLuint[] @params);
-        [DllImport(GLLibraryName)]
-        public static extern void glClearBufferiv(GLenum buffer, GLint drawbuffer, GLint[] value);
-        [DllImport(GLLibraryName)]
-        public static extern void glClearBufferuiv(GLenum buffer, GLint drawbuffer, GLuint[] value);
-        [DllImport(GLLibraryName)]
-        public static extern void glClearBufferfv(GLenum buffer, GLint drawbuffer, GLfloat[] value);
-        [DllImport(GLLibraryName)]
-        public static extern void glClearBufferfi(GLenum buffer, GLint drawbuffer, GLfloat depth, GLint stencil);
-        [DllImport(GLLibraryName)]
-        public static extern string glGetStringi(GLenum name, GLuint index);
-        [DllImport(GLLibraryName)]
-        public static extern void glUniformMatrix2x3fv(GLint location, GLsizei count, GLboolean transpose, GLfloat[] value);
-        [DllImport(GLLibraryName)]
-        public static extern void glUniformMatrix3x2fv(GLint location, GLsizei count, GLboolean transpose, GLfloat[] value);
-        [DllImport(GLLibraryName)]
-        public static extern void glUniformMatrix2x4fv(GLint location, GLsizei count, GLboolean transpose, GLfloat[] value);
-        [DllImport(GLLibraryName)]
-        public static extern void glUniformMatrix4x2fv(GLint location, GLsizei count, GLboolean transpose, GLfloat[] value);
-        [DllImport(GLLibraryName)]
-        public static extern void glUniformMatrix3x4fv(GLint location, GLsizei count, GLboolean transpose, GLfloat[] value);
-        [DllImport(GLLibraryName)]
-        public static extern void glUniformMatrix4x3fv(GLint location, GLsizei count, GLboolean transpose, GLfloat[] value);
-        [DllImport(GLLibraryName)]
-        public static extern void glBlendEquationSeparate(GLenum modeRGB, GLenum modeAlpha);
-        [DllImport(GLLibraryName)]
-        public static extern void glDrawBuffers(GLsizei n, GLenum[] bufs);
-        [DllImport(GLLibraryName)]
-        public static extern void glStencilOpSeparate(GLenum face, GLenum sfail, GLenum dpfail, GLenum dppass);
-        [DllImport(GLLibraryName)]
-        public static extern void glStencilFuncSeparate(GLenum face, GLenum func, GLint @ref, GLuint mask);
-        [DllImport(GLLibraryName)]
-        public static extern void glStencilMaskSeparate(GLenum face, GLuint mask);
-        [DllImport(GLLibraryName)]
-        public static extern void glAttachShader(GLuint program, GLuint shader);
-        [DllImport(GLLibraryName)]
-        public static extern void glBindAttribLocation(GLuint program, GLuint index, string name);
-        [DllImport(GLLibraryName)]
-        public static extern void glCompileShader(GLuint shader);
-        [DllImport(GLLibraryName)]
-        public static extern GLuint glCreateProgram();
-        [DllImport(GLLibraryName)]
-        public static extern GLuint glCreateShader(GLenum type);
-        [DllImport(GLLibraryName)]
-        public static extern void glDeleteProgram(GLuint program);
-        [DllImport(GLLibraryName)]
-        public static extern void glDeleteShader(GLuint shader);
-        [DllImport(GLLibraryName)]
-        public static extern void glDetachShader(GLuint program, GLuint shader);
-        [DllImport(GLLibraryName)]
-        public static extern void glDisableVertexAttribArray(GLuint index);
-        [DllImport(GLLibraryName)]
-        public static extern void glEnableVertexAttribArray(GLuint index);
-        [DllImport(GLLibraryName)]
-        public static extern void glGetActiveAttrib(GLuint program, GLuint index, GLsizei bufSize, GLsizei[] length, GLint[] size, GLenum[] type, GLchar[] name);
-        [DllImport(GLLibraryName)]
-        public static extern void glGetActiveUniform(GLuint program, GLuint index, GLsizei bufSize, GLsizei[] length, GLint[] size, GLenum[] type, GLchar[] name);
-        [DllImport(GLLibraryName)]
-        public static extern void glGetAttachedShaders(GLuint program, GLsizei maxCount, GLsizei[] count, GLuint[] obj);
-        [DllImport(GLLibraryName)]
-        public static extern GLint glGetAttribLocation(GLuint program, string name);
-        [DllImport(GLLibraryName)]
-        public static extern void glGetProgramiv(GLuint program, GLenum pname, GLint[] @params);
-        [DllImport(GLLibraryName)]
-        public static extern void glGetProgramInfoLog(GLuint program, GLsizei bufSize, GLsizei[] length, GLchar[] infoLog);
-        [DllImport(GLLibraryName)]
-        public static extern void glGetShaderiv(GLuint shader, GLenum pname, GLint[] @params);
-        [DllImport(GLLibraryName)]
-        public static extern void glGetShaderInfoLog(GLuint shader, GLsizei bufSize, GLsizei[] length, string infoLog);
-        [DllImport(GLLibraryName)]
-        public static extern void glGetShaderSource(GLuint shader, GLsizei bufSize, GLsizei[] length, string source);
-        [DllImport(GLLibraryName)]
-        public static extern GLint glGetUniformLocation(GLuint program, string name);
-        [DllImport(GLLibraryName)]
-        public static extern void glGetUniformfv(GLuint program, GLint location, GLfloat[] @params);
-        [DllImport(GLLibraryName)]
-        public static extern void glGetUniformiv(GLuint program, GLint location, GLint[] @params);
-        [DllImport(GLLibraryName)]
-        public static extern void glGetVertexAttribdv(GLuint index, GLenum pname, GLdouble[] @params);
-        [DllImport(GLLibraryName)]
-        public static extern void glGetVertexAttribfv(GLuint index, GLenum pname, GLfloat[] @params);
-        [DllImport(GLLibraryName)]
-        public static extern void glGetVertexAttribiv(GLuint index, GLenum pname, GLint[] @params);
-        [DllImport(GLLibraryName)]
-        public static extern void glGetVertexAttribPointerv(GLuint index, GLenum pname, IntPtr[] pointer);
-        [DllImport(GLLibraryName)]
-        public static extern GLboolean glIsProgram(GLuint program);
-        [DllImport(GLLibraryName)]
-        public static extern GLboolean glIsShader(GLuint shader);
-        [DllImport(GLLibraryName)]
-        public static extern void glLinkProgram(GLuint program);
-        [DllImport(GLLibraryName)]
-        public static extern void glShaderSource(GLuint shader, GLsizei count, string[] @string, GLint[] length);
-        [DllImport(GLLibraryName)]
-        public static extern void glUseProgram(GLuint program);
-        [DllImport(GLLibraryName)]
-        public static extern void glUniform1f(GLint location, GLfloat v0);
-        [DllImport(GLLibraryName)]
-        public static extern void glUniform2f(GLint location, GLfloat v0, GLfloat v1);
-        [DllImport(GLLibraryName)]
-        public static extern void glUniform3f(GLint location, GLfloat v0, GLfloat v1, GLfloat v2);
-        [DllImport(GLLibraryName)]
-        public static extern void glUniform4f(GLint location, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3);
-        [DllImport(GLLibraryName)]
-        public static extern void glUniform1i(GLint location, GLint v0);
-        [DllImport(GLLibraryName)]
-        public static extern void glUniform2i(GLint location, GLint v0, GLint v1);
-        [DllImport(GLLibraryName)]
-        public static extern void glUniform3i(GLint location, GLint v0, GLint v1, GLint v2);
-        [DllImport(GLLibraryName)]
-        public static extern void glUniform4i(GLint location, GLint v0, GLint v1, GLint v2, GLint v3);
-        [DllImport(GLLibraryName)]
-        public static extern void glUniform1fv(GLint location, GLsizei count, GLfloat[] value);
-        [DllImport(GLLibraryName)]
-        public static extern void glUniform2fv(GLint location, GLsizei count, GLfloat[] value);
-        [DllImport(GLLibraryName)]
-        public static extern void glUniform3fv(GLint location, GLsizei count, GLfloat[] value);
-        [DllImport(GLLibraryName)]
-        public static extern void glUniform4fv(GLint location, GLsizei count, GLfloat[] value);
-        [DllImport(GLLibraryName)]
-        public static extern void glUniform1iv(GLint location, GLsizei count, GLint[] value);
-        [DllImport(GLLibraryName)]
-        public static extern void glUniform2iv(GLint location, GLsizei count, GLint[] value);
-        [DllImport(GLLibraryName)]
-        public static extern void glUniform3iv(GLint location, GLsizei count, GLint[] value);
-        [DllImport(GLLibraryName)]
-        public static extern void glUniform4iv(GLint location, GLsizei count, GLint[] value);
-        [DllImport(GLLibraryName)]
-        public static extern void glUniformMatrix2fv(GLint location, GLsizei count, GLboolean transpose, GLfloat[] value);
-        [DllImport(GLLibraryName)]
-        public static extern void glUniformMatrix3fv(GLint location, GLsizei count, GLboolean transpose, GLfloat[] value);
-        [DllImport(GLLibraryName)]
-        public static extern void glUniformMatrix4fv(GLint location, GLsizei count, GLboolean transpose, GLfloat[] value);
-        [DllImport(GLLibraryName)]
-        public static extern void glValidateProgram(GLuint program);
-        [DllImport(GLLibraryName)]
-        public static extern void glVertexAttrib1d(GLuint index, GLdouble x);
-        [DllImport(GLLibraryName)]
-        public static extern void glVertexAttrib1dv(GLuint index, GLdouble[] v);
-        [DllImport(GLLibraryName)]
-        public static extern void glVertexAttrib1f(GLuint index, GLfloat x);
-        [DllImport(GLLibraryName)]
-        public static extern void glVertexAttrib1fv(GLuint index, GLfloat[] v);
-        [DllImport(GLLibraryName)]
-        public static extern void glVertexAttrib1s(GLuint index, GLshort x);
-        [DllImport(GLLibraryName)]
-        public static extern void glVertexAttrib1sv(GLuint index, GLshort[] v);
-        [DllImport(GLLibraryName)]
-        public static extern void glVertexAttrib2d(GLuint index, GLdouble x, GLdouble y);
-        [DllImport(GLLibraryName)]
-        public static extern void glVertexAttrib2dv(GLuint index, GLdouble[] v);
-        [DllImport(GLLibraryName)]
-        public static extern void glVertexAttrib2f(GLuint index, GLfloat x, GLfloat y);
-        [DllImport(GLLibraryName)]
-        public static extern void glVertexAttrib2fv(GLuint index, GLfloat[] v);
-        [DllImport(GLLibraryName)]
-        public static extern void glVertexAttrib2s(GLuint index, GLshort x, GLshort y);
-        [DllImport(GLLibraryName)]
-        public static extern void glVertexAttrib2sv(GLuint index, GLshort[] v);
-        [DllImport(GLLibraryName)]
-        public static extern void glVertexAttrib3d(GLuint index, GLdouble x, GLdouble y, GLdouble z);
-        [DllImport(GLLibraryName)]
-        public static extern void glVertexAttrib3dv(GLuint index, GLdouble[] v);
-        [DllImport(GLLibraryName)]
-        public static extern void glVertexAttrib3f(GLuint index, GLfloat x, GLfloat y, GLfloat z);
-        [DllImport(GLLibraryName)]
-        public static extern void glVertexAttrib3fv(GLuint index, GLfloat[] v);
-        [DllImport(GLLibraryName)]
-        public static extern void glVertexAttrib3s(GLuint index, GLshort x, GLshort y, GLshort z);
-        [DllImport(GLLibraryName)]
-        public static extern void glVertexAttrib3sv(GLuint index, GLshort[] v);
-        [DllImport(GLLibraryName)]
-        public static extern void glVertexAttrib4Nbv(GLuint index, GLbyte[] v);
-        [DllImport(GLLibraryName)]
-        public static extern void glVertexAttrib4Niv(GLuint index, GLint[] v);
-        [DllImport(GLLibraryName)]
-        public static extern void glVertexAttrib4Nsv(GLuint index, GLshort[] v);
-        [DllImport(GLLibraryName)]
-        public static extern void glVertexAttrib4Nub(GLuint index, GLubyte x, GLubyte y, GLubyte z, GLubyte w);
-        [DllImport(GLLibraryName)]
-        public static extern void glVertexAttrib4Nubv(GLuint index, GLubyte[] v);
-        [DllImport(GLLibraryName)]
-        public static extern void glVertexAttrib4Nuiv(GLuint index, GLuint[] v);
-        [DllImport(GLLibraryName)]
-        public static extern void glVertexAttrib4Nusv(GLuint index, GLushort[] v);
-        [DllImport(GLLibraryName)]
-        public static extern void glVertexAttrib4bv(GLuint index, GLbyte[] v);
-        [DllImport(GLLibraryName)]
-        public static extern void glVertexAttrib4d(GLuint index, GLdouble x, GLdouble y, GLdouble z, GLdouble w);
-        [DllImport(GLLibraryName)]
-        public static extern void glVertexAttrib4dv(GLuint index, GLdouble[] v);
-        [DllImport(GLLibraryName)]
-        public static extern void glVertexAttrib4f(GLuint index, GLfloat x, GLfloat y, GLfloat z, GLfloat w);
-        [DllImport(GLLibraryName)]
-        public static extern void glVertexAttrib4fv(GLuint index, GLfloat[] v);
-        [DllImport(GLLibraryName)]
-        public static extern void glVertexAttrib4iv(GLuint index, GLint[] v);
-        [DllImport(GLLibraryName)]
-        public static extern void glVertexAttrib4s(GLuint index, GLshort x, GLshort y, GLshort z, GLshort w);
-        [DllImport(GLLibraryName)]
-        public static extern void glVertexAttrib4sv(GLuint index, GLshort[] v);
-        [DllImport(GLLibraryName)]
-        public static extern void glVertexAttrib4ubv(GLuint index, GLubyte[] v);
-        [DllImport(GLLibraryName)]
-        public static extern void glVertexAttrib4uiv(GLuint index, GLuint[] v);
-        [DllImport(GLLibraryName)]
-        public static extern void glVertexAttrib4usv(GLuint index, GLushort[] v);
-        [DllImport(GLLibraryName)]
-        public static extern void glVertexAttribPointer(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, IntPtr pointer);
+        [DllImport(GLLibraryName, EntryPoint = "glFrontFace")]
+        public static extern void FrontFace(FronFaceDirection mode);
 
-        [DllImport(GLLibraryName)]
-        public static extern void glGenQueries(GLsizei n, GLuint[] ids);
-        [DllImport(GLLibraryName)]
-        public static extern void glDeleteQueries(GLsizei n, GLuint[] ids);
-        [DllImport(GLLibraryName)]
-        public static extern GLboolean glIsQuery(GLuint id);
-        [DllImport(GLLibraryName)]
-        public static extern void glBeginQuery(GLenum target, GLuint id);
-        [DllImport(GLLibraryName)]
-        public static extern void glEndQuery(GLenum target);
-        [DllImport(GLLibraryName)]
-        public static extern void glGetQueryiv(GLenum target, GLenum pname, GLint[] @params);
-        [DllImport(GLLibraryName)]
-        public static extern void glGetQueryObjectiv(GLuint id, GLenum pname, GLint[] @params);
-        [DllImport(GLLibraryName)]
-        public static extern void glGetQueryObjectuiv(GLuint id, GLenum pname, GLuint[] @params);
-        [DllImport(GLLibraryName)]
-        public static extern void glBindBuffer(GLenum target, GLuint buffer);
-        [DllImport(GLLibraryName)]
-        public static extern void glDeleteBuffers(GLsizei n, GLuint[] buffers);
-        [DllImport(GLLibraryName)]
-        public static extern void glGenBuffers(GLsizei n, GLuint[] buffers);
-        [DllImport(GLLibraryName)]
-        public static extern GLboolean glIsBuffer(GLuint buffer);
-        [DllImport(GLLibraryName)]
-        public static extern void glBufferData(GLenum target, GLsizeiptr size, IntPtr data, GLenum usage);
-        [DllImport(GLLibraryName)]
-        public static extern void glBufferSubData(GLenum target, GLintptr offset, GLsizeiptr size, IntPtr data);
-        [DllImport(GLLibraryName)]
-        public static extern void glGetBufferSubData(GLenum target, GLintptr offset, GLsizeiptr size, IntPtr data);
-        [DllImport(GLLibraryName)]
-        public static extern IntPtr glMapBuffer(GLenum target, GLenum access);
-        [DllImport(GLLibraryName)]
-        public static extern GLboolean glUnmapBuffer(GLenum target);
-        [DllImport(GLLibraryName)]
-        public static extern void glGetBufferParameteriv(GLenum target, GLenum pname, GLint[] @params);
-        [DllImport(GLLibraryName)]
-        public static extern void glGetBufferPointerv(GLenum target, GLenum pname, IntPtr[] @params);
-        [DllImport(GLLibraryName)]
-        public static extern void glBlendFuncSeparate(GLenum sfactorRGB, GLenum dfactorRGB, GLenum sfactorAlpha, GLenum dfactorAlpha);
-        [DllImport(GLLibraryName)]
-        public static extern void glMultiDrawArrays(GLenum mode, GLint[] first, GLsizei[] count, GLsizei drawcount);
-        [DllImport(GLLibraryName)]
-        public static extern void glMultiDrawElements(GLenum mode, GLsizei[] count, GLenum type, IntPtr[] indices, GLsizei drawcount);
-        [DllImport(GLLibraryName)]
-        public static extern void glPointParameterf(GLenum pname, GLfloat param);
-        [DllImport(GLLibraryName)]
-        public static extern void glPointParameterfv(GLenum pname, GLfloat[] @params);
-        [DllImport(GLLibraryName)]
-        public static extern void glPointParameteri(GLenum pname, GLint param);
-        [DllImport(GLLibraryName)]
-        public static extern void glPointParameteriv(GLenum pname, GLint[] @params);
-        [DllImport(GLLibraryName)]
-        public static extern void glActiveTexture(GLenum texture);
-        [DllImport(GLLibraryName)]
-        public static extern void glSampleCoverage(GLfloat value, GLboolean invert);
-        [DllImport(GLLibraryName)]
-        public static extern void glCompressedTexImage3D(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLsizei depth, GLint border, GLsizei imageSize, IntPtr data);
-        [DllImport(GLLibraryName)]
-        public static extern void glCompressedTexImage2D(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLint border, GLsizei imageSize, IntPtr data);
-        [DllImport(GLLibraryName)]
-        public static extern void glCompressedTexImage1D(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLint border, GLsizei imageSize, IntPtr data);
-        [DllImport(GLLibraryName)]
-        public static extern void glCompressedTexSubImage3D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLsizei imageSize, IntPtr data);
-        [DllImport(GLLibraryName)]
-        public static extern void glCompressedTexSubImage2D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLsizei imageSize, IntPtr data);
-        [DllImport(GLLibraryName)]
-        public static extern void glCompressedTexSubImage1D(GLenum target, GLint level, GLint xoffset, GLsizei width, GLenum format, GLsizei imageSize, IntPtr data);
-        [DllImport(GLLibraryName)]
-        public static extern void glGetCompressedTexImage(GLenum target, GLint level, IntPtr img);
-        [DllImport(GLLibraryName)]
-        public static extern void glBlendColor(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha);
-        [DllImport(GLLibraryName)]
-        public static extern void glBlendEquation(GLenum mode);
-        [DllImport(GLLibraryName)]
-        public static extern void glDrawRangeElements(GLenum mode, GLuint start, GLuint end, GLsizei count, GLenum type, IntPtr indices);
-        [DllImport(GLLibraryName)]
-        public static extern void glTexImage3D(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLsizei depth, GLint border, GLenum format, GLenum type, IntPtr pixels);
-        [DllImport(GLLibraryName)]
-        public static extern void glTexSubImage3D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLenum type, IntPtr pixels);
-        [DllImport(GLLibraryName)]
-        public static extern void glCopyTexSubImage3D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLint x, GLint y, GLsizei width, GLsizei height);
- * */
+        [DllImport(GLLibraryName, EntryPoint = "glHint")]
+        public static extern void Hint(Hint target, HintValue mode);
+
+        [DllImport(GLLibraryName, EntryPoint = "glLineWidth")]
+        public static extern void LineWidth(GLfloat width);
+
+        [DllImport(GLLibraryName, EntryPoint = "glPointSize")]
+        public static extern void PointSize(GLfloat size);
+
+        [DllImport(GLLibraryName, EntryPoint = "glPolygonMode")]
+        public static extern void PolygonMode(Face face, PolygonMode mode);
+
+        [DllImport(GLLibraryName, EntryPoint = "glScissor")]
+        public static extern void Scissor(GLint x, GLint y, GLsizei width, GLsizei height);
+
+        [DllImport(GLLibraryName, EntryPoint = "glTexParameterf")]
+        public static extern void TexParameterf(TextureTarget target, TexParameterName pname, GLfloat param);
+
+        [DllImport(GLLibraryName, EntryPoint = "glTexParameterfv")]
+        public static extern void TexParameterfv(TextureTarget target, TexParameterName pname, [In]GLfloat[] @params);
+
+        [DllImport(GLLibraryName, EntryPoint = "glTexParameteri")]
+        public static extern void TexParameteri(TextureTarget target, TexParameterName pname, GLint param);
+        
+        [DllImport(GLLibraryName, EntryPoint = "glTexParameteriv")]
+        public static extern void TexParameteriv(TextureTarget target, TexParameterName pname, [In]GLint[] @params);
+
+        [DllImport(GLLibraryName, EntryPoint = "glTexImage1D")]
+        public static extern void TexImage1D(TextureTarget target, GLint level, TextureInternalFormat internalformat, GLsizei width, GLint border, TextureFormat format, TexturePixelType type, IntPtr pixels);
+
+        [DllImport(GLLibraryName, EntryPoint = "glTexImage2D")]
+        public static extern void TexImage2D(TextureTarget target, GLint level, TextureInternalFormat internalformat, GLsizei width, GLsizei height, GLint border, TextureFormat format, TexturePixelType type, IntPtr pixels);
+
+        [DllImport(GLLibraryName, EntryPoint = "glDrawBuffer")]
+        public static extern void DrawBuffer(GLenum mode);
+
+        [DllImport(GLLibraryName, EntryPoint = "glClear")]
+        public static extern void Clear(ClearTarget mask);
+
+        [DllImport(GLLibraryName, EntryPoint = "glClearColor")]
+        public static extern void ClearColor(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha);
+
+        [DllImport(GLLibraryName, EntryPoint = "glClearStencil")]
+        public static extern void ClearStencil(GLint s);
+
+        [DllImport(GLLibraryName, EntryPoint = "glClearDepth")]
+        public static extern void ClearDepth(GLdouble depth);
+
+        [DllImport(GLLibraryName, EntryPoint = "glStencilMask")]
+        public static extern void StencilMask(GLuint mask);
+
+        [DllImport(GLLibraryName, EntryPoint = "glColorMask")]
+        public static extern void ColorMask(GLboolean red, GLboolean green, GLboolean blue, GLboolean alpha);
+
+        [DllImport(GLLibraryName, EntryPoint = "glDepthMask")]
+        public static extern void DepthMask(GLboolean flag);
+
+        [DllImport(GLLibraryName, EntryPoint = "glDisable")]
+        public static extern void Disable(StateCaps cap);
+
+        [DllImport(GLLibraryName, EntryPoint = "glEnable")]
+        public static extern void Enable(StateCaps cap);
+
+        [DllImport(GLLibraryName, EntryPoint = "glFinish")]
+        public static extern void Finish();
+
+        [DllImport(GLLibraryName, EntryPoint = "glFlush")]
+        public static extern void Flush();
+
+        [DllImport(GLLibraryName, EntryPoint = "glBlendFunc")]
+        public static extern void BlendFunc(GLenum sfactor, GLenum dfactor);
+
+        [DllImport(GLLibraryName, EntryPoint = "glLogicOp")]
+        public static extern void LogicOp(GLenum opcode);
+
+        [DllImport(GLLibraryName, EntryPoint = "glStencilFunc")]
+        public static extern void StencilFunc(GLenum func, GLint @ref, GLuint mask);
+
+        [DllImport(GLLibraryName, EntryPoint = "glStencilOp")]
+        public static extern void StencilOp(GLenum fail, GLenum zfail, GLenum zpass);
+
+        [DllImport(GLLibraryName, EntryPoint = "glDepthFunc")]
+        public static extern void DepthFunc(GLenum func);
+
+        [DllImport(GLLibraryName, EntryPoint = "glPixelStoref")]
+        public static extern void PixelStoref(GLenum pname, GLfloat param);
+
+        [DllImport(GLLibraryName, EntryPoint = "glPixelStorei")]
+        public static extern void PixelStorei(GLenum pname, GLint param);
+
+        [DllImport(GLLibraryName, EntryPoint = "glReadBuffer")]
+        public static extern void ReadBuffer(GLenum mode);
+
+        [DllImport(GLLibraryName, EntryPoint = "glReadPixels")]
+        public static extern void ReadPixels(GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, IntPtr pixels);
+
+        [DllImport(GLLibraryName, EntryPoint = "glGetBooleanv")]
+        public static extern void GetBooleanv(GLenum pname, [Out]GLboolean[] @params);
+
+        [DllImport(GLLibraryName, EntryPoint = "glGetDoublev")]
+        public static extern void GetDoublev(GLenum pname, [Out]GLdouble[] @params);
+
+        [DllImport(GLLibraryName, EntryPoint = "glGetError")]
+        public static extern GLenum GetError();
+
+        [DllImport(GLLibraryName, EntryPoint = "glGetFloatv")]
+        public static extern void GetFloatv(GLenum pname, [Out]GLfloat[] @params);
+
+        [DllImport(GLLibraryName, EntryPoint = "glGetIntegerv")]
+        public static extern void GetIntegerv(GLenum pname, [Out]GLint[] @params);
+
+        [DllImport(GLLibraryName, EntryPoint = "glGetString")]
+        public static extern string GetString(GLenum name);
+
+        [DllImport(GLLibraryName, EntryPoint = "glGetTexImage")]
+        public static extern void GetTexImage(GLenum target, GLint level, GLenum format, GLenum type, IntPtr pixels);
+
+        [DllImport(GLLibraryName, EntryPoint = "glGetTexParameterfv")]
+        public static extern void GetTexParameterfv(GLenum target, GLenum pname, [Out]GLfloat[] @params);
+
+        [DllImport(GLLibraryName, EntryPoint = "glGetTexParameteriv")]
+        public static extern void GetTexParameteriv(GLenum target, GLenum pname, [Out]GLint[] @params);
+
+        [DllImport(GLLibraryName, EntryPoint = "glGetTexLevelParameterfv")]
+        public static extern void GetTexLevelParameterfv(GLenum target, GLint level, GLenum pname, [Out]GLfloat[] @params);
+
+        [DllImport(GLLibraryName, EntryPoint = "glGetTexLevelParameteriv")]
+        public static extern void GetTexLevelParameteriv(GLenum target, GLint level, GLenum pname, [Out]GLint[] @params);
+
+        [DllImport(GLLibraryName, EntryPoint = "glIsEnabled")]
+        public static extern GLboolean IsEnabled(StateCaps cap);
+
+        [DllImport(GLLibraryName, EntryPoint = "glDepthRange")]
+        public static extern void DepthRange(GLdouble near, GLdouble far);
+
+        [DllImport(GLLibraryName, EntryPoint = "glViewport")]
+        public static extern void Viewport(GLint x, GLint y, GLsizei width, GLsizei height);
+
+        [DllImport(GLLibraryName, EntryPoint = "glDrawArrays")]
+        public static extern void DrawArrays(DrawMode mode, GLint first, GLsizei count);
+
+        [DllImport(GLLibraryName, EntryPoint = "glDrawElements")]
+        public static extern void DrawElements(DrawMode mode, GLsizei count, ElementBufferItemType type, IntPtr indices);
+
+        [DllImport(GLLibraryName, EntryPoint = "glGetPointerv")]
+        public static extern void GetPointerv(GLenum pname, IntPtr[] @params);
+
+        [DllImport(GLLibraryName, EntryPoint = "glPolygonOffset")]
+        public static extern void PolygonOffset(GLfloat factor, GLfloat units);
+
+        [DllImport(GLLibraryName, EntryPoint = "glCopyTexImage1D")]
+        public static extern void CopyTexImage1D(GLenum target, GLint level, GLenum internalformat, GLint x, GLint y, GLsizei width, GLint border);
+
+        [DllImport(GLLibraryName, EntryPoint = "glCopyTexImage2D")]
+        public static extern void CopyTexImage2D(GLenum target, GLint level, GLenum internalformat, GLint x, GLint y, GLsizei width, GLsizei height, GLint border);
+
+        [DllImport(GLLibraryName, EntryPoint = "glCopyTexSubImage1D")]
+        public static extern void CopyTexSubImage1D(GLenum target, GLint level, GLint xoffset, GLint x, GLint y, GLsizei width);
+
+        [DllImport(GLLibraryName, EntryPoint = "glCopyTexSubImage2D")]
+        public static extern void CopyTexSubImage2D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint x, GLint y, GLsizei width, GLsizei height);
+
+        [DllImport(GLLibraryName, EntryPoint = "glTexSubImage1D")]
+        public static extern void TexSubImage1D(GLenum target, GLint level, GLint xoffset, GLsizei width, GLenum format, GLenum type, IntPtr pixels);
+
+        [DllImport(GLLibraryName, EntryPoint = "glTexSubImage2D")]
+        public static extern void TexSubImage2D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLenum type, IntPtr pixels);
+
+        [DllImport(GLLibraryName, EntryPoint = "glBindTexture")]
+        public static extern void BindTexture(TextureTarget target, GLuint texture);
+
+        [DllImport(GLLibraryName, EntryPoint = "glDeleteTextures")]
+        public static extern void DeleteTextures(GLsizei n, GLuint[] textures);
+
+        [DllImport(GLLibraryName, EntryPoint = "glGenTextures")]
+        public static extern void GenTextures(GLsizei n, GLuint[] textures);
+
+        [DllImport(GLLibraryName, EntryPoint = "glIsTexture")]
+        public static extern GLboolean IsTexture(GLuint texture);
+
 
         [System.Diagnostics.DebuggerHidden]
         [System.Diagnostics.DebuggerStepThrough]
         public static void HandleOpenGLError()
         {
-            GLenum error = glGetError();
+            GLenum error = GetError();
             if (error == 0)
                 return;
             switch ((ErrorCode)error)
@@ -1730,50 +1420,15 @@ namespace ModGL.NativeGL
 
         public static void FlushOpenGLError()
         {
-            glGetError();
+            GetError();
         }
 
         public static readonly ErrorHandling OpenGLErrorFunctions = new ErrorHandling
-            {
-                FlushError = typeof(GL).GetMethod("FlushOpenGLError", BindingFlags.Public | BindingFlags.Static),
-                CheckErrorState = typeof(GL).GetMethod("HandleOpenGLError", BindingFlags.Public | BindingFlags.Static)
-            };
-
-        [DllImport(GLLibraryName)]
-        public static extern void glDrawArrays(DrawMode mode, GLint first, GLsizei count);
-        [DllImport(GLLibraryName)]
-        public static extern void glDrawElements(DrawMode mode, GLsizei count, ElementBufferItemType type, IntPtr indices);
-        [DllImport(GLLibraryName)]
-        public static extern void glGetPointerv(GLenum pname, IntPtr[] @params);
-        [DllImport(GLLibraryName)]
-        public static extern void glPolygonOffset(GLfloat factor, GLfloat units);
-        [DllImport(GLLibraryName)]
-        public static extern void glCopyTexImage1D(GLenum target, GLint level, GLenum internalformat, GLint x, GLint y, GLsizei width, GLint border);
-        [DllImport(GLLibraryName)]
-        public static extern void glCopyTexImage2D(GLenum target, GLint level, GLenum internalformat, GLint x, GLint y, GLsizei width, GLsizei height, GLint border);
-        [DllImport(GLLibraryName)]
-        public static extern void glCopyTexSubImage1D(GLenum target, GLint level, GLint xoffset, GLint x, GLint y, GLsizei width);
-        [DllImport(GLLibraryName)]
-        public static extern void glCopyTexSubImage2D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint x, GLint y, GLsizei width, GLsizei height);
-        [DllImport(GLLibraryName)]
-        public static extern void glTexSubImage1D(GLenum target, GLint level, GLint xoffset, GLsizei width, GLenum format, GLenum type, IntPtr pixels);
-        [DllImport(GLLibraryName)]
-        public static extern void glTexSubImage2D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLenum type, IntPtr pixels);
-        [DllImport(GLLibraryName)]
-        public static extern void glBindTexture(TextureTarget target, GLuint texture);
-        [DllImport(GLLibraryName)]
-        public static extern void glDeleteTextures(GLsizei n, GLuint[] textures);
-        [DllImport(GLLibraryName)]
-        public static extern void glGenTextures(GLsizei n, GLuint[] textures);
-        [DllImport(GLLibraryName)]
-        public static extern GLboolean glIsTexture(GLuint texture);
-
+        {
+            FlushError = typeof(GL).GetMethod("FlushOpenGLError", BindingFlags.Public | BindingFlags.Static),
+            CheckErrorState = typeof(GL).GetMethod("HandleOpenGLError", BindingFlags.Public | BindingFlags.Static)
+        };
 
         public const string GLLibraryName = "opengl32";
-
-        private static TDelegate GetFunction<TDelegate>(string functionName)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

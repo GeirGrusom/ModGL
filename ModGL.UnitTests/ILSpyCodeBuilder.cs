@@ -94,7 +94,7 @@ namespace ModGL.UnitTests
 
         public int DelegateCallTest(int i, long j, byte k)
         {
-            NativeGL.GL.glGetError();
+            NativeGL.GL.GetError();
             var ret = a(i, j, k);
             NativeGL.GL.HandleOpenGLError();
             return ret;
