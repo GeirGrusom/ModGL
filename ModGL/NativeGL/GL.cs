@@ -24,8 +24,6 @@ using GLint64 = System.Int64;
 
 namespace ModGL.NativeGL
 {
-
-
     public enum ShaderParameters : uint
     {
         ShaderType = 0x8B4F,
@@ -44,18 +42,18 @@ namespace ModGL.NativeGL
         UnsignedInt = 0x1405,
         Int = 0x1404,
         Float = 0x1406,
-        Unsigned_Byte_3_3_2 = 0x8032,
-        Unsigned_Byte_2_3_3_REV = 0x8362,
-        Unsigned_Short_5_6_5 = 0x8363,
-        Unsigned_Short_5_6_5_REV = 0x8364,
-        Unsigned_Short_4_4_4_4 = 0x8033,
-        Unsigned_Short_4_4_4_4_REV = 0x8365,
-        Unsigned_Short_5_5_5_1 = 0x8034,
-        Unsigned_Short_1_5_5_5_REV = 0x8366,
-        Unsigned_Int_8_8_8_8 = 0x8035,
-        Unsigned_Int_8_8_8_8_REV = 0x8367,
-        Unsigned_Int_10_10_10_2 = 0x8036,
-        Unsigned_Int_2_10_10_10_REV = 0x8368
+        UnsignedByte_3_3_2 = 0x8032,
+        UnsignedByte_2_3_3_Rev = 0x8362,
+        UnsignedShort_5_6_5 = 0x8363,
+        UnsignedShort_5_6_5_Rev = 0x8364,
+        UnsignedShort_4_4_4_4 = 0x8033,
+        UnsignedShort_4_4_4_4_Rev = 0x8365,
+        UnsignedShort_5_5_5_1 = 0x8034,
+        UnsignedShort_1_5_5_5_Rev = 0x8366,
+        UnsignedInt_8_8_8_8 = 0x8035,
+        UnsignedInt_8_8_8_8_Rev = 0x8367,
+        UnsignedInt_10_10_10_2 = 0x8036,
+        UnsignedInt_2_10_10_10_Rev = 0x8368
     }
 
     public enum TextureTarget : uint
@@ -152,7 +150,7 @@ namespace ModGL.NativeGL
     public enum StateCaps : uint
     {
         /// <summary>
-        /// If enabled, blend the computed fragment color values with the values in the color buffers. See <see cref="IOpenGL.glBlendFunc"/>.
+        /// If enabled, blend the computed fragment color values with the values in the color buffers. See <see cref="IOpenGL.BlendFunc"/>.
         /// </summary>
         Blend = 0x0BE2,
         /// <summary>
@@ -161,12 +159,12 @@ namespace ModGL.NativeGL
         ClipDistance = 0x3000,
 
         /// <summary>
-        /// If enabled, apply the currently selected logical operation to the computed fragment color and color buffer values. See <see cref="IOpenGL.glLogicOp"/>.
+        /// If enabled, apply the currently selected logical operation to the computed fragment color and color buffer values. See <see cref="IOpenGL.LogicOp"/>.
         /// </summary>
         ColorLogicOperation = 0x0BF2,
 
         /// <summary>
-        /// If enabled, cull polygons based on their winding in window coordinates. See <see cref="IOpenGL.glCullFace"/>.
+        /// If enabled, cull polygons based on their winding in window coordinates. See <see cref="IOpenGL.CullFace"/>.
         /// </summary>
         CullFace = 0x0B44,
         /// <summary>
@@ -180,12 +178,12 @@ namespace ModGL.NativeGL
         DebugOutputSynchronous = 0x8242,
 
         /// <summary>
-        /// If enabled, the -wc≤zc≤wc plane equation is ignored by view volume clipping (effectively, there is no near or far plane clipping). See <see cref="IOpenGL.glDepthRange"/>.
+        /// If enabled, the -wc≤zc≤wc plane equation is ignored by view volume clipping (effectively, there is no near or far plane clipping). See <see cref="IOpenGL.DepthRange"/>.
         /// </summary>
         DepthClamp = 0x864F,
 
         /// <summary>
-        /// If enabled, do depth comparisons and update the depth buffer. Note that even if the depth buffer exists and the depth mask is non-zero, the depth buffer is not updated if the depth test is disabled. See <see cref="IOpenGL.glDepthFunc"/> and <see cref="IOpenGL.glDepthRange"/>.
+        /// If enabled, do depth comparisons and update the depth buffer. Note that even if the depth buffer exists and the depth mask is non-zero, the depth buffer is not updated if the depth test is disabled. See <see cref="IOpenGL.DepthFunc"/> and <see cref="IOpenGL.DepthRange"/>.
         /// </summary>
         DepthTest = 0x0B71,
 
@@ -199,26 +197,26 @@ namespace ModGL.NativeGL
         /// </summary>
         FramebufferSRGB = 0x8DB9,
         /// <summary>
-        /// If enabled, draw lines with correct filtering. Otherwise, draw aliased lines. See <see cref="IOpenGL.glLineWidth"/>.
+        /// If enabled, draw lines with correct filtering. Otherwise, draw aliased lines. See <see cref="IOpenGL.LineWidth"/>.
         /// </summary>
         LineSmooth = 0x0B20,
 
         /// <summary>
-        /// If enabled, use multiple fragment samples in computing the final color of a pixel. See <see cref="IOpenGL30.glSampleCoverage"/>.
+        /// If enabled, use multiple fragment samples in computing the final color of a pixel. See <see cref="IOpenGL30.SampleCoverage"/>.
         /// </summary>
         MultiSample = 0x809D,
 
         /// <summary>
-        /// If enabled, and if the polygon is rendered in GL_FILL mode, an offset is added to depth values of a polygon's fragments before the depth comparison is performed. See <see cref="IOpenGL.glPolygonOffset"/>.
+        /// If enabled, and if the polygon is rendered in GL_FILL mode, an offset is added to depth values of a polygon's fragments before the depth comparison is performed. See <see cref="IOpenGL.PolygonOffset"/>.
         /// </summary>
         PolygonOffsetPoint = 0x2A01,
 
         /// <summary>
-        /// If enabled, and if the polygon is rendered in GL_LINE mode, an offset is added to depth values of a polygon's fragments before the depth comparison is performed. See <see cref="IOpenGL.glPolygonOffset" />.
+        /// If enabled, and if the polygon is rendered in GL_LINE mode, an offset is added to depth values of a polygon's fragments before the depth comparison is performed. See <see cref="IOpenGL.PolygonOffset" />.
         /// </summary>
         PolygonOffsetLine = 0x2A02,
         /// <summary>
-        /// If enabled, an offset is added to depth values of a polygon's fragments before the depth comparison is performed, if the polygon is rendered in GL_POINT mode. See <see cref="IOpenGL.glPolygonOffset"/>.
+        /// If enabled, an offset is added to depth values of a polygon's fragments before the depth comparison is performed, if the polygon is rendered in GL_POINT mode. See <see cref="IOpenGL.PolygonOffset"/>.
         /// </summary>
         PolygonOffsetFill = 0x8037,
 
@@ -228,7 +226,7 @@ namespace ModGL.NativeGL
         PolygonSmooth = 0x0B41,
 
         /// <summary>
-        /// Enables primitive restarting. If enabled, any one of the draw commands which transfers a set of generic attribute array elements to the GL will restart the primitive when the index of the vertex is equal to the primitive restart index. See <see cref="IOpenGL30.glPrimitiveRestartIndex"/>.
+        /// Enables primitive restarting. If enabled, any one of the draw commands which transfers a set of generic attribute array elements to the GL will restart the primitive when the index of the vertex is equal to the primitive restart index. See <see cref="IOpenGL31.PrimitiveRestartIndex"/>.
         /// </summary>
         PrimitiveRestart = 0x8F9D,
 
@@ -238,7 +236,7 @@ namespace ModGL.NativeGL
         PrimiticeRestartFixedIndex = 0x8D69,
 
         /// <summary>
-        /// If enabled, primitives are discarded after the optional transform feedback stage, but before rasterization. Furthermore, when enabled, <see cref="IOpenGL.glClear"/>, glClearBufferData, glClearBufferSubData, glClearTexImage, and glClearTexSubImage are ignored.
+        /// If enabled, primitives are discarded after the optional transform feedback stage, but before rasterization. Furthermore, when enabled, <see cref="IOpenGL.Clear"/>, glClearBufferData, glClearBufferSubData, glClearTexImage, and glClearTexSubImage are ignored.
         /// </summary>
         RasterizerDiscard = 0x8C89,
 
@@ -253,7 +251,7 @@ namespace ModGL.NativeGL
         SampleAlphaToOne = 0x809F,
 
         /// <summary>
-        /// If enabled, the fragment's coverage is ANDed with the temporary coverage value. If GL_SAMPLE_COVERAGE_INVERT is set to GL_TRUE, invert the coverage value. See <see cref="IOpenGL30.glSampleCoverage"/>.
+        /// If enabled, the fragment's coverage is ANDed with the temporary coverage value. If GL_SAMPLE_COVERAGE_INVERT is set to GL_TRUE, invert the coverage value. See <see cref="IOpenGL30.SampleCoverage"/>.
         /// </summary>
         SampleCoverage = 0x80A0,
 
@@ -268,12 +266,12 @@ namespace ModGL.NativeGL
         SampleMask = 0x8E51,
 
         /// <summary>
-        /// If enabled, discard fragments that are outside the scissor rectangle. See <see cref="IOpenGL.glScissor"/>.
+        /// If enabled, discard fragments that are outside the scissor rectangle. See <see cref="IOpenGL.Scissor"/>.
         /// </summary>
         ScissorTest = 0x0C11,
 
         /// <summary>
-        /// If enabled, do stencil testing and update the stencil buffer. See <see cref="IOpenGL.glStencilFunc"/> and <see cref="IOpenGL.glStencilOp"/>.
+        /// If enabled, do stencil testing and update the stencil buffer. See <see cref="IOpenGL.StencilFunc"/> and <see cref="IOpenGL.StencilOp"/>.
         /// </summary>
         StencilTest = 0x0B90,
 

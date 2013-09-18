@@ -100,8 +100,17 @@ namespace ModGL.VertexInfo
             }
             else
             {
-                type = GetElementType(field.FieldType);
-                dimensions = 1;
+                var typeAttrib = field.FieldType.GetCustomAttribute<VertexElementAttribute>();
+                if (typeAttrib != null)
+                {
+                    type = typeAttrib.DataType;
+                    dimensions = typeAttrib.Dimensions;
+                }
+                else
+                {
+                    type = GetElementType(field.FieldType);
+                    dimensions = 1;
+                }
             }
 
             return new VertexElement(field.Name, type, dimensions, offset);

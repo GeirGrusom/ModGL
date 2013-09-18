@@ -63,32 +63,22 @@ namespace WindowsTest
             gl = binding.CreateBinding<IOpenGL30>(context as IExtensionSupport, new Dictionary<Type, Type> { {typeof(IOpenGL), typeof(GL)} }, GL.OpenGLErrorFunctions, "gl");
             gl.Enable(StateCaps.DepthTest);
 
-            
-            buffer = new VertexBuffer<Vertex>(new []
-            {
-                new Vertex
-                {
-                    Position = new Vec4f { x = -0.5f, y = -0.5f, z = -0.5f, w = 0}
-                    //,Color = new Vec4f { x = 1.0f, w = 1.0f }
-                },
-                new Vertex
-                {
-                    Position = new Vec4f { x = 0.5f, y = 0.5f, w = 0}
-                    //,Color = new Vec4f {y = 1.0f, w = 1.0f }
-                },                
-                new Vertex
-                {
-                    Position = new Vec4f { x = 0.5f, y = -0.5f, w = 0}
-                    //,Color = new Vec4f { z = 1.0f, w = 1.0f }
-                }
-            }, gl);
+            Random rnd = new Random();
+
+            buffer = new VertexBuffer<Vertex>(
+                Enumerable.Range(0, 300).Select(i => 
+                    new Vertex
+                    {
+                        Position = new Vec4f { x = (float)Math.Cos(Math.PI * 2 / 300 * i), y = (float)Math.Sin(Math.PI * 2 / 300 * i), z = 0, w = 1 },
+                        Color = new Vec4f { x = (float)rnd.NextDouble(), y = (float)rnd.NextDouble(), z = (float)rnd.NextDouble(), w = 1.0f}
+                    })
+                , gl);
             using (buffer.Bind())
             {
                 buffer.BufferData(BufferUsage.StaticDraw);
                 buffer.ReleaseClientData();
             }
-            var desc = VertexDescriptor.Create<Vertex>();
-            array = new VertexArray(gl, new [] { buffer }, new [] { desc });
+            array = new VertexArray(gl, new [] { buffer }, new [] { Vertex.Descriptor });
 
             var vs = new System.IO.StreamReader(GetType().Assembly.GetManifestResourceStream("WindowsTest.VertexShader.vs")).ReadToEnd();
             var fs = new System.IO.StreamReader(GetType().Assembly.GetManifestResourceStream("WindowsTest.FragmentShader.fs")).ReadToEnd();
@@ -100,7 +90,7 @@ namespace WindowsTest
                     new FragmentShader(gl, fs) 
                 });
 
-            shader.BindVertexAttributeLocations(desc);
+            shader.BindVertexAttributeLocations(Vertex.Descriptor);
             gl.BindFragDataLocation(shader.Handle, 0, "output");
 
             shader.Compile();
@@ -115,13 +105,14 @@ namespace WindowsTest
         [VertexElement(DataType.Float, 3)]
         public struct Vec3f
         {
-            public float x, y, z, w;
+            public float x, y, z;
         }
 
         public struct Vertex
         {
+            public static readonly VertexDescriptor Descriptor = VertexDescriptor.Create<Vertex>();
             public Vec4f Position;
-            //public Vec4f Color;
+            public Vec4f Color;
         }
 
         public void Render()
