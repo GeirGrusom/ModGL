@@ -42,21 +42,6 @@ namespace ModGL.Textures
             return new BindContext(() => _gl.BindTexture(Target, 0));
         }
 
-        public void BufferData<T>(T[] dataArray)
-        {
-            var handle = GCHandle.Alloc(dataArray, GCHandleType.Pinned);
-            try
-            {
-                BufferData(handle.AddrOfPinnedObject());
-            }
-            finally
-            {
-                handle.Free();
-            }
-        }
-
-        public abstract void BufferData(IntPtr address);
-
         public void BufferData(System.IO.Stream source)
         {
             throw new NotImplementedException();

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 
 using ModGL.NativeGL;
 
@@ -20,7 +21,20 @@ namespace ModGL.Textures
             Width = width;
         }
 
-        public override void BufferData(IntPtr address)
+        public void BufferData<T>(T[] dataArray)
+        {
+            var handle = GCHandle.Alloc(dataArray, GCHandleType.Pinned);
+            try
+            {
+                BufferData(handle.AddrOfPinnedObject());
+            }
+            finally
+            {
+                handle.Free();
+            }
+        }
+
+        public void BufferData(IntPtr address)
         {
             _gl.TexImage1D(Target, 0, InternalFormat, Width, 0, Format, PixelType, address);
         }

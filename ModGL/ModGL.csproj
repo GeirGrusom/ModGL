@@ -85,6 +85,7 @@
     <Compile Include="Shaders\TextureUniform.cs" />
     <Compile Include="Shaders\Uniform.cs" />
     <Compile Include="Shaders\VertexShader.cs" />
+    <Compile Include="Textures\CubeMap.cs" />
     <Compile Include="Textures\Texture.cs" />
     <Compile Include="Textures\Texture1D.cs" />
     <Compile Include="Textures\Texture2D.cs" />
