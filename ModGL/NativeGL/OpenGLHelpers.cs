@@ -82,7 +82,7 @@ namespace ModGL.NativeGL
             gl.GetIntegerv(0x821D /* GL_NUM_EXTENSIONS */, values);   
             string[] results = new string[values[0]];
             for (int i = 0; i < values[0]; i++)
-                results[i] = gl.GetStringi(0x1F03, i);
+                results[i] = gl.GetStringi(0x1F03, (uint)i);
 
             return results;
         }

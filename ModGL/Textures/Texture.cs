@@ -25,15 +25,13 @@ namespace ModGL.Textures
 
         protected Texture(IOpenGL30 gl, TextureTarget target)
         {
-            uint[] newHandles = new uint[1];
-            
-            gl.GenTextures(1, newHandles);
-            if(newHandles[0] == 0u)
+            var newHandle = gl.GenTexture();
+            if(newHandle == 0u)
                 throw new NoHandleCreatedException();
 
             Target = target;
             this._gl = gl;
-            Handle = newHandles.Single();
+            Handle = newHandle;
         }
 
         public BindContext Bind()
@@ -41,11 +39,5 @@ namespace ModGL.Textures
             _gl.BindTexture(Target, Handle);
             return new BindContext(() => _gl.BindTexture(Target, 0));
         }
-
-        public void BufferData(System.IO.Stream source)
-        {
-            throw new NotImplementedException();
-        }
-
     }
 }
