@@ -42,7 +42,7 @@ namespace ModGL.Textures
             return new BindContext(() => _gl.BindTexture(Target, 0));
         }
 
-        public void BufferData(byte[] dataArray)
+        public void BufferData<T>(T[] dataArray)
         {
             var handle = GCHandle.Alloc(dataArray, GCHandleType.Pinned);
             try

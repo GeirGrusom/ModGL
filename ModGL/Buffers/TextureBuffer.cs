@@ -11,15 +11,15 @@ namespace ModGL.Buffers
     public class TextureBuffer<TPixelType> : Buffer<TPixelType>
         where TPixelType : struct 
     {
-        private IOpenGL42 gl42;
-        protected TextureBuffer(IEnumerable<TPixelType> elements, IOpenGL42 gl) : base(BufferTarget.Texture, elements, gl)
+        private IOpenGL33 gl33;
+        protected TextureBuffer(IEnumerable<TPixelType> elements, IOpenGL33 gl) : base(BufferTarget.Texture, elements, gl)
         {
-            gl42 = gl;
+            gl33 = gl;
         }
 
-        protected TextureBuffer(long size, IOpenGL42 gl) : base(BufferTarget.Texture, size, gl)
+        protected TextureBuffer(long size, IOpenGL33 gl) : base(BufferTarget.Texture, size, gl)
         {
-            gl42 = gl;
+            gl33 = gl;
         }
     }
 }

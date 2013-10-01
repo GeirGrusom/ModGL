@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
+using System.Drawing.Imaging;
 using System.Windows.Forms;
+
+using LibNoise;
 
 using ModGL;
 using ModGL.Binding;
-using ModGL.Buffers;
+using ModGL.Math;
 using ModGL.NativeGL;
-using ModGL.Rendering;
 using ModGL.Shaders;
-using ModGL.VertexInfo;
+using ModGL.Textures;
 using ModGL.Windows;
 
-using DrawMode = ModGL.NativeGL.DrawMode;
+using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace WindowsTest
 {
@@ -23,16 +23,17 @@ namespace WindowsTest
         private IContext context;
         private readonly Form form;
         private Graphics hdc;
-        private IOpenGL30 gl;
+        private IOpenGL33 gl;
 
-        private VertexArray array;
-        private VertexBuffer<Vertex> buffer;
         private ModGL.Shaders.Program shader;
 
-        public interface IClearInterface
-        {
-            void glClear(ClearTarget target);
-        }
+        private Matrix44F worldMatrix;
+        private Matrix44F viewMatrix;
+        private Matrix44F projectionMatrix;
+        private Uniform<Matrix44F> worldUniform;
+        private Uniform<Vector3F> lightUniform;
+        private Terrain terrain;
+
 
         public GLProgram(Form form)
         {
@@ -44,14 +45,18 @@ namespace WindowsTest
             if(hdc != null)
                 hdc.Dispose();   
         }
+
+
+        private Texture2D texture;
+        private Uniform<int> normalUniform;
+
         public void Init()
         {
             hdc = form.CreateGraphics();
             context = new WindowsContext(new WGL(), new ContextCreationParameters
             {
                 MajorVersion = 3,
-                MinorVersion = 0,
-                Revision = 0,
+                MinorVersion = 3,
                 ColorBits = 32,
                 DepthBits = 24,
                 StencilBits = 8,
@@ -60,25 +65,8 @@ namespace WindowsTest
             });
 
             InterfaceBindingFactory binding = new InterfaceBindingFactory();
-            gl = binding.CreateBinding<IOpenGL30>(context as IExtensionSupport, new Dictionary<Type, Type> { {typeof(IOpenGL), typeof(GL)} }, GL.OpenGLErrorFunctions, "gl");
+            gl = binding.CreateBinding<IOpenGL33>(context as IExtensionSupport, new Dictionary<Type, Type> { {typeof(IOpenGL), typeof(GL)} }, GL.OpenGLErrorFunctions, "gl");
             gl.Enable(StateCaps.DepthTest);
-
-            Random rnd = new Random();
-
-            buffer = new VertexBuffer<Vertex>(
-                Enumerable.Range(0, 300).Select(i => 
-                    new Vertex
-                    {
-                        Position = new Vec4f { x = (float)Math.Cos(Math.PI * 2 / 300 * i), y = (float)Math.Sin(Math.PI * 2 / 300 * i), z = 0, w = 1 },
-                        Color = new Vec4f { x = (float)rnd.NextDouble(), y = (float)rnd.NextDouble(), z = (float)rnd.NextDouble(), w = 1.0f}
-                    })
-                , gl);
-            using (buffer.Bind())
-            {
-                buffer.BufferData(BufferUsage.StaticDraw);
-                buffer.ReleaseClientData();
-            }
-            array = new VertexArray(gl, new [] { buffer }, new [] { Vertex.Descriptor });
 
             var vs = new System.IO.StreamReader(GetType().Assembly.GetManifestResourceStream("WindowsTest.VertexShader.vs")).ReadToEnd();
             var fs = new System.IO.StreamReader(GetType().Assembly.GetManifestResourceStream("WindowsTest.FragmentShader.fs")).ReadToEnd();
@@ -90,43 +78,83 @@ namespace WindowsTest
                     new FragmentShader(gl, fs) 
                 });
 
-            shader.BindVertexAttributeLocations(Vertex.Descriptor);
+            shader.BindVertexAttributeLocations(Terrain.VertexType.Descriptor);
             gl.BindFragDataLocation(shader.Handle, 0, "output");
 
             shader.Compile();
+
+            worldMatrix = Matrix44F.Identity;
+            viewMatrix = ModelMatrix.RotateX((float)Math.PI / 4).Translate(new Vector3F(0, -5f, -5f));
+            projectionMatrix = ProjectionMatrix.RightHandPerspective((float)Math.PI / 2, 1.0f, 20f, 0.1f);
+
+            worldUniform = shader.GetUniform<ModGL.Math.Binding.MatrixUniform, Matrix44F>("World");
+            Uniform<Matrix44F> viewUnifom = shader.GetUniform<ModGL.Math.Binding.MatrixUniform, Matrix44F>("View");
+            Uniform<Matrix44F> projectionUniform = shader.GetUniform<ModGL.Math.Binding.MatrixUniform, Matrix44F>("Projection");
+            lightUniform = shader.GetUniform<ModGL.Math.Binding.Vector3FUniform, Vector3F>("Light");
+
+            gl.Enable(StateCaps.CullFace);
+            var bitmap = (Bitmap)Image.FromFile("noiseTexture.png");
+
+            var l = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+
+            texture = new Texture2D(
+                gl,
+                l.Width,
+                l.Height,
+                TextureFormat.RGBA,
+                TextureInternalFormat.RGBA8,
+                TexturePixelType.UnsignedInt_8_8_8_8);
+
+            using (texture.Bind())
+            {
+                texture.BufferData(l.Scan0);
+            }
+
+            
+            bitmap.UnlockBits(l);
+            bitmap.Dispose();
+            normalUniform = shader.GetUniform<IntUniform, int>("NormalMap");
+            using (shader.Bind())
+            {
+                lightUniform.Value = new Vector3F(1, 1, 1);
+                worldUniform.Value = worldMatrix;
+                viewUnifom.Value = viewMatrix;
+                projectionUniform.Value = projectionMatrix;
+            }
+
+            var perlin = new LibNoise.Primitive.BevinsGradient(1024, NoiseQuality.Best);
+
+            terrain = new Terrain(
+                gl, 512, 512, (x, y) =>
+                {
+                    //var value = SimplexNoise.Noise.Generate(x / 64.0f, y / 64.0f) + SimplexNoise.Noise.Generate(x / 128, y / 128);
+
+                    var value = perlin.GetValue(x / 32.0f, y / 32.0f, 0);
+                    return new Vector3F(x / 16 - 16, value, y / 16 - 16);
+                });
         }
 
-        [VertexElement(DataType.Float, 4)]
-        public struct Vec4f
-        {
-            public float x, y, z, w;
-        }
-
-        [VertexElement(DataType.Float, 3)]
-        public struct Vec3f
-        {
-            public float x, y, z;
-        }
-
-        public struct Vertex
-        {
-            public static readonly VertexDescriptor Descriptor = VertexDescriptor.Create<Vertex>();
-            public Vec4f Position;
-            public Vec4f Color;
-        }
+        private Quaternion _rotation = Quaternion.Identity;
 
         public void Render()
         {
-            gl.ClearColor(0f, 0f, 0f, 1f);
+            var color = Color.DodgerBlue;
+            gl.ClearColor(color.R, color.G, color.B, color.A);
             gl.ClearDepth(1f);
             gl.Clear(ClearTarget.Color | ClearTarget.Depth);
             gl.Viewport(0, 0, form.ClientSize.Width, form.ClientSize.Height);
 
+            _rotation = (_rotation * new Quaternion(Vector3F.UnitY, (float)(Math.PI / 180))).Normalize();
+
             using (shader.Bind())
-            using (array.Bind())
             {
-                var render = new Renderer(gl);
-                render.Draw(DrawMode.LineLoop, buffer);
+                gl.ActiveTexture(ActiveTexture.Texture0);
+                texture.Bind();
+                normalUniform.Value = 0;
+
+
+                worldUniform.Value = _rotation.ToMatrix();
+                terrain.Render();
             }
 
             context.SwapBuffers();

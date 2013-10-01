@@ -11,6 +11,7 @@
     <AssemblyName>ModGL</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -22,6 +23,7 @@
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <PlatformTarget>x64</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -30,6 +32,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -47,6 +50,7 @@
     <Compile Include="Buffers\TextureBuffer.cs" />
     <Compile Include="ContextCreationException.cs" />
     <Compile Include="ExtensionNotSupportedException.cs" />
+    <Compile Include="Framebuffer.cs" />
     <Compile Include="IBindable.cs" />
     <Compile Include="IExtensionSupport.cs" />
     <Compile Include="IGLObject.cs" />
@@ -54,6 +58,7 @@
     <Compile Include="NativeGL\GLVersionAttribute.cs" />
     <Compile Include="Binding\InterfaceBindingFactory.cs" />
     <Compile Include="NativeGL\OpenGLException.cs" />
+    <Compile Include="NativeGL\OpenGLHelpers.cs" />
     <Compile Include="NativeGL\OpenGLInvalidEnumException.cs" />
     <Compile Include="NativeGL\OpenGLInvalidOperationException.cs" />
     <Compile Include="NativeGL\OpenGLInvalidValueException.cs" />
@@ -76,6 +81,7 @@
     <Compile Include="Shaders\ShaderException.cs" />
     <Compile Include="Shaders\ShaderProgramException.cs" />
     <Compile Include="Shaders\ShaderType.cs" />
+    <Compile Include="Shaders\TesselationControlShader.cs" />
     <Compile Include="Shaders\TextureUniform.cs" />
     <Compile Include="Shaders\Uniform.cs" />
     <Compile Include="Shaders\VertexShader.cs" />

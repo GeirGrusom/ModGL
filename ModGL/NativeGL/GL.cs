@@ -56,6 +56,28 @@ namespace ModGL.NativeGL
         UnsignedInt_2_10_10_10_Rev = 0x8368
     }
 
+    public enum FramebufferTextureTarget : uint
+    {
+        None = 0,
+        Texture1D = 0x0DE0,
+        Texture2D = 0x0DE1,
+        Texture3D = 0x806F,
+        Texture1DArray = 0x8C18,
+        Texture2DArray = 0x8C1A,
+        TextureCubeMap = 0x8513,
+        TextureCubeMapArray = 0x9009,
+        TextureRectangle = 0x84F5,
+        TextureBuffer = 0x8C2A,
+        Texture2DMultisample = 0x9100,
+        Texture2DMultisampleArray = 0x9102,
+        TextureCubeMapPositiveX = 0x8515,
+        TextureCubeMapNegativeX = 0x8516,
+        TextureCubeMapPositiveY = 0x8517,
+        TextureCubeMapNegativeY = 0x8518,
+        TextureCubeMapPositiveZ = 0x8519,
+        TextureCubeMapNegativeZ = 0x851A
+    }
+
     public enum TextureTarget : uint
     {
         Texture1D = 0x0DE0,
@@ -73,18 +95,18 @@ namespace ModGL.NativeGL
 
     public enum TextureFormat : uint
     {
-        Red = 0x1903,
-        RedGreen = 0x8227,
-        RedGreenBlue = 0x1907,
-        BlueGreenRed = 0x80E0,
-        RedGreenBlueAlpha = 0x1908,
-        BlueGreenRedAlpha = 0x80E1,
-        RedInteger = 0x8D94,
-        RedGreenInteger = 0x8228,
-        RedGreenBlueInteger = 0x8D98,
-        BlueGreenRedInteger = 0x8D9A,
-        RedGreenBlueAlphaInteger = 0x8D99,
-        BlueGreenRedAlphaInteger = 0x8D9B,
+        R = 0x1903,
+        RG = 0x8227,
+        RGB = 0x1907,
+        BGR = 0x80E0,
+        RGBA = 0x1908,
+        BGRA = 0x80E1,
+        RInteger = 0x8D94,
+        RGInteger = 0x8228,
+        RGBInteger = 0x8D98,
+        BGRInteger = 0x8D9A,
+        RGBAInteger = 0x8D99,
+        BGRAInteger = 0x8D9B,
         StencilIndex = 0x1901,
         DepthComponent = 0x1902,
         DepthStencil = 0x84F9
@@ -145,6 +167,23 @@ namespace ModGL.NativeGL
         RGB10_A2 = 0x8059,
         RGBA12 = 0x805A,
         RGBA16 = 0x805B,
+    }
+
+    public enum FramebufferTarget : uint
+    {
+        /// <summary>
+        /// Binds the framebuffer for writing. This is functionally the same as <see cref="DrawFramebuffer"/>.
+        /// </summary>
+        Framebuffer = 0x8D40,
+        /// <summary>
+        /// Binds the framebuffer for reading
+        /// </summary>
+        ReadFramebuffer = 0x8CA8,
+
+        /// <summary>
+        /// Binds the framebuffer for writing. This is functionally the same as <see cref="Framebuffer"/>.
+        /// </summary>
+        DrawFramebuffer = 0x8CA9
     }
 
     public enum StateCaps : uint
@@ -287,6 +326,42 @@ namespace ModGL.NativeGL
 
     }
 
+    public enum ActiveTexture : uint
+    {
+        Texture0 = 0x84C0,
+        Texture1 = 0x84C1,
+        Texture2 = 0x84C2,
+        Texture3 = 0x84C3,
+        Texture4 = 0x84C4,
+        Texture5 = 0x84C5,
+        Texture6 = 0x84C6,
+        Texture7 = 0x84C7,
+        Texture8 = 0x84C8,
+        Texture9 = 0x84C9,
+        Texture10 = 0x84CA,
+        Texture11 = 0x84CB,
+        Texture12 = 0x84CC,
+        Texture13 = 0x84CD,
+        Texture14 = 0x84CE,
+        Texture15 = 0x84CF,
+        Texture16 = 0x84D0,
+        Texture17 = 0x84D1,
+        Texture18 = 0x84D2,
+        Texture19 = 0x84D3,
+        Texture20 = 0x84D4,
+        Texture21 = 0x84D5,
+        Texture22 = 0x84D6,
+        Texture23 = 0x84D7,
+        Texture24 = 0x84D8,
+        Texture25 = 0x84D9,
+        Texture26 = 0x84DA,
+        Texture27 = 0x84DB,
+        Texture28 = 0x84DC,
+        Texture29 = 0x84DD,
+        Texture30 = 0x84DE,
+        Texture31 = 0x84DF
+    }
+
     public enum DrawMode : uint
     {
         Points = 0x0000,
@@ -301,6 +376,28 @@ namespace ModGL.NativeGL
         TrianglesAdjacency = 0x000C,
         TriangleStripAdjacency = 0x000D,
         Patches = 0x000E
+    }
+
+    public enum FramebufferAttachment : uint
+    {
+        ColorAttachment0 = 0x8CE0,
+        ColorAttachment1 = 0x8CE1,
+        ColorAttachment2 = 0x8CE2,
+        ColorAttachment3 = 0x8CE3,
+        ColorAttachment4 = 0x8CE4,
+        ColorAttachment5 = 0x8CE5,
+        ColorAttachment6 = 0x8CE6,
+        ColorAttachment7 = 0x8CE7,
+        ColorAttachment8 = 0x8CE8,
+        ColorAttachment9 = 0x8CE9,
+        ColorAttachment10 = 0x8CEA,
+        ColorAttachment11 = 0x8CEB,
+        ColorAttachment12 = 0x8CEC,
+        ColorAttachment13 = 0x8CED,
+        ColorAttachment14 = 0x8CEE,
+        ColorAttachment15 = 0x8CEF,
+        DepthAttachment = 0x8D00,
+        StencilAttachment = 0x8D20
     }
 
     public enum ElementBufferItemType
@@ -328,6 +425,21 @@ namespace ModGL.NativeGL
         Front = 0x0404,
         Back = 0x0405,
         FrontAndBack = 0x0408
+    }
+
+    public interface IBufferObjects
+    {
+        void BindBuffer(BufferTarget target, GLuint buffer);
+        void DeleteBuffers(GLsizei n, [In]GLuint[] buffers);
+        void GenBuffers(GLsizei n, [In]GLuint[] buffers);
+        GLboolean IsBuffer(GLuint buffer);
+        void BufferData(BufferTarget target, GLsizeiptr size, IntPtr data, BufferUsage usage);
+        void BufferSubData(BufferTarget target, GLintptr offset, GLsizeiptr size, IntPtr data);
+        void GetBufferSubData(GLenum target, GLintptr offset, GLsizeiptr size, IntPtr data);
+        IntPtr MapBuffer(BufferTarget target, BufferAccess access);
+        GLboolean UnmapBuffer(BufferTarget target);
+        void GetBufferParameteriv(GLenum target, GLenum pname, [Out]GLint[] @params);
+        void GetBufferPointerv(GLenum target, GLenum pname, [Out]IntPtr[] @params);
     }
 
     public interface IOpenGL
@@ -401,7 +513,7 @@ namespace ModGL.NativeGL
     }
 
     [GLVersion(3, 0)]
-    public interface IOpenGL30 : IOpenGL
+    public interface IOpenGL30 : IOpenGL, IBufferObjects
     {
         // 3.0
         GLboolean IsRenderbuffer(GLuint renderbuffer);
@@ -411,13 +523,13 @@ namespace ModGL.NativeGL
         void RenderbufferStorage(GLenum target, GLenum internalformat, GLsizei width, GLsizei height);
         void GetRenderbufferParameteriv(GLenum target, GLenum pname, [Out]GLint[] @params);
         GLboolean IsFramebuffer(GLuint framebuffer);
-        void BindFramebuffer(GLenum target, GLuint framebuffer);
+        void BindFramebuffer(FramebufferTarget target, GLuint framebuffer);
         void DeleteFramebuffers(GLsizei n, [In]GLuint[] framebuffers);
         void GenFramebuffers(GLsizei n, [Out]GLuint[] framebuffers);
         GLenum CheckFramebufferStatus(GLenum target);
-        void FramebufferTexture1D(GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level);
-        void FramebufferTexture2D(GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level);
-        void FramebufferTexture3D(GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level, GLint zoffset);
+        void FramebufferTexture1D(FramebufferTarget target, FramebufferAttachment attachment, FramebufferTextureTarget textarget, GLuint texture, GLint level);
+        void FramebufferTexture2D(FramebufferTarget target, FramebufferAttachment attachment, FramebufferTextureTarget textarget, GLuint texture, GLint level);
+        void FramebufferTexture3D(FramebufferTarget target, FramebufferAttachment attachment, FramebufferTextureTarget textarget, GLuint texture, GLint level, GLint zoffset);
         void FramebufferRenderbuffer(GLenum target, GLenum attachment, GLenum renderbuffertarget, GLuint renderbuffer);
         void GetFramebufferAttachmentParameteriv(GLenum target, GLenum attachment, GLenum pname, [Out]GLint[] @params);
         void GenerateMipmap(GLenum target);
@@ -470,8 +582,8 @@ namespace ModGL.NativeGL
         void VertexAttribI4ubv(GLuint index, [In]GLubyte[] v);
         void VertexAttribI4usv(GLuint index, [In]GLushort[] v);
         void GetUniformuiv(GLuint program, GLint location, [Out]GLuint[] @params);
-        void BindFragDataLocation(GLuint program, GLuint color, string name);
-        GLint GetFragDataLocation(GLuint program, string name);
+        void BindFragDataLocation(GLuint program, GLuint color, [In]string name);
+        GLint GetFragDataLocation(GLuint program, [In]string name);
         void Uniform1ui(GLint location, GLuint v0);
         void Uniform2ui(GLint location, GLuint v0, GLuint v1);
         void Uniform3ui(GLint location, GLuint v0, GLuint v1, GLuint v2);
@@ -489,12 +601,12 @@ namespace ModGL.NativeGL
         void ClearBufferfv(GLenum buffer, GLint drawbuffer, [In]GLfloat[] value);
         void ClearBufferfi(GLenum buffer, GLint drawbuffer, GLfloat depth, GLint stencil);
         string GetStringi(GLenum name, GLuint index);
-        void UniformMatrix2x3fv(GLint location, GLsizei count, GLboolean transpose, GLfloat[] value);
-        void UniformMatrix3x2fv(GLint location, GLsizei count, GLboolean transpose, GLfloat[] value);
-        void UniformMatrix2x4fv(GLint location, GLsizei count, GLboolean transpose, GLfloat[] value);
-        void UniformMatrix4x2fv(GLint location, GLsizei count, GLboolean transpose, GLfloat[] value);
-        void UniformMatrix3x4fv(GLint location, GLsizei count, GLboolean transpose, GLfloat[] value);
-        void UniformMatrix4x3fv(GLint location, GLsizei count, GLboolean transpose, GLfloat[] value);
+        void UniformMatrix2x3fv(GLint location, GLsizei count, GLboolean transpose, [In]GLfloat[] value);
+        void UniformMatrix3x2fv(GLint location, GLsizei count, GLboolean transpose, [In]GLfloat[] value);
+        void UniformMatrix2x4fv(GLint location, GLsizei count, GLboolean transpose, [In]GLfloat[] value);
+        void UniformMatrix4x2fv(GLint location, GLsizei count, GLboolean transpose, [In]GLfloat[] value);
+        void UniformMatrix3x4fv(GLint location, GLsizei count, GLboolean transpose, [In]GLfloat[] value);
+        void UniformMatrix4x3fv(GLint location, GLsizei count, GLboolean transpose, [In]GLfloat[] value);
         // 2.0
         void BlendEquationSeparate(GLenum modeRGB, GLenum modeAlpha);
         void DrawBuffers(GLsizei n, [In]GLenum[] bufs);
@@ -548,9 +660,9 @@ namespace ModGL.NativeGL
         void Uniform2iv(GLint location, GLsizei count, [In]GLint[] value);
         void Uniform3iv(GLint location, GLsizei count, [In]GLint[] value);
         void Uniform4iv(GLint location, GLsizei count, [In]GLint[] value);
-        void UniformMatrix2fv(GLint location, GLsizei count, GLboolean transpose, [In]GLfloat[] value);
-        void UniformMatrix3fv(GLint location, GLsizei count, GLboolean transpose, [In]GLfloat[] value);
-        void UniformMatrix4fv(GLint location, GLsizei count, GLboolean transpose, [In]GLfloat[] value);
+        void UniformMatrix2fv(GLint location, GLsizei count, GLboolean transpose, [In]IntPtr value);
+        void UniformMatrix3fv(GLint location, GLsizei count, GLboolean transpose, [In]IntPtr value);
+        void UniformMatrix4fv(GLint location, GLsizei count, GLboolean transpose, [In]IntPtr value);
         void ValidateProgram(GLuint program);
         void VertexAttrib1d(GLuint index, GLdouble x);
         void VertexAttrib1dv(GLuint index, [In]GLdouble[] v);
@@ -598,17 +710,6 @@ namespace ModGL.NativeGL
         void GetQueryiv(GLenum target, GLenum pname, [Out]GLint[] @params);
         void GetQueryObjectiv(GLuint id, GLenum pname, [Out]GLint[] @params);
         void GetQueryObjectuiv(GLuint id, GLenum pname, [Out]GLuint[] @params);
-        void BindBuffer(BufferTarget target, GLuint buffer);
-        void DeleteBuffers(GLsizei n, [In]GLuint[] buffers);
-        void GenBuffers(GLsizei n, [In]GLuint[] buffers);
-        GLboolean IsBuffer(GLuint buffer);
-        void BufferData(BufferTarget target, GLsizeiptr size, IntPtr data, BufferUsage usage);
-        void BufferSubData(BufferTarget target, GLintptr offset, GLsizeiptr size, IntPtr data);
-        void GetBufferSubData(GLenum target, GLintptr offset, GLsizeiptr size, IntPtr data);
-        IntPtr MapBuffer(BufferTarget target, BufferAccess access);
-        GLboolean UnmapBuffer(BufferTarget target);
-        void GetBufferParameteriv(GLenum target, GLenum pname, [Out]GLint[] @params);
-        void GetBufferPointerv(GLenum target, GLenum pname, [Out]IntPtr[] @params);
         // 1.4
         void BlendFuncSeparate(GLenum sfactorRGB, GLenum dfactorRGB, GLenum sfactorAlpha, GLenum dfactorAlpha);
         void MultiDrawArrays(GLenum mode, [In]GLint[] first, [In]GLsizei[] count, GLsizei drawcount);
@@ -618,7 +719,7 @@ namespace ModGL.NativeGL
         void PointParameteri(GLenum pname, GLint param);
         void PointParameteriv(GLenum pname, [In]GLint[] @params);
         // 1.3
-        void ActiveTexture(GLenum texture);
+        void ActiveTexture(ActiveTexture texture);
         void SampleCoverage(GLfloat value, GLboolean invert);
         void CompressedTexImage3D(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLsizei depth, GLint border, GLsizei imageSize, IntPtr data);
         void CompressedTexImage2D(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLint border, GLsizei imageSize, IntPtr data);
@@ -640,7 +741,7 @@ namespace ModGL.NativeGL
     {
         void DrawArraysInstanced(GLenum mode, GLint first, GLsizei count, GLsizei instancecount);
         void DrawElementsInstanced(GLenum mode, GLsizei count, GLenum type, IntPtr indices, GLsizei instancecount);
-        void TexBuffer(GLenum target, GLenum internalformat, GLuint buffer);
+        void TexBuffer(BufferTarget target, TextureInternalFormat internalformat, GLuint buffer);
         void PrimitiveRestartIndex(GLuint index);
         void CopyBufferSubData(GLenum readTarget, GLenum writeTarget, GLintptr readOffset, GLintptr writeOffset, GLsizeiptr size);
         void GetUniformIndices(GLuint program, GLsizei uniformCount, [In]string[] uniformNames, [Out]GLuint[] uniformIndices);
@@ -1234,7 +1335,7 @@ namespace ModGL.NativeGL
 
         [DllImport(GLLibraryName, EntryPoint = "glTexParameteri")]
         public static extern void TexParameteri(TextureTarget target, TexParameterName pname, GLint param);
-        
+
         [DllImport(GLLibraryName, EntryPoint = "glTexParameteriv")]
         public static extern void TexParameteriv(TextureTarget target, TexParameterName pname, [In]GLint[] @params);
 

@@ -149,11 +149,42 @@ namespace ModGL.Shaders
             _gl.DeleteProgram(Handle);
         }
 
-        public Uniform<TValueType> GetUniform<UniformType, TValueType>(string uniformName)
-            where UniformType : Uniform<TValueType>
+        public IEnumerable<Tuple<string, int>> GetUniforms()
+        {
+            int[] numUniforms = new int[1];
+            int[] uniformCount = new int[1];
+            _gl.GetProgramiv(Handle, ProgramParameters.ActiveUniforms, numUniforms);
+            _gl.GetProgramiv(Handle, ProgramParameters.ActiveUniformMaxLength, uniformCount);
+
+            byte[] buffer = new byte[1024];
+            for (int i = 0; i < numUniforms.Single(); i++)
+            {
+                int realLength;
+                int size;
+                uint type;
+                _gl.GetActiveUniform(Handle, (uint)i, buffer.Length, out realLength, out size, out type, buffer);
+                string name = Encoding.UTF8.GetString(buffer, 0, realLength);
+                yield return new Tuple<string, int>(name, i);
+            }
+        }
+
+        /// <summary>
+        /// Creates a uniform object for the specified uniform.
+        /// </summary>
+        /// <typeparam name="TUniformType">Type of uniform to create.</typeparam>
+        /// <typeparam name="TValueType">Type of element in the uniform.</typeparam>
+        /// <param name="uniformName">Name of the shader uniform.</param>
+        /// <returns></returns>
+        /// <exception cref="NoHandleCreatedException">Thrown if there is no uniform by that name.</exception>
+        public Uniform<TValueType> GetUniform<TUniformType, TValueType>(string uniformName)
+            where TUniformType : Uniform<TValueType>
         {
             var uniformLoc = _gl.GetUniformLocation(Handle, uniformName);
-            return (UniformType)Activator.CreateInstance(typeof(UniformType), _gl, uniformLoc, uniformName);
+
+            if(uniformLoc == -1)
+                throw new NoHandleCreatedException("Unable to find uniform with the specified name.");
+
+            return (TUniformType)Activator.CreateInstance(typeof(TUniformType), _gl, uniformName, uniformLoc);
         }
     }
 }

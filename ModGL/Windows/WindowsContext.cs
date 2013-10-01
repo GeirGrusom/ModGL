@@ -46,12 +46,14 @@ namespace ModGL.Windows
     {
         private readonly IWGL _wgl;
 
-        private readonly IntPtr hglrc;
-        private readonly IntPtr hwnd;
-        private readonly IntPtr hdc;
+        private readonly IntPtr _hglrc;
+        private readonly IntPtr _hwnd;
+        private readonly IntPtr _hdc;
 
         public static class WGLPixelFormatConstants
         {
+            public const int WGL_SAMPLE_BUFFERS_ARB = 0x2041;
+            public const int WGL_SAMPLES_ARB = 0x2042;
             public const int WGL_NUMBER_PIXEL_FORMATS_ARB = 0x2000;
             public const int WGL_DRAW_TO_WINDOW_ARB = 0x2001;
             public const int WGL_DRAW_TO_BITMAP_ARB = 0x2002;
@@ -106,13 +108,13 @@ namespace ModGL.Windows
 
         public override void Dispose()
         {
-            _wgl.wglDeleteContext(hglrc);
+            _wgl.wglDeleteContext(this._hglrc);
         }
 
         public override void SwapBuffers()
         {
-            _wgl.SwapBuffers(hdc);
-        }
+            _wgl.SwapBuffers(this._hdc);
+        } 
         
         public WindowsContext(IWGL wgl, ContextCreationParameters parameters)
         {
@@ -132,12 +134,12 @@ namespace ModGL.Windows
                 throw new ContextCreationException("Display is not supported on this platform.", parameters);
 
             _wgl = wgl;
-            hwnd = parameters.Window;
-            hdc = parameters.Device;
+            this._hwnd = parameters.Window;
+            this._hdc = parameters.Device;
 
             var tempContext = CreateTempOpenGLContext(parameters);
 
-            if(!_wgl.wglMakeCurrent(hdc, tempContext))
+            if(!_wgl.wglMakeCurrent(this._hdc, tempContext))
                 throw new ContextCreationException("Unable to make temporary context current.", parameters);
 
 
@@ -152,18 +154,21 @@ namespace ModGL.Windows
 
             int[] formats = new int[1];
             uint[] numFormats = new uint[1];
+            GL.Enable(StateCaps.MultiSample);
 
             if (!choosePixelFormat(
-                hdc,
+                this._hdc,
                 new[]
                     {
                         WGLPixelFormatConstants.WGL_DRAW_TO_WINDOW_ARB, (int) GLboolean.True,
                         WGLPixelFormatConstants.WGL_SUPPORT_OPENGL_ARB, (int) GLboolean.True,
                         WGLPixelFormatConstants.WGL_DOUBLE_BUFFER_ARB, (int) GLboolean.True,
                         WGLPixelFormatConstants.WGL_PIXEL_TYPE_ARB, WGLPixelFormatConstants.WGL_TYPE_RGBA_ARB,
-                        WGLPixelFormatConstants.WGL_COLOR_BITS_ARB, parameters.ColorBits,
-                        WGLPixelFormatConstants.WGL_DEPTH_BITS_ARB, parameters.DepthBits,
-                        WGLPixelFormatConstants.WGL_STENCIL_BITS_ARB, parameters.StencilBits,
+                        WGLPixelFormatConstants.WGL_COLOR_BITS_ARB, parameters.ColorBits.HasValue ? parameters.ColorBits.Value : 32,
+                        WGLPixelFormatConstants.WGL_DEPTH_BITS_ARB, parameters.DepthBits.HasValue ? parameters.DepthBits.Value : 24,
+                        WGLPixelFormatConstants.WGL_STENCIL_BITS_ARB, parameters.StencilBits.HasValue ? parameters.StencilBits.Value : 8,
+                        WGLPixelFormatConstants.WGL_SAMPLE_BUFFERS_ARB, 1,
+                        WGLPixelFormatConstants.WGL_SAMPLES_ARB, 1,
                         0 //End 
                     },
                 null,
@@ -175,16 +180,16 @@ namespace ModGL.Windows
                 throw new ContextCreationException("Unable to choose pixel format.", parameters);
             }
 
-            var finalContext = createContext(hdc, IntPtr.Zero, new []
+            var finalContext = createContext(this._hdc, IntPtr.Zero, new []
                 {
-                    (int)WGLContextAttributes.MajorVersion, parameters.MajorVersion,
-                    (int)WGLContextAttributes.MinorVersion, parameters.MinorVersion,
+                    (int)WGLContextAttributes.MajorVersion, parameters.MajorVersion.HasValue ? parameters.MajorVersion.Value : 3,
+                    (int)WGLContextAttributes.MinorVersion, parameters.MinorVersion.HasValue ? parameters.MinorVersion.Value : 0,
                     (int)WGLContextAttributes.Flags, 0,
                     (int)WGLContextAttributes.ProfileMask, (int)WGLContextProfileMask.CoreProfileBit,
                     0
                 }
             );
-            hglrc = finalContext;
+            this._hglrc = finalContext;
 
         }
 
@@ -201,15 +206,15 @@ namespace ModGL.Windows
                 Flags = PixelFormatFlags.DoubleBuffer | PixelFormatFlags.DrawToWindows | PixelFormatFlags.SupportOpenGL,
             };
 
-            int pixelFormat = _wgl.ChoosePixelFormat(hdc, ref desc);
+            int pixelFormat = _wgl.ChoosePixelFormat(this._hdc, ref desc);
 
             if (pixelFormat == 0)
                 throw new PixelFormatException("Could not select an appropriate pixel format.", parameters, desc);
 
-            if (!_wgl.SetPixelFormat(hdc, pixelFormat, ref desc))
+            if (!_wgl.SetPixelFormat(this._hdc, pixelFormat, ref desc))
                 throw new PixelFormatException("Could not set pixel format for HDC.", parameters, desc);
 
-            var glptr = _wgl.wglCreateContext(hdc);
+            var glptr = _wgl.wglCreateContext(this._hdc);
             if (glptr == IntPtr.Zero)
                 throw new ContextCreationException("Unable to create OpenGL context.", parameters);
 
@@ -218,7 +223,7 @@ namespace ModGL.Windows
 
         public override BindContext MakeCurrent()
         {
-            _wgl.wglMakeCurrent(hdc, hglrc);
+            _wgl.wglMakeCurrent(this._hdc, this._hglrc);
             return new BindContext(() => _wgl.wglMakeCurrent(IntPtr.Zero, IntPtr.Zero) );
         }
 
