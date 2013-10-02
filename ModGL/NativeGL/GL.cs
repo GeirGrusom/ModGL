@@ -437,7 +437,7 @@ namespace ModGL.NativeGL
     {
         void BindBuffer(BufferTarget target, GLuint buffer);
         void DeleteBuffers(GLsizei n, [In]GLuint[] buffers);
-        void GenBuffers(GLsizei n, [In]GLuint[] buffers);
+        void GenBuffers(GLsizei n, [Out]GLuint[] buffers);
         GLboolean IsBuffer(GLuint buffer);
         void BufferData(BufferTarget target, GLsizeiptr size, IntPtr data, BufferUsage usage);
         void BufferSubData(BufferTarget target, GLintptr offset, GLsizeiptr size, IntPtr data);

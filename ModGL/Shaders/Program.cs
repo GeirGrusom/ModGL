@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 
 using ModGL.NativeGL;
@@ -18,7 +19,7 @@ namespace ModGL.Shaders
         [NonSerialized]
         private readonly IOpenGL30 _gl;
         public uint Handle { get; private set; }
-        public IEnumerable<IShader> Shaders { get; private set; } 
+        public IEnumerable<IShader> Shaders { get; private set; }
 
         /// <summary>
         /// Creates an Shader program and attaches shaders to it.
@@ -28,20 +29,20 @@ namespace ModGL.Shaders
         /// <exception cref="ArgumentNullException">Thrown if gl or shaders is null.</exception>
         public Program(IOpenGL30 gl, IEnumerable<IShader> shaders)
         {
-            if(shaders == null)
+            if (shaders == null)
                 throw new ArgumentNullException("shaders");
-            if(gl == null)
+            if (gl == null)
                 throw new ArgumentNullException("gl");
 
             _gl = gl;
             Handle = gl.CreateProgram();
 
-            if(Handle == 0)
+            if (Handle == 0)
                 throw new NoHandleCreatedException();
 
             Shaders = shaders.ToArray();
 
-            foreach(var shader in Shaders)
+            foreach (var shader in Shaders)
                 gl.AttachShader(Handle, shader.Handle);
         }
 
@@ -67,7 +68,7 @@ namespace ModGL.Shaders
             {
                 int[] linkStatus = new int[1];
                 _gl.GetProgramiv(Handle, ProgramParameters.LinkStatus, linkStatus);
-                return linkStatus.Single() == (int)GLboolean.True;                
+                return linkStatus.Single() == (int)GLboolean.True;
             }
         }
 
@@ -94,13 +95,13 @@ namespace ModGL.Shaders
         /// <exception cref="InvalidOperationException">Thrown if program has already been compiled. Vertex attribute locations cannot be bound after the program has been linked.</exception>
         public void BindVertexAttributeLocations(VertexInfo.VertexDescriptor definition, int indexOffset = 0)
         {
-            if(indexOffset < 0)
+            if (indexOffset < 0)
                 throw new ArgumentException("Offset cannot be less than zero.", "indexOffset");
 
-            if(IsLinked)
+            if (IsLinked)
                 throw new InvalidOperationException("Cannot bind attributes to an already linked program.");
 
-            foreach(var item in definition.Elements.Select((Item, Index) => new { Item, Index}))
+            foreach (var item in definition.Elements.Select((Item, Index) => new { Item, Index }))
                 _gl.BindAttribLocation(Handle, (uint)(item.Index + indexOffset), item.Item.Name);
         }
 
@@ -168,6 +169,27 @@ namespace ModGL.Shaders
             }
         }
 
+        internal static class ProcCache<TKey>
+        {
+            private static readonly Func<IOpenGL30, string, int, TKey> func = Create();
+
+            private static Func<IOpenGL30, string, int, TKey> Create()
+            {
+                var ctr = typeof(TKey).GetConstructor(new[] { typeof(IOpenGL30), typeof(string), typeof(int) });
+                if (ctr == null)
+                    throw new MissingMethodException("Missing constructor taking IOpenGL30, string and int.", "ctor");
+                var p1 = Expression.Parameter(typeof(IOpenGL30));
+                var p2 = Expression.Parameter(typeof(string));
+                var p3 = Expression.Parameter(typeof(int));
+                return Expression.Lambda<Func<IOpenGL30, string, int, TKey>>(Expression.New(ctr, p1, p2, p3), p1, p2, p3).Compile();
+            }
+
+            public static TKey Create(IOpenGL30 gl, string uniformName, int location)
+            {
+                return func(gl, uniformName, location);
+            }
+        }
+
         /// <summary>
         /// Creates a uniform object for the specified uniform.
         /// </summary>
@@ -181,10 +203,10 @@ namespace ModGL.Shaders
         {
             var uniformLoc = _gl.GetUniformLocation(Handle, uniformName);
 
-            if(uniformLoc == -1)
+            if (uniformLoc == -1)
                 throw new NoHandleCreatedException("Unable to find uniform with the specified name.");
 
-            return (TUniformType)Activator.CreateInstance(typeof(TUniformType), _gl, uniformName, uniformLoc);
+            return ProcCache<TUniformType>.Create(_gl, uniformName, uniformLoc);
         }
     }
 }

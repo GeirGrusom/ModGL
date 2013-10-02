@@ -27,9 +27,6 @@ namespace WindowsTest
             public Vector3F Position;
             [VertexElement(DataType.Float, 3)]
             public Vector3F Normal;
-            [VertexElement(DataType.Float, 2)]
-            public Vector2F TexCoord;
-
         }
 
         public Terrain(IOpenGL30 gl, int columns, int rows, Func<float, float, Vector3F> heightFunction)
@@ -50,7 +47,7 @@ namespace WindowsTest
             }
         }
 
-        private Vector3F CreateNormal(Vector3F v1, Vector3F v2, Vector3F v3)
+        private static Vector3F CreateNormal(Vector3F v1, Vector3F v2, Vector3F v3)
         {
             return (v3 - v1).Cross(v2 - v1);
         }
@@ -93,7 +90,6 @@ namespace WindowsTest
                     vertexBuffer[k] = new VertexType
                     {
                         Position = result,
-                        TexCoord = new Vector2F(j / (float)columns, i / (float)rows),
                         Normal = ((CreateNormal(result, heightFunc(j - 1, i), heightFunc(j, i + 1))+
                                 CreateNormal(result, heightFunc(j + 1, i), heightFunc(j, i + 1)) +
                                 CreateNormal(result, heightFunc(j - 1, i), heightFunc(j, i - 1)) +

@@ -168,7 +168,7 @@ namespace ModGL.Windows
                         WGLPixelFormatConstants.WGL_DEPTH_BITS_ARB, parameters.DepthBits.HasValue ? parameters.DepthBits.Value : 24,
                         WGLPixelFormatConstants.WGL_STENCIL_BITS_ARB, parameters.StencilBits.HasValue ? parameters.StencilBits.Value : 8,
                         WGLPixelFormatConstants.WGL_SAMPLE_BUFFERS_ARB, 1,
-                        WGLPixelFormatConstants.WGL_SAMPLES_ARB, 1,
+                        WGLPixelFormatConstants.WGL_SAMPLES_ARB, 4,
                         0 //End 
                     },
                 null,
@@ -183,7 +183,7 @@ namespace ModGL.Windows
             var finalContext = createContext(this._hdc, IntPtr.Zero, new []
                 {
                     (int)WGLContextAttributes.MajorVersion, parameters.MajorVersion.HasValue ? parameters.MajorVersion.Value : 3,
-                    (int)WGLContextAttributes.MinorVersion, parameters.MinorVersion.HasValue ? parameters.MinorVersion.Value : 0,
+                    (int)WGLContextAttributes.MinorVersion, parameters.MinorVersion.HasValue ? parameters.MinorVersion.Value : 2,
                     (int)WGLContextAttributes.Flags, 0,
                     (int)WGLContextAttributes.ProfileMask, (int)WGLContextProfileMask.CoreProfileBit,
                     0
