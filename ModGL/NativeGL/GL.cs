@@ -448,6 +448,43 @@ namespace ModGL.NativeGL
         void GetBufferPointerv(GLenum target, GLenum pname, [Out]IntPtr[] @params);
     }
 
+    public class ConstStringReturnMarshaller : ICustomMarshaler
+    {
+        private static readonly ICustomMarshaler instance;
+        public static ICustomMarshaler GetInstance(string what)
+        {
+            return new ConstStringReturnMarshaller();
+        }
+        public object MarshalNativeToManaged(IntPtr pNativeData)
+        {
+            return Marshal.PtrToStringAnsi(pNativeData);
+        }
+
+
+        public IntPtr MarshalManagedToNative(object ManagedObj)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public void CleanUpNativeData(IntPtr pNativeData)
+        {
+            
+        }
+
+
+        public void CleanUpManagedData(object ManagedObj)
+        {
+            
+        }
+
+
+        public int GetNativeDataSize()
+        {
+            return 0;
+        }
+    }
+
     public interface IOpenGL
     {
         // 1.0
@@ -490,6 +527,8 @@ namespace ModGL.NativeGL
         GLenum GetError();
         void GetFloatv(GLenum pname, [Out]GLfloat[] @params);
         void GetIntegerv(GLenum pname, [Out]GLint[] @params);
+
+        [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(ConstStringReturnMarshaller))]
         string GetString(GLenum name);
         void GetTexImage(GLenum target, GLint level, GLenum format, GLenum type, IntPtr pixels);
         void GetTexParameterfv(GLenum target, GLenum pname, [Out]GLfloat[] @params);
@@ -606,6 +645,8 @@ namespace ModGL.NativeGL
         void ClearBufferuiv(GLenum buffer, GLint drawbuffer, [In]GLuint[] value);
         void ClearBufferfv(GLenum buffer, GLint drawbuffer, [In]GLfloat[] value);
         void ClearBufferfi(GLenum buffer, GLint drawbuffer, GLfloat depth, GLint stencil);
+
+        [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(ConstStringReturnMarshaller))]
         string GetStringi(GLenum name, GLuint index);
         void UniformMatrix2x3fv(GLint location, GLsizei count, GLboolean transpose, [In]GLfloat[] value);
         void UniformMatrix3x2fv(GLint location, GLsizei count, GLboolean transpose, [In]GLfloat[] value);
@@ -1430,6 +1471,7 @@ namespace ModGL.NativeGL
         public static extern void GetIntegerv(GLenum pname, [Out]GLint[] @params);
 
         [DllImport(GLLibraryName, EntryPoint = "glGetString")]
+        [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(ConstStringReturnMarshaller))]
         public static extern string GetString(GLenum name);
 
         [DllImport(GLLibraryName, EntryPoint = "glGetTexImage")]

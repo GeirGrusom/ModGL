@@ -91,10 +91,34 @@ namespace WindowsTest
 
             _shader.Bind();
 
+
             _worldUniform.Value = Matrix44F.Identity;
-            viewUnifom.Value = ViewMatrix.LookAt(new Vector3F(10, 10, 10), Vector3F.UnitY, new Vector3F());//ModelMatrix.Translate(new Vector3F(0, -5, -20)).RotateX((float)Math.PI / 4);
+            viewUnifom.Value = ViewMatrix.LookAt(new Vector3F(10, 10, 10), Vector3F.UnitY, new Vector3F());
             projectionUniform.Value = ProjectionMatrix.RightHandPerspective((float)Math.PI / 1.8f, 1.0f, 64f, 0.1f);
             _lightUniform.Value = new Vector3F(5, -10, 20);
+
+            var bmp = (Bitmap)Image.FromFile("noiseTexture.png");
+            var l = bmp.LockBits(
+                new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+
+            var normalMap = new Texture2D(
+                _gl,
+                l.Width,
+                l.Height,
+                TextureFormat.RGBA,
+                TextureInternalFormat.RGBA8,
+                TexturePixelType.UnsignedInt_8_8_8_8);
+            normalMap.Bind();
+            normalMap.BufferData(l.Scan0);
+
+            var str = _gl.GetString(0x1F02);
+
+            bmp.UnlockBits(l);
+
+            _gl.ActiveTexture(ActiveTexture.Texture1);
+            normalMap.Bind();
+            var nm = _shader.GetUniform<IntUniform, int>("NormalMap");
+            nm.Value = 1;
 
             this._terrain = new Terrain(
                 this._gl, 512, 512, (x, y) =>

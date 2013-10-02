@@ -27,6 +27,8 @@ namespace WindowsTest
             public Vector3F Position;
             [VertexElement(DataType.Float, 3)]
             public Vector3F Normal;
+            [VertexElement(DataType.Float, 2)]
+            public Vector2F TexCoord;
         }
 
         public Terrain(IOpenGL30 gl, int columns, int rows, Func<float, float, Vector3F> heightFunction)
@@ -93,7 +95,8 @@ namespace WindowsTest
                         Normal = ((CreateNormal(result, heightFunc(j - 1, i), heightFunc(j, i + 1))+
                                 CreateNormal(result, heightFunc(j + 1, i), heightFunc(j, i + 1)) +
                                 CreateNormal(result, heightFunc(j - 1, i), heightFunc(j, i - 1)) +
-                                CreateNormal(result, heightFunc(j - 1, i), heightFunc(j, i - 1))) * 0.25f).Normalize()
+                                CreateNormal(result, heightFunc(j - 1, i), heightFunc(j, i - 1))) * 0.25f).Normalize(),
+                                TexCoord = new Vector2F((i / 128f) % 1f, (j / 128f) % 1f)
                     };
                 }
             }
