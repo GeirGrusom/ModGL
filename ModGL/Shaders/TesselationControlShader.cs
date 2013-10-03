@@ -10,7 +10,7 @@ namespace ModGL.Shaders
 {
     public sealed class TesselationControlShader : Shader
     {
-        public TesselationControlShader(IOpenGL42 gl, string code)
+        public TesselationControlShader(IOpenGL40 gl, string code)
             : base(gl, ShaderType.TesselationControlShader, code)
         {
             
@@ -19,7 +19,7 @@ namespace ModGL.Shaders
 
     public sealed class TesselationEvaulationShader : Shader
     {
-        public TesselationEvaulationShader(IOpenGL42 gl, string code)
+        public TesselationEvaulationShader(IOpenGL40 gl, string code)
             : base(gl, ShaderType.TesselationEvaluationShader, code)
         {
         }

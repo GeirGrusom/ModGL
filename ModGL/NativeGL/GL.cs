@@ -477,13 +477,13 @@ namespace ModGL.NativeGL
 
         public void CleanUpNativeData(IntPtr pNativeData)
         {
-            
+
         }
 
 
         public void CleanUpManagedData(object ManagedObj)
         {
-            
+
         }
 
 
@@ -920,13 +920,111 @@ namespace ModGL.NativeGL
     [GLVersion(4, 1)]
     public interface IOpenGL41 : IOpenGL40
     {
-
+        void ReleaseShaderCompiler();
+        void ShaderBinary(GLsizei count, [In] GLuint[] shaders, GLenum binaryformat, [In] byte[] binary, GLsizei length);
+        void GetShaderPrecisionFormat(GLenum shadertype, GLenum precisiontype, GLint[] range, GLint[] precision);
+        void DepthRangef(GLfloat n, GLfloat f);
+        void ClearDepthf(GLfloat d);
+        void GetProgramBinary(GLuint program, GLsizei bufSize, out GLsizei length, out GLenum binaryFormat, [Out]byte[] binary);
+        void ProgramBinary(GLuint program, GLenum binaryFormat, [In]byte[] binary, GLsizei length);
+        void ProgramParameteri(GLuint program, GLenum pname, GLint value);
+        void UseProgramStages(GLuint pipeline, GLbitfield stages, GLuint program);
+        void ActiveShaderProgram(GLuint pipeline, GLuint program);
+        GLuint CreateShaderProgramv(GLenum type, GLsizei count, [In]string[] strings);
+        void BindProgramPipeline(GLuint pipeline);
+        void DeleteProgramPipelines(GLsizei n, [In]GLuint[] pipelines);
+        void GenProgramPipelines(GLsizei n, [Out]GLuint[] pipelines);
+        GLboolean IsProgramPipeline(GLuint pipeline);
+        void GetProgramPipelineiv(GLuint pipeline, GLenum pname, GLint[] @params);
+        void ProgramUniform1i(GLuint program, GLint location, GLint v0);
+        void ProgramUniform1iv(GLuint program, GLint location, GLsizei count, [In]GLint[] value);
+        void ProgramUniform1f(GLuint program, GLint location, GLfloat v0);
+        void ProgramUniform1fv(GLuint program, GLint location, GLsizei count, [In]GLfloat[] value);
+        void ProgramUniform1d(GLuint program, GLint location, GLdouble v0);
+        void ProgramUniform1dv(GLuint program, GLint location, GLsizei count, [In]GLdouble[] value);
+        void ProgramUniform1ui(GLuint program, GLint location, GLuint v0);
+        void ProgramUniform1uiv(GLuint program, GLint location, GLsizei count, [In]GLuint[] value);
+        void ProgramUniform2i(GLuint program, GLint location, GLint v0, GLint v1);
+        void ProgramUniform2iv(GLuint program, GLint location, GLsizei count, [In] GLint[] value);
+        void ProgramUniform2f(GLuint program, GLint location, GLfloat v0, GLfloat v1);
+        void ProgramUniform2fv(GLuint program, GLint location, GLsizei count, [In] GLfloat[] value);
+        void ProgramUniform2d(GLuint program, GLint location, GLdouble v0, GLdouble v1);
+        void ProgramUniform2dv(GLuint program, GLint location, GLsizei count, [In] GLdouble[] value);
+        void ProgramUniform2ui(GLuint program, GLint location, GLuint v0, GLuint v1);
+        void ProgramUniform2uiv(GLuint program, GLint location, GLsizei count, [In] GLuint[] value);
+        void ProgramUniform3i(GLuint program, GLint location, GLint v0, GLint v1, GLint v2);
+        void ProgramUniform3iv(GLuint program, GLint location, GLsizei count, [In] GLint[] value);
+        void ProgramUniform3f(GLuint program, GLint location, GLfloat v0, GLfloat v1, GLfloat v2);
+        void ProgramUniform3fv(GLuint program, GLint location, GLsizei count, [In] GLfloat[] value);
+        void ProgramUniform3d(GLuint program, GLint location, GLdouble v0, GLdouble v1, GLdouble v2);
+        void ProgramUniform3dv(GLuint program, GLint location, GLsizei count, [In] GLdouble[] value);
+        void ProgramUniform3ui(GLuint program, GLint location, GLuint v0, GLuint v1, GLuint v2);
+        void ProgramUniform3uiv(GLuint program, GLint location, GLsizei count, [In] GLuint[] value);
+        void ProgramUniform4i(GLuint program, GLint location, GLint v0, GLint v1, GLint v2, GLint v3);
+        void ProgramUniform4iv(GLuint program, GLint location, GLsizei count, [In] GLint[] value);
+        void ProgramUniform4f(GLuint program, GLint location, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3);
+        void ProgramUniform4fv(GLuint program, GLint location, GLsizei count, [In] GLfloat[] value);
+        void ProgramUniform4d(GLuint program, GLint location, GLdouble v0, GLdouble v1, GLdouble v2, GLdouble v3);
+        void ProgramUniform4dv(GLuint program, GLint location, GLsizei count, [In] GLdouble[] value);
+        void ProgramUniform4ui(GLuint program, GLint location, GLuint v0, GLuint v1, GLuint v2, GLuint v3);
+        void ProgramUniform4uiv(GLuint program, GLint location, GLsizei count, [In]GLuint[] value);
+        void ProgramUniformMatrix2fv(GLuint program, GLint location, GLsizei count, GLboolean transpose, [In]GLfloat[] value);
+        void ProgramUniformMatrix3fv(GLuint program, GLint location, GLsizei count, GLboolean transpose, [In]GLfloat[] value);
+        void ProgramUniformMatrix4fv(GLuint program, GLint location, GLsizei count, GLboolean transpose, [In]GLfloat[] value);
+        void ProgramUniformMatrix2dv(GLuint program, GLint location, GLsizei count, GLboolean transpose, [In]GLdouble[] value);
+        void ProgramUniformMatrix3dv(GLuint program, GLint location, GLsizei count, GLboolean transpose, [In]GLdouble[] value);
+        void ProgramUniformMatrix4dv(GLuint program, GLint location, GLsizei count, GLboolean transpose, [In]GLdouble[] value);
+        void ProgramUniformMatrix2x3fv(GLuint program, GLint location, GLsizei count, GLboolean transpose, [In]GLfloat[] value);
+        void ProgramUniformMatrix3x2fv(GLuint program, GLint location, GLsizei count, GLboolean transpose, [In]GLfloat[] value);
+        void ProgramUniformMatrix2x4fv(GLuint program, GLint location, GLsizei count, GLboolean transpose, [In]GLfloat[] value);
+        void ProgramUniformMatrix4x2fv(GLuint program, GLint location, GLsizei count, GLboolean transpose, [In]GLfloat[] value);
+        void ProgramUniformMatrix3x4fv(GLuint program, GLint location, GLsizei count, GLboolean transpose, [In]GLfloat[] value);
+        void ProgramUniformMatrix4x3fv(GLuint program, GLint location, GLsizei count, GLboolean transpose, [In]GLfloat[] value);
+        void ProgramUniformMatrix2x3dv(GLuint program, GLint location, GLsizei count, GLboolean transpose, [In]GLdouble[] value);
+        void ProgramUniformMatrix3x2dv(GLuint program, GLint location, GLsizei count, GLboolean transpose, [In]GLdouble[] value);
+        void ProgramUniformMatrix2x4dv(GLuint program, GLint location, GLsizei count, GLboolean transpose, [In]GLdouble[] value);
+        void ProgramUniformMatrix4x2dv(GLuint program, GLint location, GLsizei count, GLboolean transpose, [In]GLdouble[] value);
+        void ProgramUniformMatrix3x4dv(GLuint program, GLint location, GLsizei count, GLboolean transpose, [In]GLdouble[] value);
+        void ProgramUniformMatrix4x3dv(GLuint program, GLint location, GLsizei count, GLboolean transpose, [In]GLdouble[] value);
+        void ValidateProgramPipeline(GLuint pipeline);
+        void GetProgramPipelineInfoLog(GLuint pipeline, GLsizei bufSize, out GLsizei length, [Out]GLchar[] infoLog);
+        void VertexAttribL1d(GLuint index, GLdouble x);
+        void VertexAttribL2d(GLuint index, GLdouble x, GLdouble y);
+        void VertexAttribL3d(GLuint index, GLdouble x, GLdouble y, GLdouble z);
+        void VertexAttribL4d(GLuint index, GLdouble x, GLdouble y, GLdouble z, GLdouble w);
+        void VertexAttribL1dv(GLuint index, [In]GLdouble[] v);
+        void VertexAttribL2dv(GLuint index, [In]GLdouble[] v);
+        void VertexAttribL3dv(GLuint index, [In]GLdouble[] v);
+        void VertexAttribL4dv(GLuint index, [In]GLdouble[] v);
+        void VertexAttribLPointer(GLuint index, GLint size, DataType type, GLsizei stride, IntPtr pointer);
+        void GetVertexAttribLdv(GLuint index, GLenum pname, [Out]GLdouble[] @params);
+        void ViewportArrayv(GLuint first, GLsizei count, [In]GLfloat[] v);
+        void ViewportIndexedf(GLuint index, GLfloat x, GLfloat y, GLfloat w, GLfloat h);
+        void ViewportIndexedfv(GLuint index, [In]GLfloat[] v);
+        void ScissorArrayv(GLuint first, GLsizei count, [In]GLint[] v);
+        void ScissorIndexed(GLuint index, GLint left, GLint bottom, GLsizei width, GLsizei height);
+        void ScissorIndexedv(GLuint index, [In]GLint[] v);
+        void DepthRangeArrayv(GLuint first, GLsizei count, [In]GLdouble[] v);
+        void DepthRangeIndexed(GLuint index, GLdouble n, GLdouble f);
+        void GetFloati_v(GLenum target, GLuint index, [Out]GLfloat[] data);
+        void GetDoublei_v(GLenum target, GLuint index, [Out]GLdouble[] data);
     }
 
     [GLVersion(4, 2)]
     public interface IOpenGL42 : IOpenGL41
     {
-
+        void DrawArraysInstancedBaseInstance(GLenum mode, GLint first, GLsizei count, GLsizei instancecount, GLuint baseinstance);
+        void DrawElementsInstancedBaseInstance(GLenum mode, GLsizei count, GLenum type, [In]IntPtr[] indices, GLsizei instancecount, GLuint baseinstance);
+        void DrawElementsInstancedBaseVertexBaseInstance(GLenum mode, GLsizei count, GLenum type, [In]IntPtr[] indices, GLsizei instancecount, GLint basevertex, GLuint baseinstance);
+        void GetInternalformativ(GLenum target, GLenum internalformat, GLenum pname, GLsizei bufSize, [Out]GLint[] @params);
+        void GetActiveAtomicCounterBufferiv(GLuint program, GLuint bufferIndex, GLenum pname, [Out]GLint[] @params);
+        void BindImageTexture(GLuint unit, GLuint texture, GLint level, GLboolean layered, GLint layer, GLenum access, GLenum format);
+        void MemoryBarrier(GLbitfield barriers);
+        void TexStorage1D(GLenum target, GLsizei levels, GLenum internalformat, GLsizei width);
+        void TexStorage2D(GLenum target, GLsizei levels, GLenum internalformat, GLsizei width, GLsizei height);
+        void TexStorage3D(GLenum target, GLsizei levels, GLenum internalformat, GLsizei width, GLsizei height, GLsizei depth);
+        void DrawTransformFeedbackInstanced(GLenum mode, GLuint id, GLsizei instancecount);
+        void DrawTransformFeedbackStreamInstanced(GLenum mode, GLuint id, GLuint stream, GLsizei instancecount);
     }
 
     [GLVersion(4, 3)]

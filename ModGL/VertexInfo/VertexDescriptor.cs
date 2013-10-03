@@ -149,6 +149,7 @@ namespace ModGL.VertexInfo
 
         internal void Apply(IOpenGL30 gl, int indexOffset)
         {
+            var openGL41 = gl as IOpenGL41;
             foreach (var e in Elements.Select((e, i) => new { Index = i + indexOffset, Item = e}))
             {
                 // Double is supported by glVertexAttribLPointer, which is not implemented in OpenGL 3.0.
@@ -159,6 +160,15 @@ namespace ModGL.VertexInfo
                         e.Item.Dimensions,
                         e.Item.Type,
                         GLboolean.False,
+                        System.Runtime.InteropServices.Marshal.SizeOf(ElementType),
+                        new IntPtr(e.Item.Offset));
+                }
+                else if (openGL41 != null && e.Item.Type == DataType.Double)
+                {
+                    openGL41.VertexAttribLPointer(
+                        (uint)e.Index,
+                        e.Item.Dimensions,
+                        e.Item.Type,
                         System.Runtime.InteropServices.Marshal.SizeOf(ElementType),
                         new IntPtr(e.Item.Offset));
                 }

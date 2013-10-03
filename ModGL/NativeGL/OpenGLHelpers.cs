@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 namespace ModGL.NativeGL
 {
@@ -85,6 +86,25 @@ namespace ModGL.NativeGL
                 results[i] = gl.GetStringi(0x1F03, (uint)i);
 
             return results;
+        }
+
+        public static void DrawElements<T>(this IOpenGL gl, DrawMode mode, int count, ElementBufferItemType type, T[] data)
+            where T : struct
+        {
+            var handle = GCHandle.Alloc(data, GCHandleType.Pinned);
+            try
+            {
+                gl.DrawElements(mode, count, type, handle.AddrOfPinnedObject());
+            }
+            finally
+            {
+                handle.Free();
+            }
+        }
+
+        public static void DrawElements(this IOpenGL gl, DrawMode mode, int count, ElementBufferItemType type)
+        {
+            gl.DrawElements(mode, count, type, System.IntPtr.Zero);
         }
     }
 }
