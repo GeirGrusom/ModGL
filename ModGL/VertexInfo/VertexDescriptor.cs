@@ -149,7 +149,7 @@ namespace ModGL.VertexInfo
 
         internal void Apply(IOpenGL30 gl, int indexOffset)
         {
-            foreach (var e in Elements.Select((e, i) => new { Index = i, Item = e}))
+            foreach (var e in Elements.Select((e, i) => new { Index = i + indexOffset, Item = e}))
             {
                 // Double is supported by glVertexAttribLPointer, which is not implemented in OpenGL 3.0.
                 if (e.Item.Type == DataType.Half || e.Item.Type == DataType.Float) 

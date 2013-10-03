@@ -384,6 +384,14 @@ namespace ModGL.NativeGL
         Patches = 0x000E
     }
 
+    public enum GetStringNames : uint
+    {
+        Vendor = 0x1F00,
+        Renderer = 0x1F01,
+        Version = 0x1F02,
+        ShadingLanguageVersion = 0x8B8C
+    }
+
     public enum FramebufferAttachment : uint
     {
         ColorAttachment0 = 0x8CE0,
@@ -529,7 +537,7 @@ namespace ModGL.NativeGL
         void GetIntegerv(GLenum pname, [Out]GLint[] @params);
 
         [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(ConstStringReturnMarshaller))]
-        string GetString(GLenum name);
+        string GetString(GetStringNames name);
         void GetTexImage(GLenum target, GLint level, GLenum format, GLenum type, IntPtr pixels);
         void GetTexParameterfv(GLenum target, GLenum pname, [Out]GLfloat[] @params);
         void GetTexParameteriv(GLenum target, GLenum pname, [Out]GLint[] @params);
@@ -585,7 +593,7 @@ namespace ModGL.NativeGL
         void FlushMappedBufferRange(GLenum target, GLintptr offset, GLsizeiptr length);
         void BindVertexArray(GLuint array);
         void DeleteVertexArrays(GLsizei n, [In]GLuint[] arrays);
-        void GenVertexArrays(GLsizei n, [In]GLuint[] arrays);
+        void GenVertexArrays(GLsizei n, [Out]GLuint[] arrays);
         GLboolean IsVertexArray(GLuint array);
 
         void ColorMaski(GLuint index, GLboolean r, GLboolean g, GLboolean b, GLboolean a);
@@ -829,7 +837,7 @@ namespace ModGL.NativeGL
     public interface IOpenGL33 : IOpenGL32
     {
         void BindFragDataLocationIndexed(GLuint program, GLuint colorNumber, GLuint index, string name);
-        GLint GetFragDataIndex(GLuint program, string name);
+        GLint GetFragDataIndex(GLuint program, [In]string name);
         void GenSamplers(GLsizei count, GLuint[] samplers);
         void DeleteSamplers(GLsizei count, GLuint[] samplers);
         GLboolean IsSampler(GLuint sampler);
@@ -1472,7 +1480,7 @@ namespace ModGL.NativeGL
 
         [DllImport(GLLibraryName, EntryPoint = "glGetString")]
         [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(ConstStringReturnMarshaller))]
-        public static extern string GetString(GLenum name);
+        public static extern string GetString(GetStringNames name);
 
         [DllImport(GLLibraryName, EntryPoint = "glGetTexImage")]
         public static extern void GetTexImage(GLenum target, GLint level, GLenum format, GLenum type, IntPtr pixels);

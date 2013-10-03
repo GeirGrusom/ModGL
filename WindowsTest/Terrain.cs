@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,18 +18,35 @@ namespace WindowsTest
     {
         private readonly IVertexArray _vertexArray;
         private readonly IVertexBuffer _vb;
+        private readonly IVertexBuffer _tangents;
         private readonly IElementArray _ib;
 
         private readonly IOpenGL30 _gl;
+        [StructLayout(LayoutKind.Sequential)]
         public struct VertexType
         {
             public static readonly VertexDescriptor Descriptor = VertexDescriptor.Create<VertexType>();
+            
             [VertexElement(DataType.Float, 3)]
             public Vector3F Position;
+            
             [VertexElement(DataType.Float, 3)]
             public Vector3F Normal;
+            
             [VertexElement(DataType.Float, 2)]
-            public Vector2F TexCoord;
+            public Vector2F TexCoord;            
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct Tangents
+        {
+            public static readonly VertexDescriptor Descriptor = VertexDescriptor.Create<Tangents>();
+
+            [VertexElement(DataType.Float, 3)]
+            public Vector3F Tangent;
+
+            [VertexElement(DataType.Float, 3)]
+            public Vector3F BiTangent; 
         }
 
         public Terrain(IOpenGL30 gl, int columns, int rows, Func<float, float, Vector3F> heightFunction)
@@ -36,8 +54,8 @@ namespace WindowsTest
             _gl = gl;
             _vb = CreateVertexBuffer(gl, columns, rows, heightFunction);
             _ib = CreateElementBuffer(gl, columns, rows);
-            
-            _vertexArray = new VertexArray(gl, new [] { _vb }, new [] { VertexType.Descriptor } );
+            _tangents = CreateTangentBuffer(gl, (ElementBuffer<uint>)_ib, (VertexBuffer<VertexType>)_vb);
+            _vertexArray = new VertexArray(gl, new [] { _vb, _tangents }, new [] { VertexType.Descriptor, Tangents.Descriptor } );
         }
 
         public void Render()
@@ -78,6 +96,49 @@ namespace WindowsTest
                 elementBuffer.BufferData(BufferUsage.StaticDraw);
             }
             return elementBuffer;
+        }
+
+        private IVertexBuffer CreateTangentBuffer(IOpenGL30 gl, ElementBuffer<uint> ib, VertexBuffer<VertexType> vb)
+        {
+            var tangents = new VertexBuffer<Tangents>(vb.Elements, gl);
+            int[] counter = new int[vb.Elements];
+
+            for (int i = 0; i < ib.Elements; i += 3)
+            {
+                var v1 = vb[ib[i]];
+                var v2 = vb[ib[i + 1]];
+                var v3 = vb[ib[i + 2]];
+
+                var delta1 = v2.Position - v1.Position;
+                var delta2 = v3.Position - v1.Position;
+
+                var deltaUv1 = v2.TexCoord - v1.TexCoord;
+                var deltaUv2 = v3.TexCoord - v1.TexCoord;
+
+                float r = 1.0f / (deltaUv1.X * deltaUv2.Y - deltaUv1.Y * deltaUv2.X);
+                var tangent = (delta1 * deltaUv2.Y   - delta2 * delta1.Y)*r;
+                var bitangent = (delta2 * deltaUv1.X   - delta1 * delta2.X)*r;
+
+                counter[ib[i]]++;
+                counter[ib[i + 1]]++;
+                counter[ib[i + 2]]++;
+
+                tangents[ib[i]] = new Tangents { Tangent = tangents[ib[i]].Tangent + tangent, BiTangent = tangents[ib[i]].BiTangent + bitangent };
+                tangents[ib[i + 1]] = new Tangents { Tangent = tangents[ib[i + 1]].Tangent + tangent, BiTangent = tangents[ib[i + 1]].BiTangent + bitangent };
+                tangents[ib[i + 2]] = new Tangents { Tangent = tangents[ib[i + 2]].Tangent + tangent, BiTangent = tangents[ib[i + 2]].BiTangent + bitangent };
+            }
+
+            for (int i = 0; i < tangents.Elements; i++)
+            {
+                int count = counter[i];
+                tangents[i] = new Tangents { Tangent  = tangents[i].Tangent / count, BiTangent = tangents[i].BiTangent / count};
+            }
+
+            using (tangents.Bind())
+            {
+                tangents.BufferData(BufferUsage.StaticDraw);
+            }
+            return tangents;
         }
 
         private IVertexBuffer CreateVertexBuffer(IOpenGL30 gl, int columns, int rows, Func<float, float, Vector3F> heightFunc)

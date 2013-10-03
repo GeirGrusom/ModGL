@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Linq;
 using System.Windows.Forms;
 
 using ModGL;
@@ -80,6 +81,7 @@ namespace WindowsTest
                 });
 
             this._shader.BindVertexAttributeLocations(Terrain.VertexType.Descriptor);
+            this._shader.BindVertexAttributeLocations(Terrain.Tangents.Descriptor, Terrain.VertexType.Descriptor.Elements.Count());
             this._gl.BindFragDataLocation(this._shader.Handle, 0, "output");
 
             this._shader.Compile();
@@ -108,12 +110,26 @@ namespace WindowsTest
                 TextureFormat.RGBA,
                 TextureInternalFormat.RGBA8,
                 TexturePixelType.UnsignedInt_8_8_8_8);
-            normalMap.Bind();
-            normalMap.BufferData(l.Scan0);
-
-            var str = _gl.GetString(0x1F02);
-
+            
+            using (normalMap.Bind())
+            {
+                _gl.TexParameteri(TextureTarget.Texture2D, TexParameterName.TextureWrapR, 0x2901);
+                _gl.TexParameteri(TextureTarget.Texture2D, TexParameterName.TextureWrapS, 0x2901);
+                _gl.TexParameteri(TextureTarget.Texture2D, TexParameterName.TextureWrapT, 0x2901);
+                normalMap.BufferData(l.Scan0);
+                _gl.GenerateMipmap((uint)TextureTarget.Texture2D);
+            }
             bmp.UnlockBits(l);
+            bmp.Dispose();
+
+
+            var version = _gl.GetString(GetStringNames.Version);
+            var renderer = _gl.GetString(GetStringNames.Renderer);
+            var vendor = _gl.GetString(GetStringNames.Vendor);
+            var shaderVersion = _gl.GetString(GetStringNames.ShadingLanguageVersion);
+            _form.Text = string.Format("OpenGL Test - {0} - {1} - {2} - Shading language version {3}", version, renderer, vendor, shaderVersion);
+
+            
 
             _gl.ActiveTexture(ActiveTexture.Texture1);
             normalMap.Bind();
@@ -135,12 +151,6 @@ namespace WindowsTest
         }
 
         private Quaternion _rotation = Quaternion.Identity;
-
-        public struct Vertex
-        {
-            [VertexElement(DataType.Float, 3)]
-            public Vector3F Position;
-        }
 
         public void Render()
         {
