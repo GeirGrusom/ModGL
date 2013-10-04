@@ -311,7 +311,6 @@ namespace ModGL.Binding
                 generator.Emit(OpCodes.Ldloc_0); // result
                 generator.Emit(OpCodes.Stfld, field); // this._fieldName = result;
             }
-            //generator.Emit(OpCodes.Ldloc_0); // Load this
             generator.Emit(OpCodes.Ret);
         }
 
