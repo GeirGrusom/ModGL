@@ -3,6 +3,7 @@ using System.Diagnostics.Contracts;
 
 using ModGL.Binding;
 using ModGL.NativeGL;
+using ModGL.Unix;
 using ModGL.Windows;
 
 namespace ModGL
@@ -13,13 +14,22 @@ namespace ModGL
     }
 
     /// <summary>
-    /// This class is used to create a context for the running platform.
+    /// This class is used to create a context for the current platform.
     /// </summary>
     public class ContextFactory : IContextFactory
     {
+        /// <summary>
+        /// Creates a context based on the current platform.
+        /// </summary>
+        /// <param name="parameters">Parameters to create context from.</param>
+        /// <returns>An OpenGL context defined by <see cref="parameters"/>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if parameters is null.</exception>
+        /// <exception cref="PlatformNotSupportedException">Thrown if the current platform is not supported.</exception>
         [Pure]
         public IContext Create(ContextCreationParameters parameters)
         {
+            if(parameters == null)
+                throw new ArgumentNullException("parameters");
             if (Environment.OSVersion.Platform == PlatformID.Win32NT)
             {
                 var loader = new WindowsLibraryLoader();
@@ -46,13 +56,20 @@ namespace ModGL
     /// </summary>
     public class LibraryLoaderFactory : ILibraryLoaderFactory
     {
+        /// <summary>
+        /// Creates a library loader for the current platform.
+        /// </summary>
+        /// <returns>Library loader for the current platform.</returns>
+        /// <exception cref="PlatformNotSupportedException">Thrown if the current platform is not supported.</exception>
         [Pure]
         public ILibraryLoader Create()
         {
             if (Environment.OSVersion.Platform == PlatformID.Win32NT)
-            {
                 return new WindowsLibraryLoader();
-            }
+
+            if(Environment.OSVersion.Platform == PlatformID.Unix || Environment.OSVersion.Platform == PlatformID.MacOSX)
+                return new UnixLibraryLoader();
+
             throw new PlatformNotSupportedException();
         }
     }
@@ -73,18 +90,27 @@ namespace ModGL
         /// <param name="context">The created context.</param>
         /// <returns>Implementation of the specified interface for the context.</returns>
         /// <exception cref="PlatformNotSupportedException">Thrown if the platform is not supported by the implementation.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <see cref="parameters"/>, <see cref="contextFactory"/> or <see cref="libraryLoaderFactory"/> is null.</exception>
         [Pure]
         public TInterface CreateInterface<TInterface>(ContextCreationParameters parameters, IContextFactory contextFactory, ILibraryLoaderFactory libraryLoaderFactory,  bool throwOnError, out IContext context)
             where TInterface : IOpenGL // Must be at least an OpenGL 1.1 interface.
         {
+            if(contextFactory == null)
+                throw new ArgumentNullException("contextFactory");
+            if(libraryLoaderFactory == null)
+                throw new ArgumentNullException("libraryLoaderFactory");
+            if(parameters == null)
+                throw new ArgumentNullException("parameters");
+
             context = contextFactory.Create(parameters);
             var lib = libraryLoaderFactory.Create();
 
             ILibrary glLib;
+            
             if (Environment.OSVersion.Platform == PlatformID.Win32NT)
                 glLib = lib.Load("OpenGL32");
-            else 
-                throw new PlatformNotSupportedException();
+            else
+                glLib = lib.Load("libgl");
 
             var bindingFactory = new InterfaceBindingFactory();
             if (throwOnError)

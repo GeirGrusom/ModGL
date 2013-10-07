@@ -1,19 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Windows.Forms;
 
 using ModGL;
-using ModGL.Binding;
-using ModGL.Buffers;
 using ModGL.Math;
 using ModGL.NativeGL;
 using ModGL.Shaders;
 using ModGL.Textures;
-using ModGL.VertexInfo;
-using ModGL.Windows;
 
 using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
@@ -28,9 +23,6 @@ namespace WindowsTest
 
         private ModGL.Shaders.Program _shader;
 
-        private Matrix44F _worldMatrix;
-        private Matrix44F _viewMatrix;
-        private Matrix44F _projectionMatrix;
         private Uniform<Matrix44F> _worldUniform;
         private Uniform<Vector3F> _lightUniform;
         private Terrain _terrain;
@@ -46,10 +38,6 @@ namespace WindowsTest
             if(this._hdc != null)
                 this._hdc.Dispose();   
         }
-
-
-        private Texture2D _texture;
-        private Uniform<int> _normalUniform;
 
         public void Init()
         {
