@@ -79,6 +79,42 @@ namespace ModGL
     /// </summary>
     public class InterfaceFactory
     {
+
+        /// <summary>
+        /// Builds a interface and a context for the current platoform if supported.
+        /// </summary>
+        /// <typeparam name="TInterface">Interface type to implement.</typeparam>
+        /// <param name="parameters">Context creation parameters.</param>
+        /// <param name="throwOnError">Set to true if failed OpenGL calls should throw exceptions.</param>
+        /// <param name="context">The created context.</param>
+        /// <returns>Implementation of the specified interface for the context.</returns>
+        /// <exception cref="PlatformNotSupportedException">Thrown if the platform is not supported by the implementation.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <see cref="parameters"/> is null.</exception>
+        [Pure]
+        public TInterface CreateInterface<TInterface>(ContextCreationParameters parameters, bool throwOnError, out IContext context)
+            where TInterface : IOpenGL // Must be at least an OpenGL 1.1 interface.
+        {
+            return CreateInterface<TInterface>(
+                parameters, new ContextFactory(), new LibraryLoaderFactory(), throwOnError, out context);
+        }
+
+        /// <summary>
+        /// Builds a interface and a context for the current platoform if supported.
+        /// </summary>
+        /// <typeparam name="TInterface">Interface type to implement.</typeparam>
+        /// <param name="parameters">Context creation parameters.</param>
+        /// <param name="context">The created context.</param>
+        /// <returns>Implementation of the specified interface for the context.</returns>
+        /// <exception cref="PlatformNotSupportedException">Thrown if the platform is not supported by the implementation.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <see cref="parameters"/> is null.</exception>
+        [Pure]
+        public TInterface CreateInterface<TInterface>(ContextCreationParameters parameters, out IContext context)
+            where TInterface : IOpenGL // Must be at least an OpenGL 1.1 interface.
+        {
+            return CreateInterface<TInterface>(
+                parameters, new ContextFactory(), new LibraryLoaderFactory(), false, out context);
+        }
+
         /// <summary>
         /// Builds a interface and a context for the current platoform if supported.
         /// </summary>
@@ -121,6 +157,23 @@ namespace ModGL
             }
             return bindingFactory.CreateBinding<TInterface>(
                 context, errorHandling : null, extensionMethodPrefix : "gl");
+        }
+        /// <summary>
+        /// Builds a interface and a context for the current platoform if supported.
+        /// </summary>
+        /// <typeparam name="TInterface">Interface type to implement.</typeparam>
+        /// <param name="parameters">Context creation parameters.</param>
+        /// <param name="contextFactory">Context factory. Normally a new instance of <see cref="ContextFactory"/>.</param>
+        /// <param name="libraryLoaderFactory">Library loader factory. Nomrally a new instance of <see cref="LibraryLoaderFactory"/>.</param>
+        /// <param name="context">The created context.</param>
+        /// <returns>Implementation of the specified interface for the context.</returns>
+        /// <exception cref="PlatformNotSupportedException">Thrown if the platform is not supported by the implementation.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <see cref="parameters"/>, <see cref="contextFactory"/> or <see cref="libraryLoaderFactory"/> is null.</exception>
+        [Pure]
+        public TInterface CreateInterface<TInterface>(ContextCreationParameters parameters, IContextFactory contextFactory, ILibraryLoaderFactory libraryLoaderFactory, out IContext context)
+            where TInterface : IOpenGL // Must be at least an OpenGL 1.1 interface.
+        {
+            return CreateInterface<TInterface>(parameters, contextFactory, libraryLoaderFactory, false, out context);
         }
     }
 }
