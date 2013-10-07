@@ -58,8 +58,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Binding\WindowLibraryLoaderTest.cs" />
+    <Compile Include="Binding\WindowsLibraryTest.cs" />
     <Compile Include="Buffers\BufferTest.cs" />
-    <Compile Include="InterfaceBindingFactoryTest.cs" />
+    <Compile Include="Binding\InterfaceBindingFactoryTest.cs" />
     <Compile Include="Shaders\ShaderProgramTest.cs" />
     <Compile Include="Shaders\ShaderTest.cs" />
     <Compile Include="VertexArrayTest.cs" />
