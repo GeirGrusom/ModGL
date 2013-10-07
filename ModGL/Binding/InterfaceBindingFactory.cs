@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -175,6 +176,7 @@ namespace ModGL.Binding
         /// <param name="errorHandling">Defines error handling routines. Setting this to null disables error handling.</param>
         /// <param name="extensionMethodPrefix">Optional prefix to extension methods. For prefix "Foo" this will bind Bar() with FooBar().</param>
         /// <returns>Implementation of the interface.</returns>
+        [Pure]
         public TGLInterface CreateBinding<TGLInterface>(IExtensionSupport context, ErrorHandling errorHandling = null, string extensionMethodPrefix = "")
         {
             return CreateBinding<TGLInterface>(context, new Dictionary<Type, Type>(), errorHandling, extensionMethodPrefix);
@@ -190,6 +192,7 @@ namespace ModGL.Binding
         /// <param name="extensionMethodPrefix">Optional prefix to extension methods. For prefix "Foo" this will bind Bar() with FooBar().</param>
         /// <returns>Implementation of the interface.</returns>
         /// <remarks>The interface map will override interface implementations from <see cref="TGLInterface"/> if they intersect.</remarks>
+        [Pure]
         public TGLInterface CreateBinding<TGLInterface>(IExtensionSupport context, Dictionary<Type, Type> interfaceMap, ErrorHandling errorHandling = null, string extensionMethodPrefix = null)
         {
             if(context == null)

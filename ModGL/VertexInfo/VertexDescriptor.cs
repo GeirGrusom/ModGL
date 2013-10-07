@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
 
@@ -75,6 +76,7 @@ namespace ModGL.VertexInfo
             Elements = elements.ToArray();
         }
 
+        [Pure]
         private static DataType GetElementType(Type type)
         {
             if(!type.IsValueType)
@@ -88,6 +90,7 @@ namespace ModGL.VertexInfo
             throw new InvalidOperationException("Could not determine the vertex element datatype.");
         }
 
+        [Pure]
         private static VertexElement ConvertField(FieldInfo field, int offset)
         {
             var attrib = field.GetCustomAttribute<VertexElementAttribute>();
@@ -121,6 +124,7 @@ namespace ModGL.VertexInfo
         /// </summary>
         /// <returns></returns>
         /// <exception cref="InvalidOperationException">Thrown if a field is a value type, or if the class was unable to determine a correct datatype for a field.</exception>
+        [Pure]
         public static VertexDescriptor Create<TElementType>()
             where TElementType : struct
         {

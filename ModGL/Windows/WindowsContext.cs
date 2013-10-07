@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics.Contracts;
 
 using ModGL.NativeGL;
 
@@ -223,6 +220,7 @@ namespace ModGL.Windows
             return new BindContext(() => _wgl.wglMakeCurrent(IntPtr.Zero, IntPtr.Zero) );
         }
 
+        [Pure]
         public override Delegate GetProcedure(string extensionName, Type delegateType)
         {
             var delegPtr = _wgl.wglGetProcAddress(extensionName);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -14,7 +15,7 @@ namespace ModGL.Shaders
     }
 
     [Serializable]
-    public class Program : IGLObject, IProgram
+    public class Program : IProgram
     {
         [NonSerialized]
         private readonly IOpenGL30 _gl;
@@ -49,6 +50,7 @@ namespace ModGL.Shaders
         /// <summary>
         /// Gets a value indicating if the program is valid. This value will be set after program is compiled.
         /// </summary>
+        [Pure]
         public bool IsValid
         {
             get
@@ -62,6 +64,7 @@ namespace ModGL.Shaders
         /// <summary>
         /// Gets a value indicating if the program has been linked. This value will be set after the program is compiled.
         /// </summary>
+        [Pure]
         public bool IsLinked
         {
             get
@@ -76,6 +79,7 @@ namespace ModGL.Shaders
         /// Gets compilation results. This will also include compilation results of all attached shaders.
         /// </summary>
         /// <returns>Program compilation results.</returns>
+        [Pure]
         public CompilationResults GetCompilationResults()
         {
             int[] logLength = new int[1];
@@ -150,6 +154,7 @@ namespace ModGL.Shaders
             _gl.DeleteProgram(Handle);
         }
 
+        [Pure]
         public IEnumerable<Tuple<string, int>> GetUniforms()
         {
             int[] numUniforms = new int[1];
@@ -198,6 +203,7 @@ namespace ModGL.Shaders
         /// <param name="uniformName">Name of the shader uniform.</param>
         /// <returns></returns>
         /// <exception cref="NoHandleCreatedException">Thrown if there is no uniform by that name.</exception>
+        [Pure]
         public TUniformType GetUniform<TUniformType, TValueType>(string uniformName)
             where TUniformType : Uniform<TValueType>
         {

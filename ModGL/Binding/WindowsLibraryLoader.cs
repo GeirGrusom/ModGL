@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.Contracts;
 using System.IO;
 using System.Runtime.InteropServices;
 
@@ -12,7 +13,6 @@ namespace ModGL.Binding
         [DllImport("kernel32")]
         private static extern IntPtr LoadLibrary([In]string libraryName);
 
-
         private readonly Func<string, IntPtr> _loadFunc;
 
         public WindowsLibraryLoader(Func<string, IntPtr> loadFunc)
@@ -25,6 +25,7 @@ namespace ModGL.Binding
             _loadFunc = LoadLibrary;
         }
 
+        [Pure]
         public ILibrary Load(string moduleName)
         {
             string filename;

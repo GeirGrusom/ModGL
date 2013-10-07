@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.Contracts;
 
 using ModGL.Binding;
 using ModGL.NativeGL;
@@ -16,6 +17,7 @@ namespace ModGL
     /// </summary>
     public class ContextFactory : IContextFactory
     {
+        [Pure]
         public IContext Create(ContextCreationParameters parameters)
         {
             if (Environment.OSVersion.Platform == PlatformID.Win32NT)
@@ -44,6 +46,7 @@ namespace ModGL
     /// </summary>
     public class LibraryLoaderFactory : ILibraryLoaderFactory
     {
+        [Pure]
         public ILibraryLoader Create()
         {
             if (Environment.OSVersion.Platform == PlatformID.Win32NT)
@@ -70,6 +73,7 @@ namespace ModGL
         /// <param name="context">The created context.</param>
         /// <returns>Implementation of the specified interface for the context.</returns>
         /// <exception cref="PlatformNotSupportedException">Thrown if the platform is not supported by the implementation.</exception>
+        [Pure]
         public TInterface CreateInterface<TInterface>(ContextCreationParameters parameters, IContextFactory contextFactory, ILibraryLoaderFactory libraryLoaderFactory,  bool throwOnError, out IContext context)
             where TInterface : IOpenGL // Must be at least an OpenGL 1.1 interface.
         {

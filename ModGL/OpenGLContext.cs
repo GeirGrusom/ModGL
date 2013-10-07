@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.Contracts;
 
 using ModGL.Binding;
 using ModGL.NativeGL;
@@ -36,6 +37,7 @@ namespace ModGL
 
         public abstract void Dispose();
 
+        [Pure]
         public TOpenGLInterface GetOpenGL<TOpenGLInterface>(IInterfaceBindingFactory bindingFactory, bool debug = false)
             where TOpenGLInterface : class
         {
@@ -47,12 +49,14 @@ namespace ModGL
                 );
         }
 
+        [Pure]
         public TDelegate GetProcedure<TDelegate>(string procedureName)
             where TDelegate : class
         {
             return (TDelegate)Convert.ChangeType(GetProcedure(procedureName, typeof(TDelegate)), typeof(TDelegate));
         }
 
+        [Pure]
         public TDelegate GetProcedure<TDelegate>()
             where TDelegate : class
         {

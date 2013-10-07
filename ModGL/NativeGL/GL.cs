@@ -1494,6 +1494,7 @@ namespace ModGL.NativeGL
             }
         }
 
+        // TODO: Make this into a instance imeplementation instead of static member.
         public static readonly ErrorHandling OpenGLErrorFunctions = new ErrorHandling
         {
             FlushError = typeof(GL).GetMethod("FlushOpenGLError", BindingFlags.Public | BindingFlags.Static),

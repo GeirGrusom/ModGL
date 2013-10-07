@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.Contracts;
 using System.Runtime.InteropServices;
 
 namespace ModGL.Binding
@@ -32,6 +33,7 @@ namespace ModGL.Binding
             _moduleName = moduleName;
         }
 
+        [Pure]
         public IntPtr GetProcedureAddress(string name)
         {
             if(this._isDisposed)
@@ -58,6 +60,7 @@ namespace ModGL.Binding
             _freeLibrary = FreeLibrary;
         }
 
+        [Pure]
         public Delegate GetProcedure(string procedureName, Type delegateType)
         {
             if(this._isDisposed)
@@ -68,12 +71,14 @@ namespace ModGL.Binding
             return (Delegate)Convert.ChangeType(Marshal.GetDelegateForFunctionPointer(proc, delegateType), delegateType);
         }
 
+        [Pure]
         public TDelegate GetProcedure<TDelegate>(string procedureName)
             where TDelegate : class
         {
             return (TDelegate)Convert.ChangeType(GetProcedure(procedureName, typeof(TDelegate)), typeof(TDelegate));
         }
 
+        [Pure]
         public TDelegate GetProcedure<TDelegate>()
             where TDelegate : class
         {
