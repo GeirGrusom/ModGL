@@ -1015,7 +1015,7 @@ namespace ModGL.NativeGL
     public enum GLboolean : byte
     {
         True = 1,
-        False = 1
+        False = 0
     }
 
     public enum AttribMask
@@ -1435,7 +1435,10 @@ namespace ModGL.NativeGL
         [ThreadStatic]
         private static IOpenGL gl;
 
+        [ThreadStatic]
         private static bool alreadyHandlingError;
+        
+        // TODO: Not happy about this at all.
         public static void RegisterOpenGLInterface(IOpenGL @interface)
         {
             gl = @interface;
