@@ -17,16 +17,26 @@ namespace ModGL.Windows
 
         private readonly Func<string, IntPtr> _loadFunc;
 
+        /// <summary>
+        /// Overload used to override LoadLibrary. Intended for internal use.
+        /// </summary>
+        /// <param name="loadFunc"></param>
         public WindowsLibraryLoader(Func<string, IntPtr> loadFunc)
         {
-            this._loadFunc = loadFunc;
+            _loadFunc = loadFunc;
         }
 
         public WindowsLibraryLoader()
         {
-            this._loadFunc = LoadLibrary;
+            _loadFunc = LoadLibrary;
         }
 
+        /// <summary>
+        /// Loads a dynamic link library.
+        /// </summary>
+        /// <param name="moduleName">Name of the module to load. Note that the .dll extension can be omitted.</param>
+        /// <returns>Library function loader.</returns>
+        /// <remarks>Note that this functions uses the default library search paths used by the operating system. Supplying absolute or relative paths here will most likely not work.</remarks>
         [Pure]
         public ILibrary Load(string moduleName)
         {

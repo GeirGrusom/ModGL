@@ -16,7 +16,7 @@ namespace ModGL.Windows
         private readonly string _moduleName;
         private bool _isDisposed;
 
-        public string Name { get { return this._moduleName; } }
+        public string Name { get { return _moduleName; } }
 
         [DllImport("kernel32")]
         private static extern IntPtr GetProcAddress(IntPtr module, [In]string procName);
@@ -27,47 +27,55 @@ namespace ModGL.Windows
         private readonly Func<IntPtr, string, IntPtr> _getProcAddress;
         private readonly Func<IntPtr, bool> _freeLibrary; 
 
+        /// <summary>
+        /// Overload used to override GetProcAddress and FreeLibrary. Intended for internal use.
+        /// </summary>
+        /// <param name="getProc">Override function for GetProcAddress.</param>
+        /// <param name="freeProc">Override function for FreeLibrary.</param>
+        /// <param name="module">Module for loaded library.</param>
+        /// <param name="moduleName">Name of the module supplied by LibraryLoader.</param>
         public WindowsLibrary(Func<IntPtr, string, IntPtr> getProc, Func<IntPtr, bool> freeProc, IntPtr module, string moduleName)
         {
-            this._getProcAddress = getProc;
-            this._freeLibrary = freeProc;
-            this._module = module;
-            this._moduleName = moduleName;
+            _getProcAddress = getProc;
+            _freeLibrary = freeProc;
+            _module = module;
+            _moduleName = moduleName;
         }
+
+        /// <summary>
+        /// Creates a new instance of WindowsLibrary for the module specified by hModule and modulename.
+        /// </summary>
+        /// <param name="hModule">Module handle supplied by WindowsLibraryLoader.</param>
+        /// <param name="moduleName">Name of module.</param>
+        public WindowsLibrary(IntPtr hModule, string moduleName)
+        {
+            _module = hModule;
+            _moduleName = moduleName;
+            _getProcAddress = GetProcAddress;
+            _freeLibrary = FreeLibrary;
+        }
+
 
         [Pure]
         public IntPtr GetProcedureAddress(string name)
         {
-            if(this._isDisposed)
-                throw new ObjectDisposedException(this._moduleName);
-            return this._getProcAddress(this._module, name);
+            if(_isDisposed)
+                throw new ObjectDisposedException(_moduleName);
+            return _getProcAddress(this._module, name);
         }
 
         public void Dispose()
         {
-            this._freeLibrary(this._module);
-            this._isDisposed = true;
-        }
-
-        public override string ToString()
-        {
-            return this._moduleName;
-        }
-
-        public WindowsLibrary(IntPtr hModule, string moduleName)
-        {
-            this._module = hModule;
-            this._moduleName = moduleName;
-            this._getProcAddress = GetProcAddress;
-            this._freeLibrary = FreeLibrary;
+            _freeLibrary(this._module);
+            _isDisposed = true;
         }
 
         [Pure]
         public Delegate GetProcedure(string procedureName, Type delegateType)
         {
-            if(this._isDisposed)
+            if(_isDisposed)
                 throw new ObjectDisposedException(this._moduleName);
-            IntPtr proc = this._getProcAddress(this._module, procedureName);
+            IntPtr proc = _getProcAddress(this._module, procedureName);
             if (proc == IntPtr.Zero)
                 return null;
             return (Delegate)Convert.ChangeType(Marshal.GetDelegateForFunctionPointer(proc, delegateType), delegateType);
