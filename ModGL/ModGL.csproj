@@ -45,8 +45,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Binding\LibraryLoader.cs" />
-    <Compile Include="Binding\WindowsLibrary.cs" />
-    <Compile Include="Binding\WindowsLibraryLoader.cs" />
+    <Compile Include="Windows\WindowsLibrary.cs" />
+    <Compile Include="Windows\WindowsLibraryLoader.cs" />
     <Compile Include="Buffers\Buffer.cs" />
     <Compile Include="Buffers\BufferExtensions.cs" />
     <Compile Include="Buffers\ElementBuffer.cs" />

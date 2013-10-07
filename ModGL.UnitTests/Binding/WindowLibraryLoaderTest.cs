@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using ModGL.Binding;
+using ModGL.Windows;
 
 using NUnit.Framework;
 using NSubstitute;

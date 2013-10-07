@@ -2,7 +2,9 @@
 using System.Diagnostics.Contracts;
 using System.Runtime.InteropServices;
 
-namespace ModGL.Binding
+using ModGL.Binding;
+
+namespace ModGL.Windows
 {
     /// <summary>
     /// This class represents a Windows Dynamic Link Library and is used to retrieve function pointers from it.
@@ -27,10 +29,10 @@ namespace ModGL.Binding
 
         public WindowsLibrary(Func<IntPtr, string, IntPtr> getProc, Func<IntPtr, bool> freeProc, IntPtr module, string moduleName)
         {
-            _getProcAddress = getProc;
-            _freeLibrary = freeProc;
-            _module = module;
-            _moduleName = moduleName;
+            this._getProcAddress = getProc;
+            this._freeLibrary = freeProc;
+            this._module = module;
+            this._moduleName = moduleName;
         }
 
         [Pure]
@@ -38,12 +40,12 @@ namespace ModGL.Binding
         {
             if(this._isDisposed)
                 throw new ObjectDisposedException(this._moduleName);
-            return _getProcAddress(this._module, name);
+            return this._getProcAddress(this._module, name);
         }
 
         public void Dispose()
         {
-            _freeLibrary(this._module);
+            this._freeLibrary(this._module);
             this._isDisposed = true;
         }
 
@@ -54,10 +56,10 @@ namespace ModGL.Binding
 
         public WindowsLibrary(IntPtr hModule, string moduleName)
         {
-            _module = hModule;
-            _moduleName = moduleName;
-            _getProcAddress = GetProcAddress;
-            _freeLibrary = FreeLibrary;
+            this._module = hModule;
+            this._moduleName = moduleName;
+            this._getProcAddress = GetProcAddress;
+            this._freeLibrary = FreeLibrary;
         }
 
         [Pure]
@@ -65,7 +67,7 @@ namespace ModGL.Binding
         {
             if(this._isDisposed)
                 throw new ObjectDisposedException(this._moduleName);
-            IntPtr proc = _getProcAddress(this._module, procedureName);
+            IntPtr proc = this._getProcAddress(this._module, procedureName);
             if (proc == IntPtr.Zero)
                 return null;
             return (Delegate)Convert.ChangeType(Marshal.GetDelegateForFunctionPointer(proc, delegateType), delegateType);
