@@ -13,11 +13,11 @@ namespace ModGL
         TDelegate GetProcedure<TDelegate>()
             where TDelegate : class;
     }
-    public class CompundExtensionProvider : IExtensionSupport
+    public class CompositeExtensionProvider : IExtensionSupport
     {
         private readonly IList<IExtensionSupport> _providers;
 
-        public CompundExtensionProvider(params IExtensionSupport[] providers)
+        public CompositeExtensionProvider(params IExtensionSupport[] providers)
         {
             _providers = providers.ToList();
         }

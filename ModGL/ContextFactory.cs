@@ -26,7 +26,7 @@ namespace ModGL
                 var gdi32 = loader.Load("GDI32");
 
                 var interfaceFactory = new InterfaceBindingFactory();
-                var wgl = interfaceFactory.CreateBinding<IWGL>(new CompundExtensionProvider(libGL, gdi32));
+                var wgl = interfaceFactory.CreateBinding<IWGL>(new CompositeExtensionProvider(libGL, gdi32));
                 
                 var context = new WindowsContext(wgl, null, parameters);
                 return context;
@@ -69,7 +69,7 @@ namespace ModGL
             var bindingFactory = new InterfaceBindingFactory();
             if (throwOnError)
             {
-                var result = bindingFactory.CreateBinding<TInterface>(new CompundExtensionProvider(context, glLib), GL.OpenGLErrorFunctions, "gl");
+                var result = bindingFactory.CreateBinding<TInterface>(new CompositeExtensionProvider(context, glLib), GL.OpenGLErrorFunctions, "gl");
                 GL.RegisterOpenGLInterface(result);
                 return result;
             }
