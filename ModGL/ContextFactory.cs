@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using ModGL.Binding;
 using ModGL.NativeGL;
@@ -15,6 +11,9 @@ namespace ModGL
         IContext Create(ContextCreationParameters parameters);
     }
 
+    /// <summary>
+    /// This class is used to create a context for the running platform.
+    /// </summary>
     public class ContextFactory : IContextFactory
     {
         public IContext Create(ContextCreationParameters parameters)
@@ -40,6 +39,9 @@ namespace ModGL
         ILibraryLoader Create();
     }
 
+    /// <summary>
+    /// This class is used to create a library loader for the current platform.
+    /// </summary>
     public class LibraryLoaderFactory : ILibraryLoaderFactory
     {
         public ILibraryLoader Create()
@@ -52,9 +54,23 @@ namespace ModGL
         }
     }
 
+    /// <summary>
+    /// This class is used to create a interface implementation for the current platform.
+    /// </summary>
     public class InterfaceFactory
     {
-        public TInterface CreateInterface<TInterface>(ContextCreationParameters parameters, ContextFactory contextFactory, LibraryLoaderFactory libraryLoaderFactory,  bool throwOnError, out IContext context)
+        /// <summary>
+        /// Builds a interface and a context for the current platoform if supported.
+        /// </summary>
+        /// <typeparam name="TInterface">Interface type to implement.</typeparam>
+        /// <param name="parameters">Context creation parameters.</param>
+        /// <param name="contextFactory">Context factory. Normally a new instance of <see cref="ContextFactory"/>.</param>
+        /// <param name="libraryLoaderFactory">Library loader factory. Nomrally a new instance of <see cref="LibraryLoaderFactory"/>.</param>
+        /// <param name="throwOnError">Set to true if failed OpenGL calls should throw exceptions.</param>
+        /// <param name="context">The created context.</param>
+        /// <returns>Implementation of the specified interface for the context.</returns>
+        /// <exception cref="PlatformNotSupportedException">Thrown if the platform is not supported by the implementation.</exception>
+        public TInterface CreateInterface<TInterface>(ContextCreationParameters parameters, IContextFactory contextFactory, ILibraryLoaderFactory libraryLoaderFactory,  bool throwOnError, out IContext context)
             where TInterface : IOpenGL // Must be at least an OpenGL 1.1 interface.
         {
             context = contextFactory.Create(parameters);
