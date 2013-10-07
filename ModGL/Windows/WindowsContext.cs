@@ -119,17 +119,17 @@ namespace ModGL.Windows
             if(parameters.MajorVersion < 3)
                 throw new VersionNotSupportedException("OpenGL version below 3.0 is not supported.", parameters);
 
-            if(parameters.Device == IntPtr.Zero)
+            if(parameters.Device == 0)
                 throw new ContextCreationException("Device cannot be null.", parameters);
 
-            if(parameters.Window == IntPtr.Zero)
+            if(parameters.Window == 0)
                 throw new ContextCreationException("Window cannot be null.", parameters);
 
-            if(parameters.Display != IntPtr.Zero)
+            if(parameters.Display != 0)
                 throw new ContextCreationException("Display is not supported on this platform.", parameters);
 
             _wgl = wgl;
-            this._hdc = parameters.Device;
+            this._hdc = new IntPtr(parameters.Device);
 
             var tempContext = CreateTempOpenGLContext(parameters);
 

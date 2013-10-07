@@ -9,20 +9,20 @@ namespace ModGL
         /// Specifies the display used.
         /// </summary>
         /// <remarks>This property is not used by Windows.</remarks>
-        public IntPtr Display { get; set; }
+        public long Display { get; set; }
 
         /// <summary>
         /// Specifies the window handle used.
         /// </summary>
         /// <remarks>On Windows, this field should be a HWND.</remarks>
-        public IntPtr Window { get; set; }
+        public long Window { get; set; }
 
         /// <summary>
         /// Specifies the graphics device used.
         /// </summary>
         /// <remarks>
         /// On Windows, this field should be a HDC.</remarks>
-        public IntPtr Device { get; set; }
+        public long Device { get; set; }
 
         /// <summary>
         /// Specifies number of colors bits. If not seet, this will default to 32.

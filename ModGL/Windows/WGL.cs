@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-using ModGL.NativeGL;
-
 using HDC = System.IntPtr;
 using HGLRC = System.IntPtr;
 
 namespace ModGL.Windows
 {
-
     [Flags]
     public enum PixelFormatFlags : uint
     {
@@ -41,6 +38,8 @@ namespace ModGL.Windows
         UnderlyingPlane = -1
     }
 
+    [Serializable]
+    [StructLayout(LayoutKind.Sequential)]
     public struct PixelFormatDescriptor
     {
         public ushort Size;

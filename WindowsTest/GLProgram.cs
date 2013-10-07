@@ -61,8 +61,8 @@ namespace WindowsTest
                 ColorBits = 32,
                 DepthBits = 24,
                 StencilBits = 8,
-                Window = this._form.Handle,
-                Device = this._hdc.GetHdc()
+                Window = (long)_form.Handle,
+                Device = (long)_hdc.GetHdc()
             };
 
             var factory = new InterfaceFactory();
