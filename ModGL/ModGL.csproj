@@ -51,6 +51,7 @@
     <Compile Include="Buffers\BufferExtensions.cs" />
     <Compile Include="Buffers\ElementBuffer.cs" />
     <Compile Include="Buffers\TextureBuffer.cs" />
+    <Compile Include="CompositeExtensionProvider.cs" />
     <Compile Include="ContextCreationException.cs" />
     <Compile Include="ContextFactory.cs" />
     <Compile Include="ExtensionNotSupportedException.cs" />
