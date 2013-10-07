@@ -1,5 +1,6 @@
 ﻿using System;
 
+using ModGL.Binding;
 using ModGL.Windows;
 using NSubstitute;
 
@@ -17,36 +18,10 @@ namespace ModGL.UnitTests
             var wgl = Substitute.For<IWGL>();
             
             // Act
-            var exception = Assert.Catch<VersionNotSupportedException>( () => new WindowsContext(wgl, new ContextCreationParameters { MajorVersion = 2 }));
+            var exception = Assert.Catch<VersionNotSupportedException>( () => new WindowsContext(wgl, null, new ContextCreationParameters { MajorVersion = 2 }));
 
             // Assert
             Assert.AreEqual("OpenGL version below 3.0 is not supported.", exception.Message);
-        }
-
-        [Test, Ignore] // Work in progress. Functionality should probably be split up more.
-        public void Context_Ok()
-        {
-            // Arrange
-            var wgl = Substitute.For<IWGL>();
-            PixelFormatDescriptor pfd = new PixelFormatDescriptor();
-            wgl.wglGetProcAddress<wglChoosePixelFormatARB>(Arg.Any<string>()).Returns(
-                callInfo => (hdc, piAttribIList, pfAttribFList, nMaxFormats, piFormats, nNumFormats) => true);
-            wgl.ChoosePixelFormat(new IntPtr(1), ref pfd).Returns(1);
-            wgl.SetPixelFormat(Arg.Any<IntPtr>(), Arg.Any<int>(), ref pfd).Returns(true);
-            
-            
-            var createParams = new ContextCreationParameters
-            {
-                ColorBits = 32,
-                DepthBits = 24,
-                Device = new IntPtr(1),
-                Window = new IntPtr(1),
-                MajorVersion = 3,
-                MinorVersion = 0
-            };
-
-            // Act
-            var context = new WindowsContext(wgl, createParams);
         }
     }
 }

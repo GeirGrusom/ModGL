@@ -45,9 +45,6 @@ namespace ModGL.Windows
     public class WindowsContext : Context
     {
         private readonly IWGL _wgl;
-
-        private readonly IntPtr _hglrc;
-        private readonly IntPtr _hwnd;
         private readonly IntPtr _hdc;
 
         public static class WGLPixelFormatConstants
@@ -108,7 +105,8 @@ namespace ModGL.Windows
 
         public override void Dispose()
         {
-            _wgl.wglDeleteContext(this._hglrc);
+            _wgl.wglMakeCurrent(IntPtr.Zero, IntPtr.Zero);
+            _wgl.wglDeleteContext(Handle);
         }
 
         public override void SwapBuffers()
@@ -116,7 +114,7 @@ namespace ModGL.Windows
             _wgl.SwapBuffers(this._hdc);
         } 
         
-        public WindowsContext(IWGL wgl, ContextCreationParameters parameters)
+        public WindowsContext(IWGL wgl, IContext shareContext, ContextCreationParameters parameters)
         {
             if(parameters == null)
                 throw new ArgumentNullException("parameters");
@@ -134,7 +132,6 @@ namespace ModGL.Windows
                 throw new ContextCreationException("Display is not supported on this platform.", parameters);
 
             _wgl = wgl;
-            this._hwnd = parameters.Window;
             this._hdc = parameters.Device;
 
             var tempContext = CreateTempOpenGLContext(parameters);
@@ -143,8 +140,8 @@ namespace ModGL.Windows
                 throw new ContextCreationException("Unable to make temporary context current.", parameters);
 
 
-            var choosePixelFormat = _wgl.wglGetProcAddress<wglChoosePixelFormatARB>("wglChoosePixelFormatARB");
-            var createContext = _wgl.wglGetProcAddress<wglCreateContextAttribsARB>("wglCreateContextAttribsARB");
+            var choosePixelFormat = GetProcedure<wglChoosePixelFormatARB>("wglChoosePixelFormatARB");
+            var createContext = GetProcedure<wglCreateContextAttribsARB>("wglCreateContextAttribsARB");
 
             if(choosePixelFormat == null)
                 throw new ContextCreationException("Unable to find wglChoosePixelFormatARB.", parameters);
@@ -154,7 +151,6 @@ namespace ModGL.Windows
 
             int[] formats = new int[1];
             uint[] numFormats = new uint[1];
-            GL.Enable(StateCaps.MultiSample);
 
             if (!choosePixelFormat(
                 this._hdc,
@@ -180,16 +176,16 @@ namespace ModGL.Windows
                 throw new ContextCreationException("Unable to choose pixel format.", parameters);
             }
 
-            var finalContext = createContext(this._hdc, IntPtr.Zero, new []
-                {
-                    (int)WGLContextAttributes.MajorVersion, parameters.MajorVersion.HasValue ? parameters.MajorVersion.Value : 3,
-                    (int)WGLContextAttributes.MinorVersion, parameters.MinorVersion.HasValue ? parameters.MinorVersion.Value : 2,
-                    (int)WGLContextAttributes.Flags, 0,
-                    (int)WGLContextAttributes.ProfileMask, (int)WGLContextProfileMask.CoreProfileBit,
-                    0
-                }
+            var finalContext = createContext(this._hdc, shareContext != null ? shareContext.Handle : IntPtr.Zero, new []
+            {
+                (int)WGLContextAttributes.MajorVersion, parameters.MajorVersion.HasValue ? parameters.MajorVersion.Value : 3,
+                (int)WGLContextAttributes.MinorVersion, parameters.MinorVersion.HasValue ? parameters.MinorVersion.Value : 2,
+                (int)WGLContextAttributes.Flags, 0,
+                (int)WGLContextAttributes.ProfileMask, (int)WGLContextProfileMask.CoreProfileBit,
+                0
+            }
             );
-            this._hglrc = finalContext;
+            Handle = finalContext;
 
         }
 
@@ -221,16 +217,18 @@ namespace ModGL.Windows
             return glptr;
         }
 
-        public override BindContext MakeCurrent()
+        public override BindContext Bind()
         {
-            _wgl.wglMakeCurrent(this._hdc, this._hglrc);
+            _wgl.wglMakeCurrent(_hdc, Handle);
             return new BindContext(() => _wgl.wglMakeCurrent(IntPtr.Zero, IntPtr.Zero) );
         }
 
         public override Delegate GetProcedure(string extensionName, Type delegateType)
         {
-            var deleg = _wgl.wglGetProcAddress(extensionName, delegateType);
-            return deleg;
+            var delegPtr = _wgl.wglGetProcAddress(extensionName);
+            if (delegPtr == IntPtr.Zero)
+                return null;
+            return System.Runtime.InteropServices.Marshal.GetDelegateForFunctionPointer(delegPtr, delegateType);
         }
     }
 }

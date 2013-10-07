@@ -1,13 +1,16 @@
-﻿namespace ModGL.Shaders
+﻿using System;
+
+namespace ModGL.Shaders
 {
+    [Serializable]
     public class ShaderCompilationResults
     {
         public string Message { get; private set; }
         public bool Success { get; private set; }
         public ShaderCompilationResults(string message, bool success)
         {
-            this.Message = message;
-            this.Success = success;
+            Message = message;
+            Success = success;
         }
     }
 }

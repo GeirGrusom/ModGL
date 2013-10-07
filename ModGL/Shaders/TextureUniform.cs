@@ -5,6 +5,8 @@ namespace ModGL.Shaders
 {
     public class TextureUniform : Uniform<Texture>
     {
+        public ActiveTexture Slot { get; set; }
+
         public TextureUniform(IOpenGL30 gl, string name, int location) 
             : base(gl, name, location)
         {
@@ -12,7 +14,9 @@ namespace ModGL.Shaders
 
         public override void SetData(IOpenGL30 gl)
         {
-            gl.Uniform1i(this.Location, (int)this.Value.Handle);
+            gl.ActiveTexture(Slot);
+            Value.Bind();
+            gl.Uniform1i(Location, (int)Slot);
         }
     }
 }

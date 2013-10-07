@@ -59,7 +59,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Buffers\BufferTest.cs" />
-    <Compile Include="ILSpyCodeBuilder.cs" />
     <Compile Include="InterfaceBindingFactoryTest.cs" />
     <Compile Include="Shaders\ShaderProgramTest.cs" />
     <Compile Include="Shaders\ShaderTest.cs" />

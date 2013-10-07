@@ -198,7 +198,7 @@ namespace ModGL.Shaders
         /// <param name="uniformName">Name of the shader uniform.</param>
         /// <returns></returns>
         /// <exception cref="NoHandleCreatedException">Thrown if there is no uniform by that name.</exception>
-        public Uniform<TValueType> GetUniform<TUniformType, TValueType>(string uniformName)
+        public TUniformType GetUniform<TUniformType, TValueType>(string uniformName)
             where TUniformType : Uniform<TValueType>
         {
             var uniformLoc = _gl.GetUniformLocation(Handle, uniformName);

@@ -48,19 +48,19 @@ namespace ModGL.NativeGL
             return arr[0];
         }
 
-        public static void DeleteRenderBuffers(this IOpenGL30 gl, params uint[] renderBuffers)
+        public static void DeleteRenderBuffers(this IFrameBufferObjects gl, params uint[] renderBuffers)
         {
             gl.DeleteRenderbuffers(renderBuffers.Length, renderBuffers);
         }
 
-        public static uint GenVertexArray(this IOpenGL30 gl)
+        public static uint GenVertexArray(this IVertexArrayObjects gl)
         {
             uint[] arr = new uint[1];
             gl.GenVertexArrays(1, arr);
             return arr[0];
         }
 
-        public static void DeleteVertexArrays(this IOpenGL30 gl, params uint[] vertexArrays)
+        public static void DeleteVertexArrays(this IVertexArrayObjects gl, params uint[] vertexArrays)
         {
             gl.DeleteVertexArrays(vertexArrays.Length, vertexArrays);
         }

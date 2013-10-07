@@ -10,7 +10,7 @@ namespace ModGL.Shaders
         public ProgramCompilationException(Program program, CompilationResults results, string message, Exception innerException)
             : base(program, message, innerException)
         {
-            this.CompilationResults = results;
+            CompilationResults = results;
         }
 
         public ProgramCompilationException(Program program, CompilationResults results, Exception innerException)
@@ -21,7 +21,7 @@ namespace ModGL.Shaders
         public ProgramCompilationException(Program program, CompilationResults results, string message)
             : base(program, message)
         {
-            this.CompilationResults = results;
+            CompilationResults = results;
         }
 
         public ProgramCompilationException(Program program, CompilationResults results)

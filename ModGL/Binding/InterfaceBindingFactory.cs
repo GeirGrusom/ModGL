@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
+using System.Runtime.InteropServices;
 
 namespace ModGL.Binding
 {
@@ -13,8 +14,48 @@ namespace ModGL.Binding
         public MethodInfo CheckErrorState { get; set; }
     }
 
-    public class InterfaceBindingFactory
+    public interface IInterfaceBindingFactory
     {
+        /// <summary>
+        /// Creates a binding for the specified interface to extension methods defined by IExtensions support.
+        /// </summary>
+        /// <typeparam name="TGLInterface">Interface type to implement.</typeparam>
+        /// <param name="context">Extension context. This will return method delegates that the binder will use.</param>
+        /// <param name="errorHandling">Defines error handling routines. Setting this to null disables error handling.</param>
+        /// <param name="extensionMethodPrefix">Optional prefix to extension methods. For prefix "Foo" this will bind Bar() with FooBar().</param>
+        /// <returns>Implementation of the interface.</returns>
+        TGLInterface CreateBinding<TGLInterface>(IExtensionSupport context, ErrorHandling errorHandling = null, string extensionMethodPrefix = "");
+
+
+        /// <summary>
+        /// Creates a binding for the specified interface to extension methods defined by IExtensions support.
+        /// </summary>
+        /// <typeparam name="TGLInterface">Interface type to implement.</typeparam>
+        /// <param name="context">Extension context. This will return method delegates that the binder will use.</param>
+        /// <param name="interfaceMap">Additional interfaces to implement using static functions in the mpa types.</param>
+        /// <param name="errorHandling">Defines error handling routines. Setting this to null disables error handling.</param>
+        /// <param name="extensionMethodPrefix">Optional prefix to extension methods. For prefix "Foo" this will bind Bar() with FooBar().</param>
+        /// <returns>Implementation of the interface.</returns>
+        /// <remarks>The interface map will override interface implementations from <see cref="TGLInterface"/> if they intersect.</remarks>
+        TGLInterface CreateBinding<TGLInterface>(IExtensionSupport context, Dictionary<Type, Type> interfaceMap, ErrorHandling errorHandling = null, string extensionMethodPrefix = null);
+    }
+
+    public class InterfaceBindingFactory : IInterfaceBindingFactory
+    {
+
+        private class CustomAttributeNamedArgumentComparer : IEqualityComparer<CustomAttributeNamedArgument>
+        {
+            public bool Equals(CustomAttributeNamedArgument x, CustomAttributeNamedArgument y)
+            {
+                return x.MemberName == y.MemberName;
+            }
+
+            public int GetHashCode(CustomAttributeNamedArgument obj)
+            {
+                return obj.MemberName.GetHashCode();
+            }
+        }
+
         private static string GetDelegateNameForMethodInfo(MethodInfo method)
         {
             return string.Format("{0}Proc", method.Name);
@@ -29,6 +70,10 @@ namespace ModGL.Binding
         {
             string name = GetDelegateNameForMethodInfo(method);
 
+            var oldType = module.GetType(name);
+            if (oldType != null)
+                return oldType;
+
             var typeBuilder = module.DefineType(
                 name, TypeAttributes.Sealed | TypeAttributes.Public, typeof(MulticastDelegate));
 
@@ -40,8 +85,6 @@ namespace ModGL.Binding
 
             var parameters = method.GetParameters();
 
-            
-
             var invokeMethod = typeBuilder.DefineMethod(
                 "Invoke", 
                 MethodAttributes.HideBySig | MethodAttributes.Virtual | MethodAttributes.Public,
@@ -50,6 +93,7 @@ namespace ModGL.Binding
 
             invokeMethod.SetImplementationFlags(MethodImplAttributes.CodeTypeMask);
 
+            // Copy return type attributes
             if (method.ReturnType != typeof(void))
             {
                 invokeMethod.SetReturnType(method.ReturnType);
@@ -60,18 +104,32 @@ namespace ModGL.Binding
                     {
                         if (attrib.NamedArguments == null || attrib.NamedArguments.Count == 0)
                             continue;
+
+                        // The marshaller will prefer to use the MarshalType over MarshalTypeRef.
+                        // and will automatically set MarshalType if you specify MarshalTypeRef.
+                        // this will make it unable to locate the type (since without assembly specification, it will look in the dynamic assembly)
+                        // Therefore we have to remove MarshalType if both MarshalType and MarshalTypeRef is set.
+                        IEnumerable<CustomAttributeNamedArgument> namedArguments = attrib.NamedArguments;
+
+                        if (attrib.NamedArguments.Any(f => f.MemberName == "MarshalTypeRef") && attrib.NamedArguments.Any(f => f.MemberName == "MarshalType"))
+                        {
+                            namedArguments =
+                                namedArguments.Except(namedArguments.Where(f => f.MemberName == "MarshalType"), new CustomAttributeNamedArgumentComparer()).ToArray();
+                        }
+
                         returnParameter.SetCustomAttribute(
                             new CustomAttributeBuilder(
                                 attrib.Constructor,
                                 attrib.ConstructorArguments.Select(a => a.Value).ToArray(),
                                 attrib.NamedArguments.Where(a => !a.IsField).Select(s => s.MemberInfo).OfType<PropertyInfo>().ToArray(),
                                 attrib.NamedArguments.Where(a => !a.IsField).Select(s => s.TypedValue).Select(s => s.Value).ToArray(),
-                                attrib.NamedArguments.Where(a => a.IsField).Select(s => s.MemberInfo).OfType<FieldInfo>().ToArray(),
-                                attrib.NamedArguments.Where(a => a.IsField).Select(s => s.TypedValue).Select(s => s.Value).ToArray()));
+                                namedArguments.Where(a => a.IsField).Select(s => s.MemberInfo).OfType<FieldInfo>().ToArray(),
+                                namedArguments.Where(a => a.IsField).Select(s => s.TypedValue).Select(s => s.Value).ToArray()));
                     }
                 }
             }
 
+            // Copy parameter types.
             foreach (var p in parameters.Where(p=> p.Position > 0).Select((Param, Index) => new { Param, Index}))
             {
                 var newParameter = invokeMethod.DefineParameter(p.Param.Position, p.Param.Attributes, p.Param.Name);
@@ -80,14 +138,27 @@ namespace ModGL.Binding
                 {
                     if(attrib.NamedArguments == null || attrib.NamedArguments.Count == 0)
                         continue;
+
+                    // The marshaller will prefer to use the MarshalType over MarshalTypeRef.
+                    // and will automatically set MarshalType if you specify MarshalTypeRef (what?! why?).
+                    // this will make it unable to locate the type (since without assembly specification, it will look in the dynamic assembly)
+                    // Therefore we have to remove MarshalType if both MarshalType and MarshalTypeRef is set.
+                    IEnumerable<CustomAttributeNamedArgument> namedArguments = attrib.NamedArguments;
+
+                    if (attrib.NamedArguments.Any(f => f.MemberName == "MarshalTypeRef") && attrib.NamedArguments.Any(f => f.MemberName == "MarshalType"))
+                    {
+                        namedArguments =
+                            namedArguments.Except(namedArguments.Where(f => f.MemberName == "MarshalType"), new CustomAttributeNamedArgumentComparer()).ToArray();
+                    }
+
                     newParameter.SetCustomAttribute(
                         new CustomAttributeBuilder(
                             attrib.Constructor, 
                             attrib.ConstructorArguments.Select(a => a.Value).ToArray(), 
                             attrib.NamedArguments.Where(a => !a.IsField).Select(s => s.MemberInfo).OfType<PropertyInfo>().ToArray(),
                             attrib.NamedArguments.Where(a => !a.IsField).Select(s => s.TypedValue).Select(s => s.Value).ToArray(),
-                            attrib.NamedArguments.Where(a => a.IsField).Select(s => s.MemberInfo).OfType<FieldInfo>().ToArray(),
-                            attrib.NamedArguments.Where(a => a.IsField).Select(s => s.TypedValue).Select(s => s.Value).ToArray()));
+                            namedArguments.Where(a => a.IsField).Select(s => s.MemberInfo).OfType<FieldInfo>().ToArray(),
+                            namedArguments.Where(a => a.IsField).Select(s => s.TypedValue).Select(s => s.Value).ToArray()));
                 }
             }
 
@@ -144,13 +215,9 @@ namespace ModGL.Binding
                     AssemblyBuilderAccess.RunAndSave);
 
             var module = assembly.DefineDynamicModule("OpenGLInterfaces", "interface.cs");
-            
-            //var delegateModule = assembly.DefineDynamicModule("OpenGLDelegates");
 
             var definedType = module.DefineType(string.Format("{0}_DynamicProxy", typeof (TGLInterface).Name),
                                          TypeAttributes.Public | TypeAttributes.Sealed | TypeAttributes.Class);
-
-            //definedType.AddInterfaceImplementation(typeof(TGLInterface));
 
             var constructor = definedType.DefineConstructor(MethodAttributes.Public | MethodAttributes.Final, CallingConventions.HasThis, new[] {typeof (IExtensionSupport)});
 
@@ -305,6 +372,7 @@ namespace ModGL.Binding
                 generator.Emit(OpCodes.Newobj, notSupportedConstructor);
                 generator.Emit(OpCodes.Throw);
                 generator.MarkLabel(okLabel);
+                // Everything went okay. Set the delegate to the returned function.
                 generator.Emit(OpCodes.Ldloc_0);
                 generator.Emit(OpCodes.Castclass, field.FieldType);
                 generator.Emit(OpCodes.Ldarg_0); // this

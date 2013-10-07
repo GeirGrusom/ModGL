@@ -10,7 +10,7 @@ namespace ModGL.Shaders
         public ShaderProgramException(Program program, string message, Exception innerException)
             : base(message, innerException)
         {
-            this.Program = program;
+            Program = program;
         }
 
         public ShaderProgramException(Program program, Exception innerException)
@@ -21,7 +21,7 @@ namespace ModGL.Shaders
         public ShaderProgramException(Program program, string message)
             : base(message)
         {
-            this.Program = program;
+            Program = program;
         }
 
         public ShaderProgramException(Program program)

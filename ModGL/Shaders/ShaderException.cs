@@ -10,7 +10,7 @@ namespace ModGL.Shaders
         public ShaderException(Shader shader, string message, Exception innerException)
             : base(message, innerException)
         {
-            this.Shader = shader;
+            Shader = shader;
         }
 
         public ShaderException(Shader shader, Exception innerException)
@@ -22,7 +22,7 @@ namespace ModGL.Shaders
         public ShaderException(Shader shader, string message)
             : base(message)
         {
-            this.Shader = shader;
+            Shader = shader;
         }
 
         public ShaderException(Shader shader)

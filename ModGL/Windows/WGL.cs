@@ -72,22 +72,20 @@ namespace ModGL.Windows
     }
                                                        
     public delegate bool wglChoosePixelFormatARB(HDC    hdc,
-                                int[]                   piAttribIList,
-                                float[]                 pfAttribFList,
+                                [In]int[]                   piAttribIList,
+                                [In]float[]                 pfAttribFList,
                                 uint                    nMaxFormats,
-                                int[]                   piFormats,
-                                uint[]                  nNumFormats
+                                [In]int[]                   piFormats,
+                                [In]uint[]                  nNumFormats
     );
 
-    public delegate HGLRC wglCreateContextAttribsARB(HDC hDC, HGLRC hshareContext, int[] attribList);
+    public delegate HGLRC wglCreateContextAttribsARB(HDC hDC, HGLRC hshareContext, [In]int[] attribList);
 
     public interface IWGL
     {
         HGLRC wglCreateContext(HDC hdc);
 
-        Delegate wglGetProcAddress(string procName, Type delegateType);
-
-        TDelegate wglGetProcAddress<TDelegate>(string procName);
+        IntPtr wglGetProcAddress([In]string procName);
 
         bool wglMakeCurrent(HDC dc, HGLRC glrc);
 
@@ -104,97 +102,15 @@ namespace ModGL.Windows
         bool SwapBuffers(IntPtr hdc);
     }
 
-
-
-    public class WGL : IWGL
+    public interface IWGL3
     {
-        public const string WGLLibraryName = "opengl32";
-
-        public const string GDILibraryName = "gdi32";
-
-        Delegate IWGL.wglGetProcAddress(string procName, Type delegateType)
-        {
-            var ptr = wglGetProcAddress(procName);
-
-            if (ptr == IntPtr.Zero)
-            {
-                return null;
-            }
-            return Marshal.GetDelegateForFunctionPointer(ptr, delegateType);
-        }
-
-        TDelegate IWGL.wglGetProcAddress<TDelegate>(string procName)
-        {
-            return (TDelegate)Convert.ChangeType((this as IWGL).wglGetProcAddress(procName, typeof(TDelegate)), typeof(TDelegate));
-        }
-
-        bool IWGL.wglMakeCurrent(IntPtr dc, IntPtr glrc)
-        {
-            return wglMakeCurrent(dc, glrc);
-        }
-
-        int IWGL.GetPixelFormat(IntPtr hdc)
-        {
-            return GetPixelFormat(hdc);
-        }
-
-        int IWGL.DescribePixelFormat(IntPtr hdc, int pixelFormat, uint bytes, out PixelFormatDescriptor ppfd)
-        {
-            return DescribePixelFormat(hdc, pixelFormat, bytes, out ppfd);
-        }
-
-        int IWGL.ChoosePixelFormat(IntPtr hdc, ref PixelFormatDescriptor ppfd)
-        {
-            return ChoosePixelFormat(hdc, ref ppfd);
-        }
-
-        bool IWGL.wglDeleteContext(IntPtr hglrc)
-        {
-            return wglDeleteContext(hglrc);
-        }
-
-        IntPtr IWGL.wglCreateContext(IntPtr hdc)
-        {
-            return wglCreateContext(hdc);
-        }
-
-        bool IWGL.SetPixelFormat(HDC hdc, int iPixelFormat, ref PixelFormatDescriptor ppfd)
-        {
-            return SetPixelFormat(hdc, iPixelFormat, ref ppfd);
-        }
-
-        bool IWGL.SwapBuffers(HDC hdc)
-        {
-            return SwapBuffers(hdc);
-        }
-
-        [DllImport(GDILibraryName)]
-        public static extern bool SetPixelFormat(HDC hdc, int iPixelFormat, ref PixelFormatDescriptor ppfd);
-
-        [DllImport(WGLLibraryName)]
-        public static extern HGLRC wglCreateContext(HDC hdc);
-
-        [DllImport(WGLLibraryName)]
-        public static extern IntPtr wglGetProcAddress([MarshalAs(UnmanagedType.LPStr)]string procName);
-
-        [DllImport(WGLLibraryName)]
-        public static extern bool wglMakeCurrent(HDC dc, HGLRC glrc);
-
-        [DllImport(WGLLibraryName)]
-        public static extern bool wglDeleteContext(HGLRC hglrc);
-
-        [DllImport(GDILibraryName)]
-        public static extern int GetPixelFormat(HDC hdc);
-
-        [DllImport(GDILibraryName)]
-        public static extern int DescribePixelFormat(HDC hdc, int pixelFormat, uint bytes, out PixelFormatDescriptor ppfd);
-
-        [DllImport(GDILibraryName)]
-        public static extern int ChoosePixelFormat(HDC hdc, ref PixelFormatDescriptor ppfd);
-
-        [DllImport(GDILibraryName)]
-        public static extern bool SwapBuffers(HDC hdc);
+        bool ChoosePixelFormatARB(
+            HDC hdc,
+            [In] int[] piAttribIList,
+            [In] float[] pfAttribFList,
+            uint nMaxFormats,
+            [In] int[] piFormats,
+            [In] uint[] nNumFormats);
+        HGLRC CreateContextAttribsARB(HDC hDC, HGLRC hshareContext, [In]int[] attribList);
     }
-
-
 }

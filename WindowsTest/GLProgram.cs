@@ -54,21 +54,22 @@ namespace WindowsTest
         public void Init()
         {
             this._hdc = this._form.CreateGraphics();
-            this._context = new WindowsContext(new WGL(), new ContextCreationParameters
+            var creationParameters = new ContextCreationParameters
             {
                 MajorVersion = 3,
-                MinorVersion = 0,
+                MinorVersion = 3,
                 ColorBits = 32,
                 DepthBits = 24,
                 StencilBits = 8,
                 Window = this._form.Handle,
                 Device = this._hdc.GetHdc()
-            });
+            };
 
-            InterfaceBindingFactory binding = new InterfaceBindingFactory();
-            this._gl = binding.CreateBinding<IOpenGL33>((IExtensionSupport)_context, new Dictionary<Type, Type> { {typeof(IOpenGL), typeof(GL)} }, GL.OpenGLErrorFunctions, "gl");
-            this._gl.Enable(StateCaps.DepthTest);
-            this._gl.Enable(StateCaps.CullFace);
+            var factory = new InterfaceFactory();
+            
+            _gl = factory.CreateInterface<IOpenGL33>(creationParameters, new ContextFactory(), new LibraryLoaderFactory(), true, out _context);
+            _gl.Enable(StateCaps.DepthTest);
+            _gl.Enable(StateCaps.CullFace);
 
             var vs = new System.IO.StreamReader(GetType().Assembly.GetManifestResourceStream("WindowsTest.VertexShader.vs")).ReadToEnd();
             var fs = new System.IO.StreamReader(GetType().Assembly.GetManifestResourceStream("WindowsTest.FragmentShader.fs")).ReadToEnd();

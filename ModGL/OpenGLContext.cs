@@ -1,14 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 
 using ModGL.Binding;
 using ModGL.NativeGL;
 
 namespace ModGL
 {
-    public interface IContext : IDisposable
+    public interface IContext : IDisposable, IExtensionSupport
     {
-        BindContext MakeCurrent();
+        IntPtr Handle { get; }
+        BindContext Bind();
         void SwapBuffers();
     }
 
@@ -23,38 +23,38 @@ namespace ModGL
         DontCare = 0xffff,
     }
 
-    public abstract class Context : IContext, IGLObject, IExtensionSupport
+    public abstract class Context : IContext
     {
-        public uint Handle { get; protected internal set; }
+        public IntPtr Handle { get; protected set; }
 
-        private static IContext _currentContext;
+        [ThreadStatic]
+        private static IContext currentContext;
 
-        public abstract BindContext MakeCurrent();
+        public abstract BindContext Bind();
 
         public abstract void SwapBuffers();
 
         public abstract void Dispose();
 
-        public TOpenGLInterface GetOpenGL<TOpenGLInterface>(bool debug = false)
+        public TOpenGLInterface GetOpenGL<TOpenGLInterface>(IInterfaceBindingFactory bindingFactory, bool debug = false)
             where TOpenGLInterface : class
         {
-            var bindingFactory = new InterfaceBindingFactory();
             return bindingFactory
                 .CreateBinding<TOpenGLInterface>
                 (
                     context: this,
-                    interfaceMap: new Dictionary<Type, Type> { {typeof(IOpenGL), typeof(GL)} }, 
                     errorHandling: debug ? GL.OpenGLErrorFunctions : null, extensionMethodPrefix: "gl"
                 );
         }
 
         public TDelegate GetProcedure<TDelegate>(string procedureName)
+            where TDelegate : class
         {
             return (TDelegate)Convert.ChangeType(GetProcedure(procedureName, typeof(TDelegate)), typeof(TDelegate));
         }
 
-
         public TDelegate GetProcedure<TDelegate>()
+            where TDelegate : class
         {
             return (TDelegate)Convert.ChangeType(GetProcedure(typeof(TDelegate).Name, typeof (TDelegate)), typeof(TDelegate));
         }
@@ -65,13 +65,13 @@ namespace ModGL
         {
             get
             {
-                return _currentContext;
+                return currentContext;
             } 
             set
             {
-                _currentContext = value; 
+                currentContext = value; 
                 if(value != null)
-                    _currentContext.MakeCurrent();
+                    currentContext.Bind();
             }
         }
     }

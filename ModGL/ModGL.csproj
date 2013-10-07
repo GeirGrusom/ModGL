@@ -44,16 +44,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Binding\LibraryLoader.cs" />
     <Compile Include="Buffers\Buffer.cs" />
     <Compile Include="Buffers\BufferExtensions.cs" />
     <Compile Include="Buffers\ElementBuffer.cs" />
     <Compile Include="Buffers\TextureBuffer.cs" />
     <Compile Include="ContextCreationException.cs" />
+    <Compile Include="ContextFactory.cs" />
     <Compile Include="ExtensionNotSupportedException.cs" />
     <Compile Include="Framebuffer.cs" />
     <Compile Include="IBindable.cs" />
     <Compile Include="IExtensionSupport.cs" />
     <Compile Include="IGLObject.cs" />
+    <Compile Include="NativeGL\ConstStringReturnMarshaller.cs" />
     <Compile Include="NativeGL\GL.cs" />
     <Compile Include="NativeGL\GLVersionAttribute.cs" />
     <Compile Include="Binding\InterfaceBindingFactory.cs" />
@@ -82,6 +85,7 @@
     <Compile Include="Shaders\ShaderProgramException.cs" />
     <Compile Include="Shaders\ShaderType.cs" />
     <Compile Include="Shaders\TesselationControlShader.cs" />
+    <Compile Include="Shaders\TesselationEvaulationShader.cs" />
     <Compile Include="Shaders\TextureUniform.cs" />
     <Compile Include="Shaders\Uniform.cs" />
     <Compile Include="Shaders\VertexShader.cs" />
