@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
+using System.Resources;
 using System.Windows.Forms;
 
 using ModGL;
@@ -23,6 +24,14 @@ namespace WindowsTest
 
         private ModGL.Shaders.Program _shader;
 
+
+        private Uniform<Matrix44F> World;
+        private Uniform<Matrix44F> View;
+        private Uniform<Matrix44F> WorldViewProjection;
+        private Uniform<Matrix44F> ViewProjection;
+        private Uniform<Matrix44F> WorldView;
+        private Uniform<Matrix44F> Projection;
+
         private Uniform<Matrix44F> _worldUniform;
         private Uniform<Vector3F> _lightUniform;
         private Terrain _terrain;
@@ -35,8 +44,9 @@ namespace WindowsTest
 
         public void Dispose()
         {
-            if(this._hdc != null)
-                this._hdc.Dispose();   
+            _context.Dispose();
+            if (this._hdc != null)
+                this._hdc.Dispose();
         }
 
         public void Init()
@@ -54,38 +64,44 @@ namespace WindowsTest
             };
 
             var factory = new InterfaceFactory();
-            
-            _gl = factory.CreateInterface<IOpenGL33>(creationParameters, new ContextFactory(), new LibraryLoaderFactory(), true, out _context);
+
+            _gl = factory.CreateInterface<IOpenGL33>(creationParameters, true, out _context);
             _gl.Enable(StateCaps.DepthTest);
             _gl.Enable(StateCaps.CullFace);
 
-            var vs = new System.IO.StreamReader(GetType().Assembly.GetManifestResourceStream("WindowsTest.VertexShader.vs")).ReadToEnd();
-            var fs = new System.IO.StreamReader(GetType().Assembly.GetManifestResourceStream("WindowsTest.FragmentShader.fs")).ReadToEnd();
+            var vsResourceStream = GetType().Assembly.GetManifestResourceStream("WindowsTest.VertexShader.vs");
+            var fsResourceStream = GetType().Assembly.GetManifestResourceStream("WindowsTest.FragmentShader.fs");
 
-            this._shader = new ModGL.Shaders.Program(this._gl, 
-                new IShader[]
-                {
-                    new VertexShader(this._gl, vs),
-                    new FragmentShader(this._gl, fs) 
-                });
+            if (vsResourceStream == null)
+                throw new MissingManifestResourceException("Missing WindowsTest.VertexShader.vs.");
 
-            this._shader.BindVertexAttributeLocations(Terrain.VertexType.Descriptor);
-            this._shader.BindVertexAttributeLocations(Terrain.Tangents.Descriptor, Terrain.VertexType.Descriptor.Elements.Count());
+            if (fsResourceStream == null)
+                throw new MissingManifestResourceException("Missing WindowsTest.FragmentShader.fs.");
+
+            var vertexShader = new VertexShader(_gl, new System.IO.StreamReader(vsResourceStream).ReadToEnd());
+            var fragmentShader = new FragmentShader(_gl, new System.IO.StreamReader(fsResourceStream).ReadToEnd());
+
+            this._shader = new ModGL.Shaders.Program(_gl, vertexShader, fragmentShader);
+
+            this._shader.BindVertexAttributeLocations(Terrain.VertexType.Descriptor, Terrain.Tangents.Descriptor);
             this._gl.BindFragDataLocation(this._shader.Handle, 0, "output");
 
             this._shader.Compile();
 
-            this._worldUniform = this._shader.GetUniform<ModGL.Math.Binding.MatrixUniform, Matrix44F>("World");
-            Uniform<Matrix44F> viewUnifom = this._shader.GetUniform<ModGL.Math.Binding.MatrixUniform, Matrix44F>("View");
-            Uniform<Matrix44F> projectionUniform = this._shader.GetUniform<ModGL.Math.Binding.MatrixUniform, Matrix44F>("Projection");
-            this._lightUniform = this._shader.GetUniform<ModGL.Math.Binding.Vector3FUniform, Vector3F>("Light");
+            World = _shader.GetUniformInert<ModGL.Math.Binding.MatrixUniform, Matrix44F>("World");
+            View = _shader.GetUniformInert<ModGL.Math.Binding.MatrixUniform, Matrix44F>("View");
+            Projection = _shader.GetUniformInert<ModGL.Math.Binding.MatrixUniform, Matrix44F>("Projection");
+            WorldView = _shader.GetUniformInert<ModGL.Math.Binding.MatrixUniform, Matrix44F>("WorldView");
+            ViewProjection = _shader.GetUniformInert<ModGL.Math.Binding.MatrixUniform, Matrix44F>("ViewProjection");
+            WorldViewProjection = _shader.GetUniformInert<ModGL.Math.Binding.MatrixUniform, Matrix44F>("WorldViewProjection");
+            _lightUniform = _shader.GetUniform<ModGL.Math.Binding.Vector3FUniform, Vector3F>("Light");
 
             _shader.Bind();
 
 
-            _worldUniform.Value = Matrix44F.Identity;
-            viewUnifom.Value = ViewMatrix.LookAt(new Vector3F(10, 10, 10), Vector3F.UnitY, new Vector3F());
-            projectionUniform.Value = ProjectionMatrix.RightHandPerspective((float)Math.PI / 1.8f, 1.0f, 64f, 0.1f);
+            World.Value = Matrix44F.Identity;
+            View.Value = ViewMatrix.LookAt(new Vector3F(10, 10, 10), Vector3F.UnitY, new Vector3F());
+            Projection.Value = ProjectionMatrix.RightHandPerspective((float)Math.PI / 1.8f, 1.0f, 64f, 0.1f);
             _lightUniform.Value = new Vector3F(5, -10, 20);
 
             var bmp = (Bitmap)Image.FromFile("noiseTexture.png");
@@ -99,7 +115,7 @@ namespace WindowsTest
                 TextureFormat.RGBA,
                 TextureInternalFormat.RGBA8,
                 TexturePixelType.UnsignedInt_8_8_8_8);
-            
+
             using (normalMap.Bind())
             {
                 _gl.TexParameteri(TextureTarget.Texture2D, TexParameterName.TextureWrapR, 0x2901);
@@ -118,8 +134,6 @@ namespace WindowsTest
             var shaderVersion = _gl.GetString(GetStringNames.ShadingLanguageVersion);
             _form.Text = string.Format("OpenGL Test - {0} - {1} - {2} - Shading language version {3}", version, renderer, vendor, shaderVersion);
 
-            
-
             _gl.ActiveTexture(ActiveTexture.Texture1);
             normalMap.Bind();
             var nm = _shader.GetUniform<IntUniform, int>("NormalMap");
@@ -136,7 +150,7 @@ namespace WindowsTest
             this._gl.ClearColor(color.R / 255.0f, color.G / 255.0f, color.B / 255.0f, color.A / 255.0f);
             this._gl.ClearDepth(1f);
             _gl.Clear(ClearTarget.All);
-            
+
         }
 
         private Quaternion _rotation = Quaternion.Identity;
@@ -148,7 +162,11 @@ namespace WindowsTest
 
             _rotation = (_rotation * new Quaternion(Vector3F.UnitY, (float)(Math.PI / 180))).Normalize();
 
-            this._worldUniform.Value = _rotation.ToMatrix();
+            World.Value = _rotation.ToMatrix();
+            WorldView.Value = World.Value * View.Value;
+            ViewProjection.Value = View.Value * Projection.Value;
+            WorldViewProjection.Value = World.Value * View.Value * Projection.Value;
+
             this._terrain.Render();
 
             this._context.SwapBuffers();

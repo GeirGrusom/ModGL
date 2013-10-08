@@ -28,6 +28,18 @@ namespace ModGL.Shaders
         /// <param name="gl">OpenGL interface supplying shader functionality.</param>
         /// <param name="shaders">Shaders to attach.</param>
         /// <exception cref="ArgumentNullException">Thrown if gl or shaders is null.</exception>
+        public Program(IOpenGL30 gl, params IShader[] shaders)
+            : this(gl, shaders.AsEnumerable())
+        {
+        }
+
+
+        /// <summary>
+        /// Creates an Shader program and attaches shaders to it.
+        /// </summary>
+        /// <param name="gl">OpenGL interface supplying shader functionality.</param>
+        /// <param name="shaders">Shaders to attach.</param>
+        /// <exception cref="ArgumentNullException">Thrown if gl or shaders is null.</exception>
         public Program(IOpenGL30 gl, IEnumerable<IShader> shaders)
         {
             if (shaders == null)
@@ -90,6 +102,16 @@ namespace ModGL.Shaders
             return new CompilationResults(Shaders.Select(s => s.GetCompilationResults()), Encoding.UTF8.GetString(log), IsValid, IsLinked);
         }
 
+        public void BindVertexAttributeLocations(params VertexInfo.VertexDescriptor[] definitions)
+        {
+            int offset = 0;
+            foreach (var item in definitions)
+            {
+                BindVertexAttributeLocations(item, offset);
+                offset += item.Elements.Count();
+            }
+        }
+
         /// <summary>
         /// Binds attribute locations to vertex description. This can only be done before the program has been compiled.
         /// </summary>
@@ -105,7 +127,7 @@ namespace ModGL.Shaders
             if (IsLinked)
                 throw new InvalidOperationException("Cannot bind attributes to an already linked program.");
 
-            foreach (var item in definition.Elements.Select((Item, Index) => new { Item, Index }))
+            foreach (var item in definition.Elements.Select((item, index) => new { Item = item, Index = index }))
                 _gl.BindAttribLocation(Handle, (uint)(item.Index + indexOffset), item.Item.Name);
         }
 
@@ -213,6 +235,45 @@ namespace ModGL.Shaders
                 throw new NoHandleCreatedException("Unable to find uniform with the specified name.");
 
             return ProcCache<TUniformType>.Create(_gl, uniformName, uniformLoc);
+        }
+
+        /// <summary>
+        /// Creates a uniform object for the specified uniform. If the uniform does not exist, an inert uniform will be created instead.
+        /// </summary>
+        /// <typeparam name="TUniformType">Type of uniform to create.</typeparam>
+        /// <typeparam name="TValueType">Type of element in the uniform.</typeparam>
+        /// <param name="uniformName">Name of the shader uniform.</param>
+        /// <returns>If function is successful, a TUniformType instance will be returned, otherwise InertUniform will be returned.</returns>
+        [Pure]
+        public Uniform<TValueType> GetUniformInert<TUniformType, TValueType>(string uniformName)
+            where TUniformType : Uniform<TValueType>
+        {
+            var uniformLoc = _gl.GetUniformLocation(Handle, uniformName);
+
+            if (uniformLoc == -1)
+                return new InertUniform<TValueType>(_gl, uniformName, uniformLoc);
+
+            return ProcCache<TUniformType>.Create(_gl, uniformName, uniformLoc);
+        }
+
+        /// <summary>
+        /// Tries to get a uniform.
+        /// </summary>
+        /// <typeparam name="TUniformType">Type of uniform to create.</typeparam>
+        /// <typeparam name="TValueType">Type of element in the uniform.</typeparam>
+        /// <param name="uniformName">Name of the shader uniform.</param>
+        /// <param name="result">If function is successful, return true and the new uniform in result. Otherwise false is returned and result is set to null.</param>
+        /// <returns></returns>
+        public bool TryGetUniform<TUniformType, TValueType>(string uniformName, out Uniform<TValueType> result)
+            where TUniformType : Uniform<TValueType>
+        {
+            var uniformLoc = _gl.GetUniformLocation(Handle, uniformName);
+
+            result = uniformLoc != -1 
+                ? ProcCache<TUniformType>.Create(this._gl, uniformName, uniformLoc) 
+                : null;
+
+            return uniformLoc != -1;
         }
     }
 }

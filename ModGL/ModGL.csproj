@@ -45,6 +45,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Binding\LibraryLoader.cs" />
+    <Compile Include="Shaders\InertUniform.cs" />
+    <Compile Include="Unix\UnixLibrary.cs" />
+    <Compile Include="Unix\UnixLibraryLoader.cs" />
     <Compile Include="Windows\WindowsLibrary.cs" />
     <Compile Include="Windows\WindowsLibraryLoader.cs" />
     <Compile Include="Buffers\Buffer.cs" />
@@ -107,6 +110,9 @@
     <Compile Include="Windows\PixelFormatException.cs" />
     <Compile Include="Windows\WGL.cs" />
     <Compile Include="Windows\WindowsContext.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="OSX\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

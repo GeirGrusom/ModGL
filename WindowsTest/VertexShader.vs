@@ -7,6 +7,9 @@ in vec3 BiTangent;
 
 uniform mat4 World;
 uniform mat4 View;
+uniform mat4 WorldViewProjection;
+uniform mat4 ViewProjection;
+uniform mat4 WorldView;
 uniform mat4 Projection;
 uniform vec3 Light;
 
@@ -18,19 +21,19 @@ out vec2 texCoord;
 
 void main()
 {
-	mat4 modelView = World * View;
-	mat4 worldViewProjection = World * View * Projection;
-	vec4 pos = vec4(Position, 1) * worldViewProjection;
+	vec4 pos = vec4(Position, 1) * (WorldViewProjection);
 	
-	vec3 eye = normalize((vec4(0, 0, 1, 1) * (View * Projection)).xyz);
+	vec3 eye = normalize((vec4(0, 0, 1, 1) * (ViewProjection)).xyz);
 	
 	mat3 tangentMatrix = transpose(mat3(
-        (vec4(Tangent, 1) * modelView).xyz,
-        (vec4(BiTangent, 1) * modelView).xyz,
-        (vec4(Normal, 1) * modelView).xyz
+        (vec4(Tangent, 1) * WorldView).xyz,
+        (vec4(BiTangent, 1) * WorldView).xyz,
+        (vec4(Normal, 1) * WorldView).xyz
     ));
 
-	lightDirection = normalize(Light - position) * tangentMatrix;
+	vec3 lightPos = (vec4(Light, 1) * WorldView).xyz;
+
+	lightDirection = normalize(lightPos - position) * tangentMatrix;
 	eyeDirection = eye * tangentMatrix;
 	normal = Normal;
 
