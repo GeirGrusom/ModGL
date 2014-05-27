@@ -1,6 +1,5 @@
 ﻿using System;
 
-using ModGL.Binding;
 using ModGL.Windows;
 using NSubstitute;
 

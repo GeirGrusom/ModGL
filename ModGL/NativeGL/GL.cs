@@ -2,8 +2,6 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
 
-using ModGL.Binding;
-
 using GLenum = System.UInt32;
 using GLbitfield = System.UInt32;
 using GLchar = System.Byte;
@@ -1428,77 +1426,5 @@ namespace ModGL.NativeGL
         TextureWrapS = 0x2802,
         TextureWrapT = 0x2803,
         TextureWrapR = 0x8072
-    }
-
-    public static class GL
-    {
-        [ThreadStatic]
-        private static IOpenGL gl;
-
-        [ThreadStatic]
-        private static bool alreadyHandlingError;
-        
-        // TODO: Not happy about this at all.
-        public static void RegisterOpenGLInterface(IOpenGL @interface)
-        {
-            gl = @interface;
-        }
-
-        [System.Diagnostics.DebuggerHidden]
-        [System.Diagnostics.DebuggerStepThrough]
-        public static void HandleOpenGLError()
-        {
-            if (alreadyHandlingError)
-                return;
-            alreadyHandlingError = true;
-            GLenum error;
-            try
-            {
-                error = gl.GetError();
-            }
-            finally
-            {
-                alreadyHandlingError = false;
-            }
-            if (error == 0)
-                return;
-            switch ((ErrorCode)error)
-            {
-                case ErrorCode.InvalidEnum:
-                    throw new OpenGLInvalidEnumException();
-                case ErrorCode.InvalidOperation:
-                    throw new OpenGLInvalidOperationException();
-                case ErrorCode.InvalidValue:
-                    throw new OpenGLInvalidValueException();
-                case ErrorCode.StackOverflow:
-                    throw new OpenGLStackOverflowException();
-                case ErrorCode.StackUnderflow:
-                    throw new OpenGLStackUnderflowException();
-                default:
-                    throw new OpenGLException((ErrorCode)error);
-            }
-        }
-
-        public static void FlushOpenGLError()
-        {
-            if (alreadyHandlingError)
-                return;
-            alreadyHandlingError = true;
-            try
-            {
-                gl.GetError();
-            }
-            finally
-            {
-                alreadyHandlingError = false;
-            }
-        }
-
-        // TODO: Make this into a instance imeplementation instead of static member.
-        public static readonly ErrorHandling OpenGLErrorFunctions = new ErrorHandling
-        {
-            FlushError = typeof(GL).GetMethod("FlushOpenGLError", BindingFlags.Public | BindingFlags.Static),
-            CheckErrorState = typeof(GL).GetMethod("HandleOpenGLError", BindingFlags.Public | BindingFlags.Static)
-        };
     }
 }

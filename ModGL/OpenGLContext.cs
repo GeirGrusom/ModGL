@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
-
-using ModGL.Binding;
+using System.Reflection;
+using System.Threading;
 using ModGL.NativeGL;
+using Platform.Invoke;
 
 namespace ModGL
 {
-    public interface IContext : IDisposable, IExtensionSupport
+    public interface IContext : Platform.Invoke.ILibrary
     {
         IntPtr Handle { get; }
         BindContext Bind();
@@ -24,9 +25,17 @@ namespace ModGL
         DontCare = 0xffff,
     }
 
+    public interface IOpenGLGetError
+    {
+        [Platform.Invoke.Attributes.SkipProbe]
+        ErrorCode GetError();
+    }
+
     public abstract class Context : IContext
     {
         public IntPtr Handle { get; protected set; }
+
+        protected readonly ILibrary glLibrary;
 
         [ThreadStatic]
         private static IContext currentContext;
@@ -37,33 +46,87 @@ namespace ModGL
 
         public abstract void Dispose();
 
+        private readonly Lazy<IOpenGLGetError> error;
+
+        protected Context()
+        {
+            error = new Lazy<IOpenGLGetError>(() => LibraryInterfaceFactory.Implement<IOpenGLGetError>(this, f => "gl" + f), LazyThreadSafetyMode.None);
+        }
+
         [Pure]
-        public TOpenGLInterface GetOpenGL<TOpenGLInterface>(IInterfaceBindingFactory bindingFactory, bool debug = false)
+        public TOpenGLInterface CreateInterface<TOpenGLInterface>(bool debug = false)
             where TOpenGLInterface : class
         {
-            return bindingFactory
-                .CreateBinding<TOpenGLInterface>
-                (
-                    context: this,
-                    errorHandling: debug ? GL.OpenGLErrorFunctions : null, extensionMethodPrefix: "gl"
-                );
+            if (debug)
+                return CreateDebugInterface<TOpenGLInterface>();
+            return LibraryInterfaceFactory.Implement<TOpenGLInterface>(this, f => "gl" + f);
         }
+
+        public class DebugProbe<TOpenGLInterface> : IMethodCallProbe<TOpenGLInterface>
+            where TOpenGLInterface : class
+        {
+            private readonly IOpenGLGetError _error;
+
+            public DebugProbe(IOpenGLGetError error)
+            {
+                _error = error;
+            }
+
+            public void OnBeginInvoke(MethodInfo method, TOpenGLInterface reference)
+            {
+                _error.GetError(); // Clear error state
+            }
+
+            public void OnEndInvoke(MethodInfo method, TOpenGLInterface reference)
+            {
+                var errorCode = _error.GetError();
+                switch (errorCode)
+                {
+                    case ErrorCode.InvalidEnum:
+                        throw new OpenGLInvalidEnumException();
+                    case ErrorCode.InvalidOperation:
+                        throw new OpenGLInvalidOperationException();
+                    case ErrorCode.InvalidValue:
+                        throw new OpenGLInvalidValueException();
+                    case ErrorCode.OutOfMemory:
+                        throw new OutOfMemoryException();
+                    case ErrorCode.StackOverflow:
+                        throw new OpenGLStackOverflowException();
+                    case ErrorCode.StackUnderflow:
+                        throw new OpenGLStackUnderflowException();
+                }
+            }
+        }
+
+        private TOpenGLInterface CreateDebugInterface<TOpenGLInterface>()
+            where TOpenGLInterface : class
+        {
+            var delegateTypeBuilder = new DelegateTypeBuilder();
+            var constructorBuilder = new ProbingConstructorBuilder(f => "gl" + f);
+            var methodBuilder = new ProbingMethodCallWrapper(() => constructorBuilder.ProbeField);
+            var interfaceFactory = new LibraryInterfaceMapper(delegateTypeBuilder, constructorBuilder,
+                methodBuilder);
+            var probe = new DebugProbe<TOpenGLInterface>(error.Value);
+            return interfaceFactory.Implement<TOpenGLInterface>(this, probe);
+        }
+
+        public abstract Delegate GetProcedure(Type delegateType, string name);
 
         [Pure]
         public TDelegate GetProcedure<TDelegate>(string procedureName)
             where TDelegate : class
         {
-            return (TDelegate)Convert.ChangeType(GetProcedure(procedureName, typeof(TDelegate)), typeof(TDelegate));
+            return GetProcedure(typeof(TDelegate), procedureName) as TDelegate;
         }
+
+        public string Name { get { return "OpenGL"; } }
 
         [Pure]
         public TDelegate GetProcedure<TDelegate>()
             where TDelegate : class
         {
-            return (TDelegate)Convert.ChangeType(GetProcedure(typeof(TDelegate).Name, typeof (TDelegate)), typeof(TDelegate));
+            return (TDelegate)Convert.ChangeType(GetProcedure(typeof(TDelegate), typeof(TDelegate).Name), typeof(TDelegate));
         }
-
-        public abstract Delegate GetProcedure(string name, Type delegateType);
 
         public static IContext Current
         {

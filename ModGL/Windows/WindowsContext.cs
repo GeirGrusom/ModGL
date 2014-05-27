@@ -221,7 +221,7 @@ namespace ModGL.Windows
         }
 
         [Pure]
-        public override Delegate GetProcedure(string extensionName, Type delegateType)
+        public override Delegate GetProcedure(Type delegateType, string extensionName)
         {
             var delegPtr = _wgl.wglGetProcAddress(extensionName);
             if (delegPtr == IntPtr.Zero)

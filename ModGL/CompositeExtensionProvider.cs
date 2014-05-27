@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using Platform.Invoke;
 
 namespace ModGL
 {
@@ -9,19 +10,27 @@ namespace ModGL
     /// This class provides a extension mechanism where it will check for functions in all
     /// extension providers registered. The first one to give a non-null value will be returned.
     /// </summary>
-    public class CompositeExtensionProvider : IExtensionSupport
+    public class CompositeLibraryProvider : ILibrary
     {
-        private readonly IList<IExtensionSupport> _providers;
+        private readonly IList<ILibrary> _providers;
 
-        public CompositeExtensionProvider(params IExtensionSupport[] providers)
+        public string Name { get { return string.Join(", ", _providers.Select(p => p.Name)); } }
+
+        public void Dispose()
+        {
+            foreach(var provider in _providers)
+                provider.Dispose();
+        }
+
+        public CompositeLibraryProvider(params ILibrary[] providers)
         {
             _providers = providers.ToList();
         }
 
         [Pure]
-        public Delegate GetProcedure(string procedureName, Type delegateType)
+        public Delegate GetProcedure(Type delegateType, string procedureName)
         {
-            return _providers.Select(p => p.GetProcedure(procedureName, delegateType)).FirstOrDefault(p => p != null);
+            return _providers.Select(p => p.GetProcedure(delegateType, procedureName)).FirstOrDefault(p => p != null);
         }
 
 
@@ -30,13 +39,6 @@ namespace ModGL
             where TDelegate : class
         {
             return _providers.Select(p => p.GetProcedure<TDelegate>(procedureName)).FirstOrDefault(p => p != null);
-        }
-
-        [Pure]
-        public TDelegate GetProcedure<TDelegate>()
-            where TDelegate : class
-        {
-            return _providers.Select(p => p.GetProcedure<TDelegate>()).FirstOrDefault(p => p != null);
         }
     }
 }
