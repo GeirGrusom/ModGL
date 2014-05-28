@@ -53,6 +53,9 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Numerics.Vectors">
+      <HintPath>..\packages\Microsoft.Bcl.Simd.1.0.2-beta\lib\portable-net45+win8\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -61,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Buffers\BufferTest.cs" />
+    <Compile Include="Numerics\Matrix4fTests.cs" />
     <Compile Include="Shaders\ShaderProgramTest.cs" />
     <Compile Include="Shaders\ShaderTest.cs" />
     <Compile Include="VertexArrayTest.cs" />

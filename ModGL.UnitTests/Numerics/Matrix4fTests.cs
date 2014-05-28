@@ -1,0 +1,105 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
+using System.Text;
+using System.Threading.Tasks;
+using ModGL.Numerics;
+using NUnit.Framework;
+
+namespace ModGL.UnitTests.Numerics
+{
+    [TestFixture]
+    public class Matrix4fTests
+    {
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(3)]
+        public void GetRow_ReturnsCorrectRow(int index)
+        {
+            // Arrange
+            var vectors = new Vector4f[4];
+            vectors[index] = new Vector4f(1, 2, 3, 4);
+            var mat = new Matrix4f(vectors[0], vectors[1], vectors[2], vectors[3]);
+
+            // Act
+            var theRow = mat.Row(index);
+
+            // Assert
+            Assert.That(theRow, Is.EqualTo(new Vector4f(1, 2, 3, 4)));
+        }
+
+        [Test]
+        public void GetColumn0_ReturnsColumn0()
+        {
+            // Arrange
+            var mat = new Matrix4f(new Vector4f(1, 0, 0, 0), new Vector4f(2, 0, 0, 0), new Vector4f(3, 0, 0, 0), new Vector4f(4, 0, 0, 0));
+
+            // Act
+            var theRow = mat.Column(0);
+
+            // Assert
+            Assert.That(theRow, Is.EqualTo(new Vector4f(1, 2, 3, 4)));
+        }
+
+        [Test]
+        public void GetColumn1_ReturnsColumn1()
+        {
+            // Arrange
+            var mat = new Matrix4f(new Vector4f(0, 1, 0, 0), new Vector4f(0, 2, 0, 0), new Vector4f(0, 3, 0, 0), new Vector4f(0, 4, 0, 0));
+
+            // Act
+            var theRow = mat.Column(1);
+
+            // Assert
+            Assert.That(theRow, Is.EqualTo(new Vector4f(1, 2, 3, 4)));
+        }
+
+        [Test]
+        public void GetColumn2_ReturnsColumn2()
+        {
+            // Arrange
+            var mat = new Matrix4f(new Vector4f(0, 0, 1, 0), new Vector4f(0, 0, 2, 0), new Vector4f(0, 0, 3, 0), new Vector4f(0, 0, 4, 0));
+
+            // Act
+            var theRow = mat.Column(2);
+
+            // Assert
+            Assert.That(theRow, Is.EqualTo(new Vector4f(1, 2, 3, 4)));
+        }
+
+        [Test]
+        public void GetColumn3_ReturnsColumn3()
+        {
+            // Arrange
+            var mat = new Matrix4f(new Vector4f(0, 0, 0, 1), new Vector4f(0, 0, 0, 2), new Vector4f(0, 0, 0, 3), new Vector4f(0, 0, 0, 4));
+
+            // Act
+            var theRow = mat.Column(3);
+
+            // Assert
+            Assert.That(theRow, Is.EqualTo(new Vector4f(1, 2, 3, 4)));
+        }
+
+        [Test]
+        public void Multiply_ReturnsCorrectMatrix()
+        {
+            // Arrange
+            var left = new Matrix4f(new Vector4f(1, 2, 3, 4), new Vector4f(5, 6, 7, 8), new Vector4f(9, 10, 11, 12),
+                new Vector4f(13, 14, 15, 16));
+            var right = new Matrix4f(new Vector4f(21, 22, 23, 24), new Vector4f(25, 26, 27, 28),
+                new Vector4f(29, 30, 31, 32), new Vector4f(33, 34, 35, 36));
+
+            // Act
+            var result = left.Multiply(right);
+
+            // Assert
+            Assert.That(result.Row(0), Is.EqualTo(new Vector4f(650, 740, 830, 920)));
+            Assert.That(result.Row(1), Is.EqualTo(new Vector4f(762, 868, 974, 1080)));
+            Assert.That(result.Row(2), Is.EqualTo(new Vector4f(874, 996, 1118, 1240)));
+            Assert.That(result.Row(3), Is.EqualTo(new Vector4f(986, 1124, 1262, 1400)));
+        }
+
+    }
+}

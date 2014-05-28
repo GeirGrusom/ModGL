@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using System.Numerics;
 using System.Reflection;
 
 using ModGL.NativeGL;
@@ -9,7 +10,12 @@ using ModGL.Shaders;
 
 namespace ModGL.VertexInfo
 {
-
+    public struct PositionNormalTexCoord
+    {
+        public Vector3f Position;
+        public Vector3f Normal;
+        public Vector2f TexCoord;
+    }
     public class VertexElement
     {
         public int Dimensions { get; internal set; }
