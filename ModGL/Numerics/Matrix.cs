@@ -6,7 +6,7 @@ namespace ModGL.Numerics
     public class Matrix4f
     {
         public static readonly Matrix4f Identity = new Matrix4f(new Vector4f(1, 0, 0, 0), new Vector4f(0, 1, 0, 0), new Vector4f(0, 0, 1, 0), new Vector4f(0, 0, 0, 1));
-        private readonly Vector4f[] _data;
+        internal readonly Vector4f[] _data;
 
         public Vector4f Row(int index)
         {

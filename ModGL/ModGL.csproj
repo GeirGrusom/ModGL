@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Numerics\Matrix.cs" />
+    <Compile Include="Numerics\MatrixHelper.cs" />
     <Compile Include="Shaders\InertUniform.cs" />
     <Compile Include="Buffers\Buffer.cs" />
     <Compile Include="Buffers\BufferExtensions.cs" />
@@ -84,6 +85,7 @@
     <Compile Include="Shaders\FragmentShader.cs" />
     <Compile Include="Shaders\GeometryShader.cs" />
     <Compile Include="Shaders\IntUniform.cs" />
+    <Compile Include="Shaders\MatrixUniform.cs" />
     <Compile Include="Shaders\Program.cs" />
     <Compile Include="Shaders\ProgramCompilationException.cs" />
     <Compile Include="Shaders\Shader.cs" />
@@ -96,6 +98,9 @@
     <Compile Include="Shaders\TesselationEvaulationShader.cs" />
     <Compile Include="Shaders\TextureUniform.cs" />
     <Compile Include="Shaders\Uniform.cs" />
+    <Compile Include="Shaders\Vector2fUniform.cs" />
+    <Compile Include="Shaders\Vector3fUniform.cs" />
+    <Compile Include="Shaders\Vector4fUniform.cs" />
     <Compile Include="Shaders\VertexShader.cs" />
     <Compile Include="Textures\CubeMap.cs" />
     <Compile Include="Textures\Texture.cs" />
