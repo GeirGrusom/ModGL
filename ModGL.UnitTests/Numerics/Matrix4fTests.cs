@@ -83,7 +83,7 @@ namespace ModGL.UnitTests.Numerics
         }
 
         [Test]
-        public void Multiply_ReturnsCorrectMatrix()
+        public void Multiply_Matrix_ReturnsCorrectMatrix()
         {
             // Arrange
             var left = new Matrix4f(new Vector4f(1, 2, 3, 4), new Vector4f(5, 6, 7, 8), new Vector4f(9, 10, 11, 12),
@@ -99,6 +99,19 @@ namespace ModGL.UnitTests.Numerics
             Assert.That(result.Row(1), Is.EqualTo(new Vector4f(762, 868, 974, 1080)));
             Assert.That(result.Row(2), Is.EqualTo(new Vector4f(874, 996, 1118, 1240)));
             Assert.That(result.Row(3), Is.EqualTo(new Vector4f(986, 1124, 1262, 1400)));
+        }
+
+        [Test]
+        public void Multiply_Vector4f_ReturnsTranslatedVector()
+        {
+            // Arrange
+            var mat = MatrixHelper.Translate(2, 3, 4);
+            
+            // Act
+            var result = mat.Multiply(new Vector4f(0, 0, 0, 1));
+
+            // Assert
+            Assert.That(result, Is.EqualTo(new Vector4f(2, 3, 4, 1)));
         }
 
     }

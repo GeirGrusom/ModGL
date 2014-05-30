@@ -46,6 +46,27 @@ namespace ModGL.Numerics
                 new Vector4f(result[0, 3], result[1, 3], result[2, 3], result[3, 3]));
         }
 
+        public Vector4f Multiply(Vector4f vector)
+        {
+            return new Vector4f(
+                VectorMath.DotProduct(vector, Row(0)),
+                VectorMath.DotProduct(vector, Row(1)),
+                VectorMath.DotProduct(vector, Row(2)), 
+                VectorMath.DotProduct(vector, Row(3)));
+        }
+
+        public Vector3f Multiply(Vector3f vector)
+        {
+            var vec = new Vector4f(vector.X, vector.Y, vector.Z, 1);
+            var result = new Vector4f(
+                VectorMath.DotProduct(vec, Row(0)),
+                VectorMath.DotProduct(vec, Row(1)),
+                VectorMath.DotProduct(vec, Row(2)),
+                VectorMath.DotProduct(vec, Row(3)));
+
+            return new Vector3f(result.X, result.Y, result.Z);
+        }
+
         public Matrix4f()
         {
             _data = new Vector4f[4];

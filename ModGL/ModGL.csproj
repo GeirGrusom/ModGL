@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Numerics\Matrix.cs" />
+    <Compile Include="Numerics\MatrixExtensions.cs" />
     <Compile Include="Numerics\MatrixHelper.cs" />
     <Compile Include="Shaders\InertUniform.cs" />
     <Compile Include="Buffers\Buffer.cs" />
@@ -64,7 +65,6 @@
     <Compile Include="ExtensionNotSupportedException.cs" />
     <Compile Include="Framebuffer.cs" />
     <Compile Include="IBindable.cs" />
-    <Compile Include="IExtensionSupport.cs" />
     <Compile Include="IGLObject.cs" />
     <Compile Include="NativeGL\ConstStringReturnMarshaller.cs" />
     <Compile Include="NativeGL\GL.cs" />
@@ -107,7 +107,6 @@
     <Compile Include="Textures\Texture1D.cs" />
     <Compile Include="Textures\Texture2D.cs" />
     <Compile Include="Textures\Texture3D.cs" />
-    <Compile Include="ThrowOnErrorAttribute.cs" />
     <Compile Include="VersionNotSupportedException.cs" />
     <Compile Include="VertexArray.cs" />
     <Compile Include="Buffers\VertexBuffer.cs" />

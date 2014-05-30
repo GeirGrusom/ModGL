@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
-
+using Platform.Invoke.Attributes;
 using GLenum = System.UInt32;
 using GLbitfield = System.UInt32;
 using GLchar = System.Byte;
@@ -493,6 +493,7 @@ namespace ModGL.NativeGL
         void ReadPixels(GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, IntPtr pixels);
         void GetBooleanv(GLenum pname, [Out]GLboolean[] @params);
         void GetDoublev(GLenum pname, [Out]GLdouble[] @params);
+        [SkipProbe]
         GLenum GetError();
         void GetFloatv(GLenum pname, [Out]GLfloat[] @params);
         void GetIntegerv(GLenum pname, [Out]GLint[] @params);
@@ -1021,18 +1022,6 @@ namespace ModGL.NativeGL
         DepthBufferBit = 0x00000100,
         StencilBufferBit = 0x00000400,
         ColorBufferBit = 0x00004000
-    }
-
-    public enum PrimitiveType
-    {
-        Points,
-        Lines,
-        LineLoop,
-        LineStrip,
-        Triangles,
-        TriangleStrip,
-        TriangleFan,
-        Quads
     }
 
     public enum AlphaFunction
