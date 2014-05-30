@@ -20,10 +20,10 @@ namespace ModGL.UnitTests.Numerics
             var result = MatrixHelper.Translate(new Vector3f(1, 2, 3));
 
             // Assert
-            Assert.That(result.Row(0), Is.EqualTo(new Vector4f(1, 0, 0, 0)));
-            Assert.That(result.Row(1), Is.EqualTo(new Vector4f(0, 1, 0, 0)));
-            Assert.That(result.Row(2), Is.EqualTo(new Vector4f(0, 0, 1, 0)));
-            Assert.That(result.Row(3), Is.EqualTo(new Vector4f(1, 2, 3, 1)));
+            Assert.That(result.Row(0), Is.EqualTo(new Vector4f(1, 0, 0, 1)));
+            Assert.That(result.Row(1), Is.EqualTo(new Vector4f(0, 1, 0, 2)));
+            Assert.That(result.Row(2), Is.EqualTo(new Vector4f(0, 0, 1, 3)));
+            Assert.That(result.Row(3), Is.EqualTo(new Vector4f(0, 0, 0, 1)));
         }
 
         [Test]
@@ -34,10 +34,10 @@ namespace ModGL.UnitTests.Numerics
             var result = MatrixHelper.Translate(1, 2, 3);
 
             // Assert
-            Assert.That(result.Row(0), Is.EqualTo(new Vector4f(1, 0, 0, 0)));
-            Assert.That(result.Row(1), Is.EqualTo(new Vector4f(0, 1, 0, 0)));
-            Assert.That(result.Row(2), Is.EqualTo(new Vector4f(0, 0, 1, 0)));
-            Assert.That(result.Row(3), Is.EqualTo(new Vector4f(1, 2, 3, 1)));
+            Assert.That(result.Row(0), Is.EqualTo(new Vector4f(1, 0, 0, 1)));
+            Assert.That(result.Row(1), Is.EqualTo(new Vector4f(0, 1, 0, 2)));
+            Assert.That(result.Row(2), Is.EqualTo(new Vector4f(0, 0, 1, 3)));
+            Assert.That(result.Row(3), Is.EqualTo(new Vector4f(0, 0, 0, 1)));
         }
 
         [Test]
