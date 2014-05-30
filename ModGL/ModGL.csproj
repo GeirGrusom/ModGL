@@ -54,6 +54,8 @@
     <Compile Include="Numerics\Matrix.cs" />
     <Compile Include="Numerics\MatrixExtensions.cs" />
     <Compile Include="Numerics\MatrixHelper.cs" />
+    <Compile Include="Numerics\ProjectionMatrixHelper.cs" />
+    <Compile Include="Numerics\VectorMath.cs" />
     <Compile Include="Shaders\InertUniform.cs" />
     <Compile Include="Buffers\Buffer.cs" />
     <Compile Include="Buffers\BufferExtensions.cs" />

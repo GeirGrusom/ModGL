@@ -12,6 +12,8 @@ namespace ModGL
         IntPtr Handle { get; }
         BindContext Bind();
         void SwapBuffers();
+        TOpenGLInterface CreateInterface<TOpenGLInterface>(bool debug = false)
+            where TOpenGLInterface : class;
     }
 
     public enum OpenGLVersion
