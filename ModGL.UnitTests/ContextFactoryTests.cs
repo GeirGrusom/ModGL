@@ -22,7 +22,7 @@ namespace ModGL.UnitTests
             var factory = new ContextFactory(loader, libmapper, PlatformID.Win32NT);
         
             // Act
-            var context = factory.Create(new ContextCreationParameters());
+            var context = factory.Create(new ContextCreationParameters{ Device = 1, Window = 1});
 
             // Assert
             Assert.That(context, Is.InstanceOf<WindowsContext>());

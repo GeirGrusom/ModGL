@@ -7,11 +7,12 @@ using Platform.Invoke;
 
 namespace ModGL
 {
-    public interface IContext : Platform.Invoke.ILibrary
+    public interface IContext : ILibrary
     {
         IntPtr Handle { get; }
         BindContext Bind();
         void SwapBuffers();
+        void Initialize();
         TOpenGLInterface CreateInterface<TOpenGLInterface>(bool debug = false)
             where TOpenGLInterface : class;
     }
@@ -37,10 +38,8 @@ namespace ModGL
     {
         public IntPtr Handle { get; protected set; }
 
-        protected readonly ILibrary glLibrary;
-
         [ThreadStatic]
-        private static IContext currentContext;
+        private static IContext _currentContext;
 
         public abstract BindContext Bind();
 
@@ -48,11 +47,13 @@ namespace ModGL
 
         public abstract void Dispose();
 
-        private readonly Lazy<IOpenGLGetError> error;
+        public abstract void Initialize();
+
+        private readonly Lazy<IOpenGLGetError> _error;
 
         protected Context()
         {
-            error = new Lazy<IOpenGLGetError>(() => LibraryInterfaceFactory.Implement<IOpenGLGetError>(this, f => "gl" + f), LazyThreadSafetyMode.None);
+            _error = new Lazy<IOpenGLGetError>(() => LibraryInterfaceFactory.Implement<IOpenGLGetError>(this, f => "gl" + f), LazyThreadSafetyMode.None);
         }
 
         [Pure]
@@ -108,7 +109,7 @@ namespace ModGL
             var methodBuilder = new ProbingMethodCallWrapper(() => constructorBuilder.ProbeField);
             var interfaceFactory = new LibraryInterfaceMapper(delegateTypeBuilder, constructorBuilder,
                 methodBuilder);
-            var probe = new DebugProbe<TOpenGLInterface>(error.Value);
+            var probe = new DebugProbe<TOpenGLInterface>(_error.Value);
             return interfaceFactory.Implement<TOpenGLInterface>(this, probe);
         }
 
@@ -134,13 +135,13 @@ namespace ModGL
         {
             get
             {
-                return currentContext;
+                return _currentContext;
             } 
             set
             {
-                currentContext = value; 
+                _currentContext = value; 
                 if(value != null)
-                    currentContext.Bind();
+                    _currentContext.Bind();
             }
         }
     }

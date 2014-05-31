@@ -34,6 +34,8 @@ namespace ModGL
             os = Environment.OSVersion.Platform;
         }
 
+        public static IContextFactory Instance { get { return new ContextFactory(); } }
+
         /// <summary>
         /// Creates a context based on the current platform.
         /// </summary>

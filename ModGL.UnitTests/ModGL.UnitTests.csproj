@@ -73,6 +73,7 @@
     <Compile Include="VertexInfo\VertexDescriptorTest.cs" />
     <Compile Include="WindowsContextTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Windows\WindowsContextTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -43,6 +43,8 @@ namespace ModGL.Windows
     {
         private readonly IWGL _wgl;
         private readonly IntPtr _hdc;
+        private readonly ContextCreationParameters _contextParameters;
+        private readonly IContext _sharedContext;
 
         public static class WGLPixelFormatConstants
         {
@@ -108,11 +110,70 @@ namespace ModGL.Windows
 
         public override void SwapBuffers()
         {
-            _wgl.SwapBuffers(this._hdc);
-        } 
-        
+            _wgl.SwapBuffers(_hdc);
+        }
+
+        public override void Initialize()
+        {
+            var tempContext = CreateTempOpenGLContext(_contextParameters);
+
+            if (!_wgl.wglMakeCurrent(_hdc, tempContext))
+                throw new ContextCreationException("Unable to make temporary context current.", _contextParameters);
+
+
+            var choosePixelFormat = GetProcedure<wglChoosePixelFormatARB>("wglChoosePixelFormatARB");
+            var createContext = GetProcedure<wglCreateContextAttribsARB>("wglCreateContextAttribsARB");
+
+            if (choosePixelFormat == null)
+                throw new ContextCreationException("Unable to find wglChoosePixelFormatARB.", _contextParameters);
+
+            if (createContext == null)
+                throw new ContextCreationException("Unable to find wglCreateContextARB extension.", _contextParameters);
+
+            int[] formats = new int[1];
+            uint[] numFormats = new uint[1];
+
+            if (!choosePixelFormat(
+                this._hdc,
+                new[]
+                    {
+                        WGLPixelFormatConstants.WGL_DRAW_TO_WINDOW_ARB, (int) GLboolean.True,
+                        WGLPixelFormatConstants.WGL_SUPPORT_OPENGL_ARB, (int) GLboolean.True,
+                        WGLPixelFormatConstants.WGL_DOUBLE_BUFFER_ARB, (int) GLboolean.True,
+                        WGLPixelFormatConstants.WGL_PIXEL_TYPE_ARB, WGLPixelFormatConstants.WGL_TYPE_RGBA_ARB,
+                        WGLPixelFormatConstants.WGL_COLOR_BITS_ARB, _contextParameters.ColorBits.HasValue ? _contextParameters.ColorBits.Value : 32,
+                        WGLPixelFormatConstants.WGL_DEPTH_BITS_ARB, _contextParameters.DepthBits.HasValue ? _contextParameters.DepthBits.Value : 24,
+                        WGLPixelFormatConstants.WGL_STENCIL_BITS_ARB, _contextParameters.StencilBits.HasValue ? _contextParameters.StencilBits.Value : 8,
+                        WGLPixelFormatConstants.WGL_SAMPLE_BUFFERS_ARB, 1,
+                        WGLPixelFormatConstants.WGL_SAMPLES_ARB, 4,
+                        0 //End 
+                    },
+                null,
+                1,
+                formats,
+                numFormats)
+                )
+            {
+                throw new ContextCreationException("Unable to choose pixel format.", _contextParameters);
+            }
+
+            var finalContext = createContext(this._hdc, _sharedContext != null ? _sharedContext.Handle : IntPtr.Zero, new[]
+            {
+                (int)WGLContextAttributes.MajorVersion, _contextParameters.MajorVersion.HasValue ? _contextParameters.MajorVersion.Value : 3,
+                (int)WGLContextAttributes.MinorVersion, _contextParameters.MinorVersion.HasValue ? _contextParameters.MinorVersion.Value : 2,
+                (int)WGLContextAttributes.Flags, 0,
+                (int)WGLContextAttributes.ProfileMask, (int)WGLContextProfileMask.CoreProfileBit,
+                0
+            }
+            );
+            Handle = finalContext;
+        }
+
         public WindowsContext(IWGL wgl, IContext shareContext, ContextCreationParameters parameters)
         {
+            if(wgl == null)
+                throw new ArgumentNullException("wgl");
+
             if(parameters == null)
                 throw new ArgumentNullException("parameters");
 
@@ -129,60 +190,10 @@ namespace ModGL.Windows
                 throw new ContextCreationException("Display is not supported on this platform.", parameters);
 
             _wgl = wgl;
-            this._hdc = new IntPtr(parameters.Device);
+            _hdc = new IntPtr(parameters.Device);
+            _contextParameters = parameters;
+            _sharedContext = shareContext;
 
-            var tempContext = CreateTempOpenGLContext(parameters);
-
-            if(!_wgl.wglMakeCurrent(this._hdc, tempContext))
-                throw new ContextCreationException("Unable to make temporary context current.", parameters);
-
-
-            var choosePixelFormat = GetProcedure<wglChoosePixelFormatARB>("wglChoosePixelFormatARB");
-            var createContext = GetProcedure<wglCreateContextAttribsARB>("wglCreateContextAttribsARB");
-
-            if(choosePixelFormat == null)
-                throw new ContextCreationException("Unable to find wglChoosePixelFormatARB.", parameters);
-
-            if(createContext == null)
-                throw new ContextCreationException("Unable to find wglCreateContextARB extension.", parameters);
-
-            int[] formats = new int[1];
-            uint[] numFormats = new uint[1];
-
-            if (!choosePixelFormat(
-                this._hdc,
-                new[]
-                    {
-                        WGLPixelFormatConstants.WGL_DRAW_TO_WINDOW_ARB, (int) GLboolean.True,
-                        WGLPixelFormatConstants.WGL_SUPPORT_OPENGL_ARB, (int) GLboolean.True,
-                        WGLPixelFormatConstants.WGL_DOUBLE_BUFFER_ARB, (int) GLboolean.True,
-                        WGLPixelFormatConstants.WGL_PIXEL_TYPE_ARB, WGLPixelFormatConstants.WGL_TYPE_RGBA_ARB,
-                        WGLPixelFormatConstants.WGL_COLOR_BITS_ARB, parameters.ColorBits.HasValue ? parameters.ColorBits.Value : 32,
-                        WGLPixelFormatConstants.WGL_DEPTH_BITS_ARB, parameters.DepthBits.HasValue ? parameters.DepthBits.Value : 24,
-                        WGLPixelFormatConstants.WGL_STENCIL_BITS_ARB, parameters.StencilBits.HasValue ? parameters.StencilBits.Value : 8,
-                        WGLPixelFormatConstants.WGL_SAMPLE_BUFFERS_ARB, 1,
-                        WGLPixelFormatConstants.WGL_SAMPLES_ARB, 4,
-                        0 //End 
-                    },
-                null,
-                1,
-                formats,
-                numFormats)
-                )
-            {
-                throw new ContextCreationException("Unable to choose pixel format.", parameters);
-            }
-
-            var finalContext = createContext(this._hdc, shareContext != null ? shareContext.Handle : IntPtr.Zero, new []
-            {
-                (int)WGLContextAttributes.MajorVersion, parameters.MajorVersion.HasValue ? parameters.MajorVersion.Value : 3,
-                (int)WGLContextAttributes.MinorVersion, parameters.MinorVersion.HasValue ? parameters.MinorVersion.Value : 2,
-                (int)WGLContextAttributes.Flags, 0,
-                (int)WGLContextAttributes.ProfileMask, (int)WGLContextProfileMask.CoreProfileBit,
-                0
-            }
-            );
-            Handle = finalContext;
 
         }
 
