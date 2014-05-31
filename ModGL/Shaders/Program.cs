@@ -147,8 +147,9 @@ namespace ModGL.Shaders
                 throw new ProgramCompilationException(this, GetCompilationResults(), "Program failed to compile due to shader errors. See inner exception for more details.", ex);
             }
 
-            _gl.ValidateProgram(Handle);
             _gl.LinkProgram(Handle);
+            _gl.ValidateProgram(Handle);
+            
 
             if (IsLinked && IsValid)
                 return;

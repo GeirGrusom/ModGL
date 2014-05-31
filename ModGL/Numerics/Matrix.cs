@@ -29,14 +29,17 @@ namespace ModGL.Numerics
             throw new IndexOutOfRangeException();
         }
 
-        public Matrix4f Multiply(Matrix4f lhs)
+        public Matrix4f Multiply(Matrix4f rhs)
         {
+            if(rhs == null)
+                throw new ArgumentNullException("rhs");
+
             var result = new float[4,4];
             for (int i = 0; i < 4; i++)
             {
                 for (int j = 0; j < 4; j++)
                 {
-                    result[j, i] = System.Numerics.VectorMath.DotProduct(Column(j), lhs.Row(i));
+                    result[j, i] = System.Numerics.VectorMath.DotProduct(Column(j), rhs.Row(i));
                 }
             }
             return new Matrix4f(
@@ -80,6 +83,15 @@ namespace ModGL.Numerics
         public Matrix4f(Vector4f row0, Vector4f row1, Vector4f row2, Vector4f row3)
         {
             _data = new [] { row0, row1, row2, row3 };
+        }
+
+        public Matrix4f Transpose()
+        {
+            return new Matrix4f(
+                new Vector4f(_data[0].X, _data[1].X, _data[2].X, _data[3].X), 
+                new Vector4f(_data[0].Y, _data[1].Y, _data[2].Y, _data[3].Y),
+                new Vector4f(_data[0].Z, _data[1].Z, _data[2].Z, _data[3].Z),
+                new Vector4f(_data[0].W, _data[1].W, _data[2].W, _data[3].W));
         }
     }
 }

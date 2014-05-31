@@ -113,6 +113,19 @@ namespace ModGL.UnitTests.Numerics
             // Assert
             Assert.That(result, Is.EqualTo(new Vector4f(2, 3, 4, 1)));
         }
+        
+        [Test]
+        public void Transpose_ReturnsRowsAsColumns()
+        {
+            var mat = new Matrix4f(new Vector4f(1, 2, 3, 4), new Vector4f(1, 2, 3, 4), new Vector4f(1, 2, 3, 4),
+                new Vector4f(1, 2, 3, 4));
 
+            Matrix4f result = mat.Transpose();
+
+            Assert.That(result.Column(0), Is.EqualTo(new Vector4f(1, 2, 3, 4)));
+            Assert.That(result.Column(1), Is.EqualTo(new Vector4f(1, 2, 3, 4)));
+            Assert.That(result.Column(2), Is.EqualTo(new Vector4f(1, 2, 3, 4)));
+            Assert.That(result.Column(3), Is.EqualTo(new Vector4f(1, 2, 3, 4)));
+        }
     }
 }
