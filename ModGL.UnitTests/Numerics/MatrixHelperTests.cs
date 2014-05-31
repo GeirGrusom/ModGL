@@ -1,6 +1,7 @@
 ﻿using System.Numerics;
 using ModGL.Numerics;
 using NUnit.Framework;
+using NUnit.Framework.Constraints;
 
 namespace ModGL.UnitTests.Numerics
 {
@@ -61,6 +62,20 @@ namespace ModGL.UnitTests.Numerics
             Assert.That(result.Row(1), Is.EqualTo(new Vector4f(0, 2, 0, 0)));
             Assert.That(result.Row(2), Is.EqualTo(new Vector4f(0, 0, 3, 0)));
             Assert.That(result.Row(3), Is.EqualTo(new Vector4f(0, 0, 0, 1)));
+        }
+
+        [Test]
+        public void RotateZ_ReturnsRotatedMatrix()
+        {
+            // Arrange
+            // Act
+            var mat = MatrixHelper.RotateZ((float) System.Math.PI/2);
+
+            // Assert
+            Assert.That(mat.Row(0), Is.EqualTo(new Vector4f(0, 1, 0, 0)));
+            Assert.That(mat.Row(1), Is.EqualTo(new Vector4f(-1, 0, 0, 0)));
+            Assert.That(mat.Row(2), Is.EqualTo(new Vector4f(0, 0, 1, 0)));
+            Assert.That(mat.Row(3), Is.EqualTo(new Vector4f(0, 0, 0, 0)));
         }
     }
 }

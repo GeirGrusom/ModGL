@@ -54,7 +54,7 @@ namespace ModGL.UnitTests.VertexInfo
             // Arrange
 
             // Act
-            var result = ModGL.VertexInfo.VertexDescriptor.Create<TestVertex>();
+            var result = VertexDescriptor.Create<TestVertex>();
 
             // Assert
             Assert.IsNotNull(result);
@@ -67,7 +67,7 @@ namespace ModGL.UnitTests.VertexInfo
         }
 
         [Test]
-        public void Create_GeneratesVertexDescriptorForStruct_WithOneField_OvveridesDataType()
+        public void Create_GeneratesVertexDescriptorForStruct_WithOneField_OverridesDataType()
         {
             // Arrange
 
@@ -84,7 +84,7 @@ namespace ModGL.UnitTests.VertexInfo
         }
 
         [Test]
-        public void Create_GeneratesVertexDescriptorForStruct_WithOneField_OvveridesDimensions()
+        public void Create_GeneratesVertexDescriptorForStruct_WithOneField_OverridesDimensions()
         {
             // Arrange
 
@@ -126,7 +126,7 @@ namespace ModGL.UnitTests.VertexInfo
             // Arrange
 
             // Act
-            var result = ModGL.VertexInfo.VertexDescriptor.Create<TestVertexWithToFields>();
+            var result = VertexDescriptor.Create<TestVertexWithToFields>();
 
             // Assert
             Assert.AreEqual(2, result.Elements.Count());
