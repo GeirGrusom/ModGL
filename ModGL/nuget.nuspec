@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <authors>Henning Moe</authors>
+    <description>Modern OpenGL wrapper for .NET and Mono</description>
+    <projectUrl>https://github.com/GeirGrusom/ModGL</projectUrl>
+    <licenseUrl>https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html</licenseUrl>
+  </metadata>
+</package>

@@ -125,6 +125,7 @@
     <Folder Include="Unix\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="nuget.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
