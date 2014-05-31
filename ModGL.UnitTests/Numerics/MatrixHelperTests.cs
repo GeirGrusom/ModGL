@@ -1,7 +1,6 @@
 ﻿using System.Numerics;
 using ModGL.Numerics;
 using NUnit.Framework;
-using NUnit.Framework.Constraints;
 
 namespace ModGL.UnitTests.Numerics
 {

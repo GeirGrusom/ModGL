@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using ModGL.NativeGL;
+﻿using ModGL.NativeGL;
 using ModGL.Shaders;
 
 using NUnit.Framework;
@@ -26,10 +20,10 @@ namespace ModGL.UnitTests.Shaders
 
             // Act
             // Assert
-            var exception = Assert.Catch<NoHandleCreatedException>(() =>  new Program(gl, new[] { mockShader }));
+            Assert.That(() => new Program(gl, new[] { mockShader }), Throws.TypeOf<NoHandleCreatedException>());
         }
         [Test]
-        public void CompileProgram_Ok() // Test is fairly useless.
+        public void CompileProgram_UncompiledShader_CompilesShadersAsWell()
         {
             var gl = Substitute.For<IOpenGL30>();
             gl.CreateProgram().Returns(1u);
@@ -41,9 +35,32 @@ namespace ModGL.UnitTests.Shaders
             gl.When(g => g.GetProgramiv(Arg.Any<uint>(), ProgramParameters.LinkStatus, Arg.Any<int[]>()))
                 .Do(x => ((int[])x.Args()[2])[0] = 1);
 
-            var Program = new Program(gl, new[] { mockShader });
+            var program = new Program(gl, new[] { mockShader });
 
-            Program.Compile();
+            program.Compile();
+
+            mockShader.Received(1).Compile();
+        }
+
+        [Test]
+        public void CompileProgram_CompiledShader_DoesNotCompileShader()
+        {
+            var gl = Substitute.For<IOpenGL30>();
+            gl.CreateProgram().Returns(1u);
+            var mockShader = Substitute.For<IShader>();
+            mockShader.IsCompiled.Returns(true);
+            // IsValid <- true
+            gl.When(g => g.GetProgramiv(Arg.Any<uint>(), ProgramParameters.ValidateStatus, Arg.Any<int[]>()))
+                .Do(x => ((int[])x.Args()[2])[0] = 1);
+            // IsLinked <- true
+            gl.When(g => g.GetProgramiv(Arg.Any<uint>(), ProgramParameters.LinkStatus, Arg.Any<int[]>()))
+                .Do(x => ((int[])x.Args()[2])[0] = 1);
+
+            var program = new Program(gl, new[] { mockShader });
+
+            program.Compile();
+
+            mockShader.DidNotReceive().Compile();
         }
 
         [Test]
@@ -62,10 +79,10 @@ namespace ModGL.UnitTests.Shaders
             gl.When(g => g.GetProgramiv(Arg.Any<uint>(), ProgramParameters.LinkStatus, Arg.Any<int[]>()))
                 .Do(x => ((int[])x.Args()[2])[0] = 1);
 
-            var Program = new Program(gl, new[] { mockShader });
+            var program = new Program(gl, new[] { mockShader });
 
             // Act
-            var exception = Assert.Catch<ProgramCompilationException>(Program.Compile);
+            var exception = Assert.Throws<ProgramCompilationException>(program.Compile);
 
             // Assert
             Assert.IsNotNull(exception.InnerException);
@@ -86,11 +103,11 @@ namespace ModGL.UnitTests.Shaders
             gl.When(g => g.GetProgramiv(Arg.Any<uint>(), ProgramParameters.LinkStatus, Arg.Any<int[]>()))
                 .Do(x => ((int[])x.Args()[2])[0] = 0);
 
-            var Program = new Program(gl, new IShader[0]);
+            var program = new Program(gl, new IShader[0]);
 
             // Act
             
-            var exception = Assert.Throws<ProgramCompilationException>(Program.Compile);
+            var exception = Assert.Throws<ProgramCompilationException>(program.Compile);
 
             // Assert
             Assert.AreEqual(false, exception.CompilationResults.Linked);
@@ -110,10 +127,10 @@ namespace ModGL.UnitTests.Shaders
             gl.When(g => g.GetProgramiv(Arg.Any<uint>(), ProgramParameters.LinkStatus, Arg.Any<int[]>()))
                 .Do(x => ((int[])x.Args()[2])[0] = 1);
 
-            var Program = new Program(gl, new IShader[0]);
+            var program = new Program(gl, new IShader[0]);
 
             // Act
-            var exception = Assert.Throws<ProgramCompilationException>(Program.Compile);
+            var exception = Assert.Throws<ProgramCompilationException>(program.Compile);
 
             // Assert
             Assert.AreEqual(true, exception.CompilationResults.Linked);
@@ -135,7 +152,7 @@ namespace ModGL.UnitTests.Shaders
             gl.When(g => g.GetProgramiv(Arg.Any<uint>(), ProgramParameters.LinkStatus, Arg.Any<int[]>()))
                 .Do(x => ((int[])x[2])[0] = 1);
 
-            int count = 0;
+            int count;
 
             gl.When( g => g.GetProgramiv(Arg.Any<uint>(), ProgramParameters.InfoLogLength, Arg.Any<int[]>()))
                 .Do(c => { ((int[])c[2])[0] = 1; });
@@ -146,10 +163,10 @@ namespace ModGL.UnitTests.Shaders
                     ((byte[])c[3])[0] = (byte)'A';
                 });
 
-            var Program = new Program(gl, new IShader[0] );
+            var program = new Program(gl, new IShader[0] );
 
             // Act
-            var exception = Assert.Throws<ProgramCompilationException>(Program.Compile);
+            var exception = Assert.Throws<ProgramCompilationException>(program.Compile);
 
             // Assert
             Assert.AreEqual("Program compilation failed: A", exception.Message);

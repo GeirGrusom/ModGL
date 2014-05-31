@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
 
-using ModGL.NativeGL;
 using ModGL.Windows;
 using Platform.Invoke;
-using Platform.Invoke.Windows;
 
 namespace ModGL
 {
@@ -18,6 +16,24 @@ namespace ModGL
     /// </summary>
     public class ContextFactory : IContextFactory
     {
+        public ILibraryLoader LibraryLoader { get; private set; }
+        public ILibraryInterfaceMapper Mapper { get; private set; }
+        private readonly PlatformID os;
+
+        public ContextFactory(ILibraryLoader libraryLoader, ILibraryInterfaceMapper mapper, PlatformID os)
+        {
+            LibraryLoader = libraryLoader;
+            Mapper = mapper;
+            this.os = os;
+        }
+
+        public ContextFactory()
+        {
+            LibraryLoader = LibraryLoaderFactory.Create();
+            Mapper = new LibraryInterfaceMapper(new DelegateTypeBuilder(), new DefaultConstructorBuilder(s => s), new DefaultMethodCallWrapper());
+            os = Environment.OSVersion.Platform;
+        }
+
         /// <summary>
         /// Creates a context based on the current platform.
         /// </summary>
@@ -30,13 +46,13 @@ namespace ModGL
         {
             if (parameters == null)
                 throw new ArgumentNullException("parameters");
-            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+            if (os == PlatformID.Win32NT)
             {
-                var loader = new WindowsLibraryLoader();
+                var loader = LibraryLoader;
                 var libGL = loader.Load("OpenGL32");
                 var gdi32 = loader.Load("GDI32");
 
-                var wgl = LibraryInterfaceFactory.Implement<IWGL>(new CompositeLibraryProvider(libGL, gdi32));
+                var wgl = Mapper.Implement<IWGL>(new CompositeLibraryProvider(libGL, gdi32));
 
                 var context = new WindowsContext(wgl, null, parameters);
                 return context;

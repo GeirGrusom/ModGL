@@ -64,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Buffers\BufferTest.cs" />
+    <Compile Include="ContextFactoryTests.cs" />
     <Compile Include="Numerics\Matrix4fTests.cs" />
     <Compile Include="Numerics\MatrixHelperTests.cs" />
     <Compile Include="Shaders\ShaderProgramTest.cs" />
