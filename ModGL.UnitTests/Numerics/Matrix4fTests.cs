@@ -82,6 +82,20 @@ namespace ModGL.UnitTests.Numerics
             Assert.That(theRow, Is.EqualTo(new Vector4f(1, 2, 3, 4)));
         }
 
+        [Test, Ignore] // Work in progress
+        public void Determinant_ReturnsCorrectDeterminant()
+        {
+            // Arrange
+            var mat = new Matrix4f();
+
+            // Act
+            var determinant = mat.Determinant();
+
+            // Assert
+            Assert.That(determinant, Is.EqualTo(0));
+
+        }
+
         [Test]
         public void Multiply_Matrix_ReturnsCorrectMatrix()
         {

@@ -29,6 +29,11 @@ namespace ModGL.Numerics
             throw new IndexOutOfRangeException();
         }
 
+        public float Determinant()
+        {
+            throw new NotImplementedException();
+        }
+
         public Matrix4f Invert()
         {
             throw new NotImplementedException();

@@ -67,6 +67,7 @@
     <Compile Include="ContextFactoryTests.cs" />
     <Compile Include="Numerics\Matrix4fTests.cs" />
     <Compile Include="Numerics\MatrixHelperTests.cs" />
+    <Compile Include="Numerics\QuaternionTests.cs" />
     <Compile Include="Shaders\ShaderProgramTest.cs" />
     <Compile Include="Shaders\ShaderTest.cs" />
     <Compile Include="VertexArrayTest.cs" />
