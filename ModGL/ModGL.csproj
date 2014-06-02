@@ -55,6 +55,7 @@
     <Compile Include="Numerics\MatrixExtensions.cs" />
     <Compile Include="Numerics\MatrixHelper.cs" />
     <Compile Include="Numerics\ProjectionMatrixHelper.cs" />
+    <Compile Include="Numerics\Quaternion.cs" />
     <Compile Include="Numerics\VectorMath.cs" />
     <Compile Include="Numerics\ViewMatrixHelper.cs" />
     <Compile Include="Shaders\InertUniform.cs" />

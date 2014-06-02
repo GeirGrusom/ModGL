@@ -29,6 +29,11 @@ namespace ModGL.Numerics
             throw new IndexOutOfRangeException();
         }
 
+        public Matrix4f Invert()
+        {
+            
+        }
+
         public Matrix4f Multiply(Matrix4f rhs)
         {
             if(rhs == null)
