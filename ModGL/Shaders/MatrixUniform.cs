@@ -18,7 +18,7 @@ namespace ModGL.Shaders
         public override void SetData(IOpenGL30 gl)
         {
             var fix = GCHandle.Alloc(Value._data, GCHandleType.Pinned);
-            gl.UniformMatrix4fv(Location,1, GLboolean.False, fix.AddrOfPinnedObject());
+            gl.UniformMatrix4fv(Location, 1, transpose: GLboolean.False, value: fix.AddrOfPinnedObject());
             fix.Free();
         }
     }

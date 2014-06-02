@@ -9,7 +9,7 @@ using ModGL.NativeGL;
 
 namespace ModGL.Rendering
 {
-    public class Renderer
+    public struct Renderer
     {
         private readonly IOpenGL30 _gl;
 

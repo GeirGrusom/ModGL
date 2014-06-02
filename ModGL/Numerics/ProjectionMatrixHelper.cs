@@ -16,8 +16,8 @@ namespace ModGL.Numerics
             return new Matrix4f(
                 new Vector4f(f / aspectRatio, 0, 0, 0),
                 new Vector4f(0, f, 0, 0),
-                new Vector4f(0, 0, (far + near) / (near - far), -1),
-                new Vector4f(0, 0, 2 * far * near / (near - far), 0));
+                new Vector4f(0, 0, (far + near) / (near - far), 2 * far * near / (near - far)),
+                new Vector4f(0, 0, -1, 0));
         }
     }
 }
