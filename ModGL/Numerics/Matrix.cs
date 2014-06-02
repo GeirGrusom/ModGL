@@ -31,7 +31,7 @@ namespace ModGL.Numerics
 
         public Matrix4f Invert()
         {
-            
+            throw new NotImplementedException();
         }
 
         public Matrix4f Multiply(Matrix4f rhs)

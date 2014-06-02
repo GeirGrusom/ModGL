@@ -15,5 +15,10 @@ namespace ModGL.Numerics
         {
             this.value = value;
         }
+
+        public Quaternion Normalize()
+        {
+            return new Quaternion(value.Normalize());
+        }
     }
 }

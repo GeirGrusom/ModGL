@@ -25,6 +25,12 @@ namespace ModGL.Numerics
             return vec/length;
         }
 
+        public static Vector4f Normalize(this Vector4f vec)
+        {
+            var length = new Vector4f((float) Math.Sqrt(System.Numerics.VectorMath.DotProduct(vec, vec)));
+            return vec / length;
+        }
+
         public static Vector3f PlaneNormal(Vector3f a, Vector3f b, Vector3f c)
         {
             return (c - a).Cross(b - a);
