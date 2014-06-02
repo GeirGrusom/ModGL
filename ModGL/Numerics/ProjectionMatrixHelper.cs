@@ -19,5 +19,14 @@ namespace ModGL.Numerics
                 new Vector4f(0, 0, (far + near) / (near - far), 2 * far * near / (near - far)),
                 new Vector4f(0, 0, -1, 0));
         }
+
+        public static Matrix4f Orthographic(float top, float bottom, float left, float right, float far, float near)
+        {
+            return new Matrix4f(
+                new Vector4f(1 / ( right - left)),
+                new Vector4f(),
+                new Vector4f(),
+                new Vector4f());
+        }
     }
 }
