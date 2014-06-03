@@ -38,5 +38,10 @@ namespace ModGL.Numerics
         {
             return MatrixHelper.RotateY(angleInRadians).Multiply(mat);
         }
+
+        public static Matrix4f RotateZ(this Matrix4f mat, float angleInRadians)
+        {
+            return MatrixHelper.RotateZ(angleInRadians).Multiply(mat);
+        }
     }
 }
