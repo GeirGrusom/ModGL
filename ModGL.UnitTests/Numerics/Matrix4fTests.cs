@@ -82,17 +82,64 @@ namespace ModGL.UnitTests.Numerics
             Assert.That(theRow, Is.EqualTo(new Vector4f(1, 2, 3, 4)));
         }
 
-        [Test, Ignore] // Work in progress
+        [Test] // Work in progress
         public void Determinant_ReturnsCorrectDeterminant()
         {
             // Arrange
-            var mat = new Matrix4f();
+            var mat = new Matrix4f
+                (
+                new Vector4f(3, 2, -1, 4),
+                new Vector4f(2, 1, 5, 7),
+                new Vector4f(0, 5, 2, -6),
+                new Vector4f(-1, 2, 1, 0)
+                );
 
             // Act
             var determinant = mat.Determinant();
 
             // Assert
-            Assert.That(determinant, Is.EqualTo(0));
+            Assert.That(determinant, Is.EqualTo(-418));
+        }
+
+        [Test]
+        public void Invert_NotInvertible_ThrowsInvalidOperationException()
+        {
+            // Arrange
+            var mat = new Matrix4f(
+                new Vector4f(1, 2, 3, 4), 
+                new Vector4f(5, 6, 7, 8), 
+                new Vector4f(9, 10, 11, 12),
+                new Vector4f(13, 14, 15, 16));
+
+            // Act
+            TestDelegate invert = () => mat.Invert();
+
+            // Assert
+            Assert.That(invert, Throws.InvalidOperationException);
+        }
+
+        [Test]
+        public void Invert_ReturnsInvertedMatrix()
+        {
+            // Arrange
+            var mat = new Matrix4f(
+                new Vector4f(4, 0, 0, 0), 
+                new Vector4f(0, 0, 2, 0), 
+                new Vector4f(0, 1, 2, 0), 
+                new Vector4f(1, 0, 0, 1)   );
+
+            // Act
+            var resultMat = mat.Invert();
+            var results = new[] {resultMat.Row(0), resultMat.Row(1), resultMat.Row(2), resultMat.Row(3)};
+
+            // Assert
+            Assert.That(results, Is.EquivalentTo(new []
+            {
+                new Vector4f(),
+                new Vector4f(),
+                new Vector4f(),
+                new Vector4f() 
+            }));
         }
 
         [Test]

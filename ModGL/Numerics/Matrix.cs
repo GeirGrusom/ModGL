@@ -29,11 +29,23 @@ namespace ModGL.Numerics
             throw new IndexOutOfRangeException();
         }
 
+        /// <summary>
+        /// Calculates the determinant of the matrix.
+        /// </summary>
+        /// <returns></returns>
         public float Determinant()
         {
-            throw new NotImplementedException();
+            // Gnarly
+            return
+                _data[0].X * _data[1].Y * _data[2].Z * _data[3].W - _data[0].X * _data[1].Y * _data[2].W * _data[3].Z + _data[0].X * _data[1].Z * _data[2].W * _data[3].Y - _data[0].X * _data[1].Z * _data[2].Y * _data[3].W
+              + _data[0].X * _data[1].W * _data[2].Y * _data[3].Z - _data[0].X * _data[1].W * _data[2].Z * _data[3].Y - _data[0].Y * _data[1].Z * _data[2].W * _data[3].X + _data[0].Y * _data[1].Z * _data[2].X * _data[3].W
+              - _data[0].Y * _data[1].W * _data[2].X * _data[3].Z + _data[0].Y * _data[1].W * _data[2].Z * _data[3].X - _data[0].Y * _data[1].X * _data[2].Z * _data[3].W + _data[0].Y * _data[1].X * _data[2].W * _data[3].Z
+              + _data[0].Z * _data[1].W * _data[2].X * _data[3].Y - _data[0].Z * _data[1].W * _data[2].Y * _data[3].X + _data[0].Z * _data[1].X * _data[2].Y * _data[3].W - _data[0].Z * _data[1].X * _data[2].W * _data[3].Y
+              + _data[0].Z * _data[1].Y * _data[2].W * _data[3].X - _data[0].Z * _data[1].Y * _data[2].X * _data[3].W - _data[0].W * _data[1].X * _data[2].Y * _data[3].Z + _data[0].W * _data[1].X * _data[2].Z * _data[3].Y
+              - _data[0].W * _data[1].Y * _data[2].Z * _data[3].X + _data[0].W * _data[1].Y * _data[2].X * _data[3].Z - _data[0].W * _data[1].Z * _data[2].X * _data[3].Y + _data[0].W * _data[1].Z * _data[2].Y * _data[3].X;
         }
 
+        // Calculates the invert matrix if any.
         public Matrix4f Invert()
         {
             throw new NotImplementedException();
