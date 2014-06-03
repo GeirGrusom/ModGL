@@ -23,7 +23,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-    <PlatformTarget>x64</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -81,7 +81,7 @@
     <Compile Include="NativeGL\OpenGLStackOverflowException.cs" />
     <Compile Include="NativeGL\OpenGLStackUnderflowException.cs" />
     <Compile Include="NoHandleCreatedException.cs" />
-    <Compile Include="OpenGLContext.cs" />
+    <Compile Include="Context.cs" />
     <Compile Include="Rendering\Renderer.cs" />
     <Compile Include="Shaders\CompilationException.cs" />
     <Compile Include="Shaders\CompilationResults.cs" />
