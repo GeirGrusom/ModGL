@@ -93,17 +93,23 @@ namespace ModGL.UnitTests.Numerics
 
             // Assert
             Assert.That(determinant, Is.EqualTo(0));
-
         }
 
         [Test]
         public void Multiply_Matrix_ReturnsCorrectMatrix()
         {
             // Arrange
-            var left = new Matrix4f(new Vector4f(1, 2, 3, 4), new Vector4f(5, 6, 7, 8), new Vector4f(9, 10, 11, 12),
+            var left = new Matrix4f(
+                new Vector4f(1, 2, 3, 4), 
+                new Vector4f(5, 6, 7, 8), 
+                new Vector4f(9, 10, 11, 12),
                 new Vector4f(13, 14, 15, 16));
-            var right = new Matrix4f(new Vector4f(21, 22, 23, 24), new Vector4f(25, 26, 27, 28),
-                new Vector4f(29, 30, 31, 32), new Vector4f(33, 34, 35, 36));
+            
+            var right = new Matrix4f(
+                new Vector4f(21, 22, 23, 24), 
+                new Vector4f(25, 26, 27, 28),
+                new Vector4f(29, 30, 31, 32), 
+                new Vector4f(33, 34, 35, 36));
 
             // Act
             var result = left.Multiply(right);

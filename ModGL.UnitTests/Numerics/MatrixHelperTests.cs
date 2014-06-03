@@ -63,18 +63,62 @@ namespace ModGL.UnitTests.Numerics
             Assert.That(result.Row(3), Is.EqualTo(new Vector4f(0, 0, 0, 1)));
         }
 
+        // This constant is used because Cos(PI/2) isn't exactly equal to 0 due to floating point
+        // rounding errors.
+        private const float c0 = -4.371139e-08f;
+
+        [Test]
+        public void RotateX_ReturnsRotatedMatrix()
+        {
+            // Arrange
+            // Act
+            var mat = MatrixHelper.RotateX((float)(System.Math.PI / 2));
+            var results = new[] {mat.Row(0), mat.Row(1), mat.Row(2), mat.Row(3)};
+
+            // Assert
+            Assert.That(results, Is.EquivalentTo(new []
+            {
+                new Vector4f(1, 0, 0, 0), 
+                new Vector4f(0, c0, -1, 0), 
+                new Vector4f(0, 1, c0, 0), 
+                new Vector4f(0, 0, 0, 1)
+            }));
+        }
+
+        [Test]
+        public void RotateY_ReturnsRotatedMatrix()
+        {
+            // Arrange
+            // Act
+            var mat = MatrixHelper.RotateY((float)(System.Math.PI / 2));
+            var results = new[] {mat.Row(0), mat.Row(1), mat.Row(2), mat.Row(3)};
+
+            // Assert
+            Assert.That(results, Is.EquivalentTo(new []
+            {
+                new Vector4f(c0, 0, 1, 0), 
+                new Vector4f(0, 1, 0, 0), 
+                new Vector4f(-1, 0, c0, 0), 
+                new Vector4f(0, 0, 0, 1)
+            }));
+        }
+
         [Test]
         public void RotateZ_ReturnsRotatedMatrix()
         {
             // Arrange
             // Act
-            var mat = MatrixHelper.RotateZ((float) System.Math.PI/2);
-
+            var mat = MatrixHelper.RotateZ((float)(System.Math.PI / 2));
+            var results = new[] {mat.Row(0), mat.Row(1), mat.Row(2), mat.Row(3)};
+            
             // Assert
-            Assert.That(mat.Row(0), Is.EqualTo(new Vector4f(0, 1, 0, 0)));
-            Assert.That(mat.Row(1), Is.EqualTo(new Vector4f(-1, 0, 0, 0)));
-            Assert.That(mat.Row(2), Is.EqualTo(new Vector4f(0, 0, 1, 0)));
-            Assert.That(mat.Row(3), Is.EqualTo(new Vector4f(0, 0, 0, 0)));
+            Assert.That(results, Is.EquivalentTo(new []
+            {
+                new Vector4f(c0, -1, 0, 0), 
+                new Vector4f(1, c0, 0, 0), 
+                new Vector4f(0, 0, 1, 0), 
+                new Vector4f(0, 0, 0, 1)
+            }));
         }
     }
 }
