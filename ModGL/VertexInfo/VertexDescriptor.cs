@@ -6,12 +6,12 @@ using System.Numerics;
 using System.Reflection;
 
 using ModGL.NativeGL;
-using ModGL.Shaders;
 
 namespace ModGL.VertexInfo
 {
     public struct PositionNormalTexCoord
     {
+        public static readonly VertexDescriptor Descriptor = VertexDescriptor.Create<PositionNormalTexCoord>();
         public Vector3f Position;
         public Vector3f Normal;
         public Vector2f TexCoord;
@@ -34,16 +34,31 @@ namespace ModGL.VertexInfo
 
     internal static class ElementTypeHelper
     {
-        internal static readonly Dictionary<Type, DataType> TypeConversionTable = new Dictionary<Type, DataType>
+        internal class ElementDescription
         {
-            { typeof(byte), DataType.UnsignedByte },
-            { typeof(sbyte), DataType.Byte },
-            { typeof(short), DataType.Short },
-            { typeof(ushort), DataType.UnsignedShort },
-            { typeof(int), DataType.Int },
-            { typeof(uint), DataType.UnsignedInt },
-            { typeof(float), DataType.Float },
-            { typeof(double), DataType.Double }
+            internal DataType DataType { get; set; }
+            internal int Dimensions { get; set; }
+
+            internal ElementDescription(DataType dataType, int dimensions = 1)
+            {
+                DataType = dataType;
+                Dimensions = dimensions;
+            }
+
+        }
+        internal static readonly Dictionary<Type, ElementDescription> TypeConversionTable = new Dictionary<Type, ElementDescription>
+        {
+            { typeof(byte), new ElementDescription(DataType.UnsignedByte) },
+            { typeof(sbyte), new ElementDescription(DataType.Byte) },
+            { typeof(short), new ElementDescription(DataType.Short) },
+            { typeof(ushort), new ElementDescription(DataType.UnsignedShort) },
+            { typeof(int), new ElementDescription(DataType.Int) },
+            { typeof(uint), new ElementDescription(DataType.UnsignedInt) },
+            { typeof(float), new ElementDescription(DataType.Float) },
+            { typeof(double), new ElementDescription(DataType.Double) },
+            { typeof(Vector2f), new ElementDescription(DataType.Float, 2) },
+            { typeof(Vector3f), new ElementDescription(DataType.Float, 3) },
+            { typeof(Vector4f), new ElementDescription(DataType.Float, 4) }
         };
     }
 
@@ -83,16 +98,16 @@ namespace ModGL.VertexInfo
         }
 
         [Pure]
-        private static DataType GetElementType(Type type)
+        private static ElementTypeHelper.ElementDescription GetElementType(Type type)
         {
             if(!type.IsValueType)
                 throw new InvalidOperationException("Cannot use reference types as a vertex element.");
-            DataType result;
+            ElementTypeHelper.ElementDescription result;
             if (ElementTypeHelper.TypeConversionTable.TryGetValue(type, out result))
                 return result;
             var attribute = type.GetCustomAttribute<VertexElementAttribute>(false);
             if (attribute != null)
-                return attribute.DataType;
+                return new ElementTypeHelper.ElementDescription(attribute.DataType, attribute.Dimensions);
             throw new InvalidOperationException("Could not determine the vertex element datatype.");
         }
 
@@ -117,8 +132,9 @@ namespace ModGL.VertexInfo
                 }
                 else
                 {
-                    type = GetElementType(field.FieldType);
-                    dimensions = 1;
+                    var desc = GetElementType(field.FieldType);
+                    type = desc.DataType;
+                    dimensions = desc.Dimensions;
                 }
             }
 
@@ -139,7 +155,7 @@ namespace ModGL.VertexInfo
             var fields = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 
             int offset = 0;
-            List<VertexElement> results = new List<VertexElement>(fields.Length);
+            var results = new List<VertexElement>(fields.Length);
             foreach (var field in fields)
             {
                 var ret = ConvertField(field, offset);

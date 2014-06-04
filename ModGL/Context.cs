@@ -41,6 +41,9 @@ namespace ModGL
         [ThreadStatic]
         private static IContext _currentContext;
 
+        [ThreadStatic] 
+        private static BindContext _bindContext;
+
         public abstract BindContext Bind();
 
         public abstract void SwapBuffers();
@@ -69,14 +72,18 @@ namespace ModGL
             where TOpenGLInterface : class
         {
             private readonly IOpenGLGetError _error;
+            private readonly IContext _owner;
 
-            public DebugProbe(IOpenGLGetError error)
+            public DebugProbe(IOpenGLGetError error, IContext owner)
             {
                 _error = error;
+                _owner = owner;
             }
 
             public void OnBeginInvoke(MethodInfo method, TOpenGLInterface reference)
             {
+                if(Context.Current != _owner)
+                    throw new CrossContextCallException();
                 _error.GetError(); // Clear error state
             }
 
@@ -109,7 +116,7 @@ namespace ModGL
             var methodBuilder = new ProbingMethodCallWrapper(() => constructorBuilder.ProbeField);
             var interfaceFactory = new LibraryInterfaceMapper(delegateTypeBuilder, constructorBuilder,
                 methodBuilder);
-            var probe = new DebugProbe<TOpenGLInterface>(_error.Value);
+            var probe = new DebugProbe<TOpenGLInterface>(_error.Value, this);
             return interfaceFactory.Implement<TOpenGLInterface>(this, probe);
         }
 
@@ -139,9 +146,13 @@ namespace ModGL
             } 
             set
             {
+                if (_currentContext != null)
+                    _bindContext.Dispose();
+
                 _currentContext = value; 
                 if(value != null)
-                    _currentContext.Bind();
+                    _bindContext = _currentContext.Bind();
+                
             }
         }
     }

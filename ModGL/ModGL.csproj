@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CrossContextCallException.cs" />
     <Compile Include="Numerics\Matrix.cs" />
     <Compile Include="Numerics\MatrixExtensions.cs" />
     <Compile Include="Numerics\MatrixHelper.cs" />
