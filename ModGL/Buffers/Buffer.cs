@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 using ModGL.NativeGL;
@@ -24,15 +27,15 @@ namespace ModGL.Buffers
 
         internal MappedBuffer(IBuffer buffer, BindContext context, UnmanagedMemoryAccessor accessor)
         {
-            this.Buffer = buffer;
-            this._bufferBindingContext = context;
-            this.Accessor = accessor;
+            Buffer = buffer;
+            _bufferBindingContext = context;
+            Accessor = accessor;
         }
 
         public void Dispose()
         {
-            this.Accessor.Dispose();
-            this._bufferBindingContext.Dispose();
+            Accessor.Dispose();
+            _bufferBindingContext.Dispose();
         }
     }
 
@@ -55,47 +58,52 @@ namespace ModGL.Buffers
         where TElementType : struct
     {
         internal TElementType[] Data;
-        internal readonly long length;
+        internal readonly long Length;
         private readonly int _elementSize;
         private readonly IOpenGL30 _gl;
 
+        [Pure]
         public bool Released { get; private set; }
 
+        [Pure]
         public BufferTarget Target { get; private set; }
 
-        public long Elements { get { return this.length; } }
+        [Pure]
+        public long Elements { get { return Length; } }
 
-        public int ElementSize { get { return this._elementSize; } }
+        [Pure]
+        public int ElementSize { get { return _elementSize; } }
 
+        [Pure]
         public uint Handle { get; private set; }
 
         public BindContext Bind()
         {
-            this._gl.BindBuffer(this.Target, this.Handle);
-            return new BindContext(() => this._gl.BindBuffer(this.Target, 0));
+            _gl.BindBuffer(Target, Handle);
+            return new BindContext(() => _gl.BindBuffer(Target, 0));
         }
 
         public BindContext Bind(uint index)
         {
-            this._gl.BindBufferBase(this.Target, index, this.Handle);
-            return new BindContext(() => this._gl.BindBufferBase(this.Target, index, 0));
+            _gl.BindBufferBase(Target, index, Handle);
+            return new BindContext(() => _gl.BindBufferBase(Target, index, 0));
         }
 
         public BindContext Bind(uint index, long startIndex, long elements)
         {
-            this._gl.BindBufferRange(this.Target, index, this.Handle, new IntPtr(startIndex * this._elementSize), new IntPtr(elements * this._elementSize));
-            return new BindContext(() => this._gl.BindBufferBase(this.Target, index, 0));
+            _gl.BindBufferRange(Target, index, Handle, new IntPtr(startIndex * _elementSize), new IntPtr(elements * _elementSize));
+            return new BindContext(() => _gl.BindBufferBase(Target, index, 0));
         }
 
         public void ReleaseClientData()
         {
-            this.Data = null;
-            this.Released = true;
+            Data = null;
+            Released = true;
         }
 
         private void ReleasedConstraint()
         {
-            if(this.Released)
+            if(Released)
                 throw new InvalidOperationException();
         }
 
@@ -119,24 +127,24 @@ namespace ModGL.Buffers
         {
             if(elements == null)
                 throw new ArgumentNullException("elements");
-            this.Data = elements.ToArray();
-            this.length = this.Data.LongLength;
+            Data = elements.ToArray();
+            Length = Data.LongLength;
         }
 
         protected Buffer(BufferTarget target, long size, IOpenGL30 gl)
             : this(target, gl)
         {
-            this.Data = new TElementType[size];
-            this.length = size;
+            Data = new TElementType[size];
+            Length = size;
         }
 
         public void BufferData(BufferUsage usage)
         {
             ReleasedConstraint();
-            var handle = GCHandle.Alloc(this.Data, GCHandleType.Pinned);
+            var handle = GCHandle.Alloc(Data, GCHandleType.Pinned);
             try
             {
-                this._gl.BufferData(this.Target, new IntPtr(this.Data.LongLength * this.ElementSize), handle.AddrOfPinnedObject(), usage);
+                _gl.BufferData(Target, new IntPtr(Data.LongLength * ElementSize), handle.AddrOfPinnedObject(), usage);
             }
             finally
             {
@@ -152,14 +160,14 @@ namespace ModGL.Buffers
         public MappedBuffer MapBuffer(BufferAccess access)
         {
             // TODO: Add a check constrain if the object this is called on is the currently bound object.
-            var bindContext = new BindContext(() => this._gl.UnmapBuffer(this.Target) );
+            var bindContext = new BindContext(() => _gl.UnmapBuffer(Target) );
 
             // Note: glMapBuffer seem to have a relatively stupid implementation.
-            var ptr = this._gl.MapBuffer(this.Target, access);
+            var ptr = _gl.MapBuffer(Target, access);
             var accessor = new UnmanagedMemoryAccessor(
                 new SafeMapBuffer(ptr),
                 0,
-                this.Elements * this.ElementSize,
+                Elements * ElementSize,
                 access == BufferAccess.ReadOnly
                     ? FileAccess.Read
                     : access == BufferAccess.WriteOnly 
@@ -169,15 +177,16 @@ namespace ModGL.Buffers
             return new MappedBuffer(this, bindContext, accessor);
         }
 
+        [Pure]
         public Type ElementType { get { return typeof(TElementType); } }
 
         public void BufferSubData(BufferUsage usage, int offset, int size)
         {
             ReleasedConstraint();
-            var handle = GCHandle.Alloc(this.Data, GCHandleType.Pinned);
+            var handle = GCHandle.Alloc(Data, GCHandleType.Pinned);
             try
             {
-                this._gl.BufferSubData(this.Target, new IntPtr(offset), new IntPtr(size), handle.AddrOfPinnedObject());
+                _gl.BufferSubData(Target, new IntPtr(offset), new IntPtr(size), handle.AddrOfPinnedObject());
             }
             finally
             {
@@ -185,16 +194,47 @@ namespace ModGL.Buffers
             }
         }
 
-        public void BufferSubData<TElement>(BufferUsage usage, System.Linq.Expressions.Expression<Func<TElementType, TElement>> elementProc)
+        public void BufferSubData<TElement>(BufferUsage usage, Expression<Func<TElementType, TElement>> elementProc)
         {
             ReleasedConstraint();
-            throw new NotImplementedException();
+            var member = (FieldInfo)((MemberExpression) elementProc.Body).Member;
+            int fieldSize;// = System.Runtime.InteropServices.Marshal.SizeOf(member.FieldType);
+
+            var fieldOffset = member.GetCustomAttribute<FieldOffsetAttribute>();
+            int offset = fieldOffset.Value;
+            const BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic |
+                                BindingFlags.ExactBinding;
+                
+            var preFields = member.DeclaringType.GetFields(bindingFlags).OrderBy(m => m.MetadataToken).ToList();
+
+            var index = preFields.IndexOf(member);
+
+            if (index == preFields.Count - 1)
+            {
+                fieldSize = Marshal.SizeOf(member.DeclaringType) - offset;
+            }
+            else
+            {
+                var next = preFields[index + 1];
+                var nextOffset = next.GetCustomAttribute<FieldOffsetAttribute>().Value;
+                fieldSize = nextOffset - offset;
+            }
+
+            var handle = GCHandle.Alloc(Data, GCHandleType.Pinned);
+            try
+            {
+                _gl.BufferSubData(Target, new IntPtr(offset), new IntPtr(fieldSize), handle.AddrOfPinnedObject());
+            }
+            finally
+            {
+                handle.Free();
+            }
         }
 
         public TElementType this[long index]
         {
-            get { ReleasedConstraint(); return this.Data[index]; }
-            set { ReleasedConstraint(); this.Data[index] = value; }
+            get { ReleasedConstraint(); return Data[index]; }
+            set { ReleasedConstraint(); Data[index] = value; }
         }
     }
 }

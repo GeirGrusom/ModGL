@@ -4,16 +4,20 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Numerics;
 using System.Reflection;
-
+using System.Runtime.InteropServices;
 using ModGL.NativeGL;
 
 namespace ModGL.VertexInfo
 {
+    [StructLayout(LayoutKind.Explicit, Size = 32)]
     public struct PositionNormalTexCoord
     {
         public static readonly VertexDescriptor Descriptor = VertexDescriptor.Create<PositionNormalTexCoord>();
+        [FieldOffset(0)]
         public Vector3f Position;
+        [FieldOffset(12)]
         public Vector3f Normal;
+        [FieldOffset(24)]
         public Vector2f TexCoord;
     }
     public class VertexElement

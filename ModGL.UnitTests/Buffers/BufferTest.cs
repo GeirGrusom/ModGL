@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
 using ModGL.Buffers;
 using ModGL.NativeGL;
-
+using ModGL.VertexInfo;
 using NUnit.Framework;
 using NSubstitute;
 
@@ -130,6 +132,25 @@ namespace ModGL.UnitTests.Buffers
 
             // Assert
             gl.Received().BufferData(BufferTarget.ElementArray, new IntPtr(12), Arg.Any<IntPtr>(), BufferUsage.StaticDraw);
+        }
+
+        [Test]
+        public void BufferSubData_Expression_UsesCorrectOffsetAndSize()
+        {
+            // Arrange
+            var gl = Substitute.For<IOpenGL30>();
+            gl.WhenForAnyArgs(g => g.GenBuffers(Arg.Any<int>(), Arg.Any<uint[]>()))
+                .Do(x =>
+                { ((uint[])x[1])[0] = 1; });
+
+            var buffer = new VertexBuffer<PositionNormalTexCoord>(0, gl);
+
+            // Act
+            buffer.BufferSubData(BufferUsage.StaticDraw, x => x.TexCoord);
+
+            // Assert
+            gl.Received().BufferSubData(BufferTarget.Array, new IntPtr(24), new IntPtr(8), Arg.Any<IntPtr>());
+
         }
 
         [Test]
