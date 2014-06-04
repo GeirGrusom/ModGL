@@ -1,9 +1,11 @@
-﻿using System.Numerics;
+﻿using System.Diagnostics.Contracts;
+using System.Numerics;
 using Vector = System.Numerics.VectorMath; 
 namespace ModGL.Numerics
 {
     public static class ViewMatrixHelper
     {
+        [Pure]
         public static Matrix4f LookAt(Vector3f eye, Vector3f up, Vector3f target)
         {
             var zaxis = (eye - target).Normalize();
