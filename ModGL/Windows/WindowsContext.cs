@@ -45,6 +45,7 @@ namespace ModGL.Windows
         private readonly IntPtr _hdc;
         private readonly ContextCreationParameters _contextParameters;
         private readonly IContext _sharedContext;
+        private bool _initialized;
 
         public static class WGLPixelFormatConstants
         {
@@ -115,6 +116,9 @@ namespace ModGL.Windows
 
         public override void Initialize()
         {
+            if(_initialized)
+                throw new InvalidOperationException("Context has already been initialized.");
+
             var tempContext = CreateTempOpenGLContext(_contextParameters);
 
             if (!_wgl.wglMakeCurrent(_hdc, tempContext))
@@ -128,7 +132,7 @@ namespace ModGL.Windows
                 throw new ContextCreationException("Unable to find wglChoosePixelFormatARB.", _contextParameters);
 
             if (createContext == null)
-                throw new ContextCreationException("Unable to find wglCreateContextARB extension.", _contextParameters);
+                throw new ContextCreationException("Unable to find wglCreateContextAttribsARB extension.", _contextParameters);
 
             int[] formats = new int[1];
             uint[] numFormats = new uint[1];
@@ -167,6 +171,7 @@ namespace ModGL.Windows
             }
             );
             Handle = finalContext;
+            _initialized = true;
         }
 
         public WindowsContext(IWGL wgl, IContext shareContext, ContextCreationParameters parameters)
@@ -227,10 +232,12 @@ namespace ModGL.Windows
 
         public override BindContext Bind()
         {
+            if(!_initialized)
+                Initialize();
             _wgl.wglMakeCurrent(_hdc, Handle);
-            _currentContext = this;
+            CurrentContext = this;
             return new BindContext(() => { _wgl.wglMakeCurrent(IntPtr.Zero, IntPtr.Zero);
-                                             _currentContext = null;
+                                             CurrentContext = null;
             } );
         }
 

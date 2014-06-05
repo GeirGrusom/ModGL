@@ -139,7 +139,7 @@ namespace ModGL
         {
             get
             {
-                return _currentContext;
+                return CurrentContext;
             } 
         }
     }
