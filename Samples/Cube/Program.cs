@@ -81,6 +81,7 @@ namespace Cube
                     cube.Model = model; // The rotation of our model (rotates around Y axis for every frame)
                     cube.View = view; // How our View is set up (using LookAt)
                     cube.Projection = projection; // How our projection is set up (perspective)
+                    cube.DiffuseColor = Color.DodgerBlue;
                     cube.Draw(); // Draw the cube!
                     context.SwapBuffers(); // Swap the presentation buffer with the one we just finished rendering
                 }

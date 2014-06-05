@@ -1,3 +1,4 @@
+using System.Drawing;
 using System.Numerics;
 using ModGL;
 using ModGL.Buffers;
@@ -16,6 +17,7 @@ namespace Cube
         public Matrix4f Model { get; set; }
         public Matrix4f View { get; set; }
         public Matrix4f Projection { get; set; }
+        public Color DiffuseColor { get; set; }
 
         private IVertexBuffer CreateBuffer()
         {
@@ -105,6 +107,7 @@ namespace Cube
             {
                 shader.ViewProjection.Value = View*Projection;
                 shader.ModelViewProjection.Value = Model * View * Projection;
+                shader.DiffuseUniform.Value = new Vector4f(DiffuseColor.R / 255.0f, DiffuseColor.G / 255f, DiffuseColor.B / 255f, DiffuseColor.A / 255f);
                 gl.DrawArrays(DrawMode.Triangles,  0, (int)vertexBuffer.Elements);
             }
         }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,11 +20,13 @@ namespace Cube
         private readonly IProgram program;
         private readonly MatrixUniform modelViewProjection;
         private readonly MatrixUniform viewProjection;
+        private readonly Vector4fUniform diffuseUniform;
 
         public IProgram Program { get { return program; } }
 
         public Uniform<Matrix4f> ModelViewProjection { get { return modelViewProjection; } }
-        public Uniform<Matrix4f> ViewProjection { get { return viewProjection; } } 
+        public Uniform<Matrix4f> ViewProjection { get { return viewProjection; } }
+        public Uniform<Vector4f> DiffuseUniform { get { return diffuseUniform; } } 
 
         // Helper funcion to get resouce as a string.
         private static string GetEmbeddedResourceAsString(string name)
@@ -53,6 +56,7 @@ namespace Cube
             // Get the uniforms used by the shader program.
             modelViewProjection = p.GetUniform<MatrixUniform, Matrix4f>("ModelViewProjection");
             viewProjection = p.GetUniform<MatrixUniform, Matrix4f>("ViewProjection");
+            diffuseUniform = p.GetUniform<Vector4fUniform, Vector4f>("DiffuseColor");
         }
     }
 }
