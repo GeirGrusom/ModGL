@@ -21,6 +21,7 @@ namespace Cube
         {
             var result = new VertexBuffer<Vertex>(36, gl);
             
+            // Set up every face omn the cube
             // Top
             result[0]  = new Vertex { Position = new Vector3f(-1, 1,  1), Normal = new Vector3f(0, 1, 0)};
             result[1]  = new Vertex { Position = new Vector3f( 1, 1,  1), Normal = new Vector3f(0, 1, 0) };

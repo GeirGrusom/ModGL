@@ -25,9 +25,9 @@ namespace Cube
         public Uniform<Matrix4f> ModelViewProjection { get { return modelViewProjection; } }
         public Uniform<Matrix4f> ViewProjection { get { return viewProjection; } } 
 
-        private string GetEmbeddedResourceAsString(string name)
+        // Helper funcion to get resouce as a string.
+        private static string GetEmbeddedResourceAsString(string name)
         {
-            var resourceStreams = Assembly.GetExecutingAssembly().GetManifestResourceNames();
             using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Cube.Resources." + name))
             {
                 var rd = new StreamReader(stream);
@@ -37,13 +37,20 @@ namespace Cube
 
         public CubeShader(IOpenGL30 gl)
         {
+            // Create the vertex shader
             vertexShader = new VertexShader(gl, GetEmbeddedResourceAsString("cube.vs"));
+            // Create the fragmet shader
             fragmentShader = new FragmentShader(gl, GetEmbeddedResourceAsString("cube.fs"));
+            // Create the program for both shaders
             var p = new ModGL.Shaders.Program(gl, vertexShader, fragmentShader);
+            // Tell the shader what field names to use (taken from the vertex Descriptor)
             p.BindVertexAttributeLocations(PositionNormalTexCoord.Descriptor);
+            // Bind output fragment to the specified nme
             gl.BindFragDataLocation(p.Handle, 0, "Color");
+            // Compile program and shaders
             p.Compile();
             program = p;
+            // Get the uniforms used by the shader program.
             modelViewProjection = p.GetUniform<MatrixUniform, Matrix4f>("ModelViewProjection");
             viewProjection = p.GetUniform<MatrixUniform, Matrix4f>("ViewProjection");
         }
