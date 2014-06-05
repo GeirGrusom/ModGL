@@ -228,7 +228,10 @@ namespace ModGL.Windows
         public override BindContext Bind()
         {
             _wgl.wglMakeCurrent(_hdc, Handle);
-            return new BindContext(() => _wgl.wglMakeCurrent(IntPtr.Zero, IntPtr.Zero) );
+            _currentContext = this;
+            return new BindContext(() => { _wgl.wglMakeCurrent(IntPtr.Zero, IntPtr.Zero);
+                                             _currentContext = null;
+            } );
         }
 
         [Pure]

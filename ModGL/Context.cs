@@ -39,10 +39,7 @@ namespace ModGL
         public IntPtr Handle { get; protected set; }
 
         [ThreadStatic]
-        private static IContext _currentContext;
-
-        [ThreadStatic] 
-        private static BindContext _bindContext;
+        protected static IContext CurrentContext;
 
         public abstract BindContext Bind();
 
@@ -144,16 +141,6 @@ namespace ModGL
             {
                 return _currentContext;
             } 
-            set
-            {
-                if (_currentContext != null)
-                    _bindContext.Dispose();
-
-                _currentContext = value; 
-                if(value != null)
-                    _bindContext = _currentContext.Bind();
-                
-            }
         }
     }
 }

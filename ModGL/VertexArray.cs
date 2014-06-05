@@ -10,7 +10,7 @@ namespace ModGL
     using VertexInfo;
     public interface IVertexArray : IGLObject, IBindable
     {
-        
+        IEnumerable<IBuffer> Buffers { get; }
     }
 
     public sealed class VertexArray : IVertexArray
