@@ -32,9 +32,9 @@ namespace Cube
             result[5]  = new Vertex { Position = new Vector3f( 1, 1, -1), Normal = new Vector3f(0, 1, 0) };
 
             // Bottom
-            result[6]  = new Vertex { Position = new Vector3f(-1, -1,  1), Normal = new Vector3f(0,  1, 0) };
-            result[7] = new Vertex { Position = new Vector3f(-1, -1, -1), Normal = new Vector3f(0, 1, 0) };
-            result[8]  = new Vertex { Position = new Vector3f( 1, -1,  1), Normal = new Vector3f(0,  1, 0) };
+            result[6]  = new Vertex { Position = new Vector3f(-1, -1,  1), Normal = new Vector3f(0,  -1, 0) };
+            result[7] = new Vertex { Position = new Vector3f(-1, -1, -1), Normal = new Vector3f(0, -1, 0) };
+            result[8]  = new Vertex { Position = new Vector3f( 1, -1,  1), Normal = new Vector3f(0,  -1, 0) };
             
 
             result[9]  = new Vertex { Position = new Vector3f(-1, -1, -1), Normal = new Vector3f(0, -1, 0) };
@@ -69,13 +69,13 @@ namespace Cube
             result[28] = new Vertex { Position = new Vector3f(-1, -1, 1), Normal = new Vector3f(0, 0, 1) };
 
             // Back
-            result[30] = new Vertex { Position = new Vector3f(-1, 1, -1), Normal = new Vector3f(0, 0, 1) };
-            result[32] = new Vertex { Position = new Vector3f(1, -1, -1), Normal = new Vector3f(0, 0, 1) };
-            result[31] = new Vertex { Position = new Vector3f(1, 1, -1), Normal = new Vector3f(0, 0, 1) };
+            result[30] = new Vertex { Position = new Vector3f(-1, 1, -1), Normal = new Vector3f(0, 0, -1) };
+            result[32] = new Vertex { Position = new Vector3f(1, -1, -1), Normal = new Vector3f(0, 0, -1) };
+            result[31] = new Vertex { Position = new Vector3f(1, 1, -1), Normal = new Vector3f(0, 0, -1) };
 
-            result[33] = new Vertex { Position = new Vector3f(-1, 1, -1), Normal = new Vector3f(0, 0, 1) };
-            result[34] = new Vertex { Position = new Vector3f(1, -1, -1), Normal = new Vector3f(0, 0, 1) };
-            result[35] = new Vertex { Position = new Vector3f(-1, -1, -1), Normal = new Vector3f(0, 0, 1) };
+            result[33] = new Vertex { Position = new Vector3f(-1, 1, -1), Normal = new Vector3f(0, 0, -1) };
+            result[34] = new Vertex { Position = new Vector3f(1, -1, -1), Normal = new Vector3f(0, 0, -1) };
+            result[35] = new Vertex { Position = new Vector3f(-1, -1, -1), Normal = new Vector3f(0, 0, -1) };
             
 
             using (result.Bind())

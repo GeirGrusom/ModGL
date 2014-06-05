@@ -70,7 +70,7 @@ namespace Cube
                 {
                     // Calculate time since last frame
                     deltaTime = new DeltaTime(ref deltaTime);
-                    model = model.RotateY(deltaTime.Delta);
+                    model = model.RotateY(deltaTime.Delta) * MatrixHelper.RotateZ(-deltaTime.Delta / 4);
 
                     // Let windows handle Windows stuff
                     Application.DoEvents();
