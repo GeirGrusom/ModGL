@@ -114,7 +114,7 @@ namespace ModGL.Windows
             _wgl.SwapBuffers(_hdc);
         }
 
-        public override void Initialize()
+        private void Initialize()
         {
             if(_initialized)
                 throw new InvalidOperationException("Context has already been initialized.");

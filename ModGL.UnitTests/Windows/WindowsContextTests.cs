@@ -67,7 +67,6 @@ namespace ModGL.UnitTests.Windows
             wgl.wglGetProcAddress("wglChoosePixelFormatARB").Returns(Marshal.GetFunctionPointerForDelegate(ch));
             wgl.wglGetProcAddress("wglCreateContextAttribsARB").Returns(Marshal.GetFunctionPointerForDelegate(createContext));
             return wgl;
-            
         }
 
         [Test]
@@ -86,22 +85,6 @@ namespace ModGL.UnitTests.Windows
         }
 
         [Test]
-        public void Initialize_CallingTwice_ThrowsInvalidOperationException()
-        {
-            // Arrange
-            var wgl = CreateMockWgl();
-
-            var context = new WindowsContext(wgl, null, new ContextCreationParameters {Device = 1, Window = 1});
-            TestDelegate contextInitialize = context.Initialize;
-
-            // Act
-            context.Initialize();
-            
-            // Assert
-            Assert.That(contextInitialize, Throws.InvalidOperationException);
-        }
-
-        [Test]
         public void Bind_DoesNotCallInitialize_IfItIsAlreadyInitialized()
         {
             // Arrange
@@ -110,10 +93,10 @@ namespace ModGL.UnitTests.Windows
             var context = new WindowsContext(wgl, null, new ContextCreationParameters { Device = 1, Window = 1 });
 
             // Act
-            context.Initialize();
-            wgl.Received(1).wglCreateContext(Arg.Any<IntPtr>());
-
             context.Bind();
+            wgl.Received(1).wglCreateContext(Arg.Any<IntPtr>());
+            context.Bind();
+
             // Assert
             wgl.Received(1).wglCreateContext(Arg.Any<IntPtr>());
         }

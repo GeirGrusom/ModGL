@@ -12,7 +12,6 @@ namespace ModGL
         IntPtr Handle { get; }
         BindContext Bind();
         void SwapBuffers();
-        void Initialize();
         TOpenGLInterface CreateInterface<TOpenGLInterface>(bool debug = false)
             where TOpenGLInterface : class;
     }
@@ -46,8 +45,6 @@ namespace ModGL
         public abstract void SwapBuffers();
 
         public abstract void Dispose();
-
-        public abstract void Initialize();
 
         private readonly Lazy<IOpenGLGetError> _error;
 
