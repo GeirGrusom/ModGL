@@ -7,12 +7,18 @@ using Platform.Invoke;
 
 namespace ModGL
 {
+    [Flags]
+    public enum InterfaceFlags
+    {
+        Debug = 0,
+        Release = 1,
+    }
     public interface IContext : ILibrary
     {
         IntPtr Handle { get; }
         BindContext Bind();
         void SwapBuffers();
-        TOpenGLInterface CreateInterface<TOpenGLInterface>(bool debug = false)
+        TOpenGLInterface CreateInterface<TOpenGLInterface>(InterfaceFlags flags)
             where TOpenGLInterface : class;
     }
 
@@ -54,10 +60,10 @@ namespace ModGL
         }
 
         [Pure]
-        public TOpenGLInterface CreateInterface<TOpenGLInterface>(bool debug = false)
+        public TOpenGLInterface CreateInterface<TOpenGLInterface>(InterfaceFlags flags)
             where TOpenGLInterface : class
         {
-            if (debug)
+            if ((flags & InterfaceFlags.Debug) == InterfaceFlags.Debug)
                 return CreateDebugInterface<TOpenGLInterface>();
             return LibraryInterfaceFactory.Implement<TOpenGLInterface>(this, f => "gl" + f);
         }

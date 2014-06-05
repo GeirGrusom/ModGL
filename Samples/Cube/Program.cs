@@ -60,7 +60,7 @@ namespace Cube
                 var view = ViewMatrixHelper.LookAt(new Vector3f(1.5f, 1.5f, 1.5f), new Vector3f(0, 1, 0), new Vector3f(0, 0, 0));
                 var projection = ProjectionMatrixHelper.RightHandPerspective((float) Math.PI/2,
                     renderForm.ClientSize.Width/(float) renderForm.ClientSize.Height, 0.01f, 10f);
-                var gl = context.CreateInterface<IOpenGL30>(debug: true);
+                var gl = context.CreateInterface<IOpenGL30>(InterfaceFlags.Debug);
                 var cube = new Cube(gl);
                 gl.ClearColor(0, 0.1f, 0.7f, 0);
                 gl.Enable(StateCaps.DepthTest);
