@@ -6,7 +6,7 @@ using ModGL.NativeGL;
 
 namespace ModGL.Shaders
 {
-    public interface IShader : IGLObject
+    public interface IShader : IGLObject, IDisposable
     {
         ShaderCompilationResults GetCompilationResults();
         bool IsCompiled { get; }
@@ -17,7 +17,7 @@ namespace ModGL.Shaders
     /// Shader base class. This class is abstract.
     /// </summary>
     [Serializable]
-    public abstract class Shader : IDisposable, IShader
+    public abstract class Shader : IShader
     {
         private readonly ShaderType _shaderType;
         private readonly IOpenGL30 _gl;
@@ -33,7 +33,7 @@ namespace ModGL.Shaders
         /// <summary>
         /// Gets the code used to initialize this shader.
         /// </summary>
-        public string Code { get { return this._code; } }
+        public string Code { get { return _code; } }
 
 
         /// <summary>

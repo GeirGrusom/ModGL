@@ -17,6 +17,7 @@ namespace ModGL
     {
         IntPtr Handle { get; }
         BindContext Bind();
+        void Initialize();
         void SwapBuffers();
         TOpenGLInterface CreateInterface<TOpenGLInterface>(InterfaceFlags flags)
             where TOpenGLInterface : class;
@@ -52,6 +53,8 @@ namespace ModGL
 
         public abstract void Dispose();
 
+        public abstract void Initialize();
+
         private readonly Lazy<IOpenGLGetError> _error;
 
         protected Context()
@@ -73,15 +76,19 @@ namespace ModGL
         {
             private readonly IOpenGLGetError _error;
             private readonly IContext _owner;
+            private readonly Thread _ownerThread;
 
             public DebugProbe(IOpenGLGetError error, IContext owner)
             {
                 _error = error;
                 _owner = owner;
+                _ownerThread = Thread.CurrentThread;
             }
 
             public void OnBeginInvoke(MethodInfo method, TOpenGLInterface reference)
             {
+                if (Thread.CurrentThread != _ownerThread)
+                    throw new CrossThreadCallException();
                 if(Context.Current != _owner)
                     throw new CrossContextCallException();
                 _error.GetError(); // Clear error state

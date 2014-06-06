@@ -13,7 +13,7 @@ using ModGL.VertexInfo;
 
 namespace Cube
 {
-    public class CubeShader
+    public class CubeShader : IDisposable
     {
         private readonly IShader vertexShader;
         private readonly IShader fragmentShader;
@@ -26,7 +26,14 @@ namespace Cube
 
         public Uniform<Matrix4f> ModelViewProjection { get { return modelViewProjection; } }
         public Uniform<Matrix4f> ViewProjection { get { return viewProjection; } }
-        public Uniform<Vector4f> DiffuseUniform { get { return diffuseUniform; } } 
+        public Uniform<Vector4f> DiffuseUniform { get { return diffuseUniform; } }
+
+        public void Dispose()
+        {
+            program.Dispose();
+            vertexShader.Dispose();
+            fragmentShader.Dispose();
+        }
 
         // Helper funcion to get resouce as a string.
         private static string GetEmbeddedResourceAsString(string name)

@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 using ModGL.Buffers;
 using ModGL.NativeGL;
 
@@ -18,7 +13,7 @@ namespace ModGL.Rendering
             _gl = gl;
         }
 
-        public void DrawElements(IElementArray elements, DrawMode mode)
+        public void Draw(DrawMode mode, IElementArray elements)
         {
             using (elements.Bind())
             {

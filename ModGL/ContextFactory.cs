@@ -57,6 +57,7 @@ namespace ModGL
                 var wgl = Mapper.Implement<IWGL>(new CompositeLibraryProvider(libGL, gdi32));
 
                 var context = new WindowsContext(wgl, null, parameters);
+                context.Initialize();
                 return context;
             }
             throw new PlatformNotSupportedException();

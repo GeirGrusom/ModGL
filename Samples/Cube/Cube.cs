@@ -1,3 +1,4 @@
+using System;
 using System.Drawing;
 using System.Numerics;
 using ModGL;
@@ -7,7 +8,7 @@ using ModGL.Numerics;
 
 namespace Cube
 {
-    public class Cube
+    public class Cube : IDisposable
     {
         private readonly IVertexArray vertexArray;
         private readonly IVertexBuffer vertexBuffer;
@@ -105,11 +106,18 @@ namespace Cube
             using (shader.Program.Bind())
             using (vertexArray.Bind())
             {
-                shader.ViewProjection.Value = View*Projection;
+                shader.ViewProjection.Value = View * Projection;
                 shader.ModelViewProjection.Value = Model * View * Projection;
                 shader.DiffuseUniform.Value = new Vector4f(DiffuseColor.R / 255.0f, DiffuseColor.G / 255f, DiffuseColor.B / 255f, DiffuseColor.A / 255f);
                 gl.DrawArrays(DrawMode.Triangles,  0, (int)vertexBuffer.Elements);
             }
+        }
+
+        public void Dispose()
+        {
+            vertexArray.Dispose();
+            vertexBuffer.Dispose();
+            shader.Dispose();
         }
     }
 }

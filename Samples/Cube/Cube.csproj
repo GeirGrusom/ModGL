@@ -32,7 +32,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ModGL">
+    <Reference Include="ModGL, Version=0.1.5270.12648, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\ModGL\bin\Debug\ModGL.dll</HintPath>
     </Reference>
     <Reference Include="Platform.Invoke">

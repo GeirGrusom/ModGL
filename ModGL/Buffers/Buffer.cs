@@ -11,7 +11,7 @@ using ModGL.NativeGL;
 
 namespace ModGL.Buffers
 {
-    public interface IBuffer : IGLObject, IBindable
+    public interface IBuffer : IGLObject, IBindable, IDisposable
     {
         long Elements { get; }
         int ElementSize { get; }
@@ -76,6 +76,11 @@ namespace ModGL.Buffers
 
         [Pure]
         public uint Handle { get; private set; }
+
+        public void Dispose()
+        {
+            _gl.DeleteBuffers(1, new []{ Handle });
+        }
 
         public BindContext Bind()
         {

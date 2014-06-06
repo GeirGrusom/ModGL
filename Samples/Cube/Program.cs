@@ -62,15 +62,27 @@ namespace Cube
                     renderForm.ClientSize.Width/(float) renderForm.ClientSize.Height, 0.01f, 10f);
                 var gl = context.CreateInterface<IOpenGL30>(InterfaceFlags.Debug);
                 var cube = new Cube(gl);
-                gl.ClearColor(0, 0.1f, 0.7f, 0);
+                var bgColor = Color.DodgerBlue;
+                gl.ClearColor(bgColor.R / 255f, bgColor.G / 255f, bgColor.B / 255f, 1);
                 gl.Enable(StateCaps.DepthTest);
                 gl.Enable(StateCaps.CullFace);
                 var deltaTime = DeltaTime.Init();
+                double sumFps = 0;
+                int frameCount = 0;
                 while (appRunning) // Despite what resharper thinks, this loop will end when the form is closed.
                 {
                     // Calculate time since last frame
                     deltaTime = new DeltaTime(ref deltaTime);
                     model = model.RotateY(deltaTime.Delta) * MatrixHelper.RotateZ(-deltaTime.Delta / 4);
+                    sumFps += deltaTime.Delta;
+                    ++frameCount;
+                    if (sumFps > 1.0f)
+                    {
+                        var averageDelta = sumFps / frameCount;
+                        renderForm.Text = string.Format("Cube - {0:0.00} FPS", 1.0 / (averageDelta));
+                        sumFps = 0;
+                        frameCount = 0;
+                    }
 
                     // Let windows handle Windows stuff
                     Application.DoEvents();
@@ -79,14 +91,16 @@ namespace Cube
                     
                     // Set cube matrix data.
                     cube.Model = model; // The rotation of our model (rotates around Y axis for every frame)
-                    cube.View = view; // How our View is set up (using LookAt)
-                    cube.Projection = projection; // How our projection is set up (perspective)
+                    cube.View = view; 
+                    cube.Projection = projection;
                     cube.DiffuseColor = Color.DodgerBlue;
                     cube.Draw(); // Draw the cube!
+                    gl.Finish();
                     context.SwapBuffers(); // Swap the presentation buffer with the one we just finished rendering
                 }
+                cube.Dispose();
             }
-
+            
             graphics.ReleaseHdc(hdc);
             graphics.Dispose();
         }

@@ -14,5 +14,5 @@ void main()
 	vec4 resultPos = vec4(Position, 1) * ModelViewProjection;
 	gl_Position = resultPos;
 	pos = resultPos.xyz;
-	normal = (vec4(Normal, 1) * ViewProjection).xyz;
+	normal = normalize((vec4(Normal, 1) * ViewProjection).xyz);
 }

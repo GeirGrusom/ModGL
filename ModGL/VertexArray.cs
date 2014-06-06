@@ -8,7 +8,7 @@ using ModGL.NativeGL;
 namespace ModGL
 {
     using VertexInfo;
-    public interface IVertexArray : IGLObject, IBindable
+    public interface IVertexArray : IGLObject, IBindable, IDisposable
     {
         IEnumerable<IBuffer> Buffers { get; }
     }
@@ -55,6 +55,11 @@ namespace ModGL
         {
             _gl.BindVertexArray(Handle);
             return new BindContext(() => _gl.BindVertexArray(0));
+        }
+
+        public void Dispose()
+        {
+            _gl.DeleteVertexArrays(1, new [] { Handle });
         }
     }
 }
