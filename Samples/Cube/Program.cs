@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Numerics;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Windows.Forms;
 using ModGL;
 using ModGL.NativeGL;
@@ -51,11 +49,14 @@ namespace Cube
                 ContextFactory.Instance.Create(new ContextCreationParameters
                 {
                     Device = (long) hdc,
-                    Window = (long) renderForm.Handle
-                    
+                    Window = (long) renderForm.Handle,
                 });
+
+            
             using (context.Bind())
             {
+                
+
                 var model = Matrix4f.Identity;
                 var view = ViewMatrixHelper.LookAt(new Vector3f(1.75f, 1.75f, 1.75f), new Vector3f(0, 1, 0), new Vector3f(0, 0, 0));
                 var projection = ProjectionMatrixHelper.RightHandPerspective((float) Math.PI/2,
@@ -63,6 +64,15 @@ namespace Cube
                 var gl = context.CreateInterface<IOpenGL30>(InterfaceFlags.Debug);
                 var cube = new Cube(gl);
                 var bgColor = Color.DodgerBlue;
+
+                renderForm.Resize +=
+                    (sender, args) =>
+                    {
+                        gl.Viewport(0, 0, renderForm.ClientSize.Width, renderForm.ClientSize.Height);
+                        projection = ProjectionMatrixHelper.RightHandPerspective((float) Math.PI/2,
+                            renderForm.ClientSize.Width/(float) renderForm.ClientSize.Height, 0.01f, 10f);
+                    };
+
                 gl.ClearColor(bgColor.R / 255f, bgColor.G / 255f, bgColor.B / 255f, 1);
                 gl.Enable(StateCaps.DepthTest);
                 gl.Enable(StateCaps.CullFace);
@@ -73,7 +83,7 @@ namespace Cube
                 {
                     // Calculate time since last frame
                     deltaTime = new DeltaTime(ref deltaTime);
-                    model = model.RotateY(deltaTime.Delta) * MatrixHelper.RotateZ(-deltaTime.Delta / 4);
+                    model = model.RotateY(deltaTime.Delta) * MatrixHelper.RotateZ(deltaTime.Delta / 4);
                     sumFps += deltaTime.Delta;
                     ++frameCount;
                     if (sumFps > 1.0f)
