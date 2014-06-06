@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Drawing;
 using System.Numerics;
+using System.Reflection;
 using System.Windows.Forms;
 using ModGL;
 using ModGL.NativeGL;
@@ -43,13 +44,15 @@ namespace SampleBase
             Model = Matrix4f.Identity;
             View = Matrix4f.Identity;
             Projection = Matrix4f.Identity;
-
+            var glVersion = typeof (TOpenGLInterface).GetCustomAttribute<GLVersionAttribute>() ?? new GLVersionAttribute(3, 3);
             // Create the OpenGL rendering context
             _context =
                 ContextFactory.Instance.Create(new ContextCreationParameters
                 {
                     Device = (long)_hdc,
                     Window = (long)_renderForm.Handle,
+                    MajorVersion = glVersion.Major,
+                    MinorVersion = glVersion.Minor,
                 });
 
         }

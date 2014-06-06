@@ -123,6 +123,7 @@
     <Compile Include="Windows\PixelFormatException.cs" />
     <Compile Include="Windows\WGL.cs" />
     <Compile Include="Windows\WindowsContext.cs" />
+    <Compile Include="Windows\WindowsContextFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="OSX\" />
