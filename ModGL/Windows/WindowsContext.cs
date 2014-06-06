@@ -119,57 +119,10 @@ namespace ModGL.Windows
             if(_initialized)
                 throw new InvalidOperationException("Context has already been initialized.");
 
-            var tempContext = CreateTempOpenGLContext(_contextParameters);
-
-            if (!_wgl.wglMakeCurrent(_hdc, tempContext))
-                throw new ContextCreationException("Unable to make temporary context current.", _contextParameters);
-
-
-            var choosePixelFormat = GetProcedure<wglChoosePixelFormatARB>("wglChoosePixelFormatARB");
-            var createContext = GetProcedure<wglCreateContextAttribsARB>("wglCreateContextAttribsARB");
-
-            if (choosePixelFormat == null)
-                throw new ContextCreationException("Unable to find wglChoosePixelFormatARB.", _contextParameters);
-
-            if (createContext == null)
-                throw new ContextCreationException("Unable to find wglCreateContextAttribsARB extension.", _contextParameters);
-
-            int[] formats = new int[1];
-            uint[] numFormats = new uint[1];
-
-            if (!choosePixelFormat(
-                this._hdc,
-                new[]
-                    {
-                        WGLPixelFormatConstants.WGL_DRAW_TO_WINDOW_ARB, (int) GLboolean.True,
-                        WGLPixelFormatConstants.WGL_SUPPORT_OPENGL_ARB, (int) GLboolean.True,
-                        WGLPixelFormatConstants.WGL_DOUBLE_BUFFER_ARB, (int) GLboolean.True,
-                        WGLPixelFormatConstants.WGL_PIXEL_TYPE_ARB, WGLPixelFormatConstants.WGL_TYPE_RGBA_ARB,
-                        WGLPixelFormatConstants.WGL_COLOR_BITS_ARB, _contextParameters.ColorBits.HasValue ? _contextParameters.ColorBits.Value : 32,
-                        WGLPixelFormatConstants.WGL_DEPTH_BITS_ARB, _contextParameters.DepthBits.HasValue ? _contextParameters.DepthBits.Value : 24,
-                        WGLPixelFormatConstants.WGL_STENCIL_BITS_ARB, _contextParameters.StencilBits.HasValue ? _contextParameters.StencilBits.Value : 8,
-                        WGLPixelFormatConstants.WGL_SAMPLE_BUFFERS_ARB, 1,
-                        WGLPixelFormatConstants.WGL_SAMPLES_ARB, 4,
-                        0 //End 
-                    },
-                null,
-                1,
-                formats,
-                numFormats)
-                )
-            {
-                throw new ContextCreationException("Unable to choose pixel format.", _contextParameters);
-            }
-
-            var finalContext = createContext(this._hdc, _sharedContext != null ? _sharedContext.Handle : IntPtr.Zero, new[]
-            {
-                (int)WGLContextAttributes.MajorVersion, _contextParameters.MajorVersion.HasValue ? _contextParameters.MajorVersion.Value : 3,
-                (int)WGLContextAttributes.MinorVersion, _contextParameters.MinorVersion.HasValue ? _contextParameters.MinorVersion.Value : 2,
-                (int)WGLContextAttributes.Flags, 0,
-                (int)WGLContextAttributes.ProfileMask, (int)WGLContextProfileMask.CoreProfileBit,
-                0
-            }
-            );
+            
+            var builder = new ContextBuilder(_wgl);
+            var tempContext = builder.BuildLegacyContext(_contextParameters);
+            var finalContext = builder.BuildModernContext(_contextParameters, this, _sharedContext, tempContext);
             Handle = finalContext;
             _initialized = true;
         }
@@ -204,30 +157,8 @@ namespace ModGL.Windows
 
         private IntPtr CreateTempOpenGLContext(ContextCreationParameters parameters)
         {
-            PixelFormatDescriptor desc = new PixelFormatDescriptor
-            {
-                Version = 1,
-                StencilBits = 8,
-                DepthBits = 24,
-                ColorBits = 32,
-                PixelType = PixelType.Rgba,
-                Size = (ushort)System.Runtime.InteropServices.Marshal.SizeOf(typeof(PixelFormatDescriptor)),
-                Flags = PixelFormatFlags.DoubleBuffer | PixelFormatFlags.DrawToWindows | PixelFormatFlags.SupportOpenGL,
-            };
-
-            int pixelFormat = _wgl.ChoosePixelFormat(this._hdc, ref desc);
-
-            if (pixelFormat == 0)
-                throw new PixelFormatException("Could not select an appropriate pixel format.", parameters, desc);
-
-            if (!_wgl.SetPixelFormat(this._hdc, pixelFormat, ref desc))
-                throw new PixelFormatException("Could not set pixel format for HDC.", parameters, desc);
-
-            var glptr = _wgl.wglCreateContext(this._hdc);
-            if (glptr == IntPtr.Zero)
-                throw new ContextCreationException("Unable to create OpenGL context.", parameters);
-
-            return glptr;
+            var builder = new ContextBuilder(_wgl);
+            return builder.BuildLegacyContext(parameters);
         }
 
         public override BindContext Bind()
