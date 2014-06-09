@@ -8,6 +8,7 @@ using ModGL.Windows;
 using NSubstitute;
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
+using Platform.Invoke;
 
 namespace ModGL.UnitTests.Windows
 {
@@ -18,7 +19,7 @@ namespace ModGL.UnitTests.Windows
         public void Constructor_WglIsNull_ThrowsArgumentNullException()
         {
             // Arrange
-            TestDelegate createAction = () => new WindowsContext(null, null, new ContextCreationParameters());
+            TestDelegate createAction = () => new WindowsContext(null, Substitute.For<ILibrary>(), null, new ContextCreationParameters());
             
             // Assert
             Assert.That(createAction, Throws.InstanceOf<ArgumentNullException>());
@@ -28,7 +29,7 @@ namespace ModGL.UnitTests.Windows
         public void Constructor_ContextCreationParametersIsNull_ThrowsArgumentNullException()
         {
             // Arrange
-            TestDelegate createAction = () => new WindowsContext(Substitute.For<IWGL>(), null, null);
+            TestDelegate createAction = () => new WindowsContext(Substitute.For<IWGL>(), Substitute.For<ILibrary>(), null, null);
 
             // Assert
             Assert.That(createAction, Throws.InstanceOf<ArgumentNullException>());
@@ -38,7 +39,7 @@ namespace ModGL.UnitTests.Windows
         public void Constructor_OpenGLVersionLessThan3_ThrowsVersionNotSupportedException()
         {
             // Arrange
-            TestDelegate createAction = () => new WindowsContext(Substitute.For<IWGL>(), null, new ContextCreationParameters { Device = 1, Window = 1, MajorVersion = 2, MinorVersion = 0});
+            TestDelegate createAction = () => new WindowsContext(Substitute.For<IWGL>(), Substitute.For<ILibrary>(), null, new ContextCreationParameters { Device = 1, Window = 1, MajorVersion = 2, MinorVersion = 0});
 
             // Assert
             Assert.That(createAction, Throws.InstanceOf<VersionNotSupportedException>());
@@ -48,7 +49,7 @@ namespace ModGL.UnitTests.Windows
         public void Constructor_DeviceNotSet_ThrowsContextCreationException()
         {
             // Arrange
-            TestDelegate createAction = () => new WindowsContext(Substitute.For<IWGL>(), null, new ContextCreationParameters { Device = 0, Window = 1 });
+            TestDelegate createAction = () => new WindowsContext(Substitute.For<IWGL>(), Substitute.For<ILibrary>(), null, new ContextCreationParameters { Device = 0, Window = 1 });
 
             // Assert
             Assert.That(createAction, Throws.InstanceOf<ContextCreationException>());
@@ -75,7 +76,7 @@ namespace ModGL.UnitTests.Windows
             // Arrange
             var wgl = CreateMockWgl();
             
-            var context = new WindowsContext(wgl, null, new ContextCreationParameters {Device = 1, Window = 1});
+            var context = new WindowsContext(wgl, Substitute.For<ILibrary>(), null, new ContextCreationParameters {Device = 1, Window = 1});
 
             // Act
             context.Bind();
@@ -90,7 +91,7 @@ namespace ModGL.UnitTests.Windows
             // Arrange
             var wgl = CreateMockWgl();
 
-            var context = new WindowsContext(wgl, null, new ContextCreationParameters { Device = 1, Window = 1 });
+            var context = new WindowsContext(wgl, Substitute.For<ILibrary>(), null, new ContextCreationParameters { Device = 1, Window = 1 });
 
             // Act
             context.Bind();
@@ -106,7 +107,7 @@ namespace ModGL.UnitTests.Windows
         public void Constructor_WindowNotSet_ThrowsContextCreationException()
         {
             // Arrange
-            TestDelegate createAction = () => new WindowsContext(Substitute.For<IWGL>(), null, new ContextCreationParameters { Device = 1, Window = 0 });
+            TestDelegate createAction = () => new WindowsContext(Substitute.For<IWGL>(), Substitute.For<ILibrary>(), null, new ContextCreationParameters { Device = 1, Window = 0 });
 
             // Assert
             Assert.That(createAction, Throws.InstanceOf<ContextCreationException>());

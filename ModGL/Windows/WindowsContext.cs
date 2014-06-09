@@ -2,6 +2,7 @@
 using System.Diagnostics.Contracts;
 
 using ModGL.NativeGL;
+using Platform.Invoke;
 
 namespace ModGL.Windows
 {
@@ -42,6 +43,7 @@ namespace ModGL.Windows
     public class WindowsContext : Context
     {
         private readonly IWGL _wgl;
+        private readonly ILibrary _glLibraryProvider;
         private readonly IntPtr _hdc;
         private readonly ContextCreationParameters _contextParameters;
         private readonly IContext _sharedContext;
@@ -127,10 +129,13 @@ namespace ModGL.Windows
             _initialized = true;
         }
 
-        public WindowsContext(IWGL wgl, IContext shareContext, ContextCreationParameters parameters)
+        public WindowsContext(IWGL wgl, ILibrary glLibraryProvider, IContext shareContext, ContextCreationParameters parameters)
         {
             if(wgl == null)
                 throw new ArgumentNullException("wgl");
+
+            if(glLibraryProvider == null)
+                throw new ArgumentNullException("glLibraryProvider");
 
             if(parameters == null)
                 throw new ArgumentNullException("parameters");
@@ -148,6 +153,7 @@ namespace ModGL.Windows
                 throw new ContextCreationException("Display is not supported on this platform.", parameters);
 
             _wgl = wgl;
+            _glLibraryProvider = glLibraryProvider;
             _hdc = new IntPtr(parameters.Device);
             _contextParameters = parameters;
             _sharedContext = shareContext;
@@ -176,8 +182,10 @@ namespace ModGL.Windows
         public override Delegate GetProcedure(Type delegateType, string extensionName)
         {
             var delegPtr = _wgl.wglGetProcAddress(extensionName);
+
             if (delegPtr == IntPtr.Zero)
-                return null;
+                return _glLibraryProvider.GetProcedure(delegateType, extensionName);
+
             return System.Runtime.InteropServices.Marshal.GetDelegateForFunctionPointer(delegPtr, delegateType);
         }
     }

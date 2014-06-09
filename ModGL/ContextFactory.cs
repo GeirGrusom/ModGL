@@ -57,7 +57,7 @@ namespace ModGL
 
                 var wgl = Mapper.Implement<IWGL>(new CompositeLibraryProvider(libGL, gdi32));
 
-                var context = new WindowsContext(wgl, null, parameters);
+                var context = new WindowsContext(wgl, libGL, null, parameters);
                 context.Initialize();
                 return context;
             }

@@ -4,6 +4,7 @@ using ModGL.Windows;
 using NSubstitute;
 
 using NUnit.Framework;
+using Platform.Invoke;
 
 namespace ModGL.UnitTests
 {
@@ -17,7 +18,7 @@ namespace ModGL.UnitTests
             var wgl = Substitute.For<IWGL>();
             
             // Act
-            var exception = Assert.Catch<VersionNotSupportedException>( () => new WindowsContext(wgl, null, new ContextCreationParameters { MajorVersion = 2 }));
+            var exception = Assert.Catch<VersionNotSupportedException>( () => new WindowsContext(wgl, Substitute.For<ILibrary>(), null, new ContextCreationParameters { MajorVersion = 2 }));
 
             // Assert
             Assert.AreEqual("OpenGL version below 3.0 is not supported.", exception.Message);
