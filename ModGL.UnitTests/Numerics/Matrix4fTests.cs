@@ -129,16 +129,16 @@ namespace ModGL.UnitTests.Numerics
                 new Vector4f(1, 0, 0, 1)   );
 
             // Act
-            var resultMat = mat.Invert();
+            var resultMat =  mat.Invert();
             var results = new[] {resultMat.Row(0), resultMat.Row(1), resultMat.Row(2), resultMat.Row(3)};
 
             // Assert
             Assert.That(results, Is.EquivalentTo(new []
             {
-                new Vector4f(),
-                new Vector4f(),
-                new Vector4f(),
-                new Vector4f() 
+                new Vector4f(0.25f, 0, 0, 0),
+                new Vector4f(0, -1, 1, 0),
+                new Vector4f(0, 0.5f, 0, 0),
+                new Vector4f(-0.25f, 0, 0, 1) 
             }));
         }
 

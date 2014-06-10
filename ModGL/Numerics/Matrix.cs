@@ -25,7 +25,7 @@ namespace ModGL.Numerics
         {
             Contract.Requires(index >= 0 && index < 4);
             Contract.EndContractBlock();
-            if(index < 0 || index > 3)
+            if (index < 0 || index > 3)
                 throw new IndexOutOfRangeException();
             return _data[index];
         }
@@ -42,13 +42,13 @@ namespace ModGL.Numerics
             Contract.Requires(index >= 0 && index < 4);
             Contract.EndContractBlock();
 
-            if(index == 0)
+            if (index == 0)
                 return new Vector4f(_data[0].X, _data[1].X, _data[2].X, _data[3].X);
-            if(index == 1)
+            if (index == 1)
                 return new Vector4f(_data[0].Y, _data[1].Y, _data[2].Y, _data[3].Y);
-            if(index == 2)
+            if (index == 2)
                 return new Vector4f(_data[0].Z, _data[1].Z, _data[2].Z, _data[3].Z);
-            if(index  == 3)
+            if (index == 3)
                 return new Vector4f(_data[0].W, _data[1].W, _data[2].W, _data[3].W);
 
             throw new IndexOutOfRangeException();
@@ -71,11 +71,79 @@ namespace ModGL.Numerics
               - _data[0].W * _data[1].Y * _data[2].Z * _data[3].X + _data[0].W * _data[1].Y * _data[2].X * _data[3].Z - _data[0].W * _data[1].Z * _data[2].X * _data[3].Y + _data[0].W * _data[1].Z * _data[2].Y * _data[3].X;
         }
 
-        // Calculates the invert matrix if any.
+        private float this[int row, int column]
+        {
+            get
+            {
+                var r = _data[row];
+                if (column == 0)
+                    return r.X;
+                if (column == 1)
+                    return r.Y;
+                if (column == 2)
+                    return r.Z;
+                if (column == 3)
+                    return r.W;
+                throw new IndexOutOfRangeException("Column must be between 0 and 3 inclusive.");
+            }
+        }
+
+        /// <summary>
+        /// Calculates the inverse matrix. If no inverse exists, throws InvalidOperationException.
+        /// </summary>
+        /// <returns>Invertex matrix</returns>
+        /// <exception cref="InvalidOperationException">Thrown if no inverse matrix can be calculated.</exception>
+        // Taken from Robin Hillard's code on http://stackoverflow.com/questions/2624422/efficient-4x4-matrix-inverse-affine-transform
+        // TODO: check for vector operations and inline this[]
         [Pure]
         public Matrix4f Invert()
         {
-            throw new NotImplementedException();
+            var s0 = this[0, 0] * this[1, 1] - this[1, 0] * this[0, 1];
+            var s1 = this[0, 0] * this[1, 2] - this[1, 0] * this[0, 2];
+            var s2 = this[0, 0] * this[1, 3] - this[1, 0] * this[0, 3];
+            var s3 = this[0, 1] * this[1, 2] - this[1, 1] * this[0, 2];
+            var s4 = this[0, 1] * this[1, 3] - this[1, 1] * this[0, 3];
+            var s5 = this[0, 2] * this[1, 3] - this[1, 2] * this[0, 3];
+
+            var c5 = this[2, 2] * this[3, 3] - this[3, 2] * this[2, 3];
+            var c4 = this[2, 1] * this[3, 3] - this[3, 1] * this[2, 3];
+            var c3 = this[2, 1] * this[3, 2] - this[3, 1] * this[2, 2];
+            var c2 = this[2, 0] * this[3, 3] - this[3, 0] * this[2, 3];
+            var c1 = this[2, 0] * this[3, 2] - this[3, 0] * this[2, 2];
+            var c0 = this[2, 0] * this[3, 1] - this[3, 0] * this[2, 1];
+
+            
+            var invdet = 1.0f / (s0 * c5 - s1 * c4 + s2 * c3 + s3 * c2 - s4 * c1 + s5 * c0);
+            if(invdet >= -float.Epsilon && invdet >= float.Epsilon)
+                throw new InvalidOperationException("Matrix is not invertible.");
+
+            var b = new Vector4f[4];
+
+            b[0] = new Vector4f(
+                ( this[1, 1] * c5 - this[1, 2] * c4 + this[1, 3] * c3) * invdet,
+                (-this[0, 1] * c5 + this[0, 2] * c4 - this[0, 3] * c3) * invdet,
+                ( this[3, 1] * s5 - this[3, 2] * s4 + this[3, 3] * s3) * invdet,
+                (-this[2, 1] * s5 + this[2, 2] * s4 - this[2, 3] * s3) * invdet);
+
+            b[1] = new Vector4f(
+                (-this[1, 0] * c5 + this[1, 2] * c2 - this[1, 3] * c1) * invdet,
+                ( this[0, 0] * c5 - this[0, 2] * c2 + this[0, 3] * c1) * invdet,
+                (-this[3, 0] * s5 + this[3, 2] * s2 - this[3, 3] * s1) * invdet,
+                ( this[2, 0] * s5 - this[2, 2] * s2 + this[2, 3] * s1) * invdet);
+
+            b[2] = new Vector4f(
+                ( this[1, 0] * c4 - this[1, 1] * c2 + this[1, 3] * c0) * invdet,
+                (-this[0, 0] * c4 + this[0, 1] * c2 - this[0, 3] * c0) * invdet,
+                ( this[3, 0] * s4 - this[3, 1] * s2 + this[3, 3] * s0) * invdet,
+                (-this[2, 0] * s4 + this[2, 1] * s2 - this[2, 3] * s0) * invdet);
+
+            b[3] = new Vector4f(
+                (-this[1, 0] * c3 + this[1, 1] * c1 - this[1, 2] * c0) * invdet,
+                ( this[0, 0] * c3 - this[0, 1] * c1 + this[0, 2] * c0) * invdet,
+                (-this[3, 0] * s3 + this[3, 1] * s1 - this[3, 2] * s0) * invdet,
+                ( this[2, 0] * s3 - this[2, 1] * s1 + this[2, 2] * s0) * invdet);
+
+            return new Matrix4f(b[0], b[1], b[2], b[3]);
         }
 
         [Pure]
@@ -84,10 +152,10 @@ namespace ModGL.Numerics
             Contract.Requires(rhs != null, "rhs cannot be null.");
             Contract.EndContractBlock();
 
-            if(rhs == null)
+            if (rhs == null)
                 throw new ArgumentNullException("rhs");
 
-            var result = new float[4,4];
+            var result = new float[4, 4];
             for (int i = 0; i < 4; i++)
             {
                 for (int j = 0; j < 4; j++)
@@ -147,14 +215,14 @@ namespace ModGL.Numerics
             Contract.Ensures(_data != null);
             Contract.Ensures(_data.Length == 4);
             Contract.EndContractBlock();
-            _data = new [] { row0, row1, row2, row3 };
+            _data = new[] { row0, row1, row2, row3 };
         }
 
         [Pure]
         public Matrix4f Transpose()
         {
             return new Matrix4f(
-                new Vector4f(_data[0].X, _data[1].X, _data[2].X, _data[3].X), 
+                new Vector4f(_data[0].X, _data[1].X, _data[2].X, _data[3].X),
                 new Vector4f(_data[0].Y, _data[1].Y, _data[2].Y, _data[3].Y),
                 new Vector4f(_data[0].Z, _data[1].Z, _data[2].Z, _data[3].Z),
                 new Vector4f(_data[0].W, _data[1].W, _data[2].W, _data[3].W));
