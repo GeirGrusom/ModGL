@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using SpecBuilder.Parser;
 
@@ -32,7 +33,7 @@ namespace SpecBuilder.CodeGen
             {"GLclampf", typeof(float)},
             {"GLdouble", typeof(double)},
             {"GLclampd", typeof(double)},
-            {"GLsync", typeof(IntPtr)}
+            {"GLsync", typeof(IntPtr)},
         }; 
 
         private static HashSet<string> PreserveTypes = new HashSet<string>
@@ -74,7 +75,7 @@ namespace SpecBuilder.CodeGen
                                     new KeyValuePair<string, uint>(NameFormatter.FormatEnumName(f.Name),
                                         unchecked ((uint) f.Value)))));
                 }
-                namespaces.Add(new Namespace(group.Key, Enumerable.Empty<Namespace>(), new [] {constant}, enums, Enumerable.Empty<Interface>()));
+                namespaces.Add(new Namespace(group.Key, Enumerable.Empty<Namespace>(), new [] {constant}, enums, Enumerable.Empty<CodeDelegate>(), Enumerable.Empty<Interface>()));
             }
 
             List<Enumeration> groups = new List<Enumeration>();
@@ -90,30 +91,90 @@ namespace SpecBuilder.CodeGen
             }
             var glCommands = spec.Commands["GL"];
             List<Interface> interfaces = new List<Interface>();
-            foreach (var feature in spec.Features.Where(f => f.Api.Contains("gl")))
+
+            HashSet<string> validGroups = new HashSet<string>(groups.Select(g => g.Name));
+
+            /* (GLenum source,GLenum type,GLuint id,GLenum severity,GLsizei length,const GLchar *message,const void *userParam) */
+            var gldebugprocDelegate = new CodeDelegate("GLDEBUGPROC", new CustomDataType("void"),
+                new MethodParameter("source", TypeFlags.None, new SystemDataType(typeof(uint))),
+                new MethodParameter("type", TypeFlags.None, new SystemDataType(typeof(uint))),
+                new MethodParameter("id", TypeFlags.None, new SystemDataType(typeof(uint))),
+                new MethodParameter("severity", TypeFlags.None, new SystemDataType(typeof(uint))),
+                new MethodParameter("length", TypeFlags.None, new SystemDataType(typeof(int))),
+                new MethodParameter("message", TypeFlags.Out, new SystemDataType(typeof(string))),
+                new MethodParameter("userParam", TypeFlags.None, new SystemDataType(typeof(IntPtr))));
+
+            foreach (var feature in spec.Features.Where(f => f.Api.Length == 0 || f.Api.Contains("gl")))
             {
-                string interfaceName = "I" + NameFormatter.FormatEnumName(feature.Name);
+                string interfaceName;
+                var renameMatch = InterfaceRenameRegex.Match(feature.Name);
+                if (renameMatch.Success)
+                {
+                    interfaceName = string.Format("IOpenGL{0}{1}", renameMatch.Groups["Major"].Value,
+                        renameMatch.Groups["Minor"].Value);
+                }
+                else
+                    interfaceName = "I" + NameFormatter.FormatEnumName(feature.Name);
+
+                
                 var interf = new Interface(interfaceName, from command in feature.Requirements
                     .SelectMany(req => req.Commands)
                     let cmd = glCommands.Single(c => c.ReturnType.Name == command)
                     select
-                        new Method(command.Substring(2), Convert(cmd.ReturnType),
-                            cmd.Arguments.Select(ConvertToMethodParameter)));
+                        new Method(command.Substring(2), Convert(cmd.ReturnType, validGroups),
+                            cmd.Arguments.Select(m => ConvertToMethodParameter(m, validGroups))));
                 interfaces.Add(interf);
             }
 
-            return new Document(new Namespace("ModGL.NativeGL", namespaces, Enumerable.Empty<Constants>(), groups, interfaces));
-        }
+            var glNamespace = namespaces.Where(ns => ns.Name == "GL").ToArray();
+            var everythingElse = namespaces.Where(ns => ns.Name != "GL").ToArray();
 
-        private static MethodParameter ConvertToMethodParameter(Parser.DataType dataType)
+            return new Document(new Namespace("ModGL.NativeGL", everythingElse, glNamespace.SelectMany(x => x.Constants), groups, new [] { gldebugprocDelegate }, interfaces.Concat(glNamespace.SelectMany(x => x.Interfaces))));
+        }
+        private static readonly Regex InterfaceRenameRegex = new Regex("GL_VERSION_(?<Major>[0-9]+)_(?<Minor>[0-9]+)", RegexOptions.Compiled);
+        private static MethodParameter ConvertToMethodParameter(Parser.DataType dataType, HashSet<string> validGroups)
         {
-            return new MethodParameter(dataType.Name, dataType.IsConst && dataType.PointerIndirection > 0 ? TypeFlags.In : dataType.PointerIndirection > 0 ? TypeFlags.Out : TypeFlags.None, Convert(dataType));
+            TypeFlags flags;
+            var dt = Convert(dataType, validGroups);
+
+            if (dt is SystemDataType && ((SystemDataType)dt).Type == typeof(IntPtr))
+                flags = TypeFlags.None;
+            else if (dataType.IsConst)
+            {
+                if (dataType.PointerIndirection > 0)
+                    flags = TypeFlags.In;
+                else
+                    flags = TypeFlags.None;
+            }
+            else
+            {
+                if (dataType.PointerIndirection > 0)
+                    flags = TypeFlags.Out;
+                else
+                    flags = TypeFlags.None;
+            }
+
+            return new MethodParameter(dataType.Name, flags, dt);
         }
 
-        private static DataType Convert(Parser.DataType dataType)
+        private static readonly Dictionary<string, string> enumTranslation = new Dictionary<string, string>
+        {
+            {"PixelInternalFormat", "InternalFormat" } // PixelInternalFormat has a comment that says "use InternalFormat instead"
+        }; 
+
+        private static DataType Convert(Parser.DataType dataType, HashSet<string> validGroups)
         {
             if (dataType.Type == "GLenum")
-                return dataType.Group != null ? (DataType)new CustomDataType(dataType.Group) : new SystemDataType(typeof(uint));
+            {
+
+                string group = dataType.Group != null && enumTranslation.ContainsKey(dataType.Group)
+                    ? enumTranslation[dataType.Group]
+                    : (validGroups.Contains(dataType.Group) ? dataType.Group : null);
+
+                return group != null
+                    ? (DataType) new CustomDataType(group)
+                    : new SystemDataType(typeof (uint));
+            }
 
             if(PreserveTypes.Contains(dataType.Type))
                 return new CustomDataType(dataType.Type);
@@ -128,9 +189,21 @@ namespace SpecBuilder.CodeGen
 
                 return new SystemDataType(typeof(IntPtr).MakeArrayType(dataType.PointerIndirection - 1));
             }
-            var type = TypeLookup[dataType.Type];
-            if (dataType.PointerIndirection > 0)
-                type = type.MakeArrayType(dataType.PointerIndirection);
+            Type type;
+            if (dataType.Type == "GLchar" && dataType.PointerIndirection > 0)
+            {
+
+                if (dataType.PointerIndirection > 1)
+                    type = typeof (string).MakeArrayType(dataType.PointerIndirection - 1);
+                else
+                    type = typeof (string);
+            }
+            else
+            {
+                type = TypeLookup[dataType.Type];
+                if (dataType.PointerIndirection > 0)
+                    type = type.MakeArrayType(dataType.PointerIndirection);
+            }
             return new SystemDataType(type);
         }
     }

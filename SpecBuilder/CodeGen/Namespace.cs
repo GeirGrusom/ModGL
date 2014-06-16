@@ -19,13 +19,24 @@ namespace SpecBuilder.CodeGen
 
         private readonly IEnumerable<Interface> _interfaces;
 
+        private readonly IEnumerable<CodeDelegate> _delegates; 
+
+        public string Name { get { return _name; } }
+
+        public IEnumerable<Namespace> Namespaces { get { return _namespaces; } }
+        public IEnumerable<Constants> Constants { get { return _constants; } }
+        public IEnumerable<Enumeration> Enumerations { get { return _enums; } }
+        public IEnumerable<CodeDelegate> Delegates { get { return _delegates; } } 
+        public IEnumerable<Interface> Interfaces { get { return _interfaces; } } 
+
         public Namespace(string name, IEnumerable<Namespace> namespaces, IEnumerable<Constants> constants,
-            IEnumerable<Enumeration> enums, IEnumerable<Interface> interfaces)
+            IEnumerable<Enumeration> enums, IEnumerable<CodeDelegate> delegates, IEnumerable<Interface> interfaces)
         {
             _name = name;
             _namespaces = namespaces;
             _constants = constants;
             _enums = enums;
+            _delegates = delegates;
             _interfaces = interfaces;
         }
 
@@ -42,6 +53,8 @@ namespace SpecBuilder.CodeGen
                 co.Write(writer, tabs + 1);
             foreach(var en in _enums)
                 en.Write(writer, tabs + 1);
+            foreach (var dl in _delegates) 
+                dl.Write(writer, tabs + 1);
             foreach(var it in _interfaces)
                 it.Write(writer, tabs + 1);
             writer.WriteLine(indent + "}");

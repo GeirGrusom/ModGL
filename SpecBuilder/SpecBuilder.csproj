@@ -44,6 +44,7 @@
     <Compile Include="CodeGen\Constants.cs" />
     <Compile Include="CodeGen\DataType.cs" />
     <Compile Include="CodeGen\CustomDataType.cs" />
+    <Compile Include="CodeGen\Delegates.cs" />
     <Compile Include="CodeGen\Document.cs" />
     <Compile Include="CodeGen\DocumentGenerator.cs" />
     <Compile Include="CodeGen\Enumeration.cs" />
