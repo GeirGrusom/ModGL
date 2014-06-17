@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using SpecBuilder.Parser;
 
 namespace SpecBuilder.CodeGen
@@ -37,7 +34,7 @@ namespace SpecBuilder.CodeGen
             {"GLsync", typeof(IntPtr)},
         }; 
 
-        private static HashSet<string> PreserveTypes = new HashSet<string>
+        private static readonly HashSet<string> PreserveTypes = new HashSet<string>
         {
             "GLDEBUGPROC"
         };
@@ -249,9 +246,8 @@ namespace SpecBuilder.CodeGen
                 return new SystemDataType(typeof(IntPtr).MakeArrayType(dataType.PointerIndirection - 1));
             }
             Type type;
-            if (dataType.Type == "GLchar" && dataType.PointerIndirection > 0)
+            if ((dataType.Type == "GLchar" || dataType.Type == "GLubyte") && dataType.PointerIndirection > 0)
             {
-
                 if (dataType.PointerIndirection > 1)
                     type = typeof (string).MakeArrayType(dataType.PointerIndirection - 1);
                 else

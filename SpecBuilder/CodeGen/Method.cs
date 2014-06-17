@@ -20,6 +20,11 @@ namespace SpecBuilder.CodeGen
         public void Write(StreamWriter writer, int tabs)
         {
             var indent = NameFormatter.Indent(tabs);
+
+            var ret = _returnType as SystemDataType;
+            if(ret != null && ret.Type == typeof(string))
+                writer.WriteLine(indent + "[return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(ConstStringReturnMarshaller))]");
+
             writer.Write(indent);
             _returnType.Write(writer, tabs);
             writer.Write(" {0}(", _name);
