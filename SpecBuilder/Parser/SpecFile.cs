@@ -100,10 +100,16 @@ namespace SpecBuilder.Parser
                 where feature.Name == "feature"
                 let reqs = (from requirement in feature.Nodes().OfType<XElement>()
                     where requirement.Name == "require" select requirement)
+                let rem = (from remove in feature.Nodes().OfType<XElement>()
+                    where remove.Name == "remove" select remove)
                 select
                     new Feature(feature.TryGetAttributeValue("api"), feature.TryGetAttributeValue("name"),
                             feature.TryGetAttributeValue("number"),
-                            reqs.Select(r => new Requirements(
+                            reqs.Select(r => new FeatureSet(
+                                r.TryGetAttributeValue("profile"),
+                                r.Nodes().OfType<XElement>().Where(n => n.Name == "enum").Select(n => n.TryGetAttributeValue("name")),
+                                r.Nodes().OfType<XElement>().Where(n => n.Name == "command").Select(n => n.TryGetAttributeValue("name")))),
+                            rem.Select(r => new FeatureSet(
                                 r.TryGetAttributeValue("profile"),
                                 r.Nodes().OfType<XElement>().Where(n => n.Name == "enum").Select(n => n.TryGetAttributeValue("name")),
                                 r.Nodes().OfType<XElement>().Where(n => n.Name == "command").Select(n => n.TryGetAttributeValue("name")))));
@@ -116,7 +122,7 @@ namespace SpecBuilder.Parser
                 where extension.Name == "extension"
                 let requirements = (from requirement in extension.Nodes().OfType<XElement>()
                     where requirement.Name == "requirement"
-                    select new Requirements(requirement.TryGetAttributeValue("profile"),
+                    select new FeatureSet(requirement.TryGetAttributeValue("profile"),
                         requirement.Nodes()
                             .OfType<XElement>()
                             .Where(n => n.Name == "enum")

@@ -41,8 +41,15 @@ namespace SpecBuilder.CodeGen
             "GLDEBUGPROC"
         };
 
-        public static Document Create(Parser.SpecFile spec)
+        public static Document Create(SpecFile spec)
         {
+
+            var validEnums = new HashSet<string>(spec.Features.SelectMany(en => en.GetEnums("core")));
+            var validCommands = new HashSet<string>(spec.Features.SelectMany(en => en.GetCommands("core")));
+
+            validEnums.UnionWith(spec.Extensions.SelectMany(ex => ex.FeatureSet.SelectMany(f => f.Enumerations)));
+            validCommands.UnionWith(spec.Extensions.SelectMany(ex => ex.FeatureSet.SelectMany(f => f.Commands)));
+
             var namespaces = new List<Namespace>();
 
             var enumNamespaceGroups = spec.Enumerations.GroupBy(en => en.Namespace);
@@ -53,7 +60,7 @@ namespace SpecBuilder.CodeGen
                 var emptyEnums = group.Where(g =>  g.Name == null).SelectMany(g => g.Fields);
                 var nonEmptyGroups = group.Where(g => g.Name != null);
                 var constant = new Constants("Constants",
-                    emptyEnums.Where(e => e.Api == null || e.Api.Equals("gl", StringComparison.OrdinalIgnoreCase)).OrderBy(e => e.Name).Select(e =>
+                    emptyEnums.Where(e => e.Api == null || e.Api.Equals("gl", StringComparison.OrdinalIgnoreCase)).OrderBy(e => e.Name).Where(e => validEnums.Contains(e.Name)).Select(e =>
                     {
                         if ((e.Value >> 32) != 0)
                             return new KeyValuePair<string, object>(e.Name, e.Value);
@@ -62,37 +69,48 @@ namespace SpecBuilder.CodeGen
 
                 foreach (var en in nonEmptyGroups)
                 {
-                    var fields = en.Fields.Where(e => e.Api == null || e.Api.Equals("gl", StringComparison.OrdinalIgnoreCase)).ToArray();
+                    var fields = en.Fields.Where(e => validEnums.Contains(e.Name) &&  (e.Api == null || e.Api.Equals("gl", StringComparison.OrdinalIgnoreCase))).ToArray();
+                    Enumeration enumeration;
                     if (fields.Any(f => (f.Value >> 32) != 0))
                         // Enum only fits in 64-bit
-                        enums.Add(new Enumeration<ulong>(en.Name, en.Namespace, en.Type == EnumerationType.Bitmask,
+                        enumeration = new Enumeration<ulong>(en.Name, en.Namespace, en.Type == EnumerationType.Bitmask,
                             fields.Select(
-                                f => new KeyValuePair<string, ulong>(NameFormatter.FormatEnumName(f.Name), f.Value))));
+                                f => new KeyValuePair<string, ulong>(NameFormatter.FormatEnumName(f.Name), f.Value)));
                     else
-                        enums.Add(new Enumeration<uint>(en.Name, en.Namespace, en.Type == EnumerationType.Bitmask,
+                        enumeration = new Enumeration<uint>(en.Name, en.Namespace, en.Type == EnumerationType.Bitmask,
                             fields.Select(
                                 f =>
                                     new KeyValuePair<string, uint>(NameFormatter.FormatEnumName(f.Name),
-                                        unchecked ((uint) f.Value)))));
+                                        unchecked ((uint) f.Value))));
+                    if (enumeration.IsEmpty())
+                        continue;
+                    enums.Add(enumeration);
                 }
                 namespaces.Add(new Namespace(group.Key, Enumerable.Empty<Namespace>(), new [] {constant}, enums, Enumerable.Empty<CodeDelegate>(), Enumerable.Empty<Interface>()));
             }
 
-            List<Enumeration> groups = new List<Enumeration>();
+            var groups = new List<Enumeration>();
             var allEnums =
                 spec.Enumerations//.Where(s => s.Api == null || string.Equals(s.Api, "GL", StringComparison.OrdinalIgnoreCase))
+                    
                     .SelectMany(x => x.Fields)
-                    .Where(s => s.Api == null || string.Equals(s.Api, "gl", StringComparison.OrdinalIgnoreCase))
+                    .Where(s => validEnums.Contains(s.Name) && (s.Api == null || string.Equals(s.Api, "gl", StringComparison.OrdinalIgnoreCase)))
                     .ToDictionary(x => x.Name, x => x.Value);
             foreach (var group in spec.Groups)
             {
-                groups.Add(new Enumeration<uint>(group.Key, "Enumerations", false,
-                    group.Value.Where(allEnums.ContainsKey).Select(f => new KeyValuePair<string, uint>(NameFormatter.FormatEnumName(f), checked((uint)allEnums[f])))));
+                var enumeration = new Enumeration<uint>(group.Key, "Enumerations", false,
+                    group.Value.Where(allEnums.ContainsKey)
+                        .Select(
+                            f =>
+                                new KeyValuePair<string, uint>(NameFormatter.FormatEnumName(f),
+                                    checked((uint) allEnums[f]))));
+                if (enumeration.IsEmpty())
+                    continue;
+                groups.Add(enumeration);
             }
-            var glCommands = spec.Commands["GL"];
-            List<Interface> interfaces = new List<Interface>();
-
-            HashSet<string> validGroups = new HashSet<string>(groups.Select(g => g.Name));
+            var glCommands = spec.Commands["GL"].Where(c => validCommands.Contains(c.ReturnType.Name));
+            
+            var validGroups = new HashSet<string>(groups.Select(g => g.Name));
 
             /* (GLenum source,GLenum type,GLuint id,GLenum severity,GLsizei length,const GLchar *message,const void *userParam) */
             var gldebugprocDelegate = new CodeDelegate("GLDEBUGPROC", new CustomDataType("void"),
@@ -104,33 +122,59 @@ namespace SpecBuilder.CodeGen
                 new MethodParameter("message", TypeFlags.Out, new SystemDataType(typeof(string))),
                 new MethodParameter("userParam", TypeFlags.None, new SystemDataType(typeof(IntPtr))));
 
+            var interfaces = GetInterfaces(spec, glCommands, validGroups);
+
+            var glNamespace = namespaces.Where(ns => ns.Name == "GL").ToArray();
+            var everythingElse = namespaces.Where(ns => ns.Name != "GL").ToArray();
+
+            // There is currently just one namespace. 
+            return new Document(new Namespace("ModGL.NativeGL", /*everythingElse */ Enumerable.Empty<Namespace>(), glNamespace.SelectMany(x => x.Constants), groups, new [] { gldebugprocDelegate }, interfaces.Concat(glNamespace.SelectMany(x => x.Interfaces))));
+        }
+
+        private static IEnumerable<Interface> GetInterfaces(SpecFile spec, IEnumerable<Command> glCommands, HashSet<string> validGroups)
+        {
+            var versionInterfaces = new SortedList<Version, string>();
+            var interfaces = new List<Interface>();
             foreach (var feature in spec.Features.Where(f => f.Api.Length == 0 || f.Api.Contains("gl")))
             {
-                string interfaceName;
-                var renameMatch = InterfaceRenameRegex.Match(feature.Name);
-                if (renameMatch.Success)
-                {
-                    interfaceName = string.Format("IOpenGL{0}{1}", renameMatch.Groups["Major"].Value,
-                        renameMatch.Groups["Minor"].Value);
-                }
-                else
-                    interfaceName = "I" + NameFormatter.FormatEnumName(feature.Name);
+                IEnumerable<string> previousVersion;
+                string interfaceName = GetInterfaceName(feature, versionInterfaces, out previousVersion);
 
-                
                 var interf = new Interface(interfaceName, from command in feature.Requirements
                     .SelectMany(req => req.Commands)
                     let cmd = glCommands.Single(c => c.ReturnType.Name == command)
                     select
                         new Method(command.Substring(2), Convert(cmd.ReturnType, validGroups),
-                            cmd.Arguments.Select(m => ConvertToMethodParameter(m, validGroups))));
-                interfaces.Add(interf);
+                            cmd.Arguments.Select(m => ConvertToMethodParameter(m, validGroups))), previousVersion);
+                if(interf.Methods.Any())
+                    interfaces.Add(interf);
             }
-
-            var glNamespace = namespaces.Where(ns => ns.Name == "GL").ToArray();
-            var everythingElse = namespaces.Where(ns => ns.Name != "GL").ToArray();
-
-            return new Document(new Namespace("ModGL.NativeGL", everythingElse, glNamespace.SelectMany(x => x.Constants), groups, new [] { gldebugprocDelegate }, interfaces.Concat(glNamespace.SelectMany(x => x.Interfaces))));
+            return interfaces;
         }
+
+        private static string GetInterfaceName(Feature feature, SortedList<Version, string> versionInterfaces, out IEnumerable<string> previousVersion)
+        {
+            string interfaceName;
+            var renameMatch = InterfaceRenameRegex.Match(feature.Name);
+            if (renameMatch.Success)
+            {
+                int major = int.Parse(renameMatch.Groups["Major"].Value);
+                int minor = int.Parse(renameMatch.Groups["Minor"].Value);
+                interfaceName = string.Format("IOpenGL{0}{1}", major, minor);
+                if (versionInterfaces.Any())
+                    previousVersion = new[] {versionInterfaces.Last().Value};
+                else
+                    previousVersion = Enumerable.Empty<string>();
+                versionInterfaces.Add(new Version(major, minor), interfaceName);
+            }
+            else
+            {
+                interfaceName = "I" + NameFormatter.FormatEnumName(feature.Name);
+                previousVersion = Enumerable.Empty<string>();
+            }
+            return interfaceName;
+        }
+
         private static readonly Regex InterfaceRenameRegex = new Regex("GL_VERSION_(?<Major>[0-9]+)_(?<Minor>[0-9]+)", RegexOptions.Compiled);
         private static MethodParameter ConvertToMethodParameter(Parser.DataType dataType, HashSet<string> validGroups)
         {

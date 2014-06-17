@@ -11,6 +11,8 @@ namespace SpecBuilder.CodeGen
         private readonly string _name;
         private readonly string _namespace;
 
+        public abstract bool IsEmpty();
+
         protected Enumeration(string name, string @namespace, bool isFlags)
         {
             _name = name;
@@ -38,6 +40,10 @@ namespace SpecBuilder.CodeGen
     {
         private readonly IList<Field> _fields;
 
+        public override bool IsEmpty()
+        {
+            return !_fields.Any();
+        }
 
         public IDictionary<string, TBaseType> Values
         {

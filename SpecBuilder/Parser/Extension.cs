@@ -9,17 +9,17 @@ namespace SpecBuilder.Parser
     {
         private readonly string _name;
         private readonly string[] _supported;
-        private readonly Requirements[] _requirements;
+        private readonly FeatureSet[] _featureSet;
 
         public string Name { get { return _name; } }
         public IEnumerable<string> Supported { get { return _supported; } }
-        public IEnumerable<Requirements> Requirements { get { return _requirements; } }
+        public IEnumerable<FeatureSet> FeatureSet { get { return _featureSet; } }
 
-        public Extension(string name, IEnumerable<string> supported, IEnumerable<Requirements> requirements)
+        public Extension(string name, IEnumerable<string> supported, IEnumerable<FeatureSet> requirements)
         {
             _name = name;
             _supported = supported.ToArray();
-            _requirements = requirements.ToArray();
+            _featureSet = requirements.ToArray();
         }
     }
 }
