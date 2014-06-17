@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -40,6 +41,20 @@ namespace SpecBuilder.CodeGen
         {
             "GLDEBUGPROC"
         };
+
+        internal class CommandComparer : IEqualityComparer<Command>
+        {
+            public static readonly CommandComparer Comparer = new CommandComparer(); 
+            public bool Equals(Command x, Command y)
+            {
+                return x.ReturnType.Name == y.ReturnType.Name;
+            }
+
+            public int GetHashCode(Command obj)
+            {
+                return obj.ReturnType.Name.GetHashCode();
+            }
+        }
 
         public static Document Create(SpecFile spec)
         {
@@ -141,7 +156,7 @@ namespace SpecBuilder.CodeGen
                 string interfaceName = GetInterfaceName(feature, versionInterfaces, out previousVersion);
 
                 var interf = new Interface(interfaceName, from command in feature.Requirements
-                    .SelectMany(req => req.Commands)
+                    .SelectMany(req => req.Commands).Distinct()
                     let cmd = glCommands.Single(c => c.ReturnType.Name == command)
                     select
                         new Method(command.Substring(2), Convert(cmd.ReturnType, validGroups),
