@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -29,6 +30,11 @@ namespace SpecBuilder.CodeGen
             _implements = implements.ToArray();
         }
 
+        private static readonly HashSet<string> dontOverloadMethods = new HashSet<string>
+        {
+            "CreateShaderProgramv"
+        }; 
+
         public void Write(StreamWriter writer, int tabs)
         {
             var indent = NameFormatter.Indent(tabs);
@@ -42,8 +48,48 @@ namespace SpecBuilder.CodeGen
             foreach (var method in _methods)
             {
                 method.Write(writer, tabs + 1);
+                // Check if we can create overloads.
+                if (dontOverloadMethods.Contains(method.Name))
+                    continue;
+                
+                var last = method.Parameters.LastOrDefault();
+                if (last == null || method.Parameters.Except(new[] {last}).Any(p => p.Flags == TypeFlags.In) ||
+                    last.Flags != TypeFlags.In) 
+                    continue;
+
+                // Create a T* and IntPtr overloads.
+
+                // We only support system datatypes, since there is no real need for CustomDataType suport.
+                var type = last.DataType as SystemDataType;
+
+                if (type == null)
+                    continue;
+
+                if (type.Type == typeof (IntPtr))
+                {
+                    // void* overload for IntPtr methods.
+                    CreateOverload(method, new SystemDataType(typeof(void*))).Write(writer, tabs + 1);
+                    continue;
+                }
+
+                if (!type.Type.IsArray || type.Type.GetArrayRank() > 1)
+                    continue;
+
+                CreateOverload(method, new SystemDataType(typeof (IntPtr))).Write(writer, tabs + 1); // IntPtr overload
+                CreateOverload(method, new SystemDataType(type.Type.GetElementType().MakePointerType())).Write(writer, tabs + 1); // T* overload
             }
             writer.WriteLine(indent + "}");
+        }
+
+        private static Method CreateOverload(Method method, SystemDataType overloadType, bool removeFlags = true)
+        {
+            var last = method.Parameters.Last();
+
+            var lastParameter = new MethodParameter(last.Name, removeFlags ? TypeFlags.None : last.Flags, overloadType);
+
+            return new Method(method.Name, method.ReturnType,
+                method.Parameters.Except(new[] { last }).Concat(new[] { lastParameter }));
+            
         }
     }
 }

@@ -25,7 +25,6 @@ namespace SpecBuilder.CodeGen
             {"GLuint", typeof(uint)},
             {"GLint64", typeof(long)},
             {"GLuint64", typeof(ulong)},
-            {"GLboolean", typeof(byte)},
             {"GLsizei", typeof(int)},
             {"GLfloat", typeof(float)},
             {"GLclampf", typeof(float)},
@@ -36,7 +35,8 @@ namespace SpecBuilder.CodeGen
 
         private static readonly HashSet<string> PreserveTypes = new HashSet<string>
         {
-            "GLDEBUGPROC"
+            "GLDEBUGPROC",
+            "GLboolean"
         };
 
         internal class CommandComparer : IEqualityComparer<Command>
@@ -123,6 +123,7 @@ namespace SpecBuilder.CodeGen
             var glCommands = spec.Commands["GL"].Where(c => validCommands.Contains(c.ReturnType.Name));
             
             var validGroups = new HashSet<string>(groups.Select(g => g.Name));
+            validGroups.Add("GLboolean");
 
             /* (GLenum source,GLenum type,GLuint id,GLenum severity,GLsizei length,const GLchar *message,const void *userParam) */
             var gldebugprocDelegate = new CodeDelegate("GLDEBUGPROC", new CustomDataType("void"),
@@ -229,7 +230,7 @@ namespace SpecBuilder.CodeGen
 
                 return group != null
                     ? (DataType) new CustomDataType(group)
-                    : new SystemDataType(typeof (uint));
+                    : new SystemDataType( dataType.PointerIndirection > 0 ?  typeof (uint).MakeArrayType(dataType.PointerIndirection) : typeof(uint));
             }
 
             if(PreserveTypes.Contains(dataType.Type))
@@ -238,7 +239,7 @@ namespace SpecBuilder.CodeGen
             if (dataType.Type == "void")
             {
                 if(dataType.PointerIndirection == 0)
-                    return new CustomDataType("void");
+                    return new SystemDataType(typeof(void));
 
                 if (dataType.PointerIndirection == 1)
                     return new SystemDataType(typeof (IntPtr));

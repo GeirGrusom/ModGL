@@ -10,6 +10,12 @@ namespace SpecBuilder.CodeGen
         private readonly DataType _returnType;
         private readonly MethodParameter[] _parameters;
 
+        public string Name { get { return _name; } }
+
+        public DataType ReturnType { get { return _returnType; } }
+
+        public IEnumerable<MethodParameter> Parameters { get { return _parameters; } } 
+
         public Method(string name, DataType returnType, IEnumerable<MethodParameter> parameters)
         {
             _name = name;
@@ -25,7 +31,11 @@ namespace SpecBuilder.CodeGen
             if(ret != null && ret.Type == typeof(string))
                 writer.WriteLine(indent + "[return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(ConstStringReturnMarshaller))]");
 
+
             writer.Write(indent);
+
+            if(_parameters.Select(p => p.DataType).OfType<SystemDataType>().Any(p => p.Type.IsPointer))
+                writer.Write("unsafe ");
             _returnType.Write(writer, tabs);
             writer.Write(" {0}(", _name);
             for (int i = 0; i < _parameters.Length; i++)

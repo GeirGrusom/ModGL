@@ -18,8 +18,9 @@ namespace SpecBuilder.CodeGen
             var typeName = TypeNameHelper.GetFriendlyBaseTypeName(Type);
             writer.Write(typeName);
             if (Type.IsArray)
-
                 writer.Write("[" + new string(',', Type.GetArrayRank() - 1) + "]");
+            if(Type.IsPointer)
+                writer.Write("*");
         }
     }
 }

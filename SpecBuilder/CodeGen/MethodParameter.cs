@@ -38,7 +38,13 @@ namespace SpecBuilder.CodeGen
             else if ((_flags & TypeFlags.In) == TypeFlags.In)
                 writer.Write("[In]");
             else if ((_flags & TypeFlags.Out) == TypeFlags.Out)
-                writer.Write("[Out]");
+            {
+                var type = _dataType as SystemDataType;
+                if(type != null && type.Type == typeof(string))
+                    writer.Write("ref ");
+                else
+                    writer.Write("[Out]");
+            }
 
             if ((_flags & TypeFlags.Ref) == TypeFlags.Ref)
                 writer.Write("ref ");

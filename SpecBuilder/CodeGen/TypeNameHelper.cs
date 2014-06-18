@@ -16,7 +16,8 @@ namespace SpecBuilder.CodeGen
             {typeof(long), "long"},
             {typeof(ulong), "ulong"},
             {typeof(float), "float"},
-            {typeof(double), "double"}
+            {typeof(double), "double"},
+            {typeof(void), "void"}
         };
 
         private static string GetFriendlyTypeName(Type type)
@@ -33,7 +34,7 @@ namespace SpecBuilder.CodeGen
 
         public static string GetFriendlyBaseTypeName(Type type)
         {
-            if (type.IsArray)
+            if (type.IsArray || type.IsPointer)
                 return GetFriendlyTypeName(type.GetElementType());
             return GetFriendlyTypeName(type);
         }
