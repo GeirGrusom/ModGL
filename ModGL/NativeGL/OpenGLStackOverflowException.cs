@@ -2,25 +2,26 @@
 
 namespace ModGL.NativeGL
 {
+    [Obsolete]
     public class OpenGLStackOverflowException : OpenGLException
     {
         public OpenGLStackOverflowException(string message, Exception innerException)
-            : base(message, ErrorCode.StackOverflow, innerException)
+            : base(message, (ErrorCode)0x0503, innerException)
         {
         }
 
         public OpenGLStackOverflowException(string message)
-            : base(message, ErrorCode.StackOverflow)
+            : base(message, (ErrorCode)0x0503)
         {
         }
 
         public OpenGLStackOverflowException()
-            : base(ErrorCode.StackOverflow)
+            : base((ErrorCode)0x0503)
         {
         }
 
         public OpenGLStackOverflowException(Exception innerException)
-            : base(ErrorCode.StackOverflow, innerException)
+            : base((ErrorCode)0x0503, innerException)
         {
         }
     }

@@ -59,8 +59,15 @@ namespace SpecBuilder.CodeGen
             var validEnums = new HashSet<string>(spec.Features.SelectMany(en => en.GetEnums("core")));
             var validCommands = new HashSet<string>(spec.Features.SelectMany(en => en.GetCommands("core")));
 
+            var removeCommands =
+                spec.Features.SelectMany(feature => feature.Remove).SelectMany(x => x.Commands);
+            var removeEnums = spec.Features.SelectMany(feature => feature.Remove).SelectMany(x => x.Enumerations);
+
             validEnums.UnionWith(spec.Extensions.SelectMany(ex => ex.FeatureSet.SelectMany(f => f.Enumerations)));
             validCommands.UnionWith(spec.Extensions.SelectMany(ex => ex.FeatureSet.SelectMany(f => f.Commands)));
+
+            validCommands.ExceptWith(removeCommands);
+            validEnums.ExceptWith(removeEnums);
 
             var namespaces = new List<Namespace>();
 
@@ -155,7 +162,8 @@ namespace SpecBuilder.CodeGen
 
                 var interf = new Interface(interfaceName, from command in feature.Requirements
                     .SelectMany(req => req.Commands).Distinct()
-                    let cmd = glCommands.Single(c => c.ReturnType.Name == command)
+                    let cmd = glCommands.SingleOrDefault(c => c.ReturnType.Name == command)
+                    where cmd != null
                     select
                         new Method(command.Substring(2), Convert(cmd.ReturnType, validGroups),
                             cmd.Arguments.Select(m => ConvertToMethodParameter(m, validGroups))), previousVersion);

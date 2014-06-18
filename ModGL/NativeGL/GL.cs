@@ -11,20 +11,6 @@ namespace ModGL.NativeGL
 {
     public static class Constants
     {
-        public const uint _2Bytes = 0x1407;
-        public const uint _2d = 0x600;
-        public const uint _3Bytes = 0x1408;
-        public const uint _3d = 0x601;
-        public const uint _3dColor = 0x602;
-        public const uint _3dColorTexture = 0x603;
-        public const uint _4Bytes = 0x1409;
-        public const uint _4dColorTexture = 0x604;
-        public const uint Accum = 0x100;
-        public const uint AccumAlphaBits = 0xd5b;
-        public const uint AccumBlueBits = 0xd5a;
-        public const uint AccumClearValue = 0xb80;
-        public const uint AccumGreenBits = 0xd59;
-        public const uint AccumRedBits = 0xd58;
         public const uint ActiveAtomicCounterBuffers = 0x92d9;
         public const uint ActiveAttributeMaxLength = 0x8b8a;
         public const uint ActiveAttributes = 0x8b89;
@@ -41,25 +27,10 @@ namespace ModGL.NativeGL
         public const uint ActiveUniformMaxLength = 0x8b87;
         public const uint ActiveUniforms = 0x8b86;
         public const uint ActiveVariables = 0x9305;
-        public const uint Add = 0x104;
         public const uint AliasedLineWidthRange = 0x846e;
-        public const uint AliasedPointSizeRange = 0x846d;
         public const uint Alpha = 0x1906;
-        public const uint AlphaBias = 0xd1d;
-        public const uint AlphaBits = 0xd55;
-        public const uint AlphaInteger = 0x8d97;
-        public const uint AlphaScale = 0xd1c;
-        public const uint AlphaTest = 0xbc0;
-        public const uint AlphaTestFunc = 0xbc1;
-        public const uint AlphaTestRef = 0xbc2;
-        public const uint Alpha12 = 0x803d;
-        public const uint Alpha16 = 0x803e;
-        public const uint Alpha4 = 0x803b;
-        public const uint Alpha8 = 0x803c;
         public const uint AlreadySignaled = 0x911a;
         public const uint Always = 0x207;
-        public const uint Ambient = 0x1200;
-        public const uint AmbientAndDiffuse = 0x1602;
         public const uint And = 0x1501;
         public const uint AndInverted = 0x1504;
         public const uint AndReverse = 0x1502;
@@ -84,14 +55,7 @@ namespace ModGL.NativeGL
         public const uint AtomicCounterBufferSize = 0x92c3;
         public const uint AtomicCounterBufferStart = 0x92c2;
         public const uint AttachedShaders = 0x8b85;
-        public const uint AttribStackDepth = 0xbb0;
         public const uint AutoGenerateMipmap = 0x8295;
-        public const uint AutoNormal = 0xd80;
-        public const uint AuxBuffers = 0xc00;
-        public const uint Aux0 = 0x409;
-        public const uint Aux1 = 0x40a;
-        public const uint Aux2 = 0x40b;
-        public const uint Aux3 = 0x40c;
         public const uint Back = 0x405;
         public const uint BackLeft = 0x402;
         public const uint BackRight = 0x403;
@@ -99,8 +63,6 @@ namespace ModGL.NativeGL
         public const uint BgrInteger = 0x8d9a;
         public const uint Bgra = 0x80e1;
         public const uint BgraInteger = 0x8d9b;
-        public const uint Bitmap = 0x1a00;
-        public const uint BitmapToken = 0x704;
         public const uint Blend = 0xbe2;
         public const uint BlendColor = 0x8005;
         public const uint BlendDst = 0xbe0;
@@ -114,10 +76,7 @@ namespace ModGL.NativeGL
         public const uint BlendSrcRgb = 0x80c9;
         public const uint BlockIndex = 0x92fd;
         public const uint Blue = 0x1905;
-        public const uint BlueBias = 0xd1b;
-        public const uint BlueBits = 0xd54;
         public const uint BlueInteger = 0x8d96;
-        public const uint BlueScale = 0xd1a;
         public const uint Buffer = 0x82e0;
         public const uint BufferAccess = 0x88bb;
         public const uint BufferAccessFlags = 0x911f;
@@ -133,23 +92,14 @@ namespace ModGL.NativeGL
         public const uint BufferUsage = 0x8765;
         public const uint BufferVariable = 0x92e5;
         public const uint Byte = 0x1400;
-        public const uint C3fV3f = 0x2a24;
-        public const uint C4fN3fV3f = 0x2a26;
-        public const uint C4ubV2f = 0x2a22;
-        public const uint C4ubV3f = 0x2a23;
         public const uint CaveatSupport = 0x82b8;
         public const uint Ccw = 0x901;
-        public const uint Clamp = 0x2900;
-        public const uint ClampFragmentColor = 0x891b;
         public const uint ClampReadColor = 0x891c;
         public const uint ClampToBorder = 0x812d;
         public const uint ClampToEdge = 0x812f;
-        public const uint ClampVertexColor = 0x891a;
         public const uint Clear = 0x1500;
         public const uint ClearBuffer = 0x82b4;
         public const uint ClearTexture = 0x9365;
-        public const uint ClientActiveTexture = 0x84e1;
-        public const uint ClientAttribStackDepth = 0xbb1;
         public const uint ClipDistance0 = 0x3000;
         public const uint ClipDistance1 = 0x3001;
         public const uint ClipDistance2 = 0x3002;
@@ -158,20 +108,7 @@ namespace ModGL.NativeGL
         public const uint ClipDistance5 = 0x3005;
         public const uint ClipDistance6 = 0x3006;
         public const uint ClipDistance7 = 0x3007;
-        public const uint ClipPlane0 = 0x3000;
-        public const uint ClipPlane1 = 0x3001;
-        public const uint ClipPlane2 = 0x3002;
-        public const uint ClipPlane3 = 0x3003;
-        public const uint ClipPlane4 = 0x3004;
-        public const uint ClipPlane5 = 0x3005;
-        public const uint Coeff = 0xa00;
         public const uint Color = 0x1800;
-        public const uint ColorArray = 0x8076;
-        public const uint ColorArrayBufferBinding = 0x8898;
-        public const uint ColorArrayPointer = 0x8090;
-        public const uint ColorArraySize = 0x8081;
-        public const uint ColorArrayStride = 0x8083;
-        public const uint ColorArrayType = 0x8082;
         public const uint ColorAttachment0 = 0x8ce0;
         public const uint ColorAttachment1 = 0x8ce1;
         public const uint ColorAttachment10 = 0x8cea;
@@ -191,25 +128,12 @@ namespace ModGL.NativeGL
         public const uint ColorClearValue = 0xc22;
         public const uint ColorComponents = 0x8283;
         public const uint ColorEncoding = 0x8296;
-        public const uint ColorIndex = 0x1900;
-        public const uint ColorIndexes = 0x1603;
         public const uint ColorLogicOp = 0xbf2;
-        public const uint ColorMaterial = 0xb57;
-        public const uint ColorMaterialFace = 0xb55;
-        public const uint ColorMaterialParameter = 0xb56;
         public const uint ColorRenderable = 0x8286;
-        public const uint ColorSum = 0x8458;
         public const uint ColorWritemask = 0xc23;
-        public const uint CompareRToTexture = 0x884e;
         public const uint CompareRefToTexture = 0x884e;
         public const uint CompatibleSubroutines = 0x8e4b;
-        public const uint Compile = 0x1300;
-        public const uint CompileAndExecute = 0x1301;
         public const uint CompileStatus = 0x8b81;
-        public const uint CompressedAlpha = 0x84e9;
-        public const uint CompressedIntensity = 0x84ec;
-        public const uint CompressedLuminance = 0x84ea;
-        public const uint CompressedLuminanceAlpha = 0x84eb;
         public const uint CompressedR11Eac = 0x9270;
         public const uint CompressedRed = 0x8225;
         public const uint CompressedRedRgtc1 = 0x8dbb;
@@ -228,8 +152,6 @@ namespace ModGL.NativeGL
         public const uint CompressedSignedRedRgtc1 = 0x8dbc;
         public const uint CompressedSignedRgRgtc2 = 0x8dbe;
         public const uint CompressedSignedRg11Eac = 0x9273;
-        public const uint CompressedSluminance = 0x8c4a;
-        public const uint CompressedSluminanceAlpha = 0x8c4b;
         public const uint CompressedSrgb = 0x8c48;
         public const uint CompressedSrgbAlpha = 0x8c49;
         public const uint CompressedSrgbAlphaBptcUnorm = 0x8e8d;
@@ -244,36 +166,19 @@ namespace ModGL.NativeGL
         public const uint ComputeWorkGroupSize = 0x8267;
         public const uint ConditionSatisfied = 0x911c;
         public const uint ConstantAlpha = 0x8003;
-        public const uint ConstantAttenuation = 0x1207;
         public const uint ConstantColor = 0x8001;
         public const uint ContextFlags = 0x821e;
         public const uint ContextProfileMask = 0x9126;
-        public const uint CoordReplace = 0x8862;
         public const uint Copy = 0x1503;
         public const uint CopyInverted = 0x150c;
-        public const uint CopyPixelToken = 0x706;
         public const uint CopyReadBuffer = 0x8f36;
         public const uint CopyReadBufferBinding = 0x8f36;
         public const uint CopyWriteBuffer = 0x8f37;
         public const uint CopyWriteBufferBinding = 0x8f37;
         public const uint CullFace = 0xb44;
         public const uint CullFaceMode = 0xb45;
-        public const uint CurrentColor = 0xb00;
-        public const uint CurrentFogCoord = 0x8453;
-        public const uint CurrentFogCoordinate = 0x8453;
-        public const uint CurrentIndex = 0xb01;
-        public const uint CurrentNormal = 0xb02;
         public const uint CurrentProgram = 0x8b8d;
         public const uint CurrentQuery = 0x8865;
-        public const uint CurrentRasterColor = 0xb04;
-        public const uint CurrentRasterDistance = 0xb09;
-        public const uint CurrentRasterIndex = 0xb05;
-        public const uint CurrentRasterPosition = 0xb07;
-        public const uint CurrentRasterPositionValid = 0xb08;
-        public const uint CurrentRasterSecondaryColor = 0x845f;
-        public const uint CurrentRasterTextureCoords = 0xb06;
-        public const uint CurrentSecondaryColor = 0x8459;
-        public const uint CurrentTextureCoords = 0xb03;
         public const uint CurrentVertexAttrib = 0x8626;
         public const uint Cw = 0x900;
         public const uint DebugCallbackFunction = 0x8244;
@@ -302,14 +207,11 @@ namespace ModGL.NativeGL
         public const uint DebugTypePortability = 0x824f;
         public const uint DebugTypePushGroup = 0x8269;
         public const uint DebugTypeUndefinedBehavior = 0x824e;
-        public const uint Decal = 0x2101;
         public const uint Decr = 0x1e03;
         public const uint DecrWrap = 0x8508;
         public const uint DeleteStatus = 0x8b80;
         public const uint Depth = 0x1801;
         public const uint DepthAttachment = 0x8d00;
-        public const uint DepthBias = 0xd1f;
-        public const uint DepthBits = 0xd56;
         public const uint DepthClamp = 0x864f;
         public const uint DepthClearValue = 0xb73;
         public const uint DepthComponent = 0x1902;
@@ -321,24 +223,18 @@ namespace ModGL.NativeGL
         public const uint DepthFunc = 0xb74;
         public const uint DepthRange = 0xb70;
         public const uint DepthRenderable = 0x8287;
-        public const uint DepthScale = 0xd1e;
         public const uint DepthStencil = 0x84f9;
         public const uint DepthStencilAttachment = 0x821a;
         public const uint DepthStencilTextureMode = 0x90ea;
         public const uint DepthTest = 0xb71;
-        public const uint DepthTextureMode = 0x884b;
         public const uint DepthWritemask = 0xb72;
         public const uint Depth24Stencil8 = 0x88f0;
         public const uint Depth32fStencil8 = 0x8cad;
-        public const uint Diffuse = 0x1201;
         public const uint DispatchIndirectBuffer = 0x90ee;
         public const uint DispatchIndirectBufferBinding = 0x90ef;
         public const uint DisplayList = 0x82e7;
         public const uint Dither = 0xbd0;
-        public const uint Domain = 0xa02;
         public const uint DontCare = 0x1100;
-        public const uint Dot3Rgb = 0x86ae;
-        public const uint Dot3Rgba = 0x86af;
         public const uint Double = 0x140a;
         public const uint DoubleMat2 = 0x8f46;
         public const uint DoubleMat2x3 = 0x8f49;
@@ -374,65 +270,26 @@ namespace ModGL.NativeGL
         public const uint DrawFramebufferBinding = 0x8ca6;
         public const uint DrawIndirectBuffer = 0x8f3f;
         public const uint DrawIndirectBufferBinding = 0x8f43;
-        public const uint DrawPixelToken = 0x705;
         public const uint DstAlpha = 0x304;
         public const uint DstColor = 0x306;
         public const uint DynamicCopy = 0x88ea;
         public const uint DynamicDraw = 0x88e8;
         public const uint DynamicRead = 0x88e9;
-        public const uint EdgeFlag = 0xb43;
-        public const uint EdgeFlagArray = 0x8079;
-        public const uint EdgeFlagArrayBufferBinding = 0x889b;
-        public const uint EdgeFlagArrayPointer = 0x8093;
-        public const uint EdgeFlagArrayStride = 0x808c;
         public const uint ElementArrayBuffer = 0x8893;
         public const uint ElementArrayBufferBinding = 0x8895;
-        public const uint Emission = 0x1600;
         public const uint Equal = 0x202;
         public const uint Equiv = 0x1509;
-        public const uint Exp = 0x800;
-        public const uint Exp2 = 0x801;
         public const uint Extensions = 0x1f03;
-        public const uint EyeLinear = 0x2400;
-        public const uint EyePlane = 0x2502;
         public const uint Fastest = 0x1101;
-        public const uint Feedback = 0x1c01;
-        public const uint FeedbackBufferPointer = 0xdf0;
-        public const uint FeedbackBufferSize = 0xdf1;
-        public const uint FeedbackBufferType = 0xdf2;
         public const uint Fill = 0x1b02;
         public const uint Filter = 0x829a;
         public const uint FirstVertexConvention = 0x8e4d;
         public const uint Fixed = 0x140c;
         public const uint FixedOnly = 0x891d;
-        public const uint Flat = 0x1d00;
         public const uint Float = 0x1406;
         public const uint Float32UnsignedInt248Rev = 0x8dad;
-        public const uint Fog = 0xb60;
-        public const uint FogColor = 0xb66;
-        public const uint FogCoord = 0x8451;
-        public const uint FogCoordArray = 0x8457;
-        public const uint FogCoordArrayBufferBinding = 0x889d;
-        public const uint FogCoordArrayPointer = 0x8456;
-        public const uint FogCoordArrayStride = 0x8455;
-        public const uint FogCoordArrayType = 0x8454;
-        public const uint FogCoordSrc = 0x8450;
-        public const uint FogCoordinate = 0x8451;
-        public const uint FogCoordinateArray = 0x8457;
-        public const uint FogCoordinateArrayBufferBinding = 0x889d;
-        public const uint FogCoordinateArrayPointer = 0x8456;
-        public const uint FogCoordinateArrayStride = 0x8455;
-        public const uint FogCoordinateArrayType = 0x8454;
-        public const uint FogCoordinateSource = 0x8450;
-        public const uint FogDensity = 0xb62;
-        public const uint FogEnd = 0xb64;
-        public const uint FogHint = 0xc54;
-        public const uint FogIndex = 0xb61;
-        public const uint FogMode = 0xb65;
-        public const uint FogStart = 0xb63;
         public const uint FractionalEven = 0x8e7c;
         public const uint FractionalOdd = 0x8e7b;
-        public const uint FragmentDepth = 0x8452;
         public const uint FragmentInterpolationOffsetBits = 0x8e5d;
         public const uint FragmentShaderDerivativeHint = 0x8b8b;
         public const uint FragmentSubroutine = 0x92ec;
@@ -483,8 +340,6 @@ namespace ModGL.NativeGL
         public const uint FuncAdd = 0x8006;
         public const uint FuncReverseSubtract = 0x800b;
         public const uint FuncSubtract = 0x800a;
-        public const uint GenerateMipmap = 0x8191;
-        public const uint GenerateMipmapHint = 0x8192;
         public const uint GeometryInputType = 0x8917;
         public const uint GeometryOutputType = 0x8918;
         public const uint GeometryShader = 0x8dd9;
@@ -498,10 +353,7 @@ namespace ModGL.NativeGL
         public const uint GetTextureImageType = 0x8292;
         public const uint Greater = 0x204;
         public const uint Green = 0x1904;
-        public const uint GreenBias = 0xd19;
-        public const uint GreenBits = 0xd53;
         public const uint GreenInteger = 0x8d95;
-        public const uint GreenScale = 0xd18;
         public const uint HalfFloat = 0x140b;
         public const uint HighFloat = 0x8df2;
         public const uint HighInt = 0x8df5;
@@ -545,18 +397,6 @@ namespace ModGL.NativeGL
         public const uint Incr = 0x1e02;
         public const uint IncrWrap = 0x8507;
         public const uint Index = 0x8222;
-        public const uint IndexArray = 0x8077;
-        public const uint IndexArrayBufferBinding = 0x8899;
-        public const uint IndexArrayPointer = 0x8091;
-        public const uint IndexArrayStride = 0x8086;
-        public const uint IndexArrayType = 0x8085;
-        public const uint IndexBits = 0xd51;
-        public const uint IndexClearValue = 0xc20;
-        public const uint IndexLogicOp = 0xbf1;
-        public const uint IndexMode = 0xc30;
-        public const uint IndexOffset = 0xd13;
-        public const uint IndexShift = 0xd12;
-        public const uint IndexWritemask = 0xc21;
         public const uint InfoLogLength = 0x8b84;
         public const uint Int = 0x1404;
         public const uint Int2101010Rev = 0x8d9f;
@@ -582,11 +422,6 @@ namespace ModGL.NativeGL
         public const uint IntSamplerBuffer = 0x8dd0;
         public const uint IntSamplerCube = 0x8dcc;
         public const uint IntSamplerCubeMapArray = 0x900e;
-        public const uint Intensity = 0x8049;
-        public const uint Intensity12 = 0x804c;
-        public const uint Intensity16 = 0x804d;
-        public const uint Intensity4 = 0x804a;
-        public const uint Intensity8 = 0x804b;
         public const uint InterleavedAttribs = 0x8c8c;
         public const uint InternalformatAlphaSize = 0x8274;
         public const uint InternalformatAlphaType = 0x827b;
@@ -617,101 +452,37 @@ namespace ModGL.NativeGL
         public const uint Left = 0x406;
         public const uint Lequal = 0x203;
         public const uint Less = 0x201;
-        public const uint LightModelAmbient = 0xb53;
-        public const uint LightModelColorControl = 0x81f8;
-        public const uint LightModelLocalViewer = 0xb51;
-        public const uint LightModelTwoSide = 0xb52;
-        public const uint Light0 = 0x4000;
-        public const uint Light1 = 0x4001;
-        public const uint Light2 = 0x4002;
-        public const uint Light3 = 0x4003;
-        public const uint Light4 = 0x4004;
-        public const uint Light5 = 0x4005;
-        public const uint Light6 = 0x4006;
-        public const uint Light7 = 0x4007;
-        public const uint Lighting = 0xb50;
         public const uint Line = 0x1b01;
         public const uint LineLoop = 0x2;
-        public const uint LineResetToken = 0x707;
         public const uint LineSmooth = 0xb20;
         public const uint LineSmoothHint = 0xc52;
-        public const uint LineStipple = 0xb24;
-        public const uint LineStipplePattern = 0xb25;
-        public const uint LineStippleRepeat = 0xb26;
         public const uint LineStrip = 0x3;
         public const uint LineStripAdjacency = 0xb;
-        public const uint LineToken = 0x702;
         public const uint LineWidth = 0xb21;
         public const uint LineWidthGranularity = 0xb23;
         public const uint LineWidthRange = 0xb22;
         public const uint Linear = 0x2601;
-        public const uint LinearAttenuation = 0x1208;
         public const uint LinearMipmapLinear = 0x2703;
         public const uint LinearMipmapNearest = 0x2701;
         public const uint Lines = 0x1;
         public const uint LinesAdjacency = 0xa;
         public const uint LinkStatus = 0x8b82;
-        public const uint ListBase = 0xb32;
-        public const uint ListIndex = 0xb33;
-        public const uint ListMode = 0xb30;
-        public const uint Load = 0x101;
         public const uint Location = 0x930e;
         public const uint LocationComponent = 0x934a;
         public const uint LocationIndex = 0x930f;
-        public const uint LogicOp = 0xbf1;
         public const uint LogicOpMode = 0xbf0;
         public const uint LowFloat = 0x8df0;
         public const uint LowInt = 0x8df3;
         public const uint LowerLeft = 0x8ca1;
-        public const uint Luminance = 0x1909;
-        public const uint LuminanceAlpha = 0x190a;
-        public const uint Luminance12 = 0x8041;
-        public const uint Luminance12Alpha12 = 0x8047;
-        public const uint Luminance12Alpha4 = 0x8046;
-        public const uint Luminance16 = 0x8042;
-        public const uint Luminance16Alpha16 = 0x8048;
-        public const uint Luminance4 = 0x803f;
-        public const uint Luminance4Alpha4 = 0x8043;
-        public const uint Luminance6Alpha2 = 0x8044;
-        public const uint Luminance8 = 0x8040;
-        public const uint Luminance8Alpha8 = 0x8045;
         public const uint MajorVersion = 0x821b;
         public const uint ManualGenerateMipmap = 0x8294;
-        public const uint MapColor = 0xd10;
-        public const uint MapStencil = 0xd11;
-        public const uint Map1Color4 = 0xd90;
-        public const uint Map1GridDomain = 0xdd0;
-        public const uint Map1GridSegments = 0xdd1;
-        public const uint Map1Index = 0xd91;
-        public const uint Map1Normal = 0xd92;
-        public const uint Map1TextureCoord1 = 0xd93;
-        public const uint Map1TextureCoord2 = 0xd94;
-        public const uint Map1TextureCoord3 = 0xd95;
-        public const uint Map1TextureCoord4 = 0xd96;
-        public const uint Map1Vertex3 = 0xd97;
-        public const uint Map1Vertex4 = 0xd98;
-        public const uint Map2Color4 = 0xdb0;
-        public const uint Map2GridDomain = 0xdd2;
-        public const uint Map2GridSegments = 0xdd3;
-        public const uint Map2Index = 0xdb1;
-        public const uint Map2Normal = 0xdb2;
-        public const uint Map2TextureCoord1 = 0xdb3;
-        public const uint Map2TextureCoord2 = 0xdb4;
-        public const uint Map2TextureCoord3 = 0xdb5;
-        public const uint Map2TextureCoord4 = 0xdb6;
-        public const uint Map2Vertex3 = 0xdb7;
-        public const uint Map2Vertex4 = 0xdb8;
-        public const uint MatrixMode = 0xba0;
         public const uint MatrixStride = 0x92ff;
         public const uint Max = 0x8008;
         public const uint Max3dTextureSize = 0x8073;
         public const uint MaxArrayTextureLayers = 0x88ff;
         public const uint MaxAtomicCounterBufferBindings = 0x92dc;
         public const uint MaxAtomicCounterBufferSize = 0x92d8;
-        public const uint MaxAttribStackDepth = 0xd35;
-        public const uint MaxClientAttribStackDepth = 0xd3b;
         public const uint MaxClipDistances = 0xd32;
-        public const uint MaxClipPlanes = 0xd32;
         public const uint MaxColorAttachments = 0x8cdf;
         public const uint MaxColorTextureSamples = 0x910e;
         public const uint MaxCombinedAtomicCounterBuffers = 0x92d1;
@@ -750,7 +521,6 @@ namespace ModGL.NativeGL
         public const uint MaxElementIndex = 0x8d6b;
         public const uint MaxElementsIndices = 0x80e9;
         public const uint MaxElementsVertices = 0x80e8;
-        public const uint MaxEvalOrder = 0xd30;
         public const uint MaxFragmentAtomicCounterBuffers = 0x92d0;
         public const uint MaxFragmentAtomicCounters = 0x92d6;
         public const uint MaxFragmentImageUniforms = 0x90ce;
@@ -781,18 +551,12 @@ namespace ModGL.NativeGL
         public const uint MaxIntegerSamples = 0x9110;
         public const uint MaxLabelLength = 0x82e8;
         public const uint MaxLayers = 0x8281;
-        public const uint MaxLights = 0xd31;
-        public const uint MaxListNesting = 0xb31;
-        public const uint MaxModelviewStackDepth = 0xd36;
         public const uint MaxNameLength = 0x92f6;
-        public const uint MaxNameStackDepth = 0xd37;
         public const uint MaxNumActiveVariables = 0x92f7;
         public const uint MaxNumCompatibleSubroutines = 0x92f8;
         public const uint MaxPatchVertices = 0x8e7d;
-        public const uint MaxPixelMapTable = 0xd34;
         public const uint MaxProgramTexelOffset = 0x8905;
         public const uint MaxProgramTextureGatherOffset = 0x8e5f;
-        public const uint MaxProjectionStackDepth = 0xd38;
         public const uint MaxRectangleTextureSize = 0x84f8;
         public const uint MaxRenderbufferSize = 0x84e8;
         public const uint MaxSampleMaskWords = 0x8e59;
@@ -824,12 +588,9 @@ namespace ModGL.NativeGL
         public const uint MaxTessGenLevel = 0x8e7e;
         public const uint MaxTessPatchComponents = 0x8e84;
         public const uint MaxTextureBufferSize = 0x8c2b;
-        public const uint MaxTextureCoords = 0x8871;
         public const uint MaxTextureImageUnits = 0x8872;
         public const uint MaxTextureLodBias = 0x84fd;
         public const uint MaxTextureSize = 0xd33;
-        public const uint MaxTextureStackDepth = 0xd39;
-        public const uint MaxTextureUnits = 0x84e2;
         public const uint MaxTransformFeedbackBuffers = 0x8e70;
         public const uint MaxTransformFeedbackInterleavedComponents = 0x8c8a;
         public const uint MaxTransformFeedbackSeparateAttribs = 0x8c8b;
@@ -869,15 +630,8 @@ namespace ModGL.NativeGL
         public const uint Mipmap = 0x8293;
         public const uint MirrorClampToEdge = 0x8743;
         public const uint MirroredRepeat = 0x8370;
-        public const uint Modelview = 0x1700;
-        public const uint ModelviewMatrix = 0xba6;
-        public const uint ModelviewStackDepth = 0xba3;
-        public const uint Modulate = 0x2100;
-        public const uint Mult = 0x103;
         public const uint Multisample = 0x809d;
-        public const uint N3fV3f = 0x2a25;
         public const uint NameLength = 0x92f9;
-        public const uint NameStackDepth = 0xd70;
         public const uint Nand = 0x150e;
         public const uint Nearest = 0x2600;
         public const uint NearestMipmapLinear = 0x2702;
@@ -886,13 +640,6 @@ namespace ModGL.NativeGL
         public const uint Nicest = 0x1102;
         public const uint Noop = 0x1505;
         public const uint Nor = 0x1508;
-        public const uint NormalArray = 0x8075;
-        public const uint NormalArrayBufferBinding = 0x8897;
-        public const uint NormalArrayPointer = 0x808f;
-        public const uint NormalArrayStride = 0x807f;
-        public const uint NormalArrayType = 0x807e;
-        public const uint NormalMap = 0x8511;
-        public const uint Normalize = 0xba1;
         public const uint Notequal = 0x205;
         public const uint NumActiveVariables = 0x9304;
         public const uint NumCompatibleSubroutines = 0x8e4a;
@@ -902,8 +649,6 @@ namespace ModGL.NativeGL
         public const uint NumSampleCounts = 0x9380;
         public const uint NumShaderBinaryFormats = 0x8df9;
         public const uint NumShadingLanguageVersions = 0x82e9;
-        public const uint ObjectLinear = 0x2401;
-        public const uint ObjectPlane = 0x2501;
         public const uint ObjectType = 0x9112;
         public const uint Offset = 0x92fc;
         public const uint OneMinusConstantAlpha = 0x8004;
@@ -917,7 +662,6 @@ namespace ModGL.NativeGL
         public const uint Or = 0x1507;
         public const uint OrInverted = 0x150d;
         public const uint OrReverse = 0x150b;
-        public const uint Order = 0xa01;
         public const uint OutOfMemory = 0x505;
         public const uint PackAlignment = 0xd05;
         public const uint PackCompressedBlockDepth = 0x912d;
@@ -931,51 +675,21 @@ namespace ModGL.NativeGL
         public const uint PackSkipPixels = 0xd04;
         public const uint PackSkipRows = 0xd03;
         public const uint PackSwapBytes = 0xd00;
-        public const uint PassThroughToken = 0x700;
         public const uint PatchDefaultInnerLevel = 0x8e73;
         public const uint PatchDefaultOuterLevel = 0x8e74;
         public const uint PatchVertices = 0x8e72;
         public const uint Patches = 0xe;
-        public const uint PerspectiveCorrectionHint = 0xc50;
-        public const uint PixelMapAToA = 0xc79;
-        public const uint PixelMapAToASize = 0xcb9;
-        public const uint PixelMapBToB = 0xc78;
-        public const uint PixelMapBToBSize = 0xcb8;
-        public const uint PixelMapGToG = 0xc77;
-        public const uint PixelMapGToGSize = 0xcb7;
-        public const uint PixelMapIToA = 0xc75;
-        public const uint PixelMapIToASize = 0xcb5;
-        public const uint PixelMapIToB = 0xc74;
-        public const uint PixelMapIToBSize = 0xcb4;
-        public const uint PixelMapIToG = 0xc73;
-        public const uint PixelMapIToGSize = 0xcb3;
-        public const uint PixelMapIToI = 0xc70;
-        public const uint PixelMapIToISize = 0xcb0;
-        public const uint PixelMapIToR = 0xc72;
-        public const uint PixelMapIToRSize = 0xcb2;
-        public const uint PixelMapRToR = 0xc76;
-        public const uint PixelMapRToRSize = 0xcb6;
-        public const uint PixelMapSToS = 0xc71;
-        public const uint PixelMapSToSSize = 0xcb1;
         public const uint PixelPackBuffer = 0x88eb;
         public const uint PixelPackBufferBinding = 0x88ed;
         public const uint PixelUnpackBuffer = 0x88ec;
         public const uint PixelUnpackBufferBinding = 0x88ef;
         public const uint Point = 0x1b00;
-        public const uint PointDistanceAttenuation = 0x8129;
         public const uint PointFadeThresholdSize = 0x8128;
         public const uint PointSize = 0xb11;
         public const uint PointSizeGranularity = 0xb13;
-        public const uint PointSizeMax = 0x8127;
-        public const uint PointSizeMin = 0x8126;
         public const uint PointSizeRange = 0xb12;
-        public const uint PointSmooth = 0xb10;
-        public const uint PointSmoothHint = 0xc51;
-        public const uint PointSprite = 0x8861;
         public const uint PointSpriteCoordOrigin = 0x8ca0;
-        public const uint PointToken = 0x701;
         public const uint Points = 0x0;
-        public const uint Polygon = 0x9;
         public const uint PolygonMode = 0xb40;
         public const uint PolygonOffsetFactor = 0x8038;
         public const uint PolygonOffsetFill = 0x8037;
@@ -984,9 +698,6 @@ namespace ModGL.NativeGL
         public const uint PolygonOffsetUnits = 0x2a00;
         public const uint PolygonSmooth = 0xb41;
         public const uint PolygonSmoothHint = 0xc53;
-        public const uint PolygonStipple = 0xb42;
-        public const uint PolygonToken = 0x703;
-        public const uint Position = 0x1203;
         public const uint PrimitiveRestart = 0x8f9d;
         public const uint PrimitiveRestartFixedIndex = 0x8d69;
         public const uint PrimitiveRestartForPatchesSupported = 0x8221;
@@ -1002,9 +713,6 @@ namespace ModGL.NativeGL
         public const uint ProgramPipelineBinding = 0x825a;
         public const uint ProgramPointSize = 0x8642;
         public const uint ProgramSeparable = 0x8258;
-        public const uint Projection = 0x1701;
-        public const uint ProjectionMatrix = 0xba7;
-        public const uint ProjectionStackDepth = 0xba4;
         public const uint ProvokingVertex = 0x8e4f;
         public const uint ProxyTexture1d = 0x8063;
         public const uint ProxyTexture1dArray = 0x8c19;
@@ -1016,10 +724,6 @@ namespace ModGL.NativeGL
         public const uint ProxyTextureCubeMap = 0x851b;
         public const uint ProxyTextureCubeMapArray = 0x900b;
         public const uint ProxyTextureRectangle = 0x84f7;
-        public const uint Q = 0x2003;
-        public const uint QuadStrip = 0x8;
-        public const uint QuadraticAttenuation = 0x1209;
-        public const uint Quads = 0x7;
         public const uint QuadsFollowProvokingVertexConvention = 0x8e4c;
         public const uint Query = 0x82e3;
         public const uint QueryBuffer = 0x9192;
@@ -1032,7 +736,6 @@ namespace ModGL.NativeGL
         public const uint QueryResultAvailable = 0x8867;
         public const uint QueryResultNoWait = 0x9194;
         public const uint QueryWait = 0x8e13;
-        public const uint R = 0x2002;
         public const uint R11fG11fB10f = 0x8c3a;
         public const uint R16 = 0x822a;
         public const uint R16Snorm = 0x8f98;
@@ -1057,19 +760,13 @@ namespace ModGL.NativeGL
         public const uint ReadPixelsType = 0x828e;
         public const uint ReadWrite = 0x88ba;
         public const uint Red = 0x1903;
-        public const uint RedBias = 0xd15;
-        public const uint RedBits = 0xd52;
         public const uint RedInteger = 0x8d94;
-        public const uint RedScale = 0xd14;
         public const uint ReferencedByComputeShader = 0x930b;
         public const uint ReferencedByFragmentShader = 0x930a;
         public const uint ReferencedByGeometryShader = 0x9309;
         public const uint ReferencedByTessControlShader = 0x9307;
         public const uint ReferencedByTessEvaluationShader = 0x9308;
         public const uint ReferencedByVertexShader = 0x9306;
-        public const uint ReflectionMap = 0x8512;
-        public const uint Render = 0x1c00;
-        public const uint RenderMode = 0xc40;
         public const uint Renderbuffer = 0x8d41;
         public const uint RenderbufferAlphaSize = 0x8d53;
         public const uint RenderbufferBinding = 0x8ca7;
@@ -1085,8 +782,6 @@ namespace ModGL.NativeGL
         public const uint Renderer = 0x1f01;
         public const uint Repeat = 0x2901;
         public const uint Replace = 0x1e01;
-        public const uint RescaleNormal = 0x803a;
-        public const uint Return = 0x102;
         public const uint Rg = 0x8227;
         public const uint RgInteger = 0x8228;
         public const uint Rg16 = 0x822c;
@@ -1126,7 +821,6 @@ namespace ModGL.NativeGL
         public const uint Rgb9E5 = 0x8c3d;
         public const uint Rgba = 0x1908;
         public const uint RgbaInteger = 0x8d99;
-        public const uint RgbaMode = 0xc31;
         public const uint Rgba12 = 0x805a;
         public const uint Rgba16 = 0x805b;
         public const uint Rgba16Snorm = 0x8f9b;
@@ -1143,7 +837,6 @@ namespace ModGL.NativeGL
         public const uint Rgba8i = 0x8d8e;
         public const uint Rgba8ui = 0x8d7c;
         public const uint Right = 0x407;
-        public const uint S = 0x2000;
         public const uint SampleAlphaToCoverage = 0x809e;
         public const uint SampleAlphaToOne = 0x809f;
         public const uint SampleBuffers = 0x80a8;
@@ -1170,19 +863,8 @@ namespace ModGL.NativeGL
         public const uint SamplesPassed = 0x8914;
         public const uint ScissorBox = 0xc10;
         public const uint ScissorTest = 0xc11;
-        public const uint SecondaryColorArray = 0x845e;
-        public const uint SecondaryColorArrayBufferBinding = 0x889c;
-        public const uint SecondaryColorArrayPointer = 0x845d;
-        public const uint SecondaryColorArraySize = 0x845a;
-        public const uint SecondaryColorArrayStride = 0x845c;
-        public const uint SecondaryColorArrayType = 0x845b;
-        public const uint Select = 0x1c02;
-        public const uint SelectionBufferPointer = 0xdf3;
-        public const uint SelectionBufferSize = 0xdf4;
         public const uint SeparateAttribs = 0x8c8d;
-        public const uint SeparateSpecularColor = 0x81fa;
         public const uint Set = 0x150f;
-        public const uint ShadeModel = 0xb54;
         public const uint Shader = 0x82e1;
         public const uint ShaderBinaryFormats = 0x8df8;
         public const uint ShaderCompiler = 0x8dfa;
@@ -1198,7 +880,6 @@ namespace ModGL.NativeGL
         public const uint ShaderStorageBufferStart = 0x90d4;
         public const uint ShaderType = 0x8b4f;
         public const uint ShadingLanguageVersion = 0x8b8c;
-        public const uint Shininess = 0x1601;
         public const uint Short = 0x1402;
         public const uint Signaled = 0x9119;
         public const uint SignedNormalized = 0x8f9c;
@@ -1206,21 +887,10 @@ namespace ModGL.NativeGL
         public const uint SimultaneousTextureAndDepthWrite = 0x82ae;
         public const uint SimultaneousTextureAndStencilTest = 0x82ad;
         public const uint SimultaneousTextureAndStencilWrite = 0x82af;
-        public const uint SingleColor = 0x81f9;
-        public const uint Sluminance = 0x8c46;
-        public const uint SluminanceAlpha = 0x8c44;
-        public const uint Sluminance8 = 0x8c47;
-        public const uint Sluminance8Alpha8 = 0x8c45;
-        public const uint Smooth = 0x1d01;
         public const uint SmoothLineWidthGranularity = 0xb23;
         public const uint SmoothLineWidthRange = 0xb22;
         public const uint SmoothPointSizeGranularity = 0xb13;
         public const uint SmoothPointSizeRange = 0xb12;
-        public const uint Specular = 0x1202;
-        public const uint SphereMap = 0x2402;
-        public const uint SpotCutoff = 0x1206;
-        public const uint SpotDirection = 0x1204;
-        public const uint SpotExponent = 0x1205;
         public const uint SrcAlpha = 0x302;
         public const uint SrcAlphaSaturate = 0x308;
         public const uint SrcColor = 0x300;
@@ -1231,8 +901,6 @@ namespace ModGL.NativeGL
         public const uint SrgbWrite = 0x8298;
         public const uint Srgb8 = 0x8c41;
         public const uint Srgb8Alpha8 = 0x8c43;
-        public const uint StackOverflow = 0x503;
-        public const uint StackUnderflow = 0x504;
         public const uint StaticCopy = 0x88e6;
         public const uint StaticDraw = 0x88e4;
         public const uint StaticRead = 0x88e5;
@@ -1245,7 +913,6 @@ namespace ModGL.NativeGL
         public const uint StencilBackRef = 0x8ca3;
         public const uint StencilBackValueMask = 0x8ca4;
         public const uint StencilBackWritemask = 0x8ca5;
-        public const uint StencilBits = 0xd57;
         public const uint StencilClearValue = 0xb91;
         public const uint StencilComponents = 0x8285;
         public const uint StencilFail = 0xb94;
@@ -1267,20 +934,11 @@ namespace ModGL.NativeGL
         public const uint StreamDraw = 0x88e0;
         public const uint StreamRead = 0x88e1;
         public const uint SubpixelBits = 0xd50;
-        public const uint Subtract = 0x84e7;
         public const uint SyncCondition = 0x9113;
         public const uint SyncFence = 0x9116;
         public const uint SyncFlags = 0x9115;
         public const uint SyncGpuCommandsComplete = 0x9117;
         public const uint SyncStatus = 0x9114;
-        public const uint T = 0x2001;
-        public const uint T2fC3fV3f = 0x2a2a;
-        public const uint T2fC4fN3fV3f = 0x2a2c;
-        public const uint T2fC4ubV3f = 0x2a29;
-        public const uint T2fN3fV3f = 0x2a2b;
-        public const uint T2fV3f = 0x2a27;
-        public const uint T4fC4fN3fV4f = 0x2a2d;
-        public const uint T4fV4f = 0x2a28;
         public const uint TessControlOutputVertices = 0x8e75;
         public const uint TessControlShader = 0x8e88;
         public const uint TessControlSubroutine = 0x92e9;
@@ -1318,7 +976,6 @@ namespace ModGL.NativeGL
         public const uint TextureBindingRectangle = 0x84f6;
         public const uint TextureBlueSize = 0x805e;
         public const uint TextureBlueType = 0x8c12;
-        public const uint TextureBorder = 0x1005;
         public const uint TextureBorderColor = 0x1004;
         public const uint TextureBuffer = 0x8c2a;
         public const uint TextureBufferBinding = 0x8c2a;
@@ -1328,19 +985,12 @@ namespace ModGL.NativeGL
         public const uint TextureBufferSize = 0x919e;
         public const uint TextureCompareFunc = 0x884d;
         public const uint TextureCompareMode = 0x884c;
-        public const uint TextureComponents = 0x1003;
         public const uint TextureCompressed = 0x86a1;
         public const uint TextureCompressedBlockHeight = 0x82b2;
         public const uint TextureCompressedBlockSize = 0x82b3;
         public const uint TextureCompressedBlockWidth = 0x82b1;
         public const uint TextureCompressedImageSize = 0x86a0;
         public const uint TextureCompressionHint = 0x84ef;
-        public const uint TextureCoordArray = 0x8078;
-        public const uint TextureCoordArrayBufferBinding = 0x889a;
-        public const uint TextureCoordArrayPointer = 0x8092;
-        public const uint TextureCoordArraySize = 0x8088;
-        public const uint TextureCoordArrayStride = 0x808a;
-        public const uint TextureCoordArrayType = 0x8089;
         public const uint TextureCubeMap = 0x8513;
         public const uint TextureCubeMapArray = 0x9009;
         public const uint TextureCubeMapNegativeX = 0x8516;
@@ -1353,18 +1003,9 @@ namespace ModGL.NativeGL
         public const uint TextureDepth = 0x8071;
         public const uint TextureDepthSize = 0x884a;
         public const uint TextureDepthType = 0x8c16;
-        public const uint TextureEnv = 0x2300;
-        public const uint TextureEnvColor = 0x2201;
-        public const uint TextureEnvMode = 0x2200;
-        public const uint TextureFilterControl = 0x8500;
         public const uint TextureFixedSampleLocations = 0x9107;
         public const uint TextureGather = 0x82a2;
         public const uint TextureGatherShadow = 0x82a3;
-        public const uint TextureGenMode = 0x2500;
-        public const uint TextureGenQ = 0xc63;
-        public const uint TextureGenR = 0xc62;
-        public const uint TextureGenS = 0xc60;
-        public const uint TextureGenT = 0xc61;
         public const uint TextureGreenSize = 0x805d;
         public const uint TextureGreenType = 0x8c11;
         public const uint TextureHeight = 0x1001;
@@ -1372,27 +1013,19 @@ namespace ModGL.NativeGL
         public const uint TextureImageType = 0x8290;
         public const uint TextureImmutableFormat = 0x912f;
         public const uint TextureImmutableLevels = 0x82df;
-        public const uint TextureIntensitySize = 0x8061;
-        public const uint TextureIntensityType = 0x8c15;
         public const uint TextureInternalFormat = 0x1003;
         public const uint TextureLodBias = 0x8501;
-        public const uint TextureLuminanceSize = 0x8060;
-        public const uint TextureLuminanceType = 0x8c14;
         public const uint TextureMagFilter = 0x2800;
-        public const uint TextureMatrix = 0xba8;
         public const uint TextureMaxLevel = 0x813d;
         public const uint TextureMaxLod = 0x813b;
         public const uint TextureMinFilter = 0x2801;
         public const uint TextureMinLod = 0x813a;
-        public const uint TexturePriority = 0x8066;
         public const uint TextureRectangle = 0x84f5;
         public const uint TextureRedSize = 0x805c;
         public const uint TextureRedType = 0x8c10;
-        public const uint TextureResident = 0x8067;
         public const uint TextureSamples = 0x9106;
         public const uint TextureShadow = 0x82a1;
         public const uint TextureSharedSize = 0x8c3f;
-        public const uint TextureStackDepth = 0xba5;
         public const uint TextureStencilSize = 0x88f1;
         public const uint TextureSwizzleA = 0x8e45;
         public const uint TextureSwizzleB = 0x8e44;
@@ -1462,10 +1095,6 @@ namespace ModGL.NativeGL
         public const uint TransformFeedbackVarying = 0x92f4;
         public const uint TransformFeedbackVaryingMaxLength = 0x8c76;
         public const uint TransformFeedbackVaryings = 0x8c83;
-        public const uint TransposeColorMatrix = 0x84e6;
-        public const uint TransposeModelviewMatrix = 0x84e3;
-        public const uint TransposeProjectionMatrix = 0x84e4;
-        public const uint TransposeTextureMatrix = 0x84e5;
         public const uint TriangleFan = 0x6;
         public const uint TriangleStrip = 0x5;
         public const uint TriangleStripAdjacency = 0xd;
@@ -1558,18 +1187,10 @@ namespace ModGL.NativeGL
         public const uint UnsignedShort565 = 0x8363;
         public const uint UnsignedShort565Rev = 0x8364;
         public const uint UpperLeft = 0x8ca2;
-        public const uint V2f = 0x2a20;
-        public const uint V3f = 0x2a21;
         public const uint ValidateStatus = 0x8b83;
         public const uint Vendor = 0x1f00;
         public const uint Version = 0x1f02;
-        public const uint VertexArray = 0x8074;
         public const uint VertexArrayBinding = 0x85b5;
-        public const uint VertexArrayBufferBinding = 0x8896;
-        public const uint VertexArrayPointer = 0x808e;
-        public const uint VertexArraySize = 0x807a;
-        public const uint VertexArrayStride = 0x807c;
-        public const uint VertexArrayType = 0x807b;
         public const uint VertexAttribArrayBufferBinding = 0x889f;
         public const uint VertexAttribArrayDivisor = 0x88fe;
         public const uint VertexAttribArrayEnabled = 0x8622;
@@ -1587,7 +1208,6 @@ namespace ModGL.NativeGL
         public const uint VertexBindingOffset = 0x82d7;
         public const uint VertexBindingStride = 0x82d8;
         public const uint VertexProgramPointSize = 0x8642;
-        public const uint VertexProgramTwoSide = 0x8643;
         public const uint VertexSubroutine = 0x92e8;
         public const uint VertexSubroutineUniform = 0x92ee;
         public const uint VertexTexture = 0x829b;
@@ -1613,44 +1233,14 @@ namespace ModGL.NativeGL
         public const uint ViewportIndexProvokingVertex = 0x825f;
         public const uint ViewportSubpixelBits = 0x825c;
         public const uint WaitFailed = 0x911d;
-        public const uint WeightArrayBufferBinding = 0x889e;
         public const uint WriteOnly = 0x88b9;
         public const uint Xor = 0x1506;
-        public const uint ZoomX = 0xd16;
-        public const uint ZoomY = 0xd17;
-    }
-    public enum AccumOp : uint
-    {
-        Accum = 0x100,
-        Load = 0x101,
-        Return = 0x102,
-        Mult = 0x103,
-        Add = 0x104,
     }
     public enum AttribMask : uint
     {
-        AccumBufferBit = 0x200,
-        AllAttribBits = 0xffffffff,
         ColorBufferBit = 0x4000,
-        CurrentBit = 0x1,
         DepthBufferBit = 0x100,
-        EnableBit = 0x2000,
-        EvalBit = 0x10000,
-        FogBit = 0x80,
-        HintBit = 0x8000,
-        LightingBit = 0x40,
-        LineBit = 0x4,
-        ListBit = 0x20000,
-        MultisampleBit = 0x20000000,
-        PixelModeBit = 0x20,
-        PointBit = 0x2,
-        PolygonBit = 0x8,
-        PolygonStippleBit = 0x10,
-        ScissorBit = 0x80000,
         StencilBufferBit = 0x400,
-        TextureBit = 0x40000,
-        TransformBit = 0x1000,
-        ViewportBit = 0x800,
     }
     public enum AlphaFunction : uint
     {
@@ -1662,10 +1252,6 @@ namespace ModGL.NativeGL
         Less = 0x201,
         Never = 0x200,
         Notequal = 0x205,
-    }
-    public enum BlendEquationModeEXT : uint
-    {
-        LogicOp = 0xbf1,
     }
     public enum BlendingFactorDest : uint
     {
@@ -1697,16 +1283,9 @@ namespace ModGL.NativeGL
     }
     public enum ClearBufferMask : uint
     {
-        AccumBufferBit = 0x200,
         ColorBufferBit = 0x4000,
         DepthBufferBit = 0x100,
         StencilBufferBit = 0x400,
-    }
-    public enum ClientAttribMask : uint
-    {
-        ClientAllAttribBits = 0xffffffff,
-        ClientPixelStoreBit = 0x1,
-        ClientVertexArrayBit = 0x2,
     }
     public enum ClipPlaneName : uint
     {
@@ -1718,26 +1297,12 @@ namespace ModGL.NativeGL
         ClipDistance5 = 0x3005,
         ClipDistance6 = 0x3006,
         ClipDistance7 = 0x3007,
-        ClipPlane0 = 0x3000,
-        ClipPlane1 = 0x3001,
-        ClipPlane2 = 0x3002,
-        ClipPlane3 = 0x3003,
-        ClipPlane4 = 0x3004,
-        ClipPlane5 = 0x3005,
     }
     public enum ColorMaterialFace : uint
     {
         Back = 0x405,
         Front = 0x404,
         FrontAndBack = 0x408,
-    }
-    public enum ColorMaterialParameter : uint
-    {
-        Ambient = 0x1200,
-        AmbientAndDiffuse = 0x1602,
-        Diffuse = 0x1201,
-        Emission = 0x1600,
-        Specular = 0x1202,
     }
     public enum ColorPointerType : uint
     {
@@ -1779,10 +1344,6 @@ namespace ModGL.NativeGL
     }
     public enum DrawBufferMode : uint
     {
-        Aux0 = 0x409,
-        Aux1 = 0x40a,
-        Aux2 = 0x40b,
-        Aux3 = 0x40c,
         Back = 0x405,
         BackLeft = 0x402,
         BackRight = 0x403,
@@ -1796,72 +1357,20 @@ namespace ModGL.NativeGL
     }
     public enum EnableCap : uint
     {
-        AlphaTest = 0xbc0,
-        AutoNormal = 0xd80,
         Blend = 0xbe2,
-        ClipPlane0 = 0x3000,
-        ClipPlane1 = 0x3001,
-        ClipPlane2 = 0x3002,
-        ClipPlane3 = 0x3003,
-        ClipPlane4 = 0x3004,
-        ClipPlane5 = 0x3005,
-        ColorArray = 0x8076,
         ColorLogicOp = 0xbf2,
-        ColorMaterial = 0xb57,
         CullFace = 0xb44,
         DepthTest = 0xb71,
         Dither = 0xbd0,
-        EdgeFlagArray = 0x8079,
-        Fog = 0xb60,
-        IndexArray = 0x8077,
-        IndexLogicOp = 0xbf1,
-        Light0 = 0x4000,
-        Light1 = 0x4001,
-        Light2 = 0x4002,
-        Light3 = 0x4003,
-        Light4 = 0x4004,
-        Light5 = 0x4005,
-        Light6 = 0x4006,
-        Light7 = 0x4007,
-        Lighting = 0xb50,
         LineSmooth = 0xb20,
-        LineStipple = 0xb24,
-        Map1Color4 = 0xd90,
-        Map1Index = 0xd91,
-        Map1Normal = 0xd92,
-        Map1TextureCoord1 = 0xd93,
-        Map1TextureCoord2 = 0xd94,
-        Map1TextureCoord3 = 0xd95,
-        Map1TextureCoord4 = 0xd96,
-        Map1Vertex3 = 0xd97,
-        Map1Vertex4 = 0xd98,
-        Map2Color4 = 0xdb0,
-        Map2Index = 0xdb1,
-        Map2Normal = 0xdb2,
-        Map2TextureCoord1 = 0xdb3,
-        Map2TextureCoord2 = 0xdb4,
-        Map2TextureCoord3 = 0xdb5,
-        Map2TextureCoord4 = 0xdb6,
-        Map2Vertex3 = 0xdb7,
-        Map2Vertex4 = 0xdb8,
-        Normalize = 0xba1,
-        NormalArray = 0x8075,
-        PointSmooth = 0xb10,
         PolygonOffsetFill = 0x8037,
         PolygonOffsetLine = 0x2a02,
         PolygonOffsetPoint = 0x2a01,
         PolygonSmooth = 0xb41,
-        PolygonStipple = 0xb42,
         ScissorTest = 0xc11,
         StencilTest = 0xb90,
         Texture1d = 0xde0,
         Texture2d = 0xde1,
-        TextureCoordArray = 0x8078,
-        TextureGenQ = 0xc63,
-        TextureGenR = 0xc62,
-        TextureGenS = 0xc60,
-        TextureGenT = 0xc61,
-        VertexArray = 0x8074,
     }
     public enum ErrorCode : uint
     {
@@ -1871,27 +1380,6 @@ namespace ModGL.NativeGL
         InvalidValue = 0x501,
         NoError = 0x0,
         OutOfMemory = 0x505,
-        StackOverflow = 0x503,
-        StackUnderflow = 0x504,
-    }
-    public enum FeedbackType : uint
-    {
-        _2d = 0x600,
-        _3d = 0x601,
-        _3dColor = 0x602,
-        _3dColorTexture = 0x603,
-        _4dColorTexture = 0x604,
-    }
-    public enum FeedBackToken : uint
-    {
-        BitmapToken = 0x704,
-        CopyPixelToken = 0x706,
-        DrawPixelToken = 0x705,
-        LineResetToken = 0x707,
-        LineToken = 0x702,
-        PassThroughToken = 0x700,
-        PointToken = 0x701,
-        PolygonToken = 0x703,
     }
     public enum FogCoordinatePointerType : uint
     {
@@ -1900,18 +1388,7 @@ namespace ModGL.NativeGL
     }
     public enum FogMode : uint
     {
-        Exp = 0x800,
-        Exp2 = 0x801,
         Linear = 0x2601,
-    }
-    public enum FogParameter : uint
-    {
-        FogColor = 0xb66,
-        FogDensity = 0xb62,
-        FogEnd = 0xb64,
-        FogIndex = 0xb61,
-        FogMode = 0xb65,
-        FogStart = 0xb63,
     }
     public enum FogPointerTypeEXT : uint
     {
@@ -1928,210 +1405,44 @@ namespace ModGL.NativeGL
         Ccw = 0x901,
         Cw = 0x900,
     }
-    public enum GetMapQuery : uint
-    {
-        Coeff = 0xa00,
-        Domain = 0xa02,
-        Order = 0xa01,
-    }
-    public enum GetPixelMap : uint
-    {
-        PixelMapAToA = 0xc79,
-        PixelMapBToB = 0xc78,
-        PixelMapGToG = 0xc77,
-        PixelMapIToA = 0xc75,
-        PixelMapIToB = 0xc74,
-        PixelMapIToG = 0xc73,
-        PixelMapIToI = 0xc70,
-        PixelMapIToR = 0xc72,
-        PixelMapRToR = 0xc76,
-        PixelMapSToS = 0xc71,
-    }
     public enum GetPName : uint
     {
-        AccumAlphaBits = 0xd5b,
-        AccumBlueBits = 0xd5a,
-        AccumClearValue = 0xb80,
-        AccumGreenBits = 0xd59,
-        AccumRedBits = 0xd58,
         AliasedLineWidthRange = 0x846e,
-        AliasedPointSizeRange = 0x846d,
-        AlphaBias = 0xd1d,
-        AlphaBits = 0xd55,
-        AlphaScale = 0xd1c,
-        AlphaTest = 0xbc0,
-        AlphaTestFunc = 0xbc1,
-        AlphaTestRef = 0xbc2,
-        AttribStackDepth = 0xbb0,
-        AutoNormal = 0xd80,
-        AuxBuffers = 0xc00,
         Blend = 0xbe2,
         BlendDst = 0xbe0,
         BlendSrc = 0xbe1,
-        BlueBias = 0xd1b,
-        BlueBits = 0xd54,
-        BlueScale = 0xd1a,
-        ClientAttribStackDepth = 0xbb1,
-        ClipPlane0 = 0x3000,
-        ClipPlane1 = 0x3001,
-        ClipPlane2 = 0x3002,
-        ClipPlane3 = 0x3003,
-        ClipPlane4 = 0x3004,
-        ClipPlane5 = 0x3005,
-        ColorArray = 0x8076,
-        ColorArraySize = 0x8081,
-        ColorArrayStride = 0x8083,
-        ColorArrayType = 0x8082,
         ColorClearValue = 0xc22,
         ColorLogicOp = 0xbf2,
-        ColorMaterial = 0xb57,
-        ColorMaterialFace = 0xb55,
-        ColorMaterialParameter = 0xb56,
         ColorWritemask = 0xc23,
         CullFace = 0xb44,
         CullFaceMode = 0xb45,
-        CurrentColor = 0xb00,
-        CurrentIndex = 0xb01,
-        CurrentNormal = 0xb02,
-        CurrentRasterColor = 0xb04,
-        CurrentRasterDistance = 0xb09,
-        CurrentRasterIndex = 0xb05,
-        CurrentRasterPosition = 0xb07,
-        CurrentRasterPositionValid = 0xb08,
-        CurrentRasterTextureCoords = 0xb06,
-        CurrentTextureCoords = 0xb03,
-        DepthBias = 0xd1f,
-        DepthBits = 0xd56,
         DepthClearValue = 0xb73,
         DepthFunc = 0xb74,
         DepthRange = 0xb70,
-        DepthScale = 0xd1e,
         DepthTest = 0xb71,
         DepthWritemask = 0xb72,
         Dither = 0xbd0,
         Doublebuffer = 0xc32,
         DrawBuffer = 0xc01,
-        EdgeFlag = 0xb43,
-        EdgeFlagArray = 0x8079,
-        EdgeFlagArrayStride = 0x808c,
-        FeedbackBufferSize = 0xdf1,
-        FeedbackBufferType = 0xdf2,
-        Fog = 0xb60,
-        FogColor = 0xb66,
-        FogDensity = 0xb62,
-        FogEnd = 0xb64,
-        FogHint = 0xc54,
-        FogIndex = 0xb61,
-        FogMode = 0xb65,
-        FogStart = 0xb63,
         FrontFace = 0xb46,
-        GreenBias = 0xd19,
-        GreenBits = 0xd53,
-        GreenScale = 0xd18,
-        IndexArray = 0x8077,
-        IndexArrayStride = 0x8086,
-        IndexArrayType = 0x8085,
-        IndexBits = 0xd51,
-        IndexClearValue = 0xc20,
-        IndexLogicOp = 0xbf1,
-        IndexMode = 0xc30,
-        IndexOffset = 0xd13,
-        IndexShift = 0xd12,
-        IndexWritemask = 0xc21,
-        Light0 = 0x4000,
-        Light1 = 0x4001,
-        Light2 = 0x4002,
-        Light3 = 0x4003,
-        Light4 = 0x4004,
-        Light5 = 0x4005,
-        Light6 = 0x4006,
-        Light7 = 0x4007,
-        Lighting = 0xb50,
-        LightModelAmbient = 0xb53,
-        LightModelColorControl = 0x81f8,
-        LightModelLocalViewer = 0xb51,
-        LightModelTwoSide = 0xb52,
         LineSmooth = 0xb20,
         LineSmoothHint = 0xc52,
-        LineStipple = 0xb24,
-        LineStipplePattern = 0xb25,
-        LineStippleRepeat = 0xb26,
         LineWidth = 0xb21,
         LineWidthGranularity = 0xb23,
         LineWidthRange = 0xb22,
-        ListBase = 0xb32,
-        ListIndex = 0xb33,
-        ListMode = 0xb30,
-        LogicOp = 0xbf1,
         LogicOpMode = 0xbf0,
-        Map1Color4 = 0xd90,
-        Map1GridDomain = 0xdd0,
-        Map1GridSegments = 0xdd1,
-        Map1Index = 0xd91,
-        Map1Normal = 0xd92,
-        Map1TextureCoord1 = 0xd93,
-        Map1TextureCoord2 = 0xd94,
-        Map1TextureCoord3 = 0xd95,
-        Map1TextureCoord4 = 0xd96,
-        Map1Vertex3 = 0xd97,
-        Map1Vertex4 = 0xd98,
-        Map2Color4 = 0xdb0,
-        Map2GridDomain = 0xdd2,
-        Map2GridSegments = 0xdd3,
-        Map2Index = 0xdb1,
-        Map2Normal = 0xdb2,
-        Map2TextureCoord1 = 0xdb3,
-        Map2TextureCoord2 = 0xdb4,
-        Map2TextureCoord3 = 0xdb5,
-        Map2TextureCoord4 = 0xdb6,
-        Map2Vertex3 = 0xdb7,
-        Map2Vertex4 = 0xdb8,
-        MapColor = 0xd10,
-        MapStencil = 0xd11,
-        MatrixMode = 0xba0,
-        MaxAttribStackDepth = 0xd35,
-        MaxClientAttribStackDepth = 0xd3b,
         MaxClipDistances = 0xd32,
-        MaxClipPlanes = 0xd32,
-        MaxEvalOrder = 0xd30,
-        MaxLights = 0xd31,
-        MaxListNesting = 0xb31,
-        MaxModelviewStackDepth = 0xd36,
-        MaxNameStackDepth = 0xd37,
-        MaxPixelMapTable = 0xd34,
-        MaxProjectionStackDepth = 0xd38,
         MaxTextureSize = 0xd33,
-        MaxTextureStackDepth = 0xd39,
         MaxViewportDims = 0xd3a,
-        ModelviewMatrix = 0xba6,
-        ModelviewStackDepth = 0xba3,
-        NameStackDepth = 0xd70,
-        Normalize = 0xba1,
-        NormalArray = 0x8075,
-        NormalArrayStride = 0x807f,
-        NormalArrayType = 0x807e,
         PackAlignment = 0xd05,
         PackLsbFirst = 0xd01,
         PackRowLength = 0xd02,
         PackSkipPixels = 0xd04,
         PackSkipRows = 0xd03,
         PackSwapBytes = 0xd00,
-        PerspectiveCorrectionHint = 0xc50,
-        PixelMapAToASize = 0xcb9,
-        PixelMapBToBSize = 0xcb8,
-        PixelMapGToGSize = 0xcb7,
-        PixelMapIToASize = 0xcb5,
-        PixelMapIToBSize = 0xcb4,
-        PixelMapIToGSize = 0xcb3,
-        PixelMapIToISize = 0xcb0,
-        PixelMapIToRSize = 0xcb2,
-        PixelMapRToRSize = 0xcb6,
-        PixelMapSToSSize = 0xcb1,
         PointSize = 0xb11,
         PointSizeGranularity = 0xb13,
         PointSizeRange = 0xb12,
-        PointSmooth = 0xb10,
-        PointSmoothHint = 0xc51,
         PolygonMode = 0xb40,
         PolygonOffsetFactor = 0x8038,
         PolygonOffsetFill = 0x8037,
@@ -2140,24 +1451,13 @@ namespace ModGL.NativeGL
         PolygonOffsetUnits = 0x2a00,
         PolygonSmooth = 0xb41,
         PolygonSmoothHint = 0xc53,
-        PolygonStipple = 0xb42,
-        ProjectionMatrix = 0xba7,
-        ProjectionStackDepth = 0xba4,
         ReadBuffer = 0xc02,
-        RedBias = 0xd15,
-        RedBits = 0xd52,
-        RedScale = 0xd14,
-        RenderMode = 0xc40,
-        RgbaMode = 0xc31,
         ScissorBox = 0xc10,
         ScissorTest = 0xc11,
-        SelectionBufferSize = 0xdf4,
-        ShadeModel = 0xb54,
         SmoothLineWidthGranularity = 0xb23,
         SmoothLineWidthRange = 0xb22,
         SmoothPointSizeGranularity = 0xb13,
         SmoothPointSizeRange = 0xb12,
-        StencilBits = 0xd57,
         StencilClearValue = 0xb91,
         StencilFail = 0xb94,
         StencilFunc = 0xb92,
@@ -2174,58 +1474,25 @@ namespace ModGL.NativeGL
         TextureBinding1d = 0x8068,
         TextureBinding2d = 0x8069,
         TextureBinding3d = 0x806a,
-        TextureCoordArray = 0x8078,
-        TextureCoordArraySize = 0x8088,
-        TextureCoordArrayStride = 0x808a,
-        TextureCoordArrayType = 0x8089,
-        TextureGenQ = 0xc63,
-        TextureGenR = 0xc62,
-        TextureGenS = 0xc60,
-        TextureGenT = 0xc61,
-        TextureMatrix = 0xba8,
-        TextureStackDepth = 0xba5,
         UnpackAlignment = 0xcf5,
         UnpackLsbFirst = 0xcf1,
         UnpackRowLength = 0xcf2,
         UnpackSkipPixels = 0xcf4,
         UnpackSkipRows = 0xcf3,
         UnpackSwapBytes = 0xcf0,
-        VertexArray = 0x8074,
-        VertexArraySize = 0x807a,
-        VertexArrayStride = 0x807c,
-        VertexArrayType = 0x807b,
         Viewport = 0xba2,
-        ZoomX = 0xd16,
-        ZoomY = 0xd17,
-    }
-    public enum GetPointervPName : uint
-    {
-        ColorArrayPointer = 0x8090,
-        EdgeFlagArrayPointer = 0x8093,
-        FeedbackBufferPointer = 0xdf0,
-        IndexArrayPointer = 0x8091,
-        NormalArrayPointer = 0x808f,
-        SelectionBufferPointer = 0xdf3,
-        TextureCoordArrayPointer = 0x8092,
-        VertexArrayPointer = 0x808e,
     }
     public enum GetTextureParameter : uint
     {
         TextureAlphaSize = 0x805f,
         TextureBlueSize = 0x805e,
-        TextureBorder = 0x1005,
         TextureBorderColor = 0x1004,
-        TextureComponents = 0x1003,
         TextureGreenSize = 0x805d,
         TextureHeight = 0x1001,
-        TextureIntensitySize = 0x8061,
         TextureInternalFormat = 0x1003,
-        TextureLuminanceSize = 0x8060,
         TextureMagFilter = 0x2800,
         TextureMinFilter = 0x2801,
-        TexturePriority = 0x8066,
         TextureRedSize = 0x805c,
-        TextureResident = 0x8067,
         TextureWidth = 0x1000,
         TextureWrapS = 0x2802,
         TextureWrapT = 0x2803,
@@ -2238,12 +1505,8 @@ namespace ModGL.NativeGL
     }
     public enum HintTarget : uint
     {
-        FogHint = 0xc54,
         FragmentShaderDerivativeHint = 0x8b8b,
-        GenerateMipmapHint = 0x8192,
         LineSmoothHint = 0xc52,
-        PerspectiveCorrectionHint = 0xc50,
-        PointSmoothHint = 0xc51,
         PolygonSmoothHint = 0xc53,
         ProgramBinaryRetrievableHint = 0x8257,
         TextureCompressionHint = 0x84ef,
@@ -2255,75 +1518,12 @@ namespace ModGL.NativeGL
         Int = 0x1404,
         Short = 0x1402,
     }
-    public enum InterleavedArrayFormat : uint
-    {
-        C3fV3f = 0x2a24,
-        C4fN3fV3f = 0x2a26,
-        C4ubV2f = 0x2a22,
-        C4ubV3f = 0x2a23,
-        N3fV3f = 0x2a25,
-        T2fC3fV3f = 0x2a2a,
-        T2fC4fN3fV3f = 0x2a2c,
-        T2fC4ubV3f = 0x2a29,
-        T2fN3fV3f = 0x2a2b,
-        T2fV3f = 0x2a27,
-        T4fC4fN3fV4f = 0x2a2d,
-        T4fV4f = 0x2a28,
-        V2f = 0x2a20,
-        V3f = 0x2a21,
-    }
     public enum LightEnvModeSGIX : uint
     {
-        Add = 0x104,
-        Modulate = 0x2100,
         Replace = 0x1e01,
-    }
-    public enum LightModelColorControl : uint
-    {
-        SeparateSpecularColor = 0x81fa,
-        SingleColor = 0x81f9,
-    }
-    public enum LightModelParameter : uint
-    {
-        LightModelAmbient = 0xb53,
-        LightModelColorControl = 0x81f8,
-        LightModelLocalViewer = 0xb51,
-        LightModelTwoSide = 0xb52,
-    }
-    public enum LightName : uint
-    {
-        Light0 = 0x4000,
-        Light1 = 0x4001,
-        Light2 = 0x4002,
-        Light3 = 0x4003,
-        Light4 = 0x4004,
-        Light5 = 0x4005,
-        Light6 = 0x4006,
-        Light7 = 0x4007,
-    }
-    public enum LightParameter : uint
-    {
-        Ambient = 0x1200,
-        ConstantAttenuation = 0x1207,
-        Diffuse = 0x1201,
-        LinearAttenuation = 0x1208,
-        Position = 0x1203,
-        QuadraticAttenuation = 0x1209,
-        Specular = 0x1202,
-        SpotCutoff = 0x1206,
-        SpotDirection = 0x1204,
-        SpotExponent = 0x1205,
-    }
-    public enum ListMode : uint
-    {
-        Compile = 0x1300,
-        CompileAndExecute = 0x1301,
     }
     public enum ListNameType : uint
     {
-        _2Bytes = 0x1407,
-        _3Bytes = 0x1408,
-        _4Bytes = 0x1409,
         Byte = 0x1400,
         Float = 0x1406,
         Int = 0x1404,
@@ -2364,47 +1564,14 @@ namespace ModGL.NativeGL
         MapUnsynchronizedBit = 0x20,
         MapWriteBit = 0x2,
     }
-    public enum MapTarget : uint
-    {
-        Map1Color4 = 0xd90,
-        Map1Index = 0xd91,
-        Map1Normal = 0xd92,
-        Map1TextureCoord1 = 0xd93,
-        Map1TextureCoord2 = 0xd94,
-        Map1TextureCoord3 = 0xd95,
-        Map1TextureCoord4 = 0xd96,
-        Map1Vertex3 = 0xd97,
-        Map1Vertex4 = 0xd98,
-        Map2Color4 = 0xdb0,
-        Map2Index = 0xdb1,
-        Map2Normal = 0xdb2,
-        Map2TextureCoord1 = 0xdb3,
-        Map2TextureCoord2 = 0xdb4,
-        Map2TextureCoord3 = 0xdb5,
-        Map2TextureCoord4 = 0xdb6,
-        Map2Vertex3 = 0xdb7,
-        Map2Vertex4 = 0xdb8,
-    }
     public enum MaterialFace : uint
     {
         Back = 0x405,
         Front = 0x404,
         FrontAndBack = 0x408,
     }
-    public enum MaterialParameter : uint
-    {
-        Ambient = 0x1200,
-        AmbientAndDiffuse = 0x1602,
-        ColorIndexes = 0x1603,
-        Diffuse = 0x1201,
-        Emission = 0x1600,
-        Shininess = 0x1601,
-        Specular = 0x1202,
-    }
     public enum MatrixMode : uint
     {
-        Modelview = 0x1700,
-        Projection = 0x1701,
         Texture = 0x1702,
     }
     public enum MemoryBarrierMask : uint
@@ -2455,11 +1622,8 @@ namespace ModGL.NativeGL
     {
         Alpha = 0x1906,
         Blue = 0x1905,
-        ColorIndex = 0x1900,
         DepthComponent = 0x1902,
         Green = 0x1904,
-        Luminance = 0x1909,
-        LuminanceAlpha = 0x190a,
         Red = 0x1903,
         Rgb = 0x1907,
         Rgba = 0x1908,
@@ -2469,25 +1633,6 @@ namespace ModGL.NativeGL
     }
     public enum InternalFormat : uint
     {
-        Alpha12 = 0x803d,
-        Alpha16 = 0x803e,
-        Alpha4 = 0x803b,
-        Alpha8 = 0x803c,
-        Intensity = 0x8049,
-        Intensity12 = 0x804c,
-        Intensity16 = 0x804d,
-        Intensity4 = 0x804a,
-        Intensity8 = 0x804b,
-        Luminance12 = 0x8041,
-        Luminance12Alpha12 = 0x8047,
-        Luminance12Alpha4 = 0x8046,
-        Luminance16 = 0x8042,
-        Luminance16Alpha16 = 0x8048,
-        Luminance4 = 0x803f,
-        Luminance4Alpha4 = 0x8043,
-        Luminance6Alpha2 = 0x8044,
-        Luminance8 = 0x8040,
-        Luminance8Alpha8 = 0x8045,
         R3G3B2 = 0x2a10,
         Rgb10 = 0x8052,
         Rgb10A2 = 0x8059,
@@ -2502,19 +1647,6 @@ namespace ModGL.NativeGL
         Rgba2 = 0x8055,
         Rgba4 = 0x8056,
         Rgba8 = 0x8058,
-    }
-    public enum PixelMap : uint
-    {
-        PixelMapAToA = 0xc79,
-        PixelMapBToB = 0xc78,
-        PixelMapGToG = 0xc77,
-        PixelMapIToA = 0xc75,
-        PixelMapIToB = 0xc74,
-        PixelMapIToG = 0xc73,
-        PixelMapIToI = 0xc70,
-        PixelMapIToR = 0xc72,
-        PixelMapRToR = 0xc76,
-        PixelMapSToS = 0xc71,
     }
     public enum PixelStoreParameter : uint
     {
@@ -2537,32 +1669,12 @@ namespace ModGL.NativeGL
     }
     public enum PixelTexGenMode : uint
     {
-        Luminance = 0x1909,
-        LuminanceAlpha = 0x190a,
         None = 0x0,
         Rgb = 0x1907,
         Rgba = 0x1908,
     }
-    public enum PixelTransferParameter : uint
-    {
-        AlphaBias = 0xd1d,
-        AlphaScale = 0xd1c,
-        BlueBias = 0xd1b,
-        BlueScale = 0xd1a,
-        DepthBias = 0xd1f,
-        DepthScale = 0xd1e,
-        GreenBias = 0xd19,
-        GreenScale = 0xd18,
-        IndexOffset = 0xd13,
-        IndexShift = 0xd12,
-        MapColor = 0xd10,
-        MapStencil = 0xd11,
-        RedBias = 0xd15,
-        RedScale = 0xd14,
-    }
     public enum PixelType : uint
     {
-        Bitmap = 0x1a00,
         Byte = 0x1400,
         Float = 0x1406,
         Int = 0x1404,
@@ -2578,10 +1690,7 @@ namespace ModGL.NativeGL
     }
     public enum PointParameterNameSGIS : uint
     {
-        PointDistanceAttenuation = 0x8129,
         PointFadeThresholdSize = 0x8128,
-        PointSizeMax = 0x8127,
-        PointSizeMin = 0x8126,
     }
     public enum PolygonMode : uint
     {
@@ -2598,9 +1707,6 @@ namespace ModGL.NativeGL
         LineStripAdjacency = 0xb,
         Patches = 0xe,
         Points = 0x0,
-        Polygon = 0x9,
-        Quads = 0x7,
-        QuadStrip = 0x8,
         Triangles = 0x4,
         TrianglesAdjacency = 0xc,
         TriangleFan = 0x6,
@@ -2609,10 +1715,6 @@ namespace ModGL.NativeGL
     }
     public enum ReadBufferMode : uint
     {
-        Aux0 = 0x409,
-        Aux1 = 0x40a,
-        Aux2 = 0x40b,
-        Aux3 = 0x40c,
         Back = 0x405,
         BackLeft = 0x402,
         BackRight = 0x403,
@@ -2621,17 +1723,6 @@ namespace ModGL.NativeGL
         FrontRight = 0x401,
         Left = 0x406,
         Right = 0x407,
-    }
-    public enum RenderingMode : uint
-    {
-        Feedback = 0x1c01,
-        Render = 0x1c00,
-        Select = 0x1c02,
-    }
-    public enum ShadingModel : uint
-    {
-        Flat = 0x1d00,
-        Smooth = 0x1d01,
     }
     public enum StencilFunction : uint
     {
@@ -2667,40 +1758,9 @@ namespace ModGL.NativeGL
         Int = 0x1404,
         Short = 0x1402,
     }
-    public enum TextureCoordName : uint
-    {
-        S = 0x2000,
-        T = 0x2001,
-        R = 0x2002,
-        Q = 0x2003,
-    }
     public enum TextureEnvMode : uint
     {
-        Add = 0x104,
         Blend = 0xbe2,
-        Decal = 0x2101,
-        Modulate = 0x2100,
-    }
-    public enum TextureEnvParameter : uint
-    {
-        TextureEnvColor = 0x2201,
-        TextureEnvMode = 0x2200,
-    }
-    public enum TextureEnvTarget : uint
-    {
-        TextureEnv = 0x2300,
-    }
-    public enum TextureGenMode : uint
-    {
-        EyeLinear = 0x2400,
-        ObjectLinear = 0x2401,
-        SphereMap = 0x2402,
-    }
-    public enum TextureGenParameter : uint
-    {
-        EyePlane = 0x2502,
-        ObjectPlane = 0x2501,
-        TextureGenMode = 0x2500,
     }
     public enum TextureMagFilter : uint
     {
@@ -2718,11 +1778,9 @@ namespace ModGL.NativeGL
     }
     public enum TextureParameterName : uint
     {
-        GenerateMipmap = 0x8191,
         TextureBorderColor = 0x1004,
         TextureMagFilter = 0x2800,
         TextureMinFilter = 0x2801,
-        TexturePriority = 0x8066,
         TextureWrapR = 0x8072,
         TextureWrapS = 0x2802,
         TextureWrapT = 0x2803,
@@ -2742,7 +1800,6 @@ namespace ModGL.NativeGL
     }
     public enum TextureWrapMode : uint
     {
-        Clamp = 0x2900,
         ClampToBorder = 0x812d,
         ClampToEdge = 0x812f,
         Repeat = 0x2901,
@@ -2820,454 +1877,11 @@ namespace ModGL.NativeGL
         GLboolean IsEnabled(EnableCap cap);
         void DepthRange(double near, double far);
         void Viewport(int x, int y, int width, int height);
-        void NewList(uint list, ListMode mode);
-        void EndList();
-        void CallList(uint list);
-        void CallLists(int n, ListNameType type, IntPtr lists);
-        void DeleteLists(uint list, int range);
-        uint GenLists(int range);
-        void ListBase(uint @base);
-        void Begin(PrimitiveType mode);
-        void Bitmap(int width, int height, float xorig, float yorig, float xmove, float ymove, [In]string bitmap);
-        void Color3b(sbyte red, sbyte green, sbyte blue);
-        void Color3bv([In]sbyte[] v);
-        void Color3bv(IntPtr v);
-        unsafe void Color3bv(sbyte* v);
-        void Color3d(double red, double green, double blue);
-        void Color3dv([In]double[] v);
-        void Color3dv(IntPtr v);
-        unsafe void Color3dv(double* v);
-        void Color3f(float red, float green, float blue);
-        void Color3fv([In]float[] v);
-        void Color3fv(IntPtr v);
-        unsafe void Color3fv(float* v);
-        void Color3i(int red, int green, int blue);
-        void Color3iv([In]int[] v);
-        void Color3iv(IntPtr v);
-        unsafe void Color3iv(int* v);
-        void Color3s(short red, short green, short blue);
-        void Color3sv([In]short[] v);
-        void Color3sv(IntPtr v);
-        unsafe void Color3sv(short* v);
-        void Color3ub(byte red, byte green, byte blue);
-        void Color3ubv([In]string v);
-        void Color3ui(uint red, uint green, uint blue);
-        void Color3uiv([In]uint[] v);
-        void Color3uiv(IntPtr v);
-        unsafe void Color3uiv(uint* v);
-        void Color3us(ushort red, ushort green, ushort blue);
-        void Color3usv([In]ushort[] v);
-        void Color3usv(IntPtr v);
-        unsafe void Color3usv(ushort* v);
-        void Color4b(sbyte red, sbyte green, sbyte blue, sbyte alpha);
-        void Color4bv([In]sbyte[] v);
-        void Color4bv(IntPtr v);
-        unsafe void Color4bv(sbyte* v);
-        void Color4d(double red, double green, double blue, double alpha);
-        void Color4dv([In]double[] v);
-        void Color4dv(IntPtr v);
-        unsafe void Color4dv(double* v);
-        void Color4f(float red, float green, float blue, float alpha);
-        void Color4fv([In]float[] v);
-        void Color4fv(IntPtr v);
-        unsafe void Color4fv(float* v);
-        void Color4i(int red, int green, int blue, int alpha);
-        void Color4iv([In]int[] v);
-        void Color4iv(IntPtr v);
-        unsafe void Color4iv(int* v);
-        void Color4s(short red, short green, short blue, short alpha);
-        void Color4sv([In]short[] v);
-        void Color4sv(IntPtr v);
-        unsafe void Color4sv(short* v);
-        void Color4ub(byte red, byte green, byte blue, byte alpha);
-        void Color4ubv([In]string v);
-        void Color4ui(uint red, uint green, uint blue, uint alpha);
-        void Color4uiv([In]uint[] v);
-        void Color4uiv(IntPtr v);
-        unsafe void Color4uiv(uint* v);
-        void Color4us(ushort red, ushort green, ushort blue, ushort alpha);
-        void Color4usv([In]ushort[] v);
-        void Color4usv(IntPtr v);
-        unsafe void Color4usv(ushort* v);
-        void EdgeFlag(GLboolean flag);
-        void EdgeFlagv([In]GLboolean flag);
-        void End();
-        void Indexd(double c);
-        void Indexdv([In]double[] c);
-        void Indexdv(IntPtr c);
-        unsafe void Indexdv(double* c);
-        void Indexf(float c);
-        void Indexfv([In]float[] c);
-        void Indexfv(IntPtr c);
-        unsafe void Indexfv(float* c);
-        void Indexi(int c);
-        void Indexiv([In]int[] c);
-        void Indexiv(IntPtr c);
-        unsafe void Indexiv(int* c);
-        void Indexs(short c);
-        void Indexsv([In]short[] c);
-        void Indexsv(IntPtr c);
-        unsafe void Indexsv(short* c);
-        void Normal3b(sbyte nx, sbyte ny, sbyte nz);
-        void Normal3bv([In]sbyte[] v);
-        void Normal3bv(IntPtr v);
-        unsafe void Normal3bv(sbyte* v);
-        void Normal3d(double nx, double ny, double nz);
-        void Normal3dv([In]double[] v);
-        void Normal3dv(IntPtr v);
-        unsafe void Normal3dv(double* v);
-        void Normal3f(float nx, float ny, float nz);
-        void Normal3fv([In]float[] v);
-        void Normal3fv(IntPtr v);
-        unsafe void Normal3fv(float* v);
-        void Normal3i(int nx, int ny, int nz);
-        void Normal3iv([In]int[] v);
-        void Normal3iv(IntPtr v);
-        unsafe void Normal3iv(int* v);
-        void Normal3s(short nx, short ny, short nz);
-        void Normal3sv([In]short[] v);
-        void Normal3sv(IntPtr v);
-        unsafe void Normal3sv(short* v);
-        void RasterPos2d(double x, double y);
-        void RasterPos2dv([In]double[] v);
-        void RasterPos2dv(IntPtr v);
-        unsafe void RasterPos2dv(double* v);
-        void RasterPos2f(float x, float y);
-        void RasterPos2fv([In]float[] v);
-        void RasterPos2fv(IntPtr v);
-        unsafe void RasterPos2fv(float* v);
-        void RasterPos2i(int x, int y);
-        void RasterPos2iv([In]int[] v);
-        void RasterPos2iv(IntPtr v);
-        unsafe void RasterPos2iv(int* v);
-        void RasterPos2s(short x, short y);
-        void RasterPos2sv([In]short[] v);
-        void RasterPos2sv(IntPtr v);
-        unsafe void RasterPos2sv(short* v);
-        void RasterPos3d(double x, double y, double z);
-        void RasterPos3dv([In]double[] v);
-        void RasterPos3dv(IntPtr v);
-        unsafe void RasterPos3dv(double* v);
-        void RasterPos3f(float x, float y, float z);
-        void RasterPos3fv([In]float[] v);
-        void RasterPos3fv(IntPtr v);
-        unsafe void RasterPos3fv(float* v);
-        void RasterPos3i(int x, int y, int z);
-        void RasterPos3iv([In]int[] v);
-        void RasterPos3iv(IntPtr v);
-        unsafe void RasterPos3iv(int* v);
-        void RasterPos3s(short x, short y, short z);
-        void RasterPos3sv([In]short[] v);
-        void RasterPos3sv(IntPtr v);
-        unsafe void RasterPos3sv(short* v);
-        void RasterPos4d(double x, double y, double z, double w);
-        void RasterPos4dv([In]double[] v);
-        void RasterPos4dv(IntPtr v);
-        unsafe void RasterPos4dv(double* v);
-        void RasterPos4f(float x, float y, float z, float w);
-        void RasterPos4fv([In]float[] v);
-        void RasterPos4fv(IntPtr v);
-        unsafe void RasterPos4fv(float* v);
-        void RasterPos4i(int x, int y, int z, int w);
-        void RasterPos4iv([In]int[] v);
-        void RasterPos4iv(IntPtr v);
-        unsafe void RasterPos4iv(int* v);
-        void RasterPos4s(short x, short y, short z, short w);
-        void RasterPos4sv([In]short[] v);
-        void RasterPos4sv(IntPtr v);
-        unsafe void RasterPos4sv(short* v);
-        void Rectd(double x1, double y1, double x2, double y2);
-        void Rectdv([In]double[] v1, [In]double[] v2);
-        void Rectf(float x1, float y1, float x2, float y2);
-        void Rectfv([In]float[] v1, [In]float[] v2);
-        void Recti(int x1, int y1, int x2, int y2);
-        void Rectiv([In]int[] v1, [In]int[] v2);
-        void Rects(short x1, short y1, short x2, short y2);
-        void Rectsv([In]short[] v1, [In]short[] v2);
-        void TexCoord1d(double s);
-        void TexCoord1dv([In]double[] v);
-        void TexCoord1dv(IntPtr v);
-        unsafe void TexCoord1dv(double* v);
-        void TexCoord1f(float s);
-        void TexCoord1fv([In]float[] v);
-        void TexCoord1fv(IntPtr v);
-        unsafe void TexCoord1fv(float* v);
-        void TexCoord1i(int s);
-        void TexCoord1iv([In]int[] v);
-        void TexCoord1iv(IntPtr v);
-        unsafe void TexCoord1iv(int* v);
-        void TexCoord1s(short s);
-        void TexCoord1sv([In]short[] v);
-        void TexCoord1sv(IntPtr v);
-        unsafe void TexCoord1sv(short* v);
-        void TexCoord2d(double s, double t);
-        void TexCoord2dv([In]double[] v);
-        void TexCoord2dv(IntPtr v);
-        unsafe void TexCoord2dv(double* v);
-        void TexCoord2f(float s, float t);
-        void TexCoord2fv([In]float[] v);
-        void TexCoord2fv(IntPtr v);
-        unsafe void TexCoord2fv(float* v);
-        void TexCoord2i(int s, int t);
-        void TexCoord2iv([In]int[] v);
-        void TexCoord2iv(IntPtr v);
-        unsafe void TexCoord2iv(int* v);
-        void TexCoord2s(short s, short t);
-        void TexCoord2sv([In]short[] v);
-        void TexCoord2sv(IntPtr v);
-        unsafe void TexCoord2sv(short* v);
-        void TexCoord3d(double s, double t, double r);
-        void TexCoord3dv([In]double[] v);
-        void TexCoord3dv(IntPtr v);
-        unsafe void TexCoord3dv(double* v);
-        void TexCoord3f(float s, float t, float r);
-        void TexCoord3fv([In]float[] v);
-        void TexCoord3fv(IntPtr v);
-        unsafe void TexCoord3fv(float* v);
-        void TexCoord3i(int s, int t, int r);
-        void TexCoord3iv([In]int[] v);
-        void TexCoord3iv(IntPtr v);
-        unsafe void TexCoord3iv(int* v);
-        void TexCoord3s(short s, short t, short r);
-        void TexCoord3sv([In]short[] v);
-        void TexCoord3sv(IntPtr v);
-        unsafe void TexCoord3sv(short* v);
-        void TexCoord4d(double s, double t, double r, double q);
-        void TexCoord4dv([In]double[] v);
-        void TexCoord4dv(IntPtr v);
-        unsafe void TexCoord4dv(double* v);
-        void TexCoord4f(float s, float t, float r, float q);
-        void TexCoord4fv([In]float[] v);
-        void TexCoord4fv(IntPtr v);
-        unsafe void TexCoord4fv(float* v);
-        void TexCoord4i(int s, int t, int r, int q);
-        void TexCoord4iv([In]int[] v);
-        void TexCoord4iv(IntPtr v);
-        unsafe void TexCoord4iv(int* v);
-        void TexCoord4s(short s, short t, short r, short q);
-        void TexCoord4sv([In]short[] v);
-        void TexCoord4sv(IntPtr v);
-        unsafe void TexCoord4sv(short* v);
-        void Vertex2d(double x, double y);
-        void Vertex2dv([In]double[] v);
-        void Vertex2dv(IntPtr v);
-        unsafe void Vertex2dv(double* v);
-        void Vertex2f(float x, float y);
-        void Vertex2fv([In]float[] v);
-        void Vertex2fv(IntPtr v);
-        unsafe void Vertex2fv(float* v);
-        void Vertex2i(int x, int y);
-        void Vertex2iv([In]int[] v);
-        void Vertex2iv(IntPtr v);
-        unsafe void Vertex2iv(int* v);
-        void Vertex2s(short x, short y);
-        void Vertex2sv([In]short[] v);
-        void Vertex2sv(IntPtr v);
-        unsafe void Vertex2sv(short* v);
-        void Vertex3d(double x, double y, double z);
-        void Vertex3dv([In]double[] v);
-        void Vertex3dv(IntPtr v);
-        unsafe void Vertex3dv(double* v);
-        void Vertex3f(float x, float y, float z);
-        void Vertex3fv([In]float[] v);
-        void Vertex3fv(IntPtr v);
-        unsafe void Vertex3fv(float* v);
-        void Vertex3i(int x, int y, int z);
-        void Vertex3iv([In]int[] v);
-        void Vertex3iv(IntPtr v);
-        unsafe void Vertex3iv(int* v);
-        void Vertex3s(short x, short y, short z);
-        void Vertex3sv([In]short[] v);
-        void Vertex3sv(IntPtr v);
-        unsafe void Vertex3sv(short* v);
-        void Vertex4d(double x, double y, double z, double w);
-        void Vertex4dv([In]double[] v);
-        void Vertex4dv(IntPtr v);
-        unsafe void Vertex4dv(double* v);
-        void Vertex4f(float x, float y, float z, float w);
-        void Vertex4fv([In]float[] v);
-        void Vertex4fv(IntPtr v);
-        unsafe void Vertex4fv(float* v);
-        void Vertex4i(int x, int y, int z, int w);
-        void Vertex4iv([In]int[] v);
-        void Vertex4iv(IntPtr v);
-        unsafe void Vertex4iv(int* v);
-        void Vertex4s(short x, short y, short z, short w);
-        void Vertex4sv([In]short[] v);
-        void Vertex4sv(IntPtr v);
-        unsafe void Vertex4sv(short* v);
-        void ClipPlane(ClipPlaneName plane, [In]double[] equation);
-        void ClipPlane(ClipPlaneName plane, IntPtr equation);
-        unsafe void ClipPlane(ClipPlaneName plane, double* equation);
-        void ColorMaterial(MaterialFace face, ColorMaterialParameter mode);
-        void Fogf(FogParameter pname, float param);
-        void Fogfv(FogParameter pname, [In]float[] @params);
-        void Fogfv(FogParameter pname, IntPtr @params);
-        unsafe void Fogfv(FogParameter pname, float* @params);
-        void Fogi(FogParameter pname, int param);
-        void Fogiv(FogParameter pname, [In]int[] @params);
-        void Fogiv(FogParameter pname, IntPtr @params);
-        unsafe void Fogiv(FogParameter pname, int* @params);
-        void Lightf(LightName light, LightParameter pname, float param);
-        void Lightfv(LightName light, LightParameter pname, [In]float[] @params);
-        void Lightfv(LightName light, LightParameter pname, IntPtr @params);
-        unsafe void Lightfv(LightName light, LightParameter pname, float* @params);
-        void Lighti(LightName light, LightParameter pname, int param);
-        void Lightiv(LightName light, LightParameter pname, [In]int[] @params);
-        void Lightiv(LightName light, LightParameter pname, IntPtr @params);
-        unsafe void Lightiv(LightName light, LightParameter pname, int* @params);
-        void LightModelf(LightModelParameter pname, float param);
-        void LightModelfv(LightModelParameter pname, [In]float[] @params);
-        void LightModelfv(LightModelParameter pname, IntPtr @params);
-        unsafe void LightModelfv(LightModelParameter pname, float* @params);
-        void LightModeli(LightModelParameter pname, int param);
-        void LightModeliv(LightModelParameter pname, [In]int[] @params);
-        void LightModeliv(LightModelParameter pname, IntPtr @params);
-        unsafe void LightModeliv(LightModelParameter pname, int* @params);
-        void LineStipple(int factor, ushort pattern);
-        void Materialf(MaterialFace face, MaterialParameter pname, float param);
-        void Materialfv(MaterialFace face, MaterialParameter pname, [In]float[] @params);
-        void Materialfv(MaterialFace face, MaterialParameter pname, IntPtr @params);
-        unsafe void Materialfv(MaterialFace face, MaterialParameter pname, float* @params);
-        void Materiali(MaterialFace face, MaterialParameter pname, int param);
-        void Materialiv(MaterialFace face, MaterialParameter pname, [In]int[] @params);
-        void Materialiv(MaterialFace face, MaterialParameter pname, IntPtr @params);
-        unsafe void Materialiv(MaterialFace face, MaterialParameter pname, int* @params);
-        void PolygonStipple([In]string mask);
-        void ShadeModel(ShadingModel mode);
-        void TexEnvf(TextureEnvTarget target, TextureEnvParameter pname, float param);
-        void TexEnvfv(TextureEnvTarget target, TextureEnvParameter pname, [In]float[] @params);
-        void TexEnvfv(TextureEnvTarget target, TextureEnvParameter pname, IntPtr @params);
-        unsafe void TexEnvfv(TextureEnvTarget target, TextureEnvParameter pname, float* @params);
-        void TexEnvi(TextureEnvTarget target, TextureEnvParameter pname, int param);
-        void TexEnviv(TextureEnvTarget target, TextureEnvParameter pname, [In]int[] @params);
-        void TexEnviv(TextureEnvTarget target, TextureEnvParameter pname, IntPtr @params);
-        unsafe void TexEnviv(TextureEnvTarget target, TextureEnvParameter pname, int* @params);
-        void TexGend(TextureCoordName coord, TextureGenParameter pname, double param);
-        void TexGendv(TextureCoordName coord, TextureGenParameter pname, [In]double[] @params);
-        void TexGendv(TextureCoordName coord, TextureGenParameter pname, IntPtr @params);
-        unsafe void TexGendv(TextureCoordName coord, TextureGenParameter pname, double* @params);
-        void TexGenf(TextureCoordName coord, TextureGenParameter pname, float param);
-        void TexGenfv(TextureCoordName coord, TextureGenParameter pname, [In]float[] @params);
-        void TexGenfv(TextureCoordName coord, TextureGenParameter pname, IntPtr @params);
-        unsafe void TexGenfv(TextureCoordName coord, TextureGenParameter pname, float* @params);
-        void TexGeni(TextureCoordName coord, TextureGenParameter pname, int param);
-        void TexGeniv(TextureCoordName coord, TextureGenParameter pname, [In]int[] @params);
-        void TexGeniv(TextureCoordName coord, TextureGenParameter pname, IntPtr @params);
-        unsafe void TexGeniv(TextureCoordName coord, TextureGenParameter pname, int* @params);
-        void FeedbackBuffer(int size, FeedbackType type, [Out]float[] buffer);
-        void SelectBuffer(int size, [Out]uint[] buffer);
-        int RenderMode(RenderingMode mode);
-        void InitNames();
-        void LoadName(uint name);
-        void PassThrough(float token);
-        void PopName();
-        void PushName(uint name);
-        void ClearAccum(float red, float green, float blue, float alpha);
-        void ClearIndex(float c);
-        void IndexMask(uint mask);
-        void Accum(AccumOp op, float value);
-        void PopAttrib();
-        void PushAttrib(uint mask);
-        void Map1d(MapTarget target, double u1, double u2, int stride, int order, [In]double[] points);
-        void Map1d(MapTarget target, double u1, double u2, int stride, int order, IntPtr points);
-        unsafe void Map1d(MapTarget target, double u1, double u2, int stride, int order, double* points);
-        void Map1f(MapTarget target, float u1, float u2, int stride, int order, [In]float[] points);
-        void Map1f(MapTarget target, float u1, float u2, int stride, int order, IntPtr points);
-        unsafe void Map1f(MapTarget target, float u1, float u2, int stride, int order, float* points);
-        void Map2d(MapTarget target, double u1, double u2, int ustride, int uorder, double v1, double v2, int vstride, int vorder, [In]double[] points);
-        void Map2d(MapTarget target, double u1, double u2, int ustride, int uorder, double v1, double v2, int vstride, int vorder, IntPtr points);
-        unsafe void Map2d(MapTarget target, double u1, double u2, int ustride, int uorder, double v1, double v2, int vstride, int vorder, double* points);
-        void Map2f(MapTarget target, float u1, float u2, int ustride, int uorder, float v1, float v2, int vstride, int vorder, [In]float[] points);
-        void Map2f(MapTarget target, float u1, float u2, int ustride, int uorder, float v1, float v2, int vstride, int vorder, IntPtr points);
-        unsafe void Map2f(MapTarget target, float u1, float u2, int ustride, int uorder, float v1, float v2, int vstride, int vorder, float* points);
-        void MapGrid1d(int un, double u1, double u2);
-        void MapGrid1f(int un, float u1, float u2);
-        void MapGrid2d(int un, double u1, double u2, int vn, double v1, double v2);
-        void MapGrid2f(int un, float u1, float u2, int vn, float v1, float v2);
-        void EvalCoord1d(double u);
-        void EvalCoord1dv([In]double[] u);
-        void EvalCoord1dv(IntPtr u);
-        unsafe void EvalCoord1dv(double* u);
-        void EvalCoord1f(float u);
-        void EvalCoord1fv([In]float[] u);
-        void EvalCoord1fv(IntPtr u);
-        unsafe void EvalCoord1fv(float* u);
-        void EvalCoord2d(double u, double v);
-        void EvalCoord2dv([In]double[] u);
-        void EvalCoord2dv(IntPtr u);
-        unsafe void EvalCoord2dv(double* u);
-        void EvalCoord2f(float u, float v);
-        void EvalCoord2fv([In]float[] u);
-        void EvalCoord2fv(IntPtr u);
-        unsafe void EvalCoord2fv(float* u);
-        void EvalMesh1(MeshMode1 mode, int i1, int i2);
-        void EvalPoint1(int i);
-        void EvalMesh2(MeshMode2 mode, int i1, int i2, int j1, int j2);
-        void EvalPoint2(int i, int j);
-        void AlphaFunc(AlphaFunction func, float @ref);
-        void PixelZoom(float xfactor, float yfactor);
-        void PixelTransferf(PixelTransferParameter pname, float param);
-        void PixelTransferi(PixelTransferParameter pname, int param);
-        void PixelMapfv(PixelMap map, int mapsize, [In]float[] values);
-        void PixelMapfv(PixelMap map, int mapsize, IntPtr values);
-        unsafe void PixelMapfv(PixelMap map, int mapsize, float* values);
-        void PixelMapuiv(PixelMap map, int mapsize, [In]uint[] values);
-        void PixelMapuiv(PixelMap map, int mapsize, IntPtr values);
-        unsafe void PixelMapuiv(PixelMap map, int mapsize, uint* values);
-        void PixelMapusv(PixelMap map, int mapsize, [In]ushort[] values);
-        void PixelMapusv(PixelMap map, int mapsize, IntPtr values);
-        unsafe void PixelMapusv(PixelMap map, int mapsize, ushort* values);
-        void CopyPixels(int x, int y, int width, int height, PixelCopyType type);
-        void DrawPixels(int width, int height, PixelFormat format, PixelType type, IntPtr pixels);
-        void GetClipPlane(ClipPlaneName plane, [Out]double[] equation);
-        void GetLightfv(LightName light, LightParameter pname, [Out]float[] @params);
-        void GetLightiv(LightName light, LightParameter pname, [Out]int[] @params);
-        void GetMapdv(MapTarget target, GetMapQuery query, [Out]double[] v);
-        void GetMapfv(MapTarget target, GetMapQuery query, [Out]float[] v);
-        void GetMapiv(MapTarget target, GetMapQuery query, [Out]int[] v);
-        void GetMaterialfv(MaterialFace face, MaterialParameter pname, [Out]float[] @params);
-        void GetMaterialiv(MaterialFace face, MaterialParameter pname, [Out]int[] @params);
-        void GetPixelMapfv(PixelMap map, [Out]float[] values);
-        void GetPixelMapuiv(PixelMap map, [Out]uint[] values);
-        void GetPixelMapusv(PixelMap map, [Out]ushort[] values);
-        void GetPolygonStipple(ref string mask);
-        void GetTexEnvfv(TextureEnvTarget target, TextureEnvParameter pname, [Out]float[] @params);
-        void GetTexEnviv(TextureEnvTarget target, TextureEnvParameter pname, [Out]int[] @params);
-        void GetTexGendv(TextureCoordName coord, TextureGenParameter pname, [Out]double[] @params);
-        void GetTexGenfv(TextureCoordName coord, TextureGenParameter pname, [Out]float[] @params);
-        void GetTexGeniv(TextureCoordName coord, TextureGenParameter pname, [Out]int[] @params);
-        GLboolean IsList(uint list);
-        void Frustum(double left, double right, double bottom, double top, double zNear, double zFar);
-        void LoadIdentity();
-        void LoadMatrixf([In]float[] m);
-        void LoadMatrixf(IntPtr m);
-        unsafe void LoadMatrixf(float* m);
-        void LoadMatrixd([In]double[] m);
-        void LoadMatrixd(IntPtr m);
-        unsafe void LoadMatrixd(double* m);
-        void MatrixMode(MatrixMode mode);
-        void MultMatrixf([In]float[] m);
-        void MultMatrixf(IntPtr m);
-        unsafe void MultMatrixf(float* m);
-        void MultMatrixd([In]double[] m);
-        void MultMatrixd(IntPtr m);
-        unsafe void MultMatrixd(double* m);
-        void Ortho(double left, double right, double bottom, double top, double zNear, double zFar);
-        void PopMatrix();
-        void PushMatrix();
-        void Rotated(double angle, double x, double y, double z);
-        void Rotatef(float angle, float x, float y, float z);
-        void Scaled(double x, double y, double z);
-        void Scalef(float x, float y, float z);
-        void Translated(double x, double y, double z);
-        void Translatef(float x, float y, float z);
     }
     public interface IOpenGL11 : IOpenGL10
     {
         void DrawArrays(PrimitiveType mode, int first, int count);
         void DrawElements(PrimitiveType mode, int count, uint type, IntPtr indices);
-        void GetPointerv(GetPointervPName pname, [Out]IntPtr[] @params);
         void PolygonOffset(float factor, float units);
         void CopyTexImage1D(TextureTarget target, int level, InternalFormat internalformat, int x, int y, int width, int border);
         void CopyTexImage2D(TextureTarget target, int level, InternalFormat internalformat, int x, int y, int width, int height, int border);
@@ -3281,22 +1895,6 @@ namespace ModGL.NativeGL
         unsafe void DeleteTextures(int n, uint* textures);
         void GenTextures(int n, [Out]uint[] textures);
         GLboolean IsTexture(uint texture);
-        void ArrayElement(int i);
-        void ColorPointer(int size, ColorPointerType type, int stride, IntPtr pointer);
-        void DisableClientState(EnableCap array);
-        void EdgeFlagPointer(int stride, IntPtr pointer);
-        void EnableClientState(EnableCap array);
-        void IndexPointer(IndexPointerType type, int stride, IntPtr pointer);
-        void InterleavedArrays(InterleavedArrayFormat format, int stride, IntPtr pointer);
-        void NormalPointer(NormalPointerType type, int stride, IntPtr pointer);
-        void TexCoordPointer(int size, TexCoordPointerType type, int stride, IntPtr pointer);
-        void VertexPointer(int size, VertexPointerType type, int stride, IntPtr pointer);
-        GLboolean AreTexturesResident(int n, [In]uint[] textures, [Out]GLboolean residences);
-        void PrioritizeTextures(int n, [In]uint[] textures, [In]float[] priorities);
-        void Indexub(byte c);
-        void Indexubv([In]string c);
-        void PopClientAttrib();
-        void PushClientAttrib(uint mask);
     }
     public interface IOpenGL12 : IOpenGL11
     {
@@ -3316,83 +1914,6 @@ namespace ModGL.NativeGL
         void CompressedTexSubImage2D(TextureTarget target, int level, int xoffset, int yoffset, int width, int height, PixelFormat format, int imageSize, IntPtr data);
         void CompressedTexSubImage1D(TextureTarget target, int level, int xoffset, int width, PixelFormat format, int imageSize, IntPtr data);
         void GetCompressedTexImage(TextureTarget target, int level, IntPtr img);
-        void ClientActiveTexture(uint texture);
-        void MultiTexCoord1d(uint target, double s);
-        void MultiTexCoord1dv(uint target, [In]double[] v);
-        void MultiTexCoord1dv(uint target, IntPtr v);
-        unsafe void MultiTexCoord1dv(uint target, double* v);
-        void MultiTexCoord1f(uint target, float s);
-        void MultiTexCoord1fv(uint target, [In]float[] v);
-        void MultiTexCoord1fv(uint target, IntPtr v);
-        unsafe void MultiTexCoord1fv(uint target, float* v);
-        void MultiTexCoord1i(uint target, int s);
-        void MultiTexCoord1iv(uint target, [In]int[] v);
-        void MultiTexCoord1iv(uint target, IntPtr v);
-        unsafe void MultiTexCoord1iv(uint target, int* v);
-        void MultiTexCoord1s(uint target, short s);
-        void MultiTexCoord1sv(uint target, [In]short[] v);
-        void MultiTexCoord1sv(uint target, IntPtr v);
-        unsafe void MultiTexCoord1sv(uint target, short* v);
-        void MultiTexCoord2d(uint target, double s, double t);
-        void MultiTexCoord2dv(uint target, [In]double[] v);
-        void MultiTexCoord2dv(uint target, IntPtr v);
-        unsafe void MultiTexCoord2dv(uint target, double* v);
-        void MultiTexCoord2f(uint target, float s, float t);
-        void MultiTexCoord2fv(uint target, [In]float[] v);
-        void MultiTexCoord2fv(uint target, IntPtr v);
-        unsafe void MultiTexCoord2fv(uint target, float* v);
-        void MultiTexCoord2i(uint target, int s, int t);
-        void MultiTexCoord2iv(uint target, [In]int[] v);
-        void MultiTexCoord2iv(uint target, IntPtr v);
-        unsafe void MultiTexCoord2iv(uint target, int* v);
-        void MultiTexCoord2s(uint target, short s, short t);
-        void MultiTexCoord2sv(uint target, [In]short[] v);
-        void MultiTexCoord2sv(uint target, IntPtr v);
-        unsafe void MultiTexCoord2sv(uint target, short* v);
-        void MultiTexCoord3d(uint target, double s, double t, double r);
-        void MultiTexCoord3dv(uint target, [In]double[] v);
-        void MultiTexCoord3dv(uint target, IntPtr v);
-        unsafe void MultiTexCoord3dv(uint target, double* v);
-        void MultiTexCoord3f(uint target, float s, float t, float r);
-        void MultiTexCoord3fv(uint target, [In]float[] v);
-        void MultiTexCoord3fv(uint target, IntPtr v);
-        unsafe void MultiTexCoord3fv(uint target, float* v);
-        void MultiTexCoord3i(uint target, int s, int t, int r);
-        void MultiTexCoord3iv(uint target, [In]int[] v);
-        void MultiTexCoord3iv(uint target, IntPtr v);
-        unsafe void MultiTexCoord3iv(uint target, int* v);
-        void MultiTexCoord3s(uint target, short s, short t, short r);
-        void MultiTexCoord3sv(uint target, [In]short[] v);
-        void MultiTexCoord3sv(uint target, IntPtr v);
-        unsafe void MultiTexCoord3sv(uint target, short* v);
-        void MultiTexCoord4d(uint target, double s, double t, double r, double q);
-        void MultiTexCoord4dv(uint target, [In]double[] v);
-        void MultiTexCoord4dv(uint target, IntPtr v);
-        unsafe void MultiTexCoord4dv(uint target, double* v);
-        void MultiTexCoord4f(uint target, float s, float t, float r, float q);
-        void MultiTexCoord4fv(uint target, [In]float[] v);
-        void MultiTexCoord4fv(uint target, IntPtr v);
-        unsafe void MultiTexCoord4fv(uint target, float* v);
-        void MultiTexCoord4i(uint target, int s, int t, int r, int q);
-        void MultiTexCoord4iv(uint target, [In]int[] v);
-        void MultiTexCoord4iv(uint target, IntPtr v);
-        unsafe void MultiTexCoord4iv(uint target, int* v);
-        void MultiTexCoord4s(uint target, short s, short t, short r, short q);
-        void MultiTexCoord4sv(uint target, [In]short[] v);
-        void MultiTexCoord4sv(uint target, IntPtr v);
-        unsafe void MultiTexCoord4sv(uint target, short* v);
-        void LoadTransposeMatrixf([In]float[] m);
-        void LoadTransposeMatrixf(IntPtr m);
-        unsafe void LoadTransposeMatrixf(float* m);
-        void LoadTransposeMatrixd([In]double[] m);
-        void LoadTransposeMatrixd(IntPtr m);
-        unsafe void LoadTransposeMatrixd(double* m);
-        void MultTransposeMatrixf([In]float[] m);
-        void MultTransposeMatrixf(IntPtr m);
-        unsafe void MultTransposeMatrixf(float* m);
-        void MultTransposeMatrixd([In]double[] m);
-        void MultTransposeMatrixd(IntPtr m);
-        unsafe void MultTransposeMatrixd(double* m);
     }
     public interface IOpenGL14 : IOpenGL13
     {
@@ -3407,78 +1928,6 @@ namespace ModGL.NativeGL
         void PointParameteriv(uint pname, [In]int[] @params);
         void PointParameteriv(uint pname, IntPtr @params);
         unsafe void PointParameteriv(uint pname, int* @params);
-        void FogCoordf(float coord);
-        void FogCoordfv([In]float[] coord);
-        void FogCoordfv(IntPtr coord);
-        unsafe void FogCoordfv(float* coord);
-        void FogCoordd(double coord);
-        void FogCoorddv([In]double[] coord);
-        void FogCoorddv(IntPtr coord);
-        unsafe void FogCoorddv(double* coord);
-        void FogCoordPointer(FogPointerTypeEXT type, int stride, IntPtr pointer);
-        void SecondaryColor3b(sbyte red, sbyte green, sbyte blue);
-        void SecondaryColor3bv([In]sbyte[] v);
-        void SecondaryColor3bv(IntPtr v);
-        unsafe void SecondaryColor3bv(sbyte* v);
-        void SecondaryColor3d(double red, double green, double blue);
-        void SecondaryColor3dv([In]double[] v);
-        void SecondaryColor3dv(IntPtr v);
-        unsafe void SecondaryColor3dv(double* v);
-        void SecondaryColor3f(float red, float green, float blue);
-        void SecondaryColor3fv([In]float[] v);
-        void SecondaryColor3fv(IntPtr v);
-        unsafe void SecondaryColor3fv(float* v);
-        void SecondaryColor3i(int red, int green, int blue);
-        void SecondaryColor3iv([In]int[] v);
-        void SecondaryColor3iv(IntPtr v);
-        unsafe void SecondaryColor3iv(int* v);
-        void SecondaryColor3s(short red, short green, short blue);
-        void SecondaryColor3sv([In]short[] v);
-        void SecondaryColor3sv(IntPtr v);
-        unsafe void SecondaryColor3sv(short* v);
-        void SecondaryColor3ub(byte red, byte green, byte blue);
-        void SecondaryColor3ubv([In]string v);
-        void SecondaryColor3ui(uint red, uint green, uint blue);
-        void SecondaryColor3uiv([In]uint[] v);
-        void SecondaryColor3uiv(IntPtr v);
-        unsafe void SecondaryColor3uiv(uint* v);
-        void SecondaryColor3us(ushort red, ushort green, ushort blue);
-        void SecondaryColor3usv([In]ushort[] v);
-        void SecondaryColor3usv(IntPtr v);
-        unsafe void SecondaryColor3usv(ushort* v);
-        void SecondaryColorPointer(int size, ColorPointerType type, int stride, IntPtr pointer);
-        void WindowPos2d(double x, double y);
-        void WindowPos2dv([In]double[] v);
-        void WindowPos2dv(IntPtr v);
-        unsafe void WindowPos2dv(double* v);
-        void WindowPos2f(float x, float y);
-        void WindowPos2fv([In]float[] v);
-        void WindowPos2fv(IntPtr v);
-        unsafe void WindowPos2fv(float* v);
-        void WindowPos2i(int x, int y);
-        void WindowPos2iv([In]int[] v);
-        void WindowPos2iv(IntPtr v);
-        unsafe void WindowPos2iv(int* v);
-        void WindowPos2s(short x, short y);
-        void WindowPos2sv([In]short[] v);
-        void WindowPos2sv(IntPtr v);
-        unsafe void WindowPos2sv(short* v);
-        void WindowPos3d(double x, double y, double z);
-        void WindowPos3dv([In]double[] v);
-        void WindowPos3dv(IntPtr v);
-        unsafe void WindowPos3dv(double* v);
-        void WindowPos3f(float x, float y, float z);
-        void WindowPos3fv([In]float[] v);
-        void WindowPos3fv(IntPtr v);
-        unsafe void WindowPos3fv(float* v);
-        void WindowPos3i(int x, int y, int z);
-        void WindowPos3iv([In]int[] v);
-        void WindowPos3iv(IntPtr v);
-        unsafe void WindowPos3iv(int* v);
-        void WindowPos3s(short x, short y, short z);
-        void WindowPos3sv([In]short[] v);
-        void WindowPos3sv(IntPtr v);
-        unsafe void WindowPos3sv(short* v);
         void BlendColor(float red, float green, float blue, float alpha);
         void BlendEquation(uint mode);
     }
@@ -3510,7 +1959,7 @@ namespace ModGL.NativeGL
     }
     public interface IOpenGL20 : IOpenGL15
     {
-        void BlendEquationSeparate(BlendEquationModeEXT modeRGB, BlendEquationModeEXT modeAlpha);
+        void BlendEquationSeparate(uint modeRGB, uint modeAlpha);
         void DrawBuffers(int n, [In]uint[] bufs);
         void DrawBuffers(int n, IntPtr bufs);
         unsafe void DrawBuffers(int n, uint* bufs);
@@ -4316,46 +2765,17 @@ namespace ModGL.NativeGL
     }
     public interface IVersionEsCm10
     {
-        void AlphaFunc(AlphaFunction func, float @ref);
         void ClearColor(float red, float green, float blue, float alpha);
         void ClearDepthf(float d);
         void ClipPlanef(uint p, [In]float[] eqn);
         void ClipPlanef(uint p, IntPtr eqn);
         unsafe void ClipPlanef(uint p, float* eqn);
-        void Color4f(float red, float green, float blue, float alpha);
         void DepthRangef(float n, float f);
-        void Fogf(FogParameter pname, float param);
-        void Fogfv(FogParameter pname, [In]float[] @params);
-        void Fogfv(FogParameter pname, IntPtr @params);
-        unsafe void Fogfv(FogParameter pname, float* @params);
         void Frustumf(float l, float r, float b, float t, float n, float f);
         void GetClipPlanef(uint plane, [Out]float[] equation);
         void GetFloatv(GetPName pname, [Out]float[] data);
-        void GetLightfv(LightName light, LightParameter pname, [Out]float[] @params);
-        void GetMaterialfv(MaterialFace face, MaterialParameter pname, [Out]float[] @params);
-        void GetTexEnvfv(TextureEnvTarget target, TextureEnvParameter pname, [Out]float[] @params);
         void GetTexParameterfv(TextureTarget target, GetTextureParameter pname, [Out]float[] @params);
-        void LightModelf(LightModelParameter pname, float param);
-        void LightModelfv(LightModelParameter pname, [In]float[] @params);
-        void LightModelfv(LightModelParameter pname, IntPtr @params);
-        unsafe void LightModelfv(LightModelParameter pname, float* @params);
-        void Lightf(LightName light, LightParameter pname, float param);
-        void Lightfv(LightName light, LightParameter pname, [In]float[] @params);
-        void Lightfv(LightName light, LightParameter pname, IntPtr @params);
-        unsafe void Lightfv(LightName light, LightParameter pname, float* @params);
         void LineWidth(float width);
-        void LoadMatrixf([In]float[] m);
-        void LoadMatrixf(IntPtr m);
-        unsafe void LoadMatrixf(float* m);
-        void Materialf(MaterialFace face, MaterialParameter pname, float param);
-        void Materialfv(MaterialFace face, MaterialParameter pname, [In]float[] @params);
-        void Materialfv(MaterialFace face, MaterialParameter pname, IntPtr @params);
-        unsafe void Materialfv(MaterialFace face, MaterialParameter pname, float* @params);
-        void MultMatrixf([In]float[] m);
-        void MultMatrixf(IntPtr m);
-        unsafe void MultMatrixf(float* m);
-        void MultiTexCoord4f(uint target, float s, float t, float r, float q);
-        void Normal3f(float nx, float ny, float nz);
         void Orthof(float l, float r, float b, float t, float n, float f);
         void PointParameterf(uint pname, float param);
         void PointParameterfv(uint pname, [In]float[] @params);
@@ -4363,17 +2783,10 @@ namespace ModGL.NativeGL
         unsafe void PointParameterfv(uint pname, float* @params);
         void PointSize(float size);
         void PolygonOffset(float factor, float units);
-        void Rotatef(float angle, float x, float y, float z);
-        void Scalef(float x, float y, float z);
-        void TexEnvf(TextureEnvTarget target, TextureEnvParameter pname, float param);
-        void TexEnvfv(TextureEnvTarget target, TextureEnvParameter pname, [In]float[] @params);
-        void TexEnvfv(TextureEnvTarget target, TextureEnvParameter pname, IntPtr @params);
-        unsafe void TexEnvfv(TextureEnvTarget target, TextureEnvParameter pname, float* @params);
         void TexParameterf(TextureTarget target, TextureParameterName pname, float param);
         void TexParameterfv(TextureTarget target, TextureParameterName pname, [In]float[] @params);
         void TexParameterfv(TextureTarget target, TextureParameterName pname, IntPtr @params);
         unsafe void TexParameterfv(TextureTarget target, TextureParameterName pname, float* @params);
-        void Translatef(float x, float y, float z);
         void ActiveTexture(uint texture);
         void AlphaFuncx(uint func, int @ref);
         void BindBuffer(uint target, uint buffer);
@@ -4385,14 +2798,11 @@ namespace ModGL.NativeGL
         void ClearColorx(int red, int green, int blue, int alpha);
         void ClearDepthx(int depth);
         void ClearStencil(int s);
-        void ClientActiveTexture(uint texture);
         void ClipPlanex(uint plane, [In]int[] equation);
         void ClipPlanex(uint plane, IntPtr equation);
         unsafe void ClipPlanex(uint plane, int* equation);
-        void Color4ub(byte red, byte green, byte blue, byte alpha);
         void Color4x(int red, int green, int blue, int alpha);
         void ColorMask(GLboolean red, GLboolean green, GLboolean blue, GLboolean alpha);
-        void ColorPointer(int size, ColorPointerType type, int stride, IntPtr pointer);
         void CompressedTexImage2D(TextureTarget target, int level, InternalFormat internalformat, int width, int height, int border, int imageSize, IntPtr data);
         void CompressedTexSubImage2D(TextureTarget target, int level, int xoffset, int yoffset, int width, int height, PixelFormat format, int imageSize, IntPtr data);
         void CopyTexImage2D(TextureTarget target, int level, InternalFormat internalformat, int x, int y, int width, int height, int border);
@@ -4408,11 +2818,9 @@ namespace ModGL.NativeGL
         void DepthMask(GLboolean flag);
         void DepthRangex(int n, int f);
         void Disable(EnableCap cap);
-        void DisableClientState(EnableCap array);
         void DrawArrays(PrimitiveType mode, int first, int count);
         void DrawElements(PrimitiveType mode, int count, uint type, IntPtr indices);
         void Enable(EnableCap cap);
-        void EnableClientState(EnableCap array);
         void Finish();
         void Flush();
         void Fogx(uint pname, int param);
@@ -4431,10 +2839,8 @@ namespace ModGL.NativeGL
         void GetIntegerv(GetPName pname, [Out]int[] data);
         void GetLightxv(uint light, uint pname, [Out]int[] @params);
         void GetMaterialxv(uint face, uint pname, [Out]int[] @params);
-        void GetPointerv(GetPointervPName pname, [Out]IntPtr[] @params);
         [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(ConstStringReturnMarshaller))]
         string GetString(StringName name);
-        void GetTexEnviv(TextureEnvTarget target, TextureEnvParameter pname, [Out]int[] @params);
         void GetTexEnvxv(uint target, uint pname, [Out]int[] @params);
         void GetTexParameteriv(TextureTarget target, GetTextureParameter pname, [Out]int[] @params);
         void GetTexParameterxv(uint target, uint pname, [Out]int[] @params);
@@ -4451,7 +2857,6 @@ namespace ModGL.NativeGL
         void Lightxv(uint light, uint pname, IntPtr @params);
         unsafe void Lightxv(uint light, uint pname, int* @params);
         void LineWidthx(int width);
-        void LoadIdentity();
         void LoadMatrixx([In]int[] m);
         void LoadMatrixx(IntPtr m);
         unsafe void LoadMatrixx(int* m);
@@ -4460,13 +2865,11 @@ namespace ModGL.NativeGL
         void Materialxv(uint face, uint pname, [In]int[] param);
         void Materialxv(uint face, uint pname, IntPtr param);
         unsafe void Materialxv(uint face, uint pname, int* param);
-        void MatrixMode(MatrixMode mode);
         void MultMatrixx([In]int[] m);
         void MultMatrixx(IntPtr m);
         unsafe void MultMatrixx(int* m);
         void MultiTexCoord4x(uint texture, int s, int t, int r, int q);
         void Normal3x(int nx, int ny, int nz);
-        void NormalPointer(NormalPointerType type, int stride, IntPtr pointer);
         void Orthox(int l, int r, int b, int t, int n, int f);
         void PixelStorei(PixelStoreParameter pname, int param);
         void PointParameterx(uint pname, int param);
@@ -4475,24 +2878,16 @@ namespace ModGL.NativeGL
         unsafe void PointParameterxv(uint pname, int* @params);
         void PointSizex(int size);
         void PolygonOffsetx(int factor, int units);
-        void PopMatrix();
-        void PushMatrix();
         void ReadPixels(int x, int y, int width, int height, PixelFormat format, PixelType type, IntPtr pixels);
         void Rotatex(int angle, int x, int y, int z);
         void SampleCoverage(float value, GLboolean invert);
         void SampleCoveragex(int value, GLboolean invert);
         void Scalex(int x, int y, int z);
         void Scissor(int x, int y, int width, int height);
-        void ShadeModel(ShadingModel mode);
         void StencilFunc(StencilFunction func, int @ref, uint mask);
         void StencilMask(uint mask);
         void StencilOp(StencilOp fail, StencilOp zfail, StencilOp zpass);
-        void TexCoordPointer(int size, TexCoordPointerType type, int stride, IntPtr pointer);
-        void TexEnvi(TextureEnvTarget target, TextureEnvParameter pname, int param);
         void TexEnvx(uint target, uint pname, int param);
-        void TexEnviv(TextureEnvTarget target, TextureEnvParameter pname, [In]int[] @params);
-        void TexEnviv(TextureEnvTarget target, TextureEnvParameter pname, IntPtr @params);
-        unsafe void TexEnviv(TextureEnvTarget target, TextureEnvParameter pname, int* @params);
         void TexEnvxv(uint target, uint pname, [In]int[] @params);
         void TexEnvxv(uint target, uint pname, IntPtr @params);
         unsafe void TexEnvxv(uint target, uint pname, int* @params);
@@ -4507,7 +2902,6 @@ namespace ModGL.NativeGL
         unsafe void TexParameterxv(uint target, uint pname, int* @params);
         void TexSubImage2D(TextureTarget target, int level, int xoffset, int yoffset, int width, int height, PixelFormat format, PixelType type, IntPtr pixels);
         void Translatex(int x, int y, int z);
-        void VertexPointer(int size, VertexPointerType type, int stride, IntPtr pointer);
         void Viewport(int x, int y, int width, int height);
     }
     public interface IEsVersion20
@@ -4521,7 +2915,7 @@ namespace ModGL.NativeGL
         void BindTexture(TextureTarget target, uint texture);
         void BlendColor(float red, float green, float blue, float alpha);
         void BlendEquation(uint mode);
-        void BlendEquationSeparate(BlendEquationModeEXT modeRGB, BlendEquationModeEXT modeAlpha);
+        void BlendEquationSeparate(uint modeRGB, uint modeAlpha);
         void BlendFunc(BlendingFactorSrc sfactor, BlendingFactorDest dfactor);
         void BlendFuncSeparate(uint sfactorRGB, uint dfactorRGB, uint sfactorAlpha, uint dfactorAlpha);
         void BufferData(uint target, IntPtr size, IntPtr data, uint usage);

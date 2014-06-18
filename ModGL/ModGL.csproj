@@ -37,8 +37,9 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Platform.Invoke">
-      <HintPath>..\packages\Platform.Invoke.1.0.3.0\lib\net45\Platform.Invoke.dll</HintPath>
+    <Reference Include="Platform.Invoke, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Platform.Invoke.1.0.4.0\lib\net45\Platform.Invoke.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

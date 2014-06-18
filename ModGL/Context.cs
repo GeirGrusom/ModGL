@@ -107,9 +107,9 @@ namespace ModGL
                         throw new OpenGLInvalidValueException();
                     case ErrorCode.OutOfMemory:
                         throw new OutOfMemoryException();
-                    case ErrorCode.StackOverflow:
+                    case (ErrorCode)0x0503:
                         throw new OpenGLStackOverflowException();
-                    case ErrorCode.StackUnderflow:
+                    case (ErrorCode)0x0504:
                         throw new OpenGLStackUnderflowException();
                 }
             }

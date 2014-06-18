@@ -43,7 +43,9 @@ namespace SpecBuilder.Parser
         public IEnumerable<string> GetCommands(string profile)
         {
             var commands = new HashSet<string>(_requirements.SelectMany(x => x.Commands));
-            commands.ExceptWith(_remove.Where(x => x.Profile == profile).SelectMany(x => x.Commands));
+            var removeCommands = _remove.Where(x => x.Profile == profile)
+                .SelectMany(x => x.Commands).ToArray();
+            commands.ExceptWith(removeCommands);
             return commands;
         }
 

@@ -31,7 +31,6 @@ namespace SpecBuilder.CodeGen
             if(ret != null && ret.Type == typeof(string))
                 writer.WriteLine(indent + "[return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(ConstStringReturnMarshaller))]");
 
-
             writer.Write(indent);
 
             if(_parameters.Select(p => p.DataType).OfType<SystemDataType>().Any(p => p.Type.IsPointer))
