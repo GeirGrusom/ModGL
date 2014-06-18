@@ -19,7 +19,7 @@ namespace ModGL.Textures
         public TexturePixelType PixelType { get; private set; }
 
         public CubeMap(IOpenGL30 gl, int width, int height, TextureFormat format, TextureInternalFormat internalFormat, TexturePixelType type)
-            : base(gl, TextureTarget.TextureCubeMap)
+            : base(gl, (TextureTarget)Constants.TextureCubeMap)
         {
             Width = width;
             Height = height;
@@ -60,12 +60,12 @@ namespace ModGL.Textures
 
         public void BufferData(IntPtr positiveX, IntPtr negativeX, IntPtr positiveY, IntPtr negativeY, IntPtr positiveZ, IntPtr negativeZ)
         {
-            _gl.TexImage2D(TextureTarget.TextureCubeMapPositiveX, 0, InternalFormat, Width, Height, 0, Format, PixelType, positiveX);
-            _gl.TexImage2D(TextureTarget.TextureCubeMapPositiveY, 0, InternalFormat, Width, Height, 0, Format, PixelType, positiveY);
-            _gl.TexImage2D(TextureTarget.TextureCubeMapPositiveZ, 0, InternalFormat, Width, Height, 0, Format, PixelType, positiveZ);
-            _gl.TexImage2D(TextureTarget.TextureCubeMapNegativeX, 0, InternalFormat, Width, Height, 0, Format, PixelType, negativeX);
-            _gl.TexImage2D(TextureTarget.TextureCubeMapNegativeY, 0, InternalFormat, Width, Height, 0, Format, PixelType, negativeY);
-            _gl.TexImage2D(TextureTarget.TextureCubeMapNegativeZ, 0, InternalFormat, Width, Height, 0, Format, PixelType, negativeZ);
+            _gl.TexImage2D((TextureTarget)Constants.TextureCubeMapPositiveX, 0, (int)InternalFormat, Width, Height, 0, (PixelFormat)Format, (PixelType)PixelType, positiveX);
+            _gl.TexImage2D((TextureTarget)Constants.TextureCubeMapPositiveY, 0, (int)InternalFormat, Width, Height, 0, (PixelFormat)Format, (PixelType)PixelType, positiveY);
+            _gl.TexImage2D((TextureTarget)Constants.TextureCubeMapPositiveZ, 0, (int)InternalFormat, Width, Height, 0, (PixelFormat)Format, (PixelType)PixelType, positiveZ);
+            _gl.TexImage2D((TextureTarget)Constants.TextureCubeMapNegativeX, 0, (int)InternalFormat, Width, Height, 0, (PixelFormat)Format, (PixelType)PixelType, negativeX);
+            _gl.TexImage2D((TextureTarget)Constants.TextureCubeMapNegativeY, 0, (int)InternalFormat, Width, Height, 0, (PixelFormat)Format, (PixelType)PixelType, negativeY);
+            _gl.TexImage2D((TextureTarget)Constants.TextureCubeMapNegativeZ, 0, (int)InternalFormat, Width, Height, 0, (PixelFormat)Format, (PixelType)PixelType, negativeZ);
         }
 
     }

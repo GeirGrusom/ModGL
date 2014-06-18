@@ -68,7 +68,7 @@ namespace ModGL.Shaders
             get
             {
                 int[] validateStatus = new int[1];
-                _gl.GetProgramiv(Handle, ProgramParameters.ValidateStatus, validateStatus);
+                _gl.GetProgramiv(Handle, (uint)ProgramParameters.ValidateStatus, validateStatus);
                 return validateStatus.Single() == (int)GLboolean.True;
             }
         }
@@ -82,7 +82,7 @@ namespace ModGL.Shaders
             get
             {
                 int[] linkStatus = new int[1];
-                _gl.GetProgramiv(Handle, ProgramParameters.LinkStatus, linkStatus);
+                _gl.GetProgramiv(Handle, (uint)ProgramParameters.LinkStatus, linkStatus);
                 return linkStatus.Single() == (int)GLboolean.True;
             }
         }
@@ -94,12 +94,12 @@ namespace ModGL.Shaders
         [Pure]
         public CompilationResults GetCompilationResults()
         {
-            int[] logLength = new int[1];
-            _gl.GetProgramiv(Handle, ProgramParameters.InfoLogLength, logLength);
-            byte[] log = new byte[logLength.Single()];
-            _gl.GetProgramInfoLog(Handle, log.Length, out logLength[0], log);
+            var logLength = new int[1];
+            _gl.GetProgramiv(Handle, (uint)ProgramParameters.InfoLogLength, logLength);
+            var log = new string(' ', logLength.Single());
+            _gl.GetProgramInfoLog(Handle, log.Length, logLength, ref log);
 
-            return new CompilationResults(Shaders.Select(s => s.GetCompilationResults()), Encoding.UTF8.GetString(log), IsValid, IsLinked);
+            return new CompilationResults(Shaders.Select(s => s.GetCompilationResults()), log, IsValid, IsLinked);
         }
 
         public void BindVertexAttributeLocations(params VertexInfo.VertexDescriptor[] definitions)
@@ -182,17 +182,17 @@ namespace ModGL.Shaders
         {
             int[] numUniforms = new int[1];
             int[] uniformCount = new int[1];
-            _gl.GetProgramiv(Handle, ProgramParameters.ActiveUniforms, numUniforms);
-            _gl.GetProgramiv(Handle, ProgramParameters.ActiveUniformMaxLength, uniformCount);
+            _gl.GetProgramiv(Handle, (uint)ProgramParameters.ActiveUniforms, numUniforms);
+            _gl.GetProgramiv(Handle, (uint)ProgramParameters.ActiveUniformMaxLength, uniformCount);
 
-            byte[] buffer = new byte[1024];
+            string buffer = new string(' ', 1024);
             for (int i = 0; i < numUniforms.Single(); i++)
             {
-                int realLength;
-                int size;
-                uint type;
-                _gl.GetActiveUniform(Handle, (uint)i, buffer.Length, out realLength, out size, out type, buffer);
-                string name = Encoding.UTF8.GetString(buffer, 0, realLength);
+                var realLength = new int[1];
+                var size = new int[1];
+                var type = new uint[1];
+                _gl.GetActiveUniform(Handle, (uint)i, buffer.Length, realLength, size, type, ref buffer);
+                string name = buffer.Substring(0, realLength.Single());
                 yield return new Tuple<string, int>(name, i);
             }
         }

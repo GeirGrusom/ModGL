@@ -77,8 +77,8 @@ namespace ModGL.UnitTests.Buffers
             }
 
             // Assert
-            gl.Received().BindBuffer(BufferTarget.ElementArray, 1);
-            gl.Received().BindBuffer(BufferTarget.ElementArray, 0);
+            gl.Received().BindBuffer((uint)BufferTarget.ElementArray, 1);
+            gl.Received().BindBuffer((uint)BufferTarget.ElementArray, 0);
         }
 
         [Test]
@@ -95,8 +95,8 @@ namespace ModGL.UnitTests.Buffers
             }
 
             // Assert
-            gl.Received().BindBufferBase(BufferTarget.ElementArray, 2, 1);
-            gl.Received().BindBufferBase(BufferTarget.ElementArray, 2, 0);
+            gl.Received().BindBufferBase((uint)BufferTarget.ElementArray, 2, 1);
+            gl.Received().BindBufferBase((uint)BufferTarget.ElementArray, 2, 0);
         }
 
         [Test]
@@ -113,8 +113,8 @@ namespace ModGL.UnitTests.Buffers
             }
 
             // Assert
-            gl.Received().BindBufferRange(BufferTarget.ElementArray, 2,  1, new IntPtr(8), new IntPtr(16));
-            gl.Received().BindBufferBase(BufferTarget.ElementArray, 2,  0);
+            gl.Received().BindBufferRange((uint)BufferTarget.ElementArray, 2,  1, new IntPtr(8), new IntPtr(16));
+            gl.Received().BindBufferBase((uint)BufferTarget.ElementArray, 2,  0);
         }
 
         [Test]
@@ -131,7 +131,7 @@ namespace ModGL.UnitTests.Buffers
             buffer.BufferData(BufferUsage.StaticDraw);
 
             // Assert
-            gl.Received().BufferData(BufferTarget.ElementArray, new IntPtr(12), Arg.Any<IntPtr>(), BufferUsage.StaticDraw);
+            gl.Received().BufferData((uint)BufferTarget.ElementArray, new IntPtr(12), Arg.Any<IntPtr>(), (uint)BufferUsage.StaticDraw);
         }
 
         [Test]
@@ -149,7 +149,7 @@ namespace ModGL.UnitTests.Buffers
             buffer.BufferSubData(BufferUsage.StaticDraw, x => x.TexCoord);
 
             // Assert
-            gl.Received().BufferSubData(BufferTarget.Array, new IntPtr(24), new IntPtr(8), Arg.Any<IntPtr>());
+            gl.Received().BufferSubData((uint)BufferTarget.Array, new IntPtr(24), new IntPtr(8), Arg.Any<IntPtr>());
 
         }
 
@@ -168,7 +168,7 @@ namespace ModGL.UnitTests.Buffers
             buffer.BufferSubData(BufferUsage.StaticDraw, 1, 2);
 
             // Assert
-            gl.Received().BufferSubData(BufferTarget.ElementArray, new IntPtr(1), new IntPtr(2), Arg.Any<IntPtr>());
+            gl.Received().BufferSubData((uint)BufferTarget.ElementArray, new IntPtr(1), new IntPtr(2), Arg.Any<IntPtr>());
         }
 
 

@@ -14,7 +14,7 @@ namespace ModGL.Shaders
 
         public override void SetData(IOpenGL30 gl)
         {
-            gl.ActiveTexture(Slot);
+            gl.ActiveTexture((uint)Slot);
             Value.Bind();
             gl.Uniform1i(Location, (int)Slot);
         }

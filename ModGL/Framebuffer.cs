@@ -27,13 +27,13 @@ namespace ModGL
 
         public BindContext Bind()
         {
-            _gl.BindFramebuffer(_target, Handle);
-            return new BindContext(() => _gl.BindFramebuffer(_target, 0));
+            _gl.BindFramebuffer((uint)_target, Handle);
+            return new BindContext(() => _gl.BindFramebuffer((uint)_target, 0));
         }
 
         public void Attach(Textures.Texture2D texture, FramebufferTarget target, FramebufferAttachment attachment, FramebufferTextureTarget textureTarget)
         {
-            _gl.FramebufferTexture2D(target, attachment, textureTarget, texture.Handle, 0);   
+            _gl.FramebufferTexture2D((uint)target, (uint)attachment, (uint) textureTarget, texture.Handle, 0);   
         }
     }
 }

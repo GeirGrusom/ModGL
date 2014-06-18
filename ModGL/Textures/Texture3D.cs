@@ -42,7 +42,7 @@ namespace ModGL.Textures
 
         public void BufferData(IntPtr address)
         {
-            this._gl.TexImage3D(Target, 0, InternalFormat, Width, Height, Depth, 0, Format, PixelType, address);
+            this._gl.TexImage3D(Target, 0, (int)InternalFormat, Width, Height, Depth, 0, (PixelFormat)Format, (PixelType)PixelType, address);
         }
     }
 }

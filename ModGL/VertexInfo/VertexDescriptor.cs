@@ -188,8 +188,8 @@ namespace ModGL.VertexInfo
                     gl.VertexAttribPointer(
                         (uint)e.Index,
                         e.Item.Dimensions,
-                        e.Item.Type,
-                        GLboolean.False,
+                        (uint)e.Item.Type,
+                        (byte)GLboolean.False,
                         System.Runtime.InteropServices.Marshal.SizeOf(ElementType),
                         new IntPtr(e.Item.Offset));
                 }
@@ -198,7 +198,7 @@ namespace ModGL.VertexInfo
                     openGL41.VertexAttribLPointer(
                         (uint)e.Index,
                         e.Item.Dimensions,
-                        e.Item.Type,
+                        (uint)e.Item.Type,
                         System.Runtime.InteropServices.Marshal.SizeOf(ElementType),
                         new IntPtr(e.Item.Offset));
                 }
@@ -207,7 +207,7 @@ namespace ModGL.VertexInfo
                     gl.VertexAttribIPointer(
                         (uint)e.Index,
                         e.Item.Dimensions,
-                        e.Item.Type,
+                        (uint)e.Item.Type,
                         System.Runtime.InteropServices.Marshal.SizeOf(ElementType),
                         new IntPtr(e.Item.Offset));
                 }

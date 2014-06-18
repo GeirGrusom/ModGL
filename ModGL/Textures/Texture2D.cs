@@ -15,7 +15,7 @@ namespace ModGL.Textures
         public TexturePixelType PixelType { get; private set; }
 
         public Texture2D(IOpenGL30 gl, int width, int height, TextureFormat format, TextureInternalFormat internalFormat, TexturePixelType type)
-            : base(gl, TextureTarget.Texture2D)
+            : base(gl, TextureTarget.Texture2d)
         {
             Format = format;
             InternalFormat = internalFormat;
@@ -39,7 +39,7 @@ namespace ModGL.Textures
 
         public void BufferData(IntPtr address)
         {
-            _gl.TexImage2D(Target, 0, InternalFormat, Width, Height, 0, Format, PixelType, address);
+            _gl.TexImage2D(Target, 0, (int)InternalFormat, Width, Height, 0, (PixelFormat)Format, (PixelType)PixelType, address);
         }
     }
 }

@@ -81,8 +81,8 @@ namespace SampleBase
                     };
 
                 _gl.ClearColor(bgColor.R / 255f, bgColor.G / 255f, bgColor.B / 255f, 1);
-                _gl.Enable(StateCaps.DepthTest);
-                _gl.Enable(StateCaps.CullFace);
+                _gl.Enable(EnableCap.DepthTest);
+                _gl.Enable(EnableCap.CullFace);
                 View = ViewMatrixHelper.LookAt(new Vector3f(1.75f, 1.75f, 1.75f), new Vector3f(0, 1, 0), new Vector3f(0, 0, 0));
                 Initialize();
 
@@ -108,7 +108,7 @@ namespace SampleBase
                     
                     Application.DoEvents();
 
-                    _gl.Clear(ClearTarget.Color | ClearTarget.Depth); 
+                    _gl.Clear((uint)(ClearTarget.Color | ClearTarget.Depth)); 
                     FrameTick();
                     _gl.Finish();
                     _context.SwapBuffers();

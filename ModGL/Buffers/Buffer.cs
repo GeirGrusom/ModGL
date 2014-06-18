@@ -84,20 +84,20 @@ namespace ModGL.Buffers
 
         public BindContext Bind()
         {
-            _gl.BindBuffer(Target, Handle);
-            return new BindContext(() => _gl.BindBuffer(Target, 0));
+            _gl.BindBuffer((uint)Target, Handle);
+            return new BindContext(() => _gl.BindBuffer((uint)Target, 0));
         }
 
         public BindContext Bind(uint index)
         {
-            _gl.BindBufferBase(Target, index, Handle);
-            return new BindContext(() => _gl.BindBufferBase(Target, index, 0));
+            _gl.BindBufferBase((uint)Target, index, Handle);
+            return new BindContext(() => _gl.BindBufferBase((uint)Target, index, 0));
         }
 
         public BindContext Bind(uint index, long startIndex, long elements)
         {
-            _gl.BindBufferRange(Target, index, Handle, new IntPtr(startIndex * _elementSize), new IntPtr(elements * _elementSize));
-            return new BindContext(() => _gl.BindBufferBase(Target, index, 0));
+            _gl.BindBufferRange((uint)Target, index, Handle, new IntPtr(startIndex * _elementSize), new IntPtr(elements * _elementSize));
+            return new BindContext(() => _gl.BindBufferBase((uint)Target, index, 0));
         }
 
         public void ReleaseClientData()
@@ -149,7 +149,7 @@ namespace ModGL.Buffers
             var handle = GCHandle.Alloc(Data, GCHandleType.Pinned);
             try
             {
-                _gl.BufferData(Target, new IntPtr(Data.LongLength * ElementSize), handle.AddrOfPinnedObject(), usage);
+                _gl.BufferData((uint)Target, new IntPtr(Data.LongLength * ElementSize), handle.AddrOfPinnedObject(), (uint)usage);
             }
             finally
             {
@@ -165,10 +165,10 @@ namespace ModGL.Buffers
         public MappedBuffer MapBuffer(BufferAccess access)
         {
             // TODO: Add a check constrain if the object this is called on is the currently bound object.
-            var bindContext = new BindContext(() => _gl.UnmapBuffer(Target) );
+            var bindContext = new BindContext(() => _gl.UnmapBuffer((uint)Target) );
 
             // Note: glMapBuffer seem to have a relatively stupid implementation.
-            var ptr = _gl.MapBuffer(Target, access);
+            var ptr = _gl.MapBuffer((uint)Target, (uint)access);
             var accessor = new UnmanagedMemoryAccessor(
                 new SafeMapBuffer(ptr),
                 0,
@@ -191,7 +191,7 @@ namespace ModGL.Buffers
             var handle = GCHandle.Alloc(Data, GCHandleType.Pinned);
             try
             {
-                _gl.BufferSubData(Target, new IntPtr(offset), new IntPtr(size), handle.AddrOfPinnedObject());
+                _gl.BufferSubData((uint)Target, new IntPtr(offset), new IntPtr(size), handle.AddrOfPinnedObject());
             }
             finally
             {
@@ -228,7 +228,7 @@ namespace ModGL.Buffers
             var handle = GCHandle.Alloc(Data, GCHandleType.Pinned);
             try
             {
-                _gl.BufferSubData(Target, new IntPtr(offset), new IntPtr(fieldSize), handle.AddrOfPinnedObject());
+                _gl.BufferSubData((uint)Target, new IntPtr(offset), new IntPtr(fieldSize), handle.AddrOfPinnedObject());
             }
             finally
             {

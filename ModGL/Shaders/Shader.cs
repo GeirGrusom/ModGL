@@ -44,7 +44,7 @@ namespace ModGL.Shaders
             get
             {
                 int[] compileStatus = new int[1];
-                _gl.GetShaderiv(Handle, ShaderParameters.CompileStatus, compileStatus);
+                _gl.GetShaderiv(Handle, (uint)ShaderParameters.CompileStatus, compileStatus);
                 return compileStatus.Single() == (int)GLboolean.True;
             }
         }
@@ -87,10 +87,10 @@ namespace ModGL.Shaders
         {
             int[] logLength = new int[1];
             
-            this._gl.GetShaderiv(Handle, ShaderParameters.InfoLogLength, logLength);
-            byte[] log = new byte[logLength.Single()];
-            this._gl.GetShaderInfoLog(Handle, log.Length, out logLength[0], log);
-            return new ShaderCompilationResults(Encoding.UTF8.GetString(log), success: IsCompiled);
+            this._gl.GetShaderiv(Handle, (uint)ShaderParameters.InfoLogLength, logLength);
+            var log = new string(' ', 1024);
+            this._gl.GetShaderInfoLog(Handle, log.Length, logLength, ref log);
+            return new ShaderCompilationResults(log, success: IsCompiled);
         }
 
         /// <summary>
@@ -102,7 +102,7 @@ namespace ModGL.Shaders
             int[] compileStatus = new int[1];
             this._gl.ShaderSource(Handle, 1, new [] { Code }, new [] { Code.Length} );
             this._gl.CompileShader(Handle);
-            this._gl.GetShaderiv(Handle, ShaderParameters.CompileStatus, compileStatus);
+            this._gl.GetShaderiv(Handle, (uint)ShaderParameters.CompileStatus, compileStatus);
             if (compileStatus.Single() != (int)GLboolean.True)
                 throw new ShaderCompilationException(this, GetCompilationResults());
         }

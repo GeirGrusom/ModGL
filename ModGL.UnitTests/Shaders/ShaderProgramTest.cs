@@ -29,10 +29,10 @@ namespace ModGL.UnitTests.Shaders
             gl.CreateProgram().Returns(1u);
             var mockShader = Substitute.For<IShader>();
             // IsValid <- true
-            gl.When(g => g.GetProgramiv(Arg.Any<uint>(), ProgramParameters.ValidateStatus, Arg.Any<int[]>())) 
+            gl.When(g => g.GetProgramiv(Arg.Any<uint>(), (uint)ProgramParameters.ValidateStatus, Arg.Any<int[]>())) 
                 .Do(x => ((int[])x.Args()[2])[0] = 1);
             // IsLinked <- true
-            gl.When(g => g.GetProgramiv(Arg.Any<uint>(), ProgramParameters.LinkStatus, Arg.Any<int[]>()))
+            gl.When(g => g.GetProgramiv(Arg.Any<uint>(), (uint)ProgramParameters.LinkStatus, Arg.Any<int[]>()))
                 .Do(x => ((int[])x.Args()[2])[0] = 1);
 
             var program = new Program(gl, new[] { mockShader });
@@ -50,10 +50,10 @@ namespace ModGL.UnitTests.Shaders
             var mockShader = Substitute.For<IShader>();
             mockShader.IsCompiled.Returns(true);
             // IsValid <- true
-            gl.When(g => g.GetProgramiv(Arg.Any<uint>(), ProgramParameters.ValidateStatus, Arg.Any<int[]>()))
+            gl.When(g => g.GetProgramiv(Arg.Any<uint>(), (uint)ProgramParameters.ValidateStatus, Arg.Any<int[]>()))
                 .Do(x => ((int[])x.Args()[2])[0] = 1);
             // IsLinked <- true
-            gl.When(g => g.GetProgramiv(Arg.Any<uint>(), ProgramParameters.LinkStatus, Arg.Any<int[]>()))
+            gl.When(g => g.GetProgramiv(Arg.Any<uint>(), (uint)ProgramParameters.LinkStatus, Arg.Any<int[]>()))
                 .Do(x => ((int[])x.Args()[2])[0] = 1);
 
             var program = new Program(gl, new[] { mockShader });
@@ -73,10 +73,10 @@ namespace ModGL.UnitTests.Shaders
             var mockShader = Substitute.For<IShader>();
             mockShader.When(i => i.Compile()).Do(x => { throw new ShaderCompilationException(null, null); });
             // IsValid <- true
-            gl.When(g => g.GetProgramiv(Arg.Any<uint>(), ProgramParameters.ValidateStatus, Arg.Any<int[]>()))
+            gl.When(g => g.GetProgramiv(Arg.Any<uint>(), (uint)ProgramParameters.ValidateStatus, Arg.Any<int[]>()))
                 .Do(x => ((int[])x.Args()[2])[0] = 1);
             // IsLinked <- true
-            gl.When(g => g.GetProgramiv(Arg.Any<uint>(), ProgramParameters.LinkStatus, Arg.Any<int[]>()))
+            gl.When(g => g.GetProgramiv(Arg.Any<uint>(), (uint)ProgramParameters.LinkStatus, Arg.Any<int[]>()))
                 .Do(x => ((int[])x.Args()[2])[0] = 1);
 
             var program = new Program(gl, new[] { mockShader });
@@ -97,10 +97,10 @@ namespace ModGL.UnitTests.Shaders
             gl.CreateProgram().Returns(1u);
 
             // IsValid <- true
-            gl.When(g => g.GetProgramiv(Arg.Any<uint>(), ProgramParameters.ValidateStatus, Arg.Any<int[]>()))
+            gl.When(g => g.GetProgramiv(Arg.Any<uint>(), (uint)ProgramParameters.ValidateStatus, Arg.Any<int[]>()))
                 .Do(x => ((int[])x.Args()[2])[0] = 1);
             // IsLinked <- false
-            gl.When(g => g.GetProgramiv(Arg.Any<uint>(), ProgramParameters.LinkStatus, Arg.Any<int[]>()))
+            gl.When(g => g.GetProgramiv(Arg.Any<uint>(), (uint)ProgramParameters.LinkStatus, Arg.Any<int[]>()))
                 .Do(x => ((int[])x.Args()[2])[0] = 0);
 
             var program = new Program(gl, new IShader[0]);
@@ -121,10 +121,10 @@ namespace ModGL.UnitTests.Shaders
             var gl = Substitute.For<IOpenGL30>();
             gl.CreateProgram().Returns(1u);
             // IsValid <- true
-            gl.When(g => g.GetProgramiv(Arg.Any<uint>(), ProgramParameters.ValidateStatus, Arg.Any<int[]>()))
+            gl.When(g => g.GetProgramiv(Arg.Any<uint>(), (uint)ProgramParameters.ValidateStatus, Arg.Any<int[]>()))
                 .Do(x => ((int[])x.Args()[2])[0] = 0);
             // IsLinked <- false
-            gl.When(g => g.GetProgramiv(Arg.Any<uint>(), ProgramParameters.LinkStatus, Arg.Any<int[]>()))
+            gl.When(g => g.GetProgramiv(Arg.Any<uint>(), (uint)ProgramParameters.LinkStatus, Arg.Any<int[]>()))
                 .Do(x => ((int[])x.Args()[2])[0] = 1);
 
             var program = new Program(gl, new IShader[0]);
@@ -146,21 +146,24 @@ namespace ModGL.UnitTests.Shaders
 
 
             // IsValid <- true
-            gl.When(g => g.GetProgramiv(Arg.Any<uint>(), ProgramParameters.ValidateStatus, Arg.Any<int[]>()))
+            gl.When(g => g.GetProgramiv(Arg.Any<uint>(), (uint)ProgramParameters.ValidateStatus, Arg.Any<int[]>()))
                 .Do(x => ((int[])x[2])[0] = 0);
             // IsLinked <- false
-            gl.When(g => g.GetProgramiv(Arg.Any<uint>(), ProgramParameters.LinkStatus, Arg.Any<int[]>()))
+            gl.When(g => g.GetProgramiv(Arg.Any<uint>(), (uint)ProgramParameters.LinkStatus, Arg.Any<int[]>()))
                 .Do(x => ((int[])x[2])[0] = 1);
 
-            int count;
-
-            gl.When( g => g.GetProgramiv(Arg.Any<uint>(), ProgramParameters.InfoLogLength, Arg.Any<int[]>()))
-                .Do(c => { ((int[])c[2])[0] = 1; });
-            gl.WhenForAnyArgs(g => g.GetProgramInfoLog(Arg.Any<uint>(), Arg.Any<int>(), out count, Arg.Any<byte[]>()))
+            
+            gl.When( g => g.GetProgramiv(Arg.Any<uint>(), (uint)ProgramParameters.InfoLogLength, Arg.Any<int[]>()))
                 .Do(c =>
                 {
-                    c[2] = 1;
-                    ((byte[])c[3])[0] = (byte)'A';
+                    ((int[])c[2])[0] = 1;
+                });
+            string log = new string(' ', 1024);
+            gl.WhenForAnyArgs(g => g.GetProgramInfoLog(Arg.Any<uint>(), Arg.Any<int>(), Arg.Any<int[]>(), ref log))
+                .Do(c =>
+                {
+                    ((int[])c[2])[0] = 1;
+                    (c[3]) = "A";
                 });
 
             var program = new Program(gl, new IShader[0] );

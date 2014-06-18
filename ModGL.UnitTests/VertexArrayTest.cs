@@ -32,7 +32,7 @@ namespace ModGL.UnitTests
             var vertexArray = new VertexArray(gl, new[] { vertexBuffer }, new[] { descriptor });
 
             // Assert
-            gl.Received().VertexAttribPointer(0, 1, DataType.Float, GLboolean.False, 4, IntPtr.Zero); // Stride should be size of vertex element.
+            gl.Received().VertexAttribPointer(0, 1, (uint)DataType.Float, GLboolean.False, 4, IntPtr.Zero); // Stride should be size of vertex element.
             vertexBuffer.Received().Bind();
             gl.Received().BindVertexArray(0);
             Assert.Contains(vertexBuffer, vertexArray.Buffers.ToArray());
@@ -60,8 +60,8 @@ namespace ModGL.UnitTests
             var vertexArray = new VertexArray(gl, new[] { vertexBuffer }, new[] { descriptor });
 
             // Assert
-            gl.Received().VertexAttribPointer(0, 1, DataType.Float, GLboolean.False, 8, IntPtr.Zero); // Stride should be size of vertex element.
-            gl.Received().VertexAttribIPointer(1, 1, DataType.Int, 8, new IntPtr(4));
+            gl.Received().VertexAttribPointer(0, 1, (uint)DataType.Float, GLboolean.False, 8, IntPtr.Zero); // Stride should be size of vertex element.
+            gl.Received().VertexAttribIPointer(1, 1, (uint)DataType.Int, 8, new IntPtr(4));
         }
 
     }

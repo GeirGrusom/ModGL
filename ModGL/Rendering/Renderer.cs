@@ -13,15 +13,15 @@ namespace ModGL.Rendering
             _gl = gl;
         }
 
-        public void Draw(DrawMode mode, IElementArray elements)
+        public void Draw(PrimitiveType mode, IElementArray elements)
         {
             using (elements.Bind())
             {
-                _gl.DrawElements(mode, (int)elements.Elements, elements.Type, IntPtr.Zero);
+                _gl.DrawElements(mode, (int)elements.Elements, (uint)elements.Type, IntPtr.Zero);
             }
         }
 
-        public void Draw(DrawMode mode, IVertexBuffer buffer)
+        public void Draw(PrimitiveType mode, IVertexBuffer buffer)
         {
             _gl.DrawArrays(mode, 0, (int)buffer.Elements);
         }
