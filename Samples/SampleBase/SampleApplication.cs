@@ -69,6 +69,9 @@ namespace SampleBase
             {
 
                 _gl = _context.CreateInterface<TOpenGLInterface>(InterfaceFlags.Debug);
+                string renderer = _gl.GetString(StringName.Renderer);
+                string vendor = _gl.GetString(StringName.Vendor);
+                string version = _gl.GetString(StringName.Version);
                 var bgColor = Color.DodgerBlue;
                 Projection = ProjectionMatrixHelper.RightHandPerspective((float) Math.PI/2,
                     _renderForm.ClientSize.Width/(float) _renderForm.ClientSize.Height, 0.01f, 10f);
@@ -85,7 +88,6 @@ namespace SampleBase
                 _gl.Enable(EnableCap.CullFace);
                 View = ViewMatrixHelper.LookAt(new Vector3f(1.75f, 1.75f, 1.75f), new Vector3f(0, 1, 0), new Vector3f(0, 0, 0));
                 Initialize();
-
                 var deltaTime = DeltaTime.Init();
                 double sumFps = 0;
                 int frameCount = 0;
@@ -99,7 +101,7 @@ namespace SampleBase
                     if (sumFps > 0.5f)
                     {
                         var averageDelta = sumFps / frameCount;
-                        _renderForm.Text = string.Format("{0} - {1:0.00} FPS", _applicationName, 1.0 / (averageDelta));
+                        _renderForm.Text = string.Format("{0} - {1:0.00} FPS - OpenGL {2} using {3}({4})", _applicationName, 1.0 / (averageDelta), version, renderer, vendor);
                         sumFps = 0;
                         frameCount = 0;
                     }

@@ -89,7 +89,7 @@ namespace ModGL
             {
                 if (Thread.CurrentThread != _ownerThread)
                     throw new CrossThreadCallException();
-                if(Context.Current != _owner)
+                if(Current != _owner)
                     throw new CrossContextCallException();
                 _error.GetError(); // Clear error state
             }
@@ -107,10 +107,8 @@ namespace ModGL
                         throw new OpenGLInvalidValueException();
                     case ErrorCode.OutOfMemory:
                         throw new OutOfMemoryException();
-                    case (ErrorCode)0x0503:
-                        throw new OpenGLStackOverflowException();
-                    case (ErrorCode)0x0504:
-                        throw new OpenGLStackUnderflowException();
+                    case ErrorCode.InvalidFramebufferOperation:
+                        throw new OpenGLInvalidFramebufferOperationException();
                 }
             }
         }
