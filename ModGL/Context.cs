@@ -87,9 +87,11 @@ namespace ModGL
 
             public void OnBeginInvoke(MethodInfo method, TOpenGLInterface reference)
             {
-                if (Thread.CurrentThread != _ownerThread)
+                if (Thread.CurrentThread != _ownerThread) 
+                    // A call to this implementation has been made by a thread that does not own it.
                     throw new CrossThreadCallException();
-                if(Current != _owner)
+                if(Current != _owner) 
+                    // A call has been made to this implementation, but its context is not current.
                     throw new CrossContextCallException();
                 _error.GetError(); // Clear error state
             }
@@ -106,7 +108,7 @@ namespace ModGL
                     case ErrorCode.InvalidValue:
                         throw new OpenGLInvalidValueException();
                     case ErrorCode.OutOfMemory:
-                        throw new OutOfMemoryException();
+                        throw new OpenGLOutOfMemoryException();
                     case ErrorCode.InvalidFramebufferOperation:
                         throw new OpenGLInvalidFramebufferOperationException();
                 }

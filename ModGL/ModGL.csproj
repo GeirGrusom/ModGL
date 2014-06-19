@@ -57,6 +57,7 @@
     <Compile Include="CrossThreadCallException.cs" />
     <Compile Include="NativeGL\Enums.cs" />
     <Compile Include="NativeGL\OpenGLInvalidFramebufferOperationException.cs" />
+    <Compile Include="NativeGL\OpenGLOutOfMemoryException.cs" />
     <Compile Include="Numerics\Matrix.cs" />
     <Compile Include="Numerics\MatrixExtensions.cs" />
     <Compile Include="Numerics\MatrixHelper.cs" />
