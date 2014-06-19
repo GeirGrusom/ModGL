@@ -39,6 +39,12 @@ namespace ModGL.Windows
         Flags            =      0x2094,
         ProfileMask      =      0x9126
     }
+
+    public enum SwapInterval
+    {
+        Immediate = 0,
+        VerticalSync = 1
+    }
  
     public class WindowsContext : Context
     {
@@ -127,6 +133,28 @@ namespace ModGL.Windows
             var finalContext = builder.BuildModernContext(_contextParameters, this, _sharedContext, tempContext);
             Handle = finalContext;
             _initialized = true;
+
+            if (_contextParameters.SwapInterval != null)
+            {
+                using (Bind())
+                {
+                    SetSwapInterval((SwapInterval)_contextParameters.SwapInterval.Value);
+                }
+            }
+        }
+
+        private delegate bool wglSwapIntervalEXTProc(int interval);
+
+        private wglSwapIntervalEXTProc _setSwapInterval;
+
+        private void SetSwapInterval(SwapInterval swapInterval)
+        {
+            if (_setSwapInterval == null)
+                _setSwapInterval = GetProcedure<wglSwapIntervalEXTProc>("wglSwapIntervalEXT");
+            if (_setSwapInterval != null)
+            {
+                _setSwapInterval((int) swapInterval);
+            }
         }
 
         public WindowsContext(IWGL wgl, ILibrary glLibraryProvider, IContext shareContext, ContextCreationParameters parameters)

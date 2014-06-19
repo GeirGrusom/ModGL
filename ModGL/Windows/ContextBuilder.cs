@@ -67,6 +67,9 @@ namespace ModGL.Windows
 
             if(finalContext == IntPtr.Zero)
                 throw new ContextCreationException("Unable to create OpenGL 3.0 context.", contextParameters);
+
+
+
             return finalContext;
         }
 

@@ -53,6 +53,7 @@ namespace SampleBase
                     Window = (long)_renderForm.Handle,
                     MajorVersion = glVersion.Major,
                     MinorVersion = glVersion.Minor,
+                    SwapInterval = 0
                 });
 
         }

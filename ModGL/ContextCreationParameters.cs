@@ -59,5 +59,10 @@ namespace ModGL
         /// Specifies that this context should be a stereo rendering context.
         /// </summary>
         public bool StereoRendering { get; set; }
+
+        /// <summary>
+        /// Specifies color buffer swap interval. Set this to 1 to enable vertical sync.
+        /// </summary>
+        public int? SwapInterval { get; set; }
     }
 }
