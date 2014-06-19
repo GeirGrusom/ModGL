@@ -6,7 +6,6 @@ namespace ModGL.NativeGL
 {
     public static class OpenGLHelpers
     {
-        [Pure]
         public static uint GenTexture(this IOpenGL30 gl)
         {
             var arr = new uint[1];
@@ -19,7 +18,6 @@ namespace ModGL.NativeGL
             gl.DeleteTextures(textures.Length, textures);   
         }
 
-        [Pure]
         public static uint GenBuffer(this IOpenGL30 gl)
         {
             var arr = new uint[1];
@@ -32,7 +30,6 @@ namespace ModGL.NativeGL
             gl.DeleteBuffers(buffers.Length, buffers);
         }
 
-        [Pure]
         public static uint GenFramebuffer(this IOpenGL30 gl)
         {
             var arr = new uint[1];
@@ -45,7 +42,6 @@ namespace ModGL.NativeGL
             gl.DeleteFramebuffers(frameBuffers.Length, frameBuffers);
         }
 
-        [Pure]
         public static uint GenRenderBuffer(this IOpenGL30 gl)
         {
             var arr = new uint[1];
@@ -58,7 +54,6 @@ namespace ModGL.NativeGL
             gl.DeleteRenderbuffers(renderBuffers.Length, renderBuffers);
         }
 
-        [Pure]
         public static uint GenVertexArray(this IOpenGL30 gl)
         {
             var arr = new uint[1];
@@ -71,7 +66,6 @@ namespace ModGL.NativeGL
             gl.DeleteVertexArrays(vertexArrays.Length, vertexArrays);
         }
 
-        [Pure]
         public static uint GenQuery(this IOpenGL30 gl)
         {
             var arr = new uint[1];
