@@ -5,7 +5,7 @@ namespace ModGL.NativeGL
     [Serializable]
     public class OpenGLException : Exception
     {
-        public ErrorCode ErrorCode { get; set; }
+        public ErrorCode ErrorCode { get; private set; }
 
         public OpenGLException(string message, ErrorCode error, Exception innerException)
             : base(message, innerException)
