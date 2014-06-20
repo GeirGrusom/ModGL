@@ -2,24 +2,24 @@
 
 namespace ModGL.NativeGL
 {
-    public class OpenGLInvalidValueException : OpenGLException
+    public class InvalidValueException : OpenGLException
     {
-        public OpenGLInvalidValueException(string message, Exception innerException)
+        public InvalidValueException(string message, Exception innerException)
             : base(message, ErrorCode.InvalidValue, innerException)
         {
         }
 
-        public OpenGLInvalidValueException(string message)
+        public InvalidValueException(string message)
             : base(message, ErrorCode.InvalidValue)
         {
         }
 
-        public OpenGLInvalidValueException()
+        public InvalidValueException()
             : base(ErrorCode.InvalidValue)
         {
         }
 
-        public OpenGLInvalidValueException(Exception innerException)
+        public InvalidValueException(Exception innerException)
             : base(ErrorCode.InvalidValue, innerException)
         {
         }

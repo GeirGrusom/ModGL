@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 
 using ModGL.NativeGL;
+using InvalidOperationException = System.InvalidOperationException;
 
 namespace ModGL.Buffers
 {

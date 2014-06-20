@@ -6,6 +6,7 @@ using System.Linq.Expressions;
 using System.Text;
 
 using ModGL.NativeGL;
+using InvalidOperationException = System.InvalidOperationException;
 
 namespace ModGL.Shaders
 {

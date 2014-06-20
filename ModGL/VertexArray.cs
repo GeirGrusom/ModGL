@@ -4,6 +4,7 @@ using System.Linq;
 
 using ModGL.Buffers;
 using ModGL.NativeGL;
+using InvalidOperationException = System.InvalidOperationException;
 
 namespace ModGL
 {

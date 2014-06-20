@@ -4,6 +4,8 @@ using System.Reflection;
 using System.Threading;
 using ModGL.NativeGL;
 using Platform.Invoke;
+using InvalidOperationException = ModGL.NativeGL.InvalidOperationException;
+using OutOfMemoryException = ModGL.NativeGL.OutOfMemoryException;
 
 namespace ModGL
 {
@@ -102,15 +104,15 @@ namespace ModGL
                 switch (errorCode)
                 {
                     case ErrorCode.InvalidEnum:
-                        throw new OpenGLInvalidEnumException();
+                        throw new InvalidEnumException();
                     case ErrorCode.InvalidOperation:
-                        throw new OpenGLInvalidOperationException();
+                        throw new InvalidOperationException();
                     case ErrorCode.InvalidValue:
-                        throw new OpenGLInvalidValueException();
+                        throw new InvalidValueException();
                     case ErrorCode.OutOfMemory:
-                        throw new OpenGLOutOfMemoryException();
+                        throw new OutOfMemoryException();
                     case ErrorCode.InvalidFramebufferOperation:
-                        throw new OpenGLInvalidFramebufferOperationException();
+                        throw new InvalidFramebufferOperationException();
                 }
             }
         }

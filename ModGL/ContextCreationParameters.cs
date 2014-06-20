@@ -61,7 +61,7 @@ namespace ModGL
         public bool StereoRendering { get; set; }
 
         /// <summary>
-        /// Specifies color buffer swap interval. Set this to 1 to enable vertical sync.
+        /// Specifies color buffer swap interval. Set this to 1 to enable vertical sync. This will default to driver implementation.
         /// </summary>
         public int? SwapInterval { get; set; }
     }

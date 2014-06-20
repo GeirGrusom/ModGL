@@ -7,24 +7,24 @@ using System.Threading.Tasks;
 namespace ModGL.NativeGL
 {
     [Serializable]
-    public class OpenGLInvalidFramebufferOperationException : OpenGLException
+    public class InvalidFramebufferOperationException : OpenGLException
     {
-        public OpenGLInvalidFramebufferOperationException(string message, Exception innerException) 
+        public InvalidFramebufferOperationException(string message, Exception innerException) 
             : base(message, ErrorCode.InvalidFramebufferOperation, innerException)
         {
         }
 
-        public OpenGLInvalidFramebufferOperationException(string message) 
+        public InvalidFramebufferOperationException(string message) 
             : base(message, ErrorCode.InvalidFramebufferOperation)
         {
         }
 
-        public OpenGLInvalidFramebufferOperationException(Exception innerException) 
+        public InvalidFramebufferOperationException(Exception innerException) 
             : base(ErrorCode.InvalidFramebufferOperation, innerException)
         {
         }
 
-        public OpenGLInvalidFramebufferOperationException() 
+        public InvalidFramebufferOperationException() 
             : base(ErrorCode.InvalidFramebufferOperation)
         {
         }

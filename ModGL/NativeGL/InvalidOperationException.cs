@@ -2,24 +2,24 @@
 
 namespace ModGL.NativeGL
 {
-    public class OpenGLInvalidOperationException : OpenGLException
+    public class InvalidOperationException : OpenGLException
     {
-        public OpenGLInvalidOperationException(string message, Exception innerException)
+        public InvalidOperationException(string message, Exception innerException)
             : base(message, ErrorCode.InvalidOperation, innerException)
         {
         }
 
-        public OpenGLInvalidOperationException(string message)
+        public InvalidOperationException(string message)
             : base(message, ErrorCode.InvalidOperation)
         {
         }
 
-        public OpenGLInvalidOperationException()
+        public InvalidOperationException()
             : base(ErrorCode.InvalidOperation)
         {
         }
 
-        public OpenGLInvalidOperationException(Exception innerException)
+        public InvalidOperationException(Exception innerException)
             : base(ErrorCode.InvalidOperation, innerException)
         {
         }

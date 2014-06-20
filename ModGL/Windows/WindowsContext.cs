@@ -3,6 +3,7 @@ using System.Diagnostics.Contracts;
 
 using ModGL.NativeGL;
 using Platform.Invoke;
+using InvalidOperationException = System.InvalidOperationException;
 
 namespace ModGL.Windows
 {

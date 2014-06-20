@@ -2,27 +2,27 @@
 
 namespace ModGL.NativeGL
 {
-    public class OpenGLInvalidEnumException : OpenGLException
+    public class InvalidEnumException : OpenGLException
     {
-        public OpenGLInvalidEnumException(string message, Exception innerException)
+        public InvalidEnumException(string message, Exception innerException)
             : base(message, ErrorCode.InvalidEnum, innerException)
         {
             
         }
 
-        public OpenGLInvalidEnumException(string message)
+        public InvalidEnumException(string message)
             : base(message, ErrorCode.InvalidEnum)
         {
 
         }
 
-        public OpenGLInvalidEnumException()
+        public InvalidEnumException()
             : base(ErrorCode.InvalidEnum)
         {
 
         }
 
-        public OpenGLInvalidEnumException(Exception innerException)
+        public InvalidEnumException(Exception innerException)
             : base(ErrorCode.InvalidEnum, innerException)
         {
 
