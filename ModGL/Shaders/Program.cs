@@ -15,7 +15,6 @@ namespace ModGL.Shaders
         void Compile();
     }
 
-    [Serializable]
     public class Program : IProgram
     {
         [NonSerialized]
@@ -103,7 +102,7 @@ namespace ModGL.Shaders
             return new CompilationResults(Shaders.Select(s => s.GetCompilationResults()), log, IsValid, IsLinked);
         }
 
-        public void BindVertexAttributeLocations(params VertexInfo.VertexDescriptor[] definitions)
+        public void BindVertexAttributeLocations(params VertexInfo.IVertexDescriptor[] definitions)
         {
             int offset = 0;
             foreach (var item in definitions)
@@ -120,7 +119,7 @@ namespace ModGL.Shaders
         /// <param name="indexOffset">Optional. Offset for each index.</param>
         /// <exception cref="ArgumentException">Thrown if <see cref="indexOffset"/> is less than zero.</exception>
         /// <exception cref="InvalidOperationException">Thrown if program has already been compiled. Vertex attribute locations cannot be bound after the program has been linked.</exception>
-        public void BindVertexAttributeLocations(VertexInfo.VertexDescriptor definition, int indexOffset = 0)
+        public void BindVertexAttributeLocations(VertexInfo.IVertexDescriptor definition, int indexOffset = 0)
         {
             if (indexOffset < 0)
                 throw new ArgumentException("Offset cannot be less than zero.", "indexOffset");

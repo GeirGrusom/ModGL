@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
-using System.Numerics;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using ModGL.NativeGL;
@@ -10,88 +9,16 @@ using InvalidOperationException = System.InvalidOperationException;
 
 namespace ModGL.VertexInfo
 {
-    [StructLayout(LayoutKind.Explicit, Size = 32)]
-    public struct PositionNormalTexCoord
+    public sealed class VertexDescriptor<TElementType> : VertexDescriptor, IVertexDescriptor<TElementType>
+        where TElementType : struct
     {
-        public static readonly VertexDescriptor Descriptor = VertexDescriptor.Create<PositionNormalTexCoord>();
-        [FieldOffset(0)]
-        public Vector3f Position;
-        [FieldOffset(12)]
-        public Vector3f Normal;
-        [FieldOffset(24)]
-        public Vector2f TexCoord;
-    }
-    public class VertexElement
-    {
-        public int Dimensions { get; internal set; }
-        public string Name { get; internal set; }
-        public DataType Type { get; internal set; }
-        public int Offset { get; set; }
-
-        public VertexElement(string name, DataType type, int dimensions, int offset)
+        public VertexDescriptor(IEnumerable<VertexElement> elements)
+            : base(typeof(TElementType), elements)
         {
-            Name = name;
-            Type = type;
-            Dimensions = dimensions;
-            Offset = offset;
         }
     }
 
-    internal static class ElementTypeHelper
-    {
-        internal class ElementDescription
-        {
-            internal DataType DataType { get; set; }
-            internal int Dimensions { get; set; }
-
-            internal ElementDescription(DataType dataType, int dimensions = 1)
-            {
-                DataType = dataType;
-                Dimensions = dimensions;
-            }
-
-        }
-        internal static readonly Dictionary<Type, ElementDescription> TypeConversionTable = new Dictionary<Type, ElementDescription>
-        {
-            { typeof(byte), new ElementDescription(DataType.UnsignedByte) },
-            { typeof(sbyte), new ElementDescription(DataType.Byte) },
-            { typeof(short), new ElementDescription(DataType.Short) },
-            { typeof(ushort), new ElementDescription(DataType.UnsignedShort) },
-            { typeof(int), new ElementDescription(DataType.Int) },
-            { typeof(uint), new ElementDescription(DataType.UnsignedInt) },
-            { typeof(float), new ElementDescription(DataType.Float) },
-            { typeof(double), new ElementDescription(DataType.Double) },
-            { typeof(Vector2f), new ElementDescription(DataType.Float, 2) },
-            { typeof(Vector3f), new ElementDescription(DataType.Float, 3) },
-            { typeof(Vector4f), new ElementDescription(DataType.Float, 4) }
-        };
-    }
-
-    [AttributeUsage(AttributeTargets.Field)]
-    public class IgnoreVertexElementAttribute : Attribute
-    {
-    }
-
-    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Struct)]
-    public class VertexElementAttribute : Attribute
-    {
-        public VertexElementAttribute(DataType type, int dimensions)
-        {
-            DataType = type;
-            Dimensions = dimensions;
-        }
-
-        public VertexElementAttribute(DataType type)
-        {
-            DataType = type;
-            Dimensions = 1;
-        }
-
-        public DataType DataType;
-        public int Dimensions;
-    }
-
-    public class VertexDescriptor
+    public class VertexDescriptor : IVertexDescriptor
     {
         public Type ElementType { get; private set; }
         public IEnumerable<VertexElement> Elements { get; private set; }
@@ -152,7 +79,7 @@ namespace ModGL.VertexInfo
         /// <returns></returns>
         /// <exception cref="InvalidOperationException">Thrown if a field is a value type, or if the class was unable to determine a correct datatype for a field.</exception>
         [Pure]
-        public static VertexDescriptor Create<TElementType>()
+        public static IVertexDescriptor<TElementType> Create<TElementType>()
             where TElementType : struct
         {
             var type = typeof(TElementType);
@@ -171,9 +98,8 @@ namespace ModGL.VertexInfo
                     results.Add(ret);
             }
 
-            return new VertexDescriptor
+            return new VertexDescriptor<TElementType>
             (                
-                typeof(TElementType),
                 results
             );
         }
@@ -191,7 +117,7 @@ namespace ModGL.VertexInfo
                         e.Item.Dimensions,
                         (uint)e.Item.Type,
                         (byte)GLboolean.False,
-                        System.Runtime.InteropServices.Marshal.SizeOf(ElementType),
+                        Marshal.SizeOf(ElementType),
                         new IntPtr(e.Item.Offset));
                 }
                 else if (openGL41 != null && e.Item.Type == DataType.Double)
@@ -200,7 +126,7 @@ namespace ModGL.VertexInfo
                         (uint)e.Index,
                         e.Item.Dimensions,
                         (uint)e.Item.Type,
-                        System.Runtime.InteropServices.Marshal.SizeOf(ElementType),
+                        Marshal.SizeOf(ElementType),
                         new IntPtr(e.Item.Offset));
                 }
                 else
@@ -209,7 +135,7 @@ namespace ModGL.VertexInfo
                         (uint)e.Index,
                         e.Item.Dimensions,
                         (uint)e.Item.Type,
-                        System.Runtime.InteropServices.Marshal.SizeOf(ElementType),
+                        Marshal.SizeOf(ElementType),
                         new IntPtr(e.Item.Offset));
                 }
                 gl.EnableVertexAttribArray((uint)e.Index);

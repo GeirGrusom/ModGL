@@ -8,6 +8,8 @@ namespace SpecBuilder.CodeGen
         private readonly Type _type;
         public Type Type { get { return _type; } }
         
+        
+
         public SystemDataType(Type type)
         {
             _type = type;

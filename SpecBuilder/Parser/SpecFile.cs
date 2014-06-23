@@ -121,7 +121,7 @@ namespace SpecBuilder.Parser
                     root.Nodes().OfType<XElement>().Single(n => n.Name == "extensions").Nodes().OfType<XElement>()
                 where extension.Name == "extension"
                 let requirements = (from requirement in extension.Nodes().OfType<XElement>()
-                    where requirement.Name == "requirement"
+                    where requirement.Name == "require"
                     select new FeatureSet(requirement.TryGetAttributeValue("profile"),
                         requirement.Nodes()
                             .OfType<XElement>()

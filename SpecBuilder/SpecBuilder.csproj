@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CodeGen\AttributeElement.cs" />
     <Compile Include="CodeGen\Constants.cs" />
     <Compile Include="CodeGen\DataType.cs" />
     <Compile Include="CodeGen\CustomDataType.cs" />

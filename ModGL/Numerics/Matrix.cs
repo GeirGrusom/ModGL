@@ -7,7 +7,7 @@ using System.Numerics;
 namespace ModGL.Numerics
 {
     [ImmutableObject(true)]
-    [DebuggerDisplay("{_data}")]
+    [DebuggerDisplay("{_data[0]}, {_data[1]}, {_data[2]}, {_data[3]}")]
     public sealed class Matrix4f
     {
         public static readonly Matrix4f Identity = new Matrix4f(new Vector4f(1, 0, 0, 0), new Vector4f(0, 1, 0, 0), new Vector4f(0, 0, 1, 0), new Vector4f(0, 0, 0, 1));
@@ -175,6 +175,14 @@ namespace ModGL.Numerics
         {
             Contract.Requires(lhs != null);
             Contract.Requires(rhs != null);
+            Contract.EndContractBlock();
+            return lhs.Multiply(rhs);
+        }
+
+        [Pure]
+        public static Vector4f operator *(Matrix4f lhs, Vector4f rhs)
+        {
+            Contract.Requires(lhs != null);
             Contract.EndContractBlock();
             return lhs.Multiply(rhs);
         }

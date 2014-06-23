@@ -24,6 +24,12 @@ namespace SpecBuilder.CodeGen
         public DataType DataType { get { return _dataType; } }
         public string Name { get { return _name; } }
 
+        public MethodParameter(string name, DataType dataType)
+            : this(name, TypeFlags.None, dataType)
+        {
+            
+        }
+
         public MethodParameter(string name, TypeFlags flags, DataType dataType)
         {
             _name = name;

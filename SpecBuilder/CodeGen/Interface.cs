@@ -10,6 +10,7 @@ namespace SpecBuilder.CodeGen
         private readonly string _name;
         private readonly Method[] _methods;
         private readonly string[] _implements;
+        private readonly AttributeElement[] _attributes;
 
         public string Name
         {
@@ -21,13 +22,29 @@ namespace SpecBuilder.CodeGen
             get { return _methods; }
         }
 
+        public IEnumerable<AttributeElement> Attributes { get { return _attributes; } }
+
         public IEnumerable<string> Implements { get { return _implements; }}
 
+        public Interface(string name, IEnumerable<Method> methods)
+            : this(name, methods, Enumerable.Empty<string>(), Enumerable.Empty<AttributeElement>())
+        {
+
+        }
+
+
         public Interface(string name, IEnumerable<Method> methods, IEnumerable<string> implements)
+            : this(name, methods, implements, Enumerable.Empty<AttributeElement>())
+        {
+            
+        }
+
+        public Interface(string name, IEnumerable<Method> methods, IEnumerable<string> implements, IEnumerable<AttributeElement> attributes)
         {
             _name = name;
             _methods = methods.ToArray();
             _implements = implements.ToArray();
+            _attributes = attributes.ToArray();
         }
 
         private static readonly HashSet<string> dontOverloadMethods = new HashSet<string>
@@ -38,6 +55,10 @@ namespace SpecBuilder.CodeGen
         public void Write(StreamWriter writer, int tabs)
         {
             var indent = NameFormatter.Indent(tabs);
+
+            foreach(var element in _attributes)
+                element.Write(writer, tabs);
+
             writer.Write(indent + "public interface {0}", _name);
             var impl = (_implements ?? Enumerable.Empty<string>()).ToArray();
             if(impl.Any())

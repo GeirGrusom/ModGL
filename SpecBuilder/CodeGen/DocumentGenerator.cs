@@ -12,6 +12,7 @@ namespace SpecBuilder.CodeGen
         private static readonly IDictionary<string, Type> TypeLookup = new Dictionary<string, Type>
         {
             {"GLchar", typeof(sbyte)},
+            {"GLcharARB", typeof(byte)},
             {"GLbyte", typeof(sbyte)},
             {"GLubyte", typeof(byte)},
             {"GLshort", typeof(short)},
@@ -19,23 +20,33 @@ namespace SpecBuilder.CodeGen
             {"GLclampx", typeof(int)},
             {"GLfixed", typeof(int)},
             {"GLintptr", typeof(IntPtr)},
+            {"GLintptrARB", typeof(IntPtr)},
             {"GLsizeiptr", typeof(IntPtr)},
+            {"GLsizeiptrARB", typeof(IntPtr)},
             {"GLint", typeof(int)},
             {"GLbitfield", typeof(uint)},
             {"GLuint", typeof(uint)},
             {"GLint64", typeof(long)},
             {"GLuint64", typeof(ulong)},
+            {"GLvoid", typeof(void)},
             {"GLsizei", typeof(int)},
             {"GLfloat", typeof(float)},
             {"GLclampf", typeof(float)},
             {"GLdouble", typeof(double)},
             {"GLclampd", typeof(double)},
             {"GLsync", typeof(IntPtr)},
+            {"GLint64EXT", typeof(long)},
+            {"GLuint64EXT", typeof(ulong)},
+            {"GLhalfNV", typeof(ushort)}, // TODO: Add 16-bit float support
+            {"GLhandleARB", typeof(uint)} // HACK: This is 64-bit on OS X!
         }; 
 
         private static readonly HashSet<string> PreserveTypes = new HashSet<string>
         {
             "GLDEBUGPROC",
+            "GLDEBUGPROCAMD",
+            "GLDEBUGPROCKHR",
+            "GLDEBUGPROCARB",
             "GLboolean"
         };
 
@@ -134,13 +145,41 @@ namespace SpecBuilder.CodeGen
 
             /* (GLenum source,GLenum type,GLuint id,GLenum severity,GLsizei length,const GLchar *message,const void *userParam) */
             var gldebugprocDelegate = new CodeDelegate("GLDEBUGPROC", new CustomDataType("void"),
-                new MethodParameter("source", TypeFlags.None, new SystemDataType(typeof(uint))),
-                new MethodParameter("type", TypeFlags.None, new SystemDataType(typeof(uint))),
-                new MethodParameter("id", TypeFlags.None, new SystemDataType(typeof(uint))),
-                new MethodParameter("severity", TypeFlags.None, new SystemDataType(typeof(uint))),
-                new MethodParameter("length", TypeFlags.None, new SystemDataType(typeof(int))),
+                new MethodParameter("source",  new SystemDataType(typeof(uint))),
+                new MethodParameter("type",  new SystemDataType(typeof(uint))),
+                new MethodParameter("id", new SystemDataType(typeof(uint))),
+                new MethodParameter("severity", new SystemDataType(typeof(uint))),
+                new MethodParameter("length", new SystemDataType(typeof(int))),
                 new MethodParameter("message", TypeFlags.Out, new SystemDataType(typeof(string))),
-                new MethodParameter("userParam", TypeFlags.None, new SystemDataType(typeof(IntPtr))));
+                new MethodParameter("userParam", new SystemDataType(typeof(IntPtr))));
+
+            var glDebugProcArbDelegate = new CodeDelegate("GLDEBUGPROCARB", new CustomDataType("void"),
+                new MethodParameter("source", new SystemDataType(typeof(uint))),
+                new MethodParameter("type", new SystemDataType(typeof(uint))),
+                new MethodParameter("id", new SystemDataType(typeof(uint))),
+                new MethodParameter("severity", new SystemDataType(typeof(uint))),
+                new MethodParameter("length", new SystemDataType(typeof(int))),
+                new MethodParameter("message", TypeFlags.Out, new SystemDataType(typeof(string))),
+                new MethodParameter("userParam", new SystemDataType(typeof(IntPtr))));
+
+
+            var glDebugProcKhrDelegate = new CodeDelegate("GLDEBUGPROCKHR", new CustomDataType("void"),
+    new MethodParameter("source", new SystemDataType(typeof(uint))),
+    new MethodParameter("type", new SystemDataType(typeof(uint))),
+    new MethodParameter("id", new SystemDataType(typeof(uint))),
+    new MethodParameter("severity", new SystemDataType(typeof(uint))),
+    new MethodParameter("length", new SystemDataType(typeof(int))),
+    new MethodParameter("message", TypeFlags.Out, new SystemDataType(typeof(string))),
+    new MethodParameter("userParam", new SystemDataType(typeof(IntPtr))));
+
+            // <type>typedef void (<apientry/> *<name>GLDEBUGPROCAMD</name>)(GLuint id,GLenum category,GLenum severity,GLsizei length,const GLchar *message,void *userParam);</type>
+            var glDebugProcAmdDelegate = new CodeDelegate("GLDEBUGPROCAMD", new SystemDataType(typeof (void)),
+                new MethodParameter("id", DataType.GLuint),
+                new MethodParameter("caegory", DataType.GLenum),
+                new MethodParameter("severity", DataType.GLenum ),
+                new MethodParameter("length", DataType.GLsizei),
+                new MethodParameter("message", TypeFlags.In, DataType.Create<string>()),
+                new MethodParameter("userdata", DataType.Create<IntPtr>()));
 
             var interfaces = GetInterfaces(spec, glCommands, validGroups);
 
@@ -148,7 +187,7 @@ namespace SpecBuilder.CodeGen
             var everythingElse = namespaces.Where(ns => ns.Name != "GL").ToArray();
 
             // There is currently just one namespace. 
-            return new Document(new Namespace("ModGL.NativeGL", /*everythingElse */ Enumerable.Empty<Namespace>(), glNamespace.SelectMany(x => x.Constants), groups, new [] { gldebugprocDelegate }, interfaces.Concat(glNamespace.SelectMany(x => x.Interfaces))));
+            return new Document(new Namespace("ModGL.NativeGL", /*everythingElse */ Enumerable.Empty<Namespace>(), glNamespace.SelectMany(x => x.Constants), groups, new [] { gldebugprocDelegate, glDebugProcAmdDelegate, glDebugProcKhrDelegate, glDebugProcArbDelegate }, interfaces.Concat(glNamespace.SelectMany(x => x.Interfaces))));
         }
 
         private static IEnumerable<Interface> GetInterfaces(SpecFile spec, IEnumerable<Command> glCommands, HashSet<string> validGroups)
@@ -170,6 +209,24 @@ namespace SpecBuilder.CodeGen
                 if(interf.Methods.Any())
                     interfaces.Add(interf);
             }
+
+            /*foreach (var extension in spec.Extensions)
+            {
+                string interfaceName = NameFormatter.FormatEnumName(extension.Name);
+
+                var interf = new Interface(interfaceName, from command in extension.FeatureSet
+                    .SelectMany(req => req.Commands).Distinct()
+                                                          let cmd = glCommands.SingleOrDefault(c => c.ReturnType.Name == command)
+                                                          where cmd != null
+                                                          let returnType = Convert(cmd.ReturnType, validGroups)
+                                                          select
+                                                              new Method(command.Substring(2), returnType,
+                                                                  cmd.Arguments.Select(m => ConvertToMethodParameter(m, validGroups))), 
+                                                                  Enumerable.Empty<string>(), new [] { new AttributeElement("Extension", new [] { extension.Name }, Enumerable.Empty<KeyValuePair<string, string>>()) });
+                if (interf.Methods.Any())
+                    interfaces.Add(interf);
+            }*/
+
             return interfaces;
         }
 
@@ -264,6 +321,8 @@ namespace SpecBuilder.CodeGen
             }
             else
             {
+                if (dataType.Type.StartsWith("struct ") && dataType.PointerIndirection == 1)
+                    return DataType.Create<IntPtr>();
                 type = TypeLookup[dataType.Type];
                 if (dataType.PointerIndirection > 0)
                     type = type.MakeArrayType(dataType.PointerIndirection);

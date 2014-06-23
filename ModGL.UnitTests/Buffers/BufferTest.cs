@@ -170,7 +170,5 @@ namespace ModGL.UnitTests.Buffers
             // Assert
             gl.Received().BufferSubData((uint)BufferTarget.ElementArray, new IntPtr(1), new IntPtr(2), Arg.Any<IntPtr>());
         }
-
-
     }
 }

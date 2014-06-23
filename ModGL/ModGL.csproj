@@ -56,6 +56,7 @@
     <Compile Include="CrossContextCallException.cs" />
     <Compile Include="CrossThreadCallException.cs" />
     <Compile Include="NativeGL\Enums.cs" />
+    <Compile Include="NativeGL\ExtensionAttribute.cs" />
     <Compile Include="NativeGL\InvalidFramebufferOperationException.cs" />
     <Compile Include="NativeGL\OutOfMemoryException.cs" />
     <Compile Include="Numerics\Matrix.cs" />
@@ -120,8 +121,14 @@
     <Compile Include="VertexArray.cs" />
     <Compile Include="Buffers\VertexBuffer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="VertexInfo\ElementTypeHelper.cs" />
+    <Compile Include="VertexInfo\IgnoreVertexElementAttribute.cs" />
+    <Compile Include="VertexInfo\IVertexDescriptor.cs" />
+    <Compile Include="VertexInfo\PositionNormalTexCoord.cs" />
     <Compile Include="VertexInfo\VertexDescriptor.cs" />
     <Compile Include="ContextCreationParameters.cs" />
+    <Compile Include="VertexInfo\VertexElement.cs" />
+    <Compile Include="VertexInfo\VertexElementAttribute.cs" />
     <Compile Include="Windows\ContextBuilder.cs" />
     <Compile Include="Windows\PixelFormatException.cs" />
     <Compile Include="Windows\WGL.cs" />
