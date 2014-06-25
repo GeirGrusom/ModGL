@@ -30,18 +30,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ModGL">
-      <HintPath>..\..\ModGL\bin\Debug\ModGL.dll</HintPath>
-    </Reference>
     <Reference Include="Platform.Invoke">
-      <HintPath>..\..\ModGL\bin\Debug\Platform.Invoke.dll</HintPath>
+      <HintPath>..\..\packages\Platform.Invoke.1.0.4.0\lib\net45\Platform.Invoke.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Numerics.Vectors, Version=1.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\ModGL\bin\Debug\System.Numerics.Vectors.dll</HintPath>
+    <Reference Include="System.Numerics.Vectors">
+      <HintPath>..\..\packages\Microsoft.Bcl.Simd.1.0.2-beta\lib\portable-net45+win8\System.Numerics.Vectors.dll</HintPath>
     </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="Microsoft.CSharp" />
@@ -49,6 +45,19 @@
   <ItemGroup>
     <Compile Include="SampleApplication.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\ModGL.ObjectModel\ModGL.ObjectModel.csproj">
+      <Project>{16679673-170a-4788-93c5-37c3df2e330b}</Project>
+      <Name>ModGL.ObjectModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ModGL\ModGL.csproj">
+      <Project>{1cfdc9ee-42e8-45fd-b5ea-478f67c72447}</Project>
+      <Name>ModGL</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

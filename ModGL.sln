@@ -24,6 +24,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModGL.ObjectModel", "ModGL.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModGL.ObjectModel.UnitTests", "ModGL.ObjectModel.UnitTests\ModGL.ObjectModel.UnitTests.csproj", "{4DC39B92-66D3-4A9B-BE31-11F1AF5771D6}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{42414904-7A64-4C90-84E6-F98413E38EA6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cube", "Samples\Cube\Cube.csproj", "{A126F6B7-10BF-4ECF-ABE1-945FDF4B79BC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleBase", "Samples\SampleBase\SampleBase.csproj", "{3CFD311A-7172-43A9-8974-8037CC8633E3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -58,11 +64,21 @@ Global
 		{4DC39B92-66D3-4A9B-BE31-11F1AF5771D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4DC39B92-66D3-4A9B-BE31-11F1AF5771D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4DC39B92-66D3-4A9B-BE31-11F1AF5771D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A126F6B7-10BF-4ECF-ABE1-945FDF4B79BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A126F6B7-10BF-4ECF-ABE1-945FDF4B79BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A126F6B7-10BF-4ECF-ABE1-945FDF4B79BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A126F6B7-10BF-4ECF-ABE1-945FDF4B79BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3CFD311A-7172-43A9-8974-8037CC8633E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3CFD311A-7172-43A9-8974-8037CC8633E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3CFD311A-7172-43A9-8974-8037CC8633E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3CFD311A-7172-43A9-8974-8037CC8633E3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{085A1FDD-7708-4EAD-9317-76DA11F7A775} = {125808DE-F95B-41EA-B7DC-0CED6668AB4B}
+		{A126F6B7-10BF-4ECF-ABE1-945FDF4B79BC} = {42414904-7A64-4C90-84E6-F98413E38EA6}
+		{3CFD311A-7172-43A9-8974-8037CC8633E3} = {42414904-7A64-4C90-84E6-F98413E38EA6}
 	EndGlobalSection
 EndGlobal

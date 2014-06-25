@@ -44,6 +44,7 @@ namespace ModGL.ObjectModel
             Width = width;
             Height = height;
             InternalFormat = internalFormat;
+            _gl = gl;
 
             gl.BindRenderbuffer(Constants.Renderbuffer, Handle);
             gl.RenderbufferStorage(Constants.Renderbuffer, (uint)InternalFormat, Width, Height);

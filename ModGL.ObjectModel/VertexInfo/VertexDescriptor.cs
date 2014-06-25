@@ -103,43 +103,5 @@ namespace ModGL.ObjectModel.VertexInfo
                 results
             );
         }
-
-        internal void Apply(IOpenGL30 gl, int indexOffset)
-        {
-            var openGL41 = gl as IOpenGL41;
-            foreach (var e in Elements.Select((e, i) => new { Index = i + indexOffset, Item = e}))
-            {
-                // Double is supported by glVertexAttribLPointer, which is not implemented in OpenGL 3.0.
-                if (e.Item.Type == DataType.Half || e.Item.Type == DataType.Float) 
-                {
-                    gl.VertexAttribPointer(
-                        (uint)e.Index,
-                        e.Item.Dimensions,
-                        (uint)e.Item.Type,
-                        (byte)GLboolean.False,
-                        Marshal.SizeOf(ElementType),
-                        new IntPtr(e.Item.Offset));
-                }
-                else if (openGL41 != null && e.Item.Type == DataType.Double)
-                {
-                    openGL41.VertexAttribLPointer(
-                        (uint)e.Index,
-                        e.Item.Dimensions,
-                        (uint)e.Item.Type,
-                        Marshal.SizeOf(ElementType),
-                        new IntPtr(e.Item.Offset));
-                }
-                else
-                {
-                    gl.VertexAttribIPointer(
-                        (uint)e.Index,
-                        e.Item.Dimensions,
-                        (uint)e.Item.Type,
-                        Marshal.SizeOf(ElementType),
-                        new IntPtr(e.Item.Offset));
-                }
-                gl.EnableVertexAttribArray((uint)e.Index);
-            }
-        }
     }
 }

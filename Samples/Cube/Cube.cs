@@ -3,9 +3,10 @@ using System.Drawing;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using ModGL;
-using ModGL.Buffers;
+using ModGL.ObjectModel.Buffers;
 using ModGL.NativeGL;
 using ModGL.Numerics;
+using ModGL.ObjectModel.VertexInfo;
 
 namespace Cube
 {

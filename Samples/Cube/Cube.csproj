@@ -36,16 +36,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\ModGL\bin\Debug\ModGL.dll</HintPath>
     </Reference>
-    <Reference Include="Platform.Invoke">
-      <HintPath>..\..\ModGL\bin\Debug\Platform.Invoke.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Numerics.Vectors">
-      <HintPath>..\..\ModGL\bin\Debug\System.Numerics.Vectors.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Numerics.Vectors, Version=1.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Microsoft.Bcl.Simd.1.0.2-beta\lib\portable-net45+win8\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
@@ -63,6 +61,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Resources\cube.vs" />
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -80,6 +79,10 @@
     <EmbeddedResource Include="Resources\cube.fs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\ModGL.ObjectModel\ModGL.ObjectModel.csproj">
+      <Project>{16679673-170a-4788-93c5-37c3df2e330b}</Project>
+      <Name>ModGL.ObjectModel</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SampleBase\SampleBase.csproj">
       <Project>{3cfd311a-7172-43a9-8974-8037cc8633e3}</Project>
       <Name>SampleBase</Name>

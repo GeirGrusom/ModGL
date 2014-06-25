@@ -8,8 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using ModGL.NativeGL;
 using ModGL.Numerics;
-using ModGL.Shaders;
-using ModGL.VertexInfo;
+using ModGL.ObjectModel.Shaders;
+using ModGL.ObjectModel.VertexInfo;
 
 namespace Cube
 {
@@ -52,7 +52,7 @@ namespace Cube
             // Create the fragmet shader
             fragmentShader = new FragmentShader(gl, GetEmbeddedResourceAsString("cube.fs"));
             // Create the program for both shaders
-            var p = new ModGL.Shaders.Program(gl, vertexShader, fragmentShader);
+            var p = new ModGL.ObjectModel.Shaders.Program(gl, vertexShader, fragmentShader);
             // Tell the shader what field names to use (taken from the vertex Descriptor)
             p.BindVertexAttributeLocations(PositionNormalTexCoord.Descriptor);
             // Bind output fragment to the specified nme

@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using ModGL.NativeGL;
-using ModGL.VertexInfo;
+using ModGL.ObjectModel.VertexInfo;
 using SampleBase;
 
 namespace Cube
@@ -11,7 +11,7 @@ namespace Cube
     [StructLayout(LayoutKind.Explicit, Size = 24)]
     public struct Vertex
     {
-        public static readonly VertexDescriptor Descriptor = VertexDescriptor.Create<Vertex>();
+        public static readonly IVertexDescriptor<Vertex> Descriptor = VertexDescriptor.Create<Vertex>();
 
         [FieldOffset(0)]
         public Vector3f Position;
