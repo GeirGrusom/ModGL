@@ -54,7 +54,7 @@ namespace ModGL.Shaders.Linq
 
         private static bool IsSelectExpressionUniformDef(MethodCallExpression node)
         {
-            
+            return false;
         }
     }
 }
