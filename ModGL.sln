@@ -16,6 +16,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{125808DE
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpecBuilder", "SpecBuilder\SpecBuilder.csproj", "{085A1FDD-7708-4EAD-9317-76DA11F7A775}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModGL.Shaders.Linq", "ModGL.Shaders.Linq\ModGL.Shaders.Linq.csproj", "{9C308E0E-90E2-44FA-8F54-A5276B67BE43}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModGL.Shaders.Linq.UnitTests", "ModGL.Shaders.Linq.UnitTests\ModGL.Shaders.Linq.UnitTests.csproj", "{F9D51D99-B69D-4EFF-B522-DCBC6B9CFB9A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,6 +38,14 @@ Global
 		{085A1FDD-7708-4EAD-9317-76DA11F7A775}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{085A1FDD-7708-4EAD-9317-76DA11F7A775}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{085A1FDD-7708-4EAD-9317-76DA11F7A775}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C308E0E-90E2-44FA-8F54-A5276B67BE43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C308E0E-90E2-44FA-8F54-A5276B67BE43}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C308E0E-90E2-44FA-8F54-A5276B67BE43}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C308E0E-90E2-44FA-8F54-A5276B67BE43}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9D51D99-B69D-4EFF-B522-DCBC6B9CFB9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9D51D99-B69D-4EFF-B522-DCBC6B9CFB9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9D51D99-B69D-4EFF-B522-DCBC6B9CFB9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9D51D99-B69D-4EFF-B522-DCBC6B9CFB9A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

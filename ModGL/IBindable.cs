@@ -12,6 +12,7 @@ namespace ModGL
     public interface IBindable
     {
         BindContext Bind();
+        
     }
 
     public struct BindContext : IDisposable
