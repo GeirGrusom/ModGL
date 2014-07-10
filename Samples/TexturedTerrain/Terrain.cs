@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using ModGL.NativeGL;
 using ModGL.Numerics;
 using ModGL.ObjectModel.Buffers;
-using ModGL.ObjectModel.Shaders;
 using ModGL.ObjectModel.VertexInfo;
 
 namespace TexturedTerrain
@@ -21,11 +16,11 @@ namespace TexturedTerrain
 
     public class Terrain : IDisposable
     {
-        private readonly IVertexArray vertexArray;
-        private readonly IVertexBuffer vertexBuffer;
-        private readonly IElementArray elementBuffer;
-        private readonly TerrainShader shader;
-        private readonly IOpenGL33 gl;
+        private readonly IVertexArray _vertexArray;
+        private readonly IVertexBuffer _vertexBuffer;
+        private readonly IElementArray _elementBuffer;
+        private readonly TerrainShader _shader;
+        private readonly IOpenGL33 _gl;
 
         public Matrix4f Model { get; set; }
         public Matrix4f View { get; set; }
@@ -34,19 +29,19 @@ namespace TexturedTerrain
 
         public void Dispose()
         {
-            vertexArray.Dispose();
-            vertexBuffer.Dispose();
-            elementBuffer.Dispose();
-            shader.Dispose();
+            _vertexArray.Dispose();
+            _vertexBuffer.Dispose();
+            _elementBuffer.Dispose();
+            _shader.Dispose();
         }
 
         private Terrain(IOpenGL33 gl, IVertexArray vertexArray, IVertexBuffer vertexBuffer, IElementArray elementBuffer, TerrainShader shader)
         {
-            this.gl = gl;
-            this.vertexArray = vertexArray;
-            this.vertexBuffer = vertexBuffer;
-            this.elementBuffer = elementBuffer;
-            this.shader = shader;
+            this._gl = gl;
+            this._vertexArray = vertexArray;
+            this._vertexBuffer = vertexBuffer;
+            this._elementBuffer = elementBuffer;
+            this._shader = shader;
             Model = Matrix4f.Identity;
             View = Matrix4f.Identity;
             Projection = Matrix4f.Identity;
@@ -75,19 +70,15 @@ namespace TexturedTerrain
                     float ix = fx + x * dx;
                     float iy = fy + y * dy;
 
-                    const float scale = 2f;
-
-                    float d2 = depth/2;
-                    float w2 = width/2;
                     const float detail = 0.25f;
                     const float detailScale = 0.2f;
                     const float macro = 0.008f;
                     const float macroScale = 4f;
-                    float fUp = (float)(noise.Noise(x * detail, 0, (y + 1) * detail) * detailScale + noise.Noise(x * macro, 0, (y + 1) * macro) * macroScale) ;
-                    float fDown = (float)(noise.Noise(x * detail, 0,  (y - 1) * detail) * detailScale + noise.Noise(x * macro, 0,  (y - 1) * macro) * macroScale) ;
-                    float fLeft = (float)(noise.Noise((x - 1) * detail, 0, y * detail) * detailScale + noise.Noise((x - 1) * macro, 0, y * macro) * macroScale);
-                    float fRight = (float)(noise.Noise((x + 1) * detail, 0, y * detail) * detailScale + noise.Noise((x + 1) * macro, 0, y * macro) * macroScale);
-                    float fThis = (float)(noise.Noise(x * detail, 0, y * detail) * detailScale + noise.Noise(x * macro, 0, y * macro) * macroScale);
+                    var fUp = (float)(noise.Noise(x * detail, 0, (y + 1) * detail) * detailScale + noise.Noise(x * macro, 0, (y + 1) * macro) * macroScale) ;
+                    var fDown = (float)(noise.Noise(x * detail, 0,  (y - 1) * detail) * detailScale + noise.Noise(x * macro, 0,  (y - 1) * macro) * macroScale) ;
+                    var fLeft = (float)(noise.Noise((x - 1) * detail, 0, y * detail) * detailScale + noise.Noise((x - 1) * macro, 0, y * macro) * macroScale);
+                    var fRight = (float)(noise.Noise((x + 1) * detail, 0, y * detail) * detailScale + noise.Noise((x + 1) * macro, 0, y * macro) * macroScale);
+                    var fThis = (float)(noise.Noise(x * detail, 0, y * detail) * detailScale + noise.Noise(x * macro, 0, y * macro) * macroScale);
 
                     
                     var vUp = new Vector3f(ix, fUp, iy - dy);
@@ -143,16 +134,16 @@ namespace TexturedTerrain
 
         public void Draw()
         {
-            using (shader.Program.Bind())
+            using (_shader.Program.Bind())
             {
-                shader.ModelViewProjection.Value = Model * View * Projection;
-                shader.ViewProjection.Value = View * Projection;
-                shader.DiffuseUniform.Value = Diffuse;
+                _shader.ModelViewProjection.Value = Model * View * Projection;
+                _shader.ViewProjection.Value = View * Projection;
+                _shader.DiffuseUniform.Value = Diffuse;
 
-                using(vertexArray.Bind())
-                using (elementBuffer.Bind())
+                using(_vertexArray.Bind())
+                using (_elementBuffer.Bind())
                 {
-                    gl.DrawElements(PrimitiveType.Triangles, (int)elementBuffer.Elements, ElementBufferItemType.UnsignedInt);
+                    _gl.DrawElements(PrimitiveType.Triangles, (int)_elementBuffer.Elements, ElementBufferItemType.UnsignedInt);
                 }
             }
         }
