@@ -1,5 +1,7 @@
 ﻿using System;
-
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using ModGL.Windows;
 using NSubstitute;
 
@@ -11,6 +13,34 @@ namespace ModGL.UnitTests
     [TestFixture]
     public class WindowsContextTest
     {
+        private static readonly Random rnd = new Random();
+        public static IEnumerable<char> RandomChar()
+        {
+            while (true)
+                yield return (char)rnd.Next('a', 'z');
+        }
+
+        string CreateJumbledString(string input)
+        {
+            return CreateJumbledString(input.Count(c => c == ' '));
+        }
+
+        string CreateJumbledString(IEnumerable<int> lengths)
+        {
+            return string.Join(" ", lengths.Select(CreateJumbledString));
+        }
+
+        string CreateJumbledString(int length)
+        {
+            return new string(RandomChar().Take(length).ToArray());
+        }
+
+        [Test]
+        public void TestString()
+        {
+            var jumbledString = CreateJumbledString(4);
+        }
+
         [Test]
         public void CreateContext_OlderThan_30_NotSupported()
         {

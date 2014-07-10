@@ -30,6 +30,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cube", "Samples\Cube\Cube.c
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleBase", "Samples\SampleBase\SampleBase.csproj", "{3CFD311A-7172-43A9-8974-8037CC8633E3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TexturedTerrain", "Samples\TexturedTerrain\TexturedTerrain.csproj", "{35F106D1-24DF-4237-A148-9A9C41A20FBD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -72,6 +74,10 @@ Global
 		{3CFD311A-7172-43A9-8974-8037CC8633E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3CFD311A-7172-43A9-8974-8037CC8633E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3CFD311A-7172-43A9-8974-8037CC8633E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35F106D1-24DF-4237-A148-9A9C41A20FBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35F106D1-24DF-4237-A148-9A9C41A20FBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35F106D1-24DF-4237-A148-9A9C41A20FBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35F106D1-24DF-4237-A148-9A9C41A20FBD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -80,5 +86,6 @@ Global
 		{085A1FDD-7708-4EAD-9317-76DA11F7A775} = {125808DE-F95B-41EA-B7DC-0CED6668AB4B}
 		{A126F6B7-10BF-4ECF-ABE1-945FDF4B79BC} = {42414904-7A64-4C90-84E6-F98413E38EA6}
 		{3CFD311A-7172-43A9-8974-8037CC8633E3} = {42414904-7A64-4C90-84E6-F98413E38EA6}
+		{35F106D1-24DF-4237-A148-9A9C41A20FBD} = {42414904-7A64-4C90-84E6-F98413E38EA6}
 	EndGlobalSection
 EndGlobal
