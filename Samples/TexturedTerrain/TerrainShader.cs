@@ -18,13 +18,15 @@ namespace TexturedTerrain
         private readonly IShader vertexShader;
         private readonly IShader fragmentShader;
         private readonly IProgram program;
+        private readonly Vector4fUniform diffuseUniform;
         private readonly MatrixUniform modelViewProjection;
         private readonly MatrixUniform viewProjection;
-        private readonly Vector4fUniform diffuseUniform;        
+        private readonly IntUniform textureUnitUniform;
 
+        public Uniform<Vector4f> DiffuseColor { get { return diffuseUniform; } } 
         public Uniform<Matrix4f> ModelViewProjection { get { return modelViewProjection; } }
         public Uniform<Matrix4f> ViewProjection { get { return viewProjection; } }
-        public Uniform<Vector4f> DiffuseUniform { get { return diffuseUniform; } }
+        public Uniform<int> TextureUnitUniform { get { return textureUnitUniform; } } 
 
         public IProgram Program { get { return program; } }
 
@@ -57,9 +59,10 @@ namespace TexturedTerrain
             p.Compile();
             program = p;
             // Get the uniforms used by the shader program.
+            diffuseUniform = p.GetUniform<Vector4fUniform, Vector4f>("DiffuseColor");
             modelViewProjection = p.GetUniform<MatrixUniform, Matrix4f>("ModelViewProjection");
             viewProjection = p.GetUniform<MatrixUniform, Matrix4f>("ViewProjection");
-            diffuseUniform = p.GetUniform<Vector4fUniform, Vector4f>("DiffuseColor");
+            textureUnitUniform = p.GetUniform<IntUniform, int>("Texture");
         }
     }
 }

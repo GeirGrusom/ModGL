@@ -88,9 +88,9 @@ namespace ModGL.ObjectModel.Shaders
             int[] logLength = new int[1];
             
             this._gl.GetShaderiv(Handle, (uint)ShaderParameters.InfoLogLength, logLength);
-            var log = new string(' ', 1024);
-            this._gl.GetShaderInfoLog(Handle, log.Length, logLength, ref log);
-            return new ShaderCompilationResults(log, success: IsCompiled);
+            var log = new byte[logLength[0]];
+            this._gl.GetShaderInfoLog(Handle, log.Length, logLength, log);
+            return new ShaderCompilationResults(Encoding.UTF8.GetString(log), success: IsCompiled);
         }
 
         /// <summary>

@@ -32,7 +32,7 @@ namespace Cube
 
         }
 
-        protected override void FrameTick()
+        protected override void FrameTick(float dt)
         {
             _cube.Model = Model;
             _cube.View = View;

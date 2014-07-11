@@ -60,7 +60,12 @@ namespace SampleBase
 
         protected abstract void Initialize();
 
-        protected abstract void FrameTick();
+        protected abstract void FrameTick(float dt);
+
+        protected virtual void RotateModel(float dt)
+        {
+            Model = Model.RotateY(dt) * MatrixHelper.RotateZ(dt * 0.25f);
+        }
 
         public abstract void Exiting();
 
@@ -75,15 +80,14 @@ namespace SampleBase
                 string version = _gl.GetString(StringName.Version);
                 var bgColor = Color.DodgerBlue;
                 Projection = ProjectionMatrixHelper.RightHandPerspective((float) Math.PI/2,
-                    _renderForm.ClientSize.Width/(float) _renderForm.ClientSize.Height, 0.01f, 10f);
+                    _renderForm.ClientSize.Width/(float) _renderForm.ClientSize.Height, 0.1f, 50f);
                 _renderForm.Resize +=
                     (sender, args) =>
                     {
                         _gl.Viewport(0, 0, _renderForm.ClientSize.Width, _renderForm.ClientSize.Height);
                         Projection = ProjectionMatrixHelper.RightHandPerspective((float)Math.PI / 2,
-                            _renderForm.ClientSize.Width / (float)_renderForm.ClientSize.Height, 0.01f, 10f);
+                            _renderForm.ClientSize.Width / (float)_renderForm.ClientSize.Height, 0.1f, 50f);
                     };
-
                 _gl.ClearColor(bgColor.R / 255f, bgColor.G / 255f, bgColor.B / 255f, 1);
                 _gl.Enable(EnableCap.DepthTest);
                 _gl.Enable(EnableCap.CullFace);
@@ -107,12 +111,12 @@ namespace SampleBase
                         frameCount = 0;
                     }
 
-                    Model = Model.RotateY(deltaTime.Delta) * MatrixHelper.RotateZ(deltaTime.Delta / 4);
+                    RotateModel(deltaTime.Delta);
                     
                     Application.DoEvents();
 
                     _gl.Clear((uint)(ClearTarget.Color | ClearTarget.Depth)); 
-                    FrameTick();
+                    FrameTick(deltaTime.Delta);
                     _gl.Finish();
                     _context.SwapBuffers();
                 }

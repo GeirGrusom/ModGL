@@ -5840,7 +5840,7 @@ namespace ModGL.NativeGL
         void GetProgramiv(uint program, uint pname, [Out]int[] @params);
         void GetProgramInfoLog(uint program, int bufSize, [Out]int[] length, ref string infoLog);
         void GetShaderiv(uint shader, uint pname, [Out]int[] @params);
-        void GetShaderInfoLog(uint shader, int bufSize, [Out]int[] length, ref string infoLog);
+        void GetShaderInfoLog(uint shader, int bufSize, [Out]int[] length, [Out]byte[] infoLog);
         void GetShaderSource(uint shader, int bufSize, [Out]int[] length, ref string source);
         int GetUniformLocation(uint program, [In]string name);
         void GetUniformfv(uint program, int location, [Out]float[] @params);

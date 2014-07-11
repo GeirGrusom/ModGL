@@ -5,6 +5,7 @@ using System.Numerics;
 using ModGL.NativeGL;
 using ModGL.Numerics;
 using ModGL.ObjectModel.Buffers;
+using ModGL.ObjectModel.Textures;
 using ModGL.ObjectModel.VertexInfo;
 
 namespace TexturedTerrain
@@ -26,6 +27,8 @@ namespace TexturedTerrain
         public Matrix4f View { get; set; }
         public Matrix4f Projection { get; set; }
         public Vector4f Diffuse { get; set; }
+        public Texture2D Texture { get; set; }
+        public Sampler Sampler { get; set; }
 
         public void Dispose()
         {
@@ -37,20 +40,21 @@ namespace TexturedTerrain
 
         private Terrain(IOpenGL33 gl, IVertexArray vertexArray, IVertexBuffer vertexBuffer, IElementArray elementBuffer, TerrainShader shader)
         {
-            this._gl = gl;
-            this._vertexArray = vertexArray;
-            this._vertexBuffer = vertexBuffer;
-            this._elementBuffer = elementBuffer;
-            this._shader = shader;
+            _gl = gl;
+            _vertexArray = vertexArray;
+            _vertexBuffer = vertexBuffer;
+            _elementBuffer = elementBuffer;
+            _shader = shader;
             Model = Matrix4f.Identity;
             View = Matrix4f.Identity;
             Projection = Matrix4f.Identity;
-            Diffuse = new Vector4f(Color.PaleGreen.R / 255f, Color.PaleGreen.G / 255f, Color.PaleGreen.B / 255f, 1f);
+            Diffuse = new Vector4f(Color.DodgerBlue.R / 255f, Color.DodgerBlue.G / 255f, Color.DodgerBlue.B / 255f, 1f);
         }
 
         public static Terrain Build(IOpenGL33 gl, int columns, int rows, float width, float depth)
         {
             var noise = new PerlinNoise();
+            var noise2 = new PerlinNoise();
             
             var vertexBuffer = new VertexBuffer<PositionNormalTexCoord>((columns + 1) * (rows + 1), gl);
             var indexBuffer = new ElementBuffer<uint>(columns * rows * 6 , gl);
@@ -74,13 +78,12 @@ namespace TexturedTerrain
                     const float detailScale = 0.2f;
                     const float macro = 0.008f;
                     const float macroScale = 4f;
-                    var fUp = (float)(noise.Noise(x * detail, 0, (y + 1) * detail) * detailScale + noise.Noise(x * macro, 0, (y + 1) * macro) * macroScale) ;
-                    var fDown = (float)(noise.Noise(x * detail, 0,  (y - 1) * detail) * detailScale + noise.Noise(x * macro, 0,  (y - 1) * macro) * macroScale) ;
-                    var fLeft = (float)(noise.Noise((x - 1) * detail, 0, y * detail) * detailScale + noise.Noise((x - 1) * macro, 0, y * macro) * macroScale);
-                    var fRight = (float)(noise.Noise((x + 1) * detail, 0, y * detail) * detailScale + noise.Noise((x + 1) * macro, 0, y * macro) * macroScale);
-                    var fThis = (float)(noise.Noise(x * detail, 0, y * detail) * detailScale + noise.Noise(x * macro, 0, y * macro) * macroScale);
+                    var fUp = (float)((noise.Noise(x * detail, 0, (y + 1) * detail) - noise2.Noise(x * detail, 0, (y + 1) * detail) * 0.25f) * detailScale + noise.Noise(x * macro, 0, (y + 1) * macro) * macroScale) ;
+                    var fDown = (float)((noise.Noise(x * detail, 0,  (y - 1) * detail) - noise2.Noise(x * detail, 0,  (y - 1) * detail) * 0.25f) * detailScale + noise.Noise(x * macro, 0,  (y - 1) * macro) * macroScale) ;
+                    var fLeft = (float)((noise.Noise((x - 1) * detail, 0, y * detail) - noise2.Noise((x - 1) * detail, 0, y * detail) * 0.25f) * detailScale + noise.Noise((x - 1) * macro, 0, y * macro) * macroScale);
+                    var fRight = (float)((noise.Noise((x + 1) * detail, 0, y * detail) - noise2.Noise((x + 1) * detail, 0, y * detail) * 0.25f) * detailScale + noise.Noise((x + 1) * macro, 0, y * macro) * macroScale);
+                    var fThis = (float)((noise.Noise(x * detail, 0, y * detail) - noise2.Noise(x * detail, 0, y * detail) * 0.25f) * detailScale + noise.Noise(x * macro, 0, y * macro) * macroScale);
 
-                    
                     var vUp = new Vector3f(ix, fUp, iy - dy);
                     var vDown = new Vector3f(ix, fDown, iy + dy);
                     var vLeft = new Vector3f(ix - 1, fLeft, iy);
@@ -95,20 +98,19 @@ namespace TexturedTerrain
                     var normal = upperLeft + upperRight + lowerLeft + lowerRight;
                     normal = new Vector3f(normal.X * 0.25f, normal.Y * 0.25f, normal.Z * 0.25f);
 
-                    vertexBuffer[i] = new PositionNormalTexCoord { Normal = normal.Normalize(), Position = vThis};
+                    vertexBuffer[i] = new PositionNormalTexCoord { Normal = normal.Normalize(), Position = vThis, TexCoord = new Vector2f(vThis.X, vThis.Z)};
                 }
             }
             int offset = 0;
             foreach(var index in Enumerable.Range(0, columns * rows + columns).Where(index => (index % (columns + 1)) != columns))
             {
-                
-                indexBuffer[offset] = (uint)index;                    // 1 *-* 2
-                indexBuffer[offset + 1] = (uint)index + 1;            //    \|
-                indexBuffer[offset + 2] = (uint)(index + (columns + 1) + 1);  //     * 3
+                indexBuffer[offset] = (uint)index;
+                indexBuffer[offset + 1] = (uint)(index + (columns + 1) + 1); 
+                indexBuffer[offset + 2] = (uint)index + 1;
 
-                indexBuffer[offset + 3] = (uint)index;                // 1 * 
-                indexBuffer[offset + 4] = (uint)(index + (columns + 1) + 1);  //   |\
-                indexBuffer[offset + 5] = (uint)(index + (columns + 1));      // 3 *-* 2
+                indexBuffer[offset + 3] = (uint)index;                
+                indexBuffer[offset + 4] = (uint)(index + (columns + 1));
+                indexBuffer[offset + 5] = (uint)(index + (columns + 1) + 1);
                 offset += 6;
             }
 
@@ -136,9 +138,14 @@ namespace TexturedTerrain
         {
             using (_shader.Program.Bind())
             {
+                _shader.DiffuseColor.Value = Diffuse;
                 _shader.ModelViewProjection.Value = Model * View * Projection;
                 _shader.ViewProjection.Value = View * Projection;
-                _shader.DiffuseUniform.Value = Diffuse;
+                _shader.TextureUnitUniform.Value = 0;
+
+                _gl.ActiveTexture(Constants.Texture0);
+                Texture.Bind();
+                Sampler.Bind(0);
 
                 using(_vertexArray.Bind())
                 using (_elementBuffer.Bind())
@@ -147,6 +154,5 @@ namespace TexturedTerrain
                 }
             }
         }
-
     }
 }
